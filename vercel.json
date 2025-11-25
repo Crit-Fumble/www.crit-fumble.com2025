@@ -4,6 +4,19 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["iad1"],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "crit-fumble.com"
+        }
+      ],
+      "destination": "https://www.crit-fumble.com/:path*",
+      "permanent": true
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   },

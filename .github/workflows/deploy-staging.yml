@@ -1,10 +1,8 @@
 name: Deploy to Staging
 
+# Disabled - not currently using staging deployments
 on:
-  push:
-    branches:
-      - staging
-  workflow_dispatch:  # Allow manual deployment
+  workflow_dispatch:  # Manual trigger only
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

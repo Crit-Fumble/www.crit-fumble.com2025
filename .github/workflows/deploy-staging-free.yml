@@ -1,9 +1,8 @@
 name: Deploy to Staging (Vercel Free Tier)
 
+# Disabled - not currently using staging deployments
 on:
-  push:
-    branches:
-      - staging
+  workflow_dispatch: # Manual trigger only
 
 # Note: This workflow uses Vercel's automatic GitHub integration
 # which works on the free tier. Manual workflow_dispatch is not included

@@ -8,10 +8,16 @@ import Resend from "next-auth/providers/resend"
 import { prisma } from "./db"
 import { CustomPrismaAdapter } from "./prisma-adapter"
 
-// Security: Validate NEXTAUTH_SECRET is set in production runtime
-// Note: Skip this check during build phase (SKIP_ENV_VALIDATION is set in vercel.json)
-if (!process.env.NEXTAUTH_SECRET && process.env.NODE_ENV === 'production' && !process.env.SKIP_ENV_VALIDATION) {
-  throw new Error('NEXTAUTH_SECRET must be set in production environment')
+// Security: Validate auth secret is set in production runtime
+// Note: AUTH_SECRET or NEXTAUTH_SECRET can be used (AUTH_SECRET is preferred by NextAuth v5)
+// Skip validation during build phase (SKIP_ENV_VALIDATION=1 is set in vercel.json)
+// or when not in production runtime
+if (process.env.NODE_ENV === 'production' && !process.env.SKIP_ENV_VALIDATION) {
+  const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET
+  if (!authSecret) {
+    console.warn('Warning: No auth secret found. AUTH_SECRET or NEXTAUTH_SECRET should be set in production')
+    // Don't throw during module evaluation - let NextAuth handle it at runtime
+  }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({

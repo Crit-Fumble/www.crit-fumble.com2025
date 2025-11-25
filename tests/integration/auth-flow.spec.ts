@@ -111,7 +111,7 @@ test.describe('Authentication Flow', () => {
       const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
       // Create a test user
-      const createResponse = await page.request.post(`${baseURL}/api/test-auth`, {
+      const createResponse = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
         data: {
           role: 'player',
           username: `cleanup_test_${Date.now()}`,
@@ -123,7 +123,7 @@ test.describe('Authentication Flow', () => {
       const testUser = await createResponse.json();
 
       // Delete the test user
-      const deleteResponse = await page.request.delete(`${baseURL}/api/test-auth`, {
+      const deleteResponse = await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
         data: { userId: testUser.userId },
       });
 
@@ -420,7 +420,7 @@ test.describe('Authentication Flow', () => {
           process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
         // Try to access test-auth endpoint
-        const response = await page.request.post(`${baseURL}/api/test-auth`, {
+        const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
           data: {},
           failOnStatusCode: false,
         });

@@ -27,6 +27,7 @@ build/
 
 # Environment Variables (IMPORTANT - Never commit!)
 .env
+.env.backup
 .env.development.local
 .env.test.local
 .env.staging
@@ -124,3 +125,5 @@ src/platforms/worldographer/
 !README.md
 
 .vercel
+
+.env*.local

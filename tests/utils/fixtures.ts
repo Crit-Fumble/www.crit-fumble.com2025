@@ -47,7 +47,7 @@ export const test = base.extend<CustomFixtures>({
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
     // Create test user via API
-    const response = await page.request.post(`${baseURL}/api/test-auth`, {
+    const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
         role: 'player',
         username: `test_user_${Date.now()}`,
@@ -65,7 +65,7 @@ export const test = base.extend<CustomFixtures>({
     await use(testUser);
 
     // Cleanup: Delete test user after test
-    await page.request.delete(`${baseURL}/api/test-auth`, {
+    await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
       data: { playerId: testUser.userId }, // userId maps to playerId in the API
     });
   },
@@ -75,7 +75,7 @@ export const test = base.extend<CustomFixtures>({
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
     // Create admin user via API (will have verification fields set to match DEV_ env vars)
-    const response = await page.request.post(`${baseURL}/api/test-auth`, {
+    const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
         role: 'admin',
         username: `test_admin_${Date.now()}`,
@@ -93,7 +93,7 @@ export const test = base.extend<CustomFixtures>({
     await use(adminUser);
 
     // Cleanup: Delete admin user after test
-    await page.request.delete(`${baseURL}/api/test-auth`, {
+    await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
       data: { playerId: adminUser.userId },
     });
   },

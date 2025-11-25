@@ -36,10 +36,10 @@ test.describe('Auth Debug - Session Investigation', () => {
     // STEP 2: Create test session via API
     // ==================================================================
     await test.step('Create Test Session', async () => {
-      console.log('📍 STEP 2: Creating test session via /api/test-auth...');
+      console.log('📍 STEP 2: Creating test session via /api/_dev/test-auth...');
 
       const authData = await page.evaluate(async ({ email, username }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -220,7 +220,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async () => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -274,7 +274,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -362,7 +362,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username, coins }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -414,7 +414,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username, credits }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -467,7 +467,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username, coins, credits }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -526,7 +526,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username, coins }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -585,7 +585,7 @@ test.describe('Auth Debug - Session Investigation', () => {
       await page.goto('http://localhost:3000');
 
       const authData = await page.evaluate(async ({ email, username, coins }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

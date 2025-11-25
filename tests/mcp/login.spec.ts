@@ -70,7 +70,7 @@ test('MCP Login', async ({ page }, testInfo) => {
   const testUsername = `mcp_user_${timestamp}`;
 
   const authData = await page.evaluate(async ({ email, username }) => {
-    const res = await fetch('/api/test-auth', {
+    const res = await fetch('/api/_dev/test-auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

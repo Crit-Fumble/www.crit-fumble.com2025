@@ -114,7 +114,7 @@ test.describe('User Login Flow - Complete Journey', () => {
       const testUsername = `login_user_${timestamp}`;
 
       // Navigate to test-auth page (which will set the cookie in the browser context)
-      const response = await page.goto('/api/test-auth', {
+      const response = await page.goto('/api/_dev/test-auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ test.describe('User Login Flow - Complete Journey', () => {
 
       // Alternative approach: Use page.evaluate to call fetch with credentials
       const authData = await page.evaluate(async ({ email, username }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include', // Important: include cookies
@@ -295,7 +295,7 @@ test.describe('User Login Flow - Complete Journey', () => {
 
       // Authenticate using page.evaluate to ensure cookie is set in browser context
       const authData = await page.evaluate(async ({ email, username }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -347,7 +347,7 @@ test.describe('User Login Flow - Complete Journey', () => {
       const testUsername = `video_user_${timestamp}`;
 
       const authData = await page.evaluate(async ({ email, username }) => {
-        const res = await fetch('/api/test-auth', {
+        const res = await fetch('/api/_dev/test-auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

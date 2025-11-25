@@ -150,7 +150,7 @@ function ensureDir(dirPath: string) {
 
 // Create test auth session
 async function createTestSession(page: Page): Promise<string> {
-  const response = await page.request.post(`${BASE_URL}/api/test-auth`, {
+  const response = await page.request.post(`${BASE_URL}/api/_dev/test-auth`, {
     data: {
       username: `capture_user_${Date.now()}`,
       email: `capture-${Date.now()}@crit-fumble.test`,

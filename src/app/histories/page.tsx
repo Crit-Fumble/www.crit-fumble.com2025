@@ -196,9 +196,12 @@ export default async function HistoriesPage() {
             {/* Feature Info */}
             <div className="mt-8 bg-white dark:bg-slate-900 rounded-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                World History Features (Coming Soon)
+                World History Features
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p className="text-gray-600 dark:text-gray-400">
+                This feature is not yet available.
+              </p>
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -262,7 +265,7 @@ export default async function HistoriesPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

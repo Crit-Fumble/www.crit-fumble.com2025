@@ -2372,39 +2372,44 @@ model RpgMode {
   @@map("rpg_modes")
 }
 
-// RpgSystem - Game systems (assemblies of rules)
+// RpgSystem - Actual RPG game systems (D&D 5e, Cypher, Pathfinder, etc.)
 model RpgSystem {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  // System info
-  systemId    String  @unique @map("system_id") @db.VarChar(50) // 'weather', 'travel', etc.
-  name        String  @db.VarChar(100)
+  // System identification
+  systemId    String  @unique @map("system_id") @db.VarChar(50) // 'dnd5e', 'cyphersystem', 'pf2e', etc.
+  name        String  @db.VarChar(100) // Display name
+  title       String  @db.VarChar(200) // Full title
   description String? @db.Text
-  category    String  @db.VarChar(50) // 'environmental', 'exploration', 'downtime', 'social'
+  version     String? @db.VarChar(50) // Current version
 
-  // System configuration
-  isActive      Boolean @default(false) @map("is_active")
-  configuration Json    @default("{}") @db.JsonB
-  ruleIds       Json    @default("[]") @map("rule_ids") @db.JsonB // Rules used by this system
+  // Publisher/Author
+  author      String? @db.VarChar(200)
+  publisher   String? @db.VarChar(200)
+  license     String? @db.VarChar(100)
 
-  // System reference
-  gameSystem String? @map("game_system") @db.VarChar(100) // Which game system this is for
+  // Platform support - JSON object with platform-specific data
+  // Example: { "foundry": { "manifestUrl": "...", "version": "5.2.0", "download": "..." }, "roll20": { ... } }
+  platforms Json @default("{}") @db.JsonB
 
-  // Usage
-  isPublic Boolean @default(true) @map("is_public")
-  isCustom Boolean @default(false) @map("is_custom")
+  // Configuration
+  isEnabled Boolean @default(false) @map("is_enabled") // Whether this system is available for use
+  isCore    Boolean @default(false) @map("is_core") // Core systems we officially support
+  priority  Int     @default(0) // Display order (higher = shown first)
+
+  // Metadata
+  addedBy String? @map("added_by") // User ID who added this system
+  notes   String? @db.Text // Admin notes
 
   // Relations
   subSystems RpgSubSystem[]
 
   @@index([systemId])
-  @@index([category])
-  @@index([gameSystem])
-  @@index([isActive])
-  @@index([isPublic])
+  @@index([isEnabled])
+  @@index([isCore])
   @@index([deletedAt])
   @@map("rpg_systems")
 }

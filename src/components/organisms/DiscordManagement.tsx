@@ -358,7 +358,7 @@ export function DiscordManagement({
             <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4 space-y-4">
               <h4 className="font-semibold text-gray-900 dark:text-white">Create New Role</h4>
               <p className="text-sm text-amber-600 dark:text-amber-400">
-                Coming soon: Create and configure roles directly from the admin panel.
+                This feature is not yet available.
               </p>
               <button
                 onClick={() => setShowCreateRole(false)}
@@ -431,7 +431,7 @@ export function DiscordManagement({
             <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4 space-y-4">
               <h4 className="font-semibold text-gray-900 dark:text-white">Create New Channel</h4>
               <p className="text-sm text-amber-600 dark:text-amber-400">
-                Coming soon: Create text, voice, and forum channels directly from the admin panel.
+                This feature is not yet available.
               </p>
               <button
                 onClick={() => setShowCreateChannel(false)}

@@ -8,10 +8,9 @@ import Resend from "next-auth/providers/resend"
 import { prisma } from "./db"
 import { CustomPrismaAdapter } from "./prisma-adapter"
 
-// Security: Validate NEXTAUTH_SECRET is set in production
-if (!process.env.NEXTAUTH_SECRET && process.env.NODE_ENV === 'production') {
-  throw new Error('NEXTAUTH_SECRET must be set in production environment')
-}
+// Note: AUTH_SECRET or NEXTAUTH_SECRET validation is handled by NextAuth at runtime
+// We don't validate during module evaluation to avoid build-time errors
+// NextAuth will throw appropriate errors if the secret is missing when auth is actually used
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,

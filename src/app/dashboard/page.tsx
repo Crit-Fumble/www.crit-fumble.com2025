@@ -118,7 +118,7 @@ export default async function DashboardPage() {
               </div>
             </div>
 
-            {/* Coming Soon Section */}
+            {/* Game Management Section */}
             <section data-testid="coming-soon-section" className="mb-8">
               <div className="bg-crit-purple-600 rounded-t-lg px-4 sm:px-8 py-3 sm:py-4">
                 <h2 className="text-lg sm:text-xl md:text-2xl font-display font-bold text-white">
@@ -141,11 +141,10 @@ export default async function DashboardPage() {
                     />
                   </svg>
                   <h3 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 dark:text-white mb-4">
-                    Coming March 2026
+                    Game Management
                   </h3>
                   <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-                    Character sheets, campaign management, and world-building tools are currently in development.
-                    Stay tuned for exciting updates!
+                    This feature is not yet available.
                   </p>
                 </div>
               </div>

@@ -8,8 +8,9 @@ import Resend from "next-auth/providers/resend"
 import { prisma } from "./db"
 import { CustomPrismaAdapter } from "./prisma-adapter"
 
-// Security: Validate NEXTAUTH_SECRET is set in production
-if (!process.env.NEXTAUTH_SECRET && process.env.NODE_ENV === 'production') {
+// Security: Validate NEXTAUTH_SECRET is set in production runtime
+// Note: Skip this check during build phase (SKIP_ENV_VALIDATION is set in vercel.json)
+if (!process.env.NEXTAUTH_SECRET && process.env.NODE_ENV === 'production' && !process.env.SKIP_ENV_VALIDATION) {
   throw new Error('NEXTAUTH_SECRET must be set in production environment')
 }
 

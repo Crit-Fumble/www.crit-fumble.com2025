@@ -1,0 +1,155 @@
+{
+  "name": "Vampiric Touch",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/vampiric-touch.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 3</strong> Necromancy</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined self</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Concentration, up to 1 minute</p>\n\nThe touch of your shadow-wreathed hand can siphon life force from others to heal your wounds. Make a melee spell attack against one creature within reach. On a hit, the target takes 3d6 Necrotic damage, and you regain Hit Points|XPHB equal to half the amount of Necrotic damage dealt. Until the spell ends, you can make the attack again on each of your turns as a Magic|XPHB action, targeting the same creature or a different one.\n\n<p><strong>At Higher Levels:</strong> The damage increases by 3d6|3-9|1d6 for each spell slot level above 3.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "msak",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 3,
+    "school": "nec",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 337,
+      "school": "N",
+      "classes": [],
+      "_srdData": {
+        "name": "Vampiric Touch",
+        "source": "XPHB",
+        "page": 337,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 3,
+        "school": "N",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "self"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "The touch of your shadow-wreathed hand can siphon life force from others to heal your wounds. Make a melee spell attack against one creature within reach. On a hit, the target takes {@damage 3d6} Necrotic damage, and you regain {@variantrule Hit Points|XPHB} equal to half the amount of Necrotic damage dealt.",
+          "Until the spell ends, you can make the attack again on each of your turns as a {@action Magic|XPHB} action, targeting the same creature or a different one."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The damage increases by {@scaledamage 3d6|3-9|1d6} for each spell slot level above 3."
+            ]
+          }
+        ],
+        "damageInflict": [
+          "necrotic"
+        ],
+        "spellAttack": [
+          "M"
+        ],
+        "miscTags": [
+          "HL"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

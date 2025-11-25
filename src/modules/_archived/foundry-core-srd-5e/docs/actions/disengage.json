@@ -1,0 +1,39 @@
+{
+  "id": "action-disengage",
+  "name": "Disengage",
+  "description": "Prevent your movement from provoking Opportunity Attacks for the rest of the turn",
+  "type": "action",
+  "availability": "any",
+  "requirements": [],
+  "effects": {
+    "description": "If you take the Disengage action, your movement doesn't provoke Opportunity Attacks for the rest of the current turn.",
+    "mechanicalEffects": [
+      "Your movement no longer provokes Opportunity Attacks until the end of your turn",
+      "Applies to all movement you make during the turn",
+      "Works with walking, climbing, swimming, flying, or any other form of movement",
+      "Effect lasts until the end of your current turn"
+    ]
+  },
+  "restrictions": [
+    "Does not prevent Opportunity Attacks caused by other actions",
+    "Only affects movement-based Opportunity Attacks",
+    "Effect ends at the end of your turn"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:433-435",
+  "examples": [
+    "A fighter surrounded by enemies takes the Disengage action before moving to safety",
+    "A rogue Disengages to move through a group of monsters without being attacked",
+    "A wizard Disengages from melee combat to gain distance for spellcasting",
+    "A ranger uses Disengage to reposition without giving the enemy free attacks"
+  ],
+  "relatedActions": [
+    "action-dash",
+    "action-dodge"
+  ],
+  "additionalRules": {
+    "opportunityAttacks": "Normally, you provoke an Opportunity Attack when you move out of an enemy's reach. Taking the Disengage action prevents this.",
+    "otherWaysToAvoid": "You also don't provoke Opportunity Attacks when you Teleport or when you are moved without using your movement, action, Bonus Action, or Reaction (such as being pushed by an explosion or falling)",
+    "bonusAction": "Some class features (like Rogue's Cunning Action) allow you to Disengage as a Bonus Action",
+    "mountedCombat": "A controlled mount can use the Disengage action on your turn as you direct it"
+  }
+}

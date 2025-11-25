@@ -1,0 +1,74 @@
+{
+  "name": "Glamoured Studded Leather",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/glamoured-studded-leather.png",
+  "system": {
+    "description": {
+      "value": "While wearing this armor, you gain a +1 bonus to Armor Class|XPHB. You can also take a Bonus Action|XPHB to cause the armor to assume the appearance of a normal set of clothing or some other kind of armor. You decide what it looks like—including color, style, and accessories—but the armor retains its normal bulk and weight. The illusory appearance lasts until you use this property again or doff the armor.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 264,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 13,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 264,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Glamoured Studded Leather",
+        "source": "XDMG",
+        "page": 264,
+        "srd52": true,
+        "basicRules2024": true,
+        "baseItem": "studded leather armor|xphb",
+        "type": "LA|XPHB",
+        "rarity": "rare",
+        "weight": 13,
+        "ac": 12,
+        "bonusAc": "+1",
+        "entries": [
+          "While wearing this armor, you gain a +1 bonus to {@variantrule Armor Class|XPHB}. You can also take a {@variantrule Bonus Action|XPHB} to cause the armor to assume the appearance of a normal set of clothing or some other kind of armor. You decide what it looks like—including color, style, and accessories—but the armor retains its normal bulk and weight. The illusory appearance lasts until you use this property again or doff the armor."
+        ],
+        "lootTables": [
+          "Implements - Rare|XDMG"
+        ]
+      }
+    }
+  }
+}

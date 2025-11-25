@@ -1,0 +1,143 @@
+{
+  "name": "Warding Bond",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/warding-bond.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 2</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> 1 hour</p>\n\nYou touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has Resistance|XPHB to all damage. Also, each time it takes damage, you take the same amount of damage. The spell ends if you drop to 0 Hit Points|XPHB or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 340,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Warding Bond",
+        "source": "XPHB",
+        "page": 340,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 2,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "a pair of platinum rings worth 50+ GP each, which you and the target must wear for the duration",
+            "cost": 5000
+          }
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 1
+            }
+          }
+        ],
+        "entries": [
+          "You touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has {@variantrule Resistance|XPHB} to all damage. Also, each time it takes damage, you take the same amount of damage.",
+          "The spell ends if you drop to 0 {@variantrule Hit Points|XPHB} or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures."
+        ],
+        "miscTags": [
+          "MAC"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

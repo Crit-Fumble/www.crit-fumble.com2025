@@ -1,0 +1,37 @@
+{
+  "name": "@crit-fumble/ttrpg-core-concepts-web-api",
+  "version": "0.1.0",
+  "description": "Client library for connecting web applications to TTRPG Core Concepts Bridge API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest"
+  },
+  "keywords": [
+    "foundry-vtt",
+    "ttrpg",
+    "client",
+    "websocket",
+    "rpg",
+    "game-client"
+  ],
+  "author": "Crit Fumble Gaming",
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}

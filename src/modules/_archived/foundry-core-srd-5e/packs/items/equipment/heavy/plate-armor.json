@@ -1,0 +1,97 @@
+{
+  "name": "Plate Armor",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/armor/plate-armor.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 219,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 65,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1500,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "",
+      "cost": null,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 18,
+      "type": "heavy",
+      "dex": 0
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 219,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Plate Armor",
+        "source": "XPHB",
+        "page": 219,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "HA|XPHB",
+        "rarity": "none",
+        "weight": 65,
+        "value": 150000,
+        "ac": 18,
+        "strength": "15",
+        "armor": true,
+        "stealth": true,
+        "hasFluffImages": true
+      }
+    }
+  }
+}

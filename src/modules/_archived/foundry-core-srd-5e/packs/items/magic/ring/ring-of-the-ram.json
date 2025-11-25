@@ -1,0 +1,80 @@
+{
+  "name": "Ring of the Ram",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ring-of-the-ram.png",
+  "system": {
+    "description": {
+      "value": "This ring has 3 charges and regains 1d3 expended charges daily at dawn. While wearing the ring, you can take a Magic|XPHB action to expend 1 to 3 charges to make a ranged spell attack against one creature you can see within 60 feet of yourself. The ring produces a spectral ram's head and makes its attack roll with a +7 bonus. On a hit, for each charge you spend, the target takes 2d10 Force damage and is pushed 5 feet away from you. Alternatively, you can expend 1 to 3 of the ring's charges as a Magic|XPHB action to try to break a nonmagical object you can see within 60 feet of yourself that isn't being worn or carried. The ring makes a Strength check with a +5 bonus for each charge you spend.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 296,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 296,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Ring of the Ram",
+        "source": "XDMG",
+        "page": 296,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "RG|XDMG",
+        "rarity": "rare",
+        "reqAttune": true,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d3}",
+        "charges": 3,
+        "entries": [
+          "This ring has 3 charges and regains {@dice 1d3} expended charges daily at dawn. While wearing the ring, you can take a {@action Magic|XPHB} action to expend 1 to 3 charges to make a ranged spell attack against one creature you can see within 60 feet of yourself. The ring produces a spectral ram's head and makes its attack roll with a +7 bonus. On a hit, for each charge you spend, the target takes {@damage 2d10} Force damage and is pushed 5 feet away from you.",
+          "Alternatively, you can expend 1 to 3 of the ring's charges as a {@action Magic|XPHB} action to try to break a nonmagical object you can see within 60 feet of yourself that isn't being worn or carried. The ring makes a Strength check with a +5 bonus for each charge you spend."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Armaments - Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

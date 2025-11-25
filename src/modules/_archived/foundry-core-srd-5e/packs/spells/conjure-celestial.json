@@ -1,0 +1,178 @@
+{
+  "name": "Conjure Celestial",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/conjure-celestial.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 7</strong> Conjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 90 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Concentration, up to 10 minutes</p>\n\nYou conjure a spirit from the Upper Planes, which manifests as a pillar of light in a 10-foot-radius, 40-foot-high Cylinder [Area of Effect]|XPHB|Cylinder centered on a point within range. For each creature you can see in the Cylinder [Area of Effect]|XPHB|Cylinder, choose which of these lights shines on it: • The target regains Hit Points|XPHB equal to 4d12 plus your spellcasting ability modifier.\n• The target makes a Dexterity saving throw, taking 6d12 Radiant damage on a failed save or half as much damage on a successful one.\nUntil the spell ends, Bright Light|XPHB fills the Cylinder [Area of Effect]|XPHB|Cylinder, and when you move on your turn, you can also move the Cylinder [Area of Effect]|XPHB|Cylinder up to 30 feet. Whenever the Cylinder [Area of Effect]|XPHB|Cylinder moves into the space of a creature you can see and whenever a creature you can see enters the Cylinder [Area of Effect]|XPHB|Cylinder or ends its turn there, you can bathe it in one of the lights. A creature can be affected by this spell only once per turn.\n\n<p><strong>At Higher Levels:</strong> The healing and damage increase by 6d12|7-9|1d12 for each spell slot level above 7.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 90,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "dex",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 7,
+    "school": "con",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 254,
+      "school": "C",
+      "classes": [],
+      "_srdData": {
+        "name": "Conjure Celestial",
+        "source": "XPHB",
+        "page": 254,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 7,
+        "school": "C",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 90
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 10
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "You conjure a spirit from the Upper Planes, which manifests as a pillar of light in a 10-foot-radius, 40-foot-high {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} centered on a point within range. For each creature you can see in the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder}, choose which of these lights shines on it:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Healing Light",
+                "entries": [
+                  "The target regains {@variantrule Hit Points|XPHB} equal to {@dice 4d12} plus your spellcasting ability modifier."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Searing Light",
+                "entries": [
+                  "The target makes a Dexterity saving throw, taking {@damage 6d12} Radiant damage on a failed save or half as much damage on a successful one."
+                ]
+              }
+            ]
+          },
+          "Until the spell ends, {@variantrule Bright Light|XPHB} fills the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder}, and when you move on your turn, you can also move the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} up to 30 feet.",
+          "Whenever the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} moves into the space of a creature you can see and whenever a creature you can see enters the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} or ends its turn there, you can bathe it in one of the lights. A creature can be affected by this spell only once per turn."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The healing and damage increase by {@scaledamage 6d12|7-9|1d12} for each spell slot level above 7."
+            ]
+          }
+        ],
+        "damageInflict": [
+          "radiant"
+        ],
+        "savingThrow": [
+          "dexterity"
+        ],
+        "miscTags": [
+          "HL",
+          "SGT"
+        ],
+        "areaTags": [
+          "Y"
+        ]
+      }
+    }
+  }
+}

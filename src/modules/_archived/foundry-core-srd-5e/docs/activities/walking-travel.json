@@ -1,0 +1,63 @@
+{
+  "id": "activity-walking-travel",
+  "name": "Walking / Travel",
+  "description": "Sustained movement on foot, whether exploration, travel, or patrol",
+  "intensity": "strenuous",
+  "category": "physical",
+  "modes": ["exploration", "travel"],
+  "properties": {
+    "interruptThresholdHours": 1,
+    "physicalDemand": "high",
+    "mentalDemand": "low",
+    "requiresConsciousness": true,
+    "compatiblePositions": ["standing", "walking"]
+  },
+  "prerequisites": [
+    "Mobile (not restrained or incapacitated)",
+    "Conscious"
+  ],
+  "srdReferences": [
+    {
+      "source": "rulesglossary/rulesdefinitions/96-LongRest.md",
+      "quote": "1 hour of walking or other physical exertion",
+      "context": "Interrupts Long Rest if sustained for 1 hour"
+    }
+  ],
+  "effects": {
+    "interruptsLongRest": true,
+    "interruptsLongRestAfterHours": 1,
+    "interruptsShortRest": true,
+    "grantsRestBenefits": false,
+    "enablesRecovery": false
+  },
+  "travelPace": {
+    "fast": {
+      "speed": "4 miles per hour",
+      "distance": "30 miles per day (8 hours)",
+      "penalty": "Disadvantage on passive Wisdom (Perception) scores"
+    },
+    "normal": {
+      "speed": "3 miles per hour",
+      "distance": "24 miles per day (8 hours)",
+      "penalty": "None"
+    },
+    "slow": {
+      "speed": "2 miles per hour",
+      "distance": "18 miles per day (8 hours)",
+      "benefit": "Able to use Stealth"
+    }
+  },
+  "environmentalConsiderations": [
+    "Difficult terrain halves travel speed",
+    "Extreme heat or cold may require CON saves",
+    "High altitude may cause exhaustion",
+    "Forced march beyond 8 hours requires CON save (DC 10 + 1 per hour past 8) or gain exhaustion"
+  ],
+  "examples": [
+    "Traveling between towns on a road",
+    "Exploring a dungeon corridor",
+    "Hiking through wilderness",
+    "Patrolling a settlement perimeter",
+    "Marching with an army"
+  ]
+}

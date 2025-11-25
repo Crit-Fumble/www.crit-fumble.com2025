@@ -1,0 +1,142 @@
+{
+  "name": "Identify",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/identify.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 1</strong> Divination</p>\n<p><strong>Casting Time:</strong> 1 minute</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nYou touch an object throughout the spell's casting. If the object is a magic item or some other magical object, you learn its properties and how to use them, whether it requires Attunement|XPHB, and how many charges it has, if any. You learn whether any ongoing spells are affecting the item and what they are. If the item was created by a spell, you learn that spell's name. If you instead touch a creature throughout the casting, you learn which ongoing spells, if any, are currently affecting it.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "minute",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 1,
+    "school": "div",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": true,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 287,
+      "school": "D",
+      "classes": [],
+      "_srdData": {
+        "name": "Identify",
+        "source": "XPHB",
+        "page": 287,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 1,
+        "school": "D",
+        "time": [
+          {
+            "number": 1,
+            "unit": "minute"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "a pearl worth 100+ GP",
+            "cost": 10000
+          }
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "meta": {
+          "ritual": true
+        },
+        "entries": [
+          "You touch an object throughout the spell's casting. If the object is a magic item or some other magical object, you learn its properties and how to use them, whether it requires {@variantrule Attunement|XPHB}, and how many charges it has, if any. You learn whether any ongoing spells are affecting the item and what they are. If the item was created by a spell, you learn that spell's name.",
+          "If you instead touch a creature throughout the casting, you learn which ongoing spells, if any, are currently affecting it."
+        ],
+        "miscTags": [
+          "OBJ"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

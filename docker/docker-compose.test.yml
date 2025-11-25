@@ -1,0 +1,123 @@
+# Docker Compose configuration for test capture service
+# This service can be used standalone or via MCP server for background test execution
+
+version: '3.8'
+
+services:
+  test-capture:
+    build:
+      context: ..
+      dockerfile: docker/test-capture.Dockerfile
+    container_name: crit-fumble-test-capture
+
+    # Environment variables
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - PROCESS_CAPTURES=${PROCESS_CAPTURES:-true}
+      - PLAYWRIGHT_BASE_URL=${PLAYWRIGHT_BASE_URL:-http://host.docker.internal:3000}
+
+    # Mount volumes for test outputs
+    volumes:
+      - ../tests/screenshots:/app/tests/screenshots
+      - ../tests/videos:/app/tests/videos
+      - ../tests/results:/app/tests/results
+      - ../tests/traces:/app/tests/traces
+      - ../playwright-report:/app/playwright-report
+
+    # Network configuration
+    network_mode: "host"
+
+    # VNC port for debugging (optional)
+    ports:
+      - "5900:5900"
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+    # Keep container running for interactive test execution
+    stdin_open: true
+    tty: true
+
+    # Override default command for interactive mode
+    # Use: docker-compose -f docker-compose.test.yml run test-capture [test-file]
+    command: /bin/bash
+
+  # MCP Server for background test execution
+  mcp-server:
+    build:
+      context: ..
+      dockerfile: docker/mcp-server.Dockerfile
+    container_name: crit-fumble-mcp-server
+
+    # Environment variables
+    environment:
+      - NODE_ENV=production
+      - MCP_PORT=3333
+      - MCP_HOST=0.0.0.0
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - PLAYWRIGHT_BASE_URL=${PLAYWRIGHT_BASE_URL:-http://host.docker.internal:3000}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+
+    # Mount Docker socket to allow MCP server to orchestrate test containers
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../tests/screenshots:/app/tests/screenshots
+      - ../tests/videos:/app/tests/videos
+      - ../tests/results:/app/tests/results
+      - ../tests/traces:/app/tests/traces
+      - ../playwright-report:/app/playwright-report
+      - ../mcp-state:/app/mcp-state
+      - ../mcp-logs:/app/mcp-logs
+
+    # Network configuration
+    network_mode: "host"
+
+    # Expose MCP server port
+    ports:
+      - "3333:3333"
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+    # Restart policy
+    restart: unless-stopped
+
+  # Optional: VNC viewer service for debugging
+  vnc-viewer:
+    image: consol/ubuntu-xfce-vnc:latest
+    container_name: crit-fumble-vnc-viewer
+    ports:
+      - "6080:6080"
+      - "5901:5900"
+    environment:
+      - VNC_PW=testing123
+    profiles:
+      - debug
+    depends_on:
+      - test-capture

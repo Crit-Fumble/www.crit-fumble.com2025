@@ -1,0 +1,57 @@
+{
+  "id": "damage-lightning",
+  "name": "Lightning",
+  "description": "Damage from electrical discharges, shocking bolts, and electrification that can travel through conductive materials.",
+  "category": "elemental",
+  "characteristics": {
+    "sourceExamples": [
+      "Electricity",
+      "Lightning bolts",
+      "Dragon breath (Blue/Bronze dragons)",
+      "Electric spells",
+      "Shocking weapons",
+      "Storm energy"
+    ],
+    "resistanceCommon": [
+      "Blue dragons",
+      "Bronze dragons",
+      "Storm giants",
+      "Air elementals",
+      "Behirs",
+      "Shockers"
+    ],
+    "immunityCommon": [
+      "Adult/Ancient blue dragons",
+      "Adult/Ancient bronze dragons",
+      "Lightning elementals (if present)",
+      "Some constructs immune to lightning"
+    ],
+    "vulnerabilityCommon": [
+      "Creatures in water or wearing metal armor (DM discretion)",
+      "Some creatures (rare in standard rules)"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Can arc through multiple targets (specific spells)",
+      "May conduct through water or metal (DM discretion)",
+      "Lightning Bolt creates a 100-foot line",
+      "Can be attracted to metal objects (specific effects)",
+      "Often appears in storm-related magic",
+      "Call Lightning only works outdoors or where storms can form"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Lightning Bolt (spell)",
+    "Call Lightning (spell)",
+    "Chain Lightning (spell)",
+    "Shocking Grasp (cantrip)",
+    "Witch Bolt (spell)",
+    "Blue dragon breath weapon",
+    "Storm Sphere (spell)",
+    "Lightning Arrow (spell)"
+  ]
+}

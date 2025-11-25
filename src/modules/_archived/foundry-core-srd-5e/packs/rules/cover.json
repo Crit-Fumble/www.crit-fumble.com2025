@@ -1,0 +1,39 @@
+{
+  "name": "Cover",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/rules/cover.svg",
+  "pages": [
+    {
+      "name": "Cover",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Cover</h2>\n\n<p><em>Source: XPHB, page 364</em></p>\n\nCover provides a degree of protection to a target behind it. There are three degrees of cover, each of which provides a different benefit to a target: Half Cover (+2 bonus to AC and Dexterity saving throws), Three-Quarters Cover (+5 bonus to AC and Dexterity Saving Throw|XPHB|saving throws), and Total Cover (can't be targeted directly). If behind more than one degree of cover, a target benefits only from the most protective degree."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "variant-rule",
+      "ruleType": "C",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 364,
+      "_srdData": {
+        "name": "Cover",
+        "source": "XPHB",
+        "page": 364,
+        "srd52": true,
+        "basicRules2024": true,
+        "ruleType": "C",
+        "entries": [
+          "Cover provides a degree of protection to a target behind it. There are three degrees of cover, each of which provides a different benefit to a target: Half Cover (+2 bonus to AC and Dexterity saving throws), Three-Quarters Cover (+5 bonus to AC and Dexterity {@variantrule Saving Throw|XPHB|saving throws}), and Total Cover (can't be targeted directly). If behind more than one degree of cover, a target benefits only from the most protective degree."
+        ]
+      }
+    }
+  }
+}

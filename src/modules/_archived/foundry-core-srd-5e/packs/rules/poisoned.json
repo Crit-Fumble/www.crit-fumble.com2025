@@ -1,0 +1,56 @@
+{
+  "name": "Poisoned",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/conditions/poisoned.svg",
+  "pages": [
+    {
+      "name": "Poisoned",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Poisoned</h2>\n\n<p><em>Source: XPHB, page 372</em></p>\n\nWhile you have the Poisoned condition, you experience the following effect. You have Disadvantage|XPHB on attack rolls and ability checks."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "condition",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 372,
+      "activeEffects": [
+        {
+          "key": "flags.dnd5e.poisoned",
+          "mode": 5,
+          "value": "1"
+        }
+      ],
+      "_srdData": {
+        "name": "Poisoned",
+        "source": "XPHB",
+        "page": 372,
+        "srd52": true,
+        "basicRules2024": true,
+        "entries": [
+          "While you have the Poisoned condition, you experience the following effect.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Ability Checks and Attacks Affected",
+                "entries": [
+                  "You have {@variantrule Disadvantage|XPHB} on attack rolls and ability checks."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

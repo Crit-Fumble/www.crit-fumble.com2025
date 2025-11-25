@@ -1,0 +1,69 @@
+{
+  "name": "Tent",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/tent.png",
+  "system": {
+    "description": {
+      "value": "A Tent sleeps up to two Small or Medium creatures.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 229,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 20,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 229,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Tent",
+        "source": "XPHB",
+        "page": 229,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 20,
+        "value": 200,
+        "entries": [
+          "A Tent sleeps up to two Small or Medium creatures."
+        ]
+      }
+    }
+  }
+}

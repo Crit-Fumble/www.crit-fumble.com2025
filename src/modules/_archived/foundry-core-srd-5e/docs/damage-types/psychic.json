@@ -1,0 +1,60 @@
+{
+  "id": "damage-psychic",
+  "name": "Psychic",
+  "description": "Damage from mind-rending energy that directly assaults the consciousness, thoughts, and mental faculties of a creature.",
+  "category": "supernatural",
+  "characteristics": {
+    "sourceExamples": [
+      "Mind-rending energy",
+      "Telepathic attacks",
+      "Psychic blasts",
+      "Mental assaults",
+      "Psionic powers",
+      "Mind flayer abilities",
+      "Nightmare effects"
+    ],
+    "resistanceCommon": [
+      "Some aberrations",
+      "Mind flayers",
+      "Intellect devourers",
+      "Creatures with strong mental defenses",
+      "Kalashtar (if present)"
+    ],
+    "immunityCommon": [
+      "Constructs (most types)",
+      "Undead (many types)",
+      "Creatures without intelligence or consciousness",
+      "Oozes",
+      "Some elementals",
+      "Objects"
+    ],
+    "vulnerabilityCommon": [
+      "Very rare",
+      "No standard creatures have psychic vulnerability"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": false,
+    "canCritical": true,
+    "specialRules": [
+      "Does not affect objects (targets conscious minds)",
+      "Ineffective against creatures without Intelligence",
+      "Constructs and most undead are immune",
+      "Often accompanied by mental conditions (charmed, frightened, stunned)",
+      "Cannot damage inanimate objects",
+      "Some psychic effects can pierce defenses that block physical damage",
+      "Telepathic creatures often deal psychic damage"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Mind Blast (Mind Flayer ability)",
+    "Psychic Scream (spell)",
+    "Vicious Mockery (cantrip)",
+    "Synaptic Static (spell)",
+    "Phantasmal Force (spell)",
+    "Phantasmal Killer (spell)",
+    "Intellect devourer attack",
+    "Psychic Crush (spell, if available)"
+  ]
+}

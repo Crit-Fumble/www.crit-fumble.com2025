@@ -1,0 +1,68 @@
+{
+  "name": "Ale (mug)",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ale-mug.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 231,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.04,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 231,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ale (mug)",
+        "source": "XPHB",
+        "page": 231,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "FD|XPHB",
+        "rarity": "none",
+        "value": 4,
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

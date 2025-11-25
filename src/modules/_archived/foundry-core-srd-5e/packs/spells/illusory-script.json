@@ -1,0 +1,141 @@
+{
+  "name": "Illusory Script",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/illusory-script.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 1</strong> Illusion</p>\n<p><strong>Casting Time:</strong> 1 minute</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> S, M</p>\n<p><strong>Duration:</strong> 10 days</p>\n\nYou write on parchment, paper, or another suitable material and imbue it with an illusion that lasts for the duration. To you and any creatures you designate when you cast the spell, the writing appears normal, seems to be written in your hand, and conveys whatever meaning you intended when you wrote the text. To all others, the writing appears as if it were written in an unknown or magical script that is unintelligible. Alternatively, the illusion can alter the meaning, handwriting, and language of the text, though the language must be one you know. If the spell is dispelled, the original script and the illusion both disappear. A creature that has Truesight|XPHB can read the hidden message.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "minute",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "day"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 1,
+    "school": "ill",
+    "components": {
+      "value": "",
+      "vocal": false,
+      "somatic": true,
+      "material": true,
+      "ritual": true,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 288,
+      "school": "I",
+      "classes": [],
+      "_srdData": {
+        "name": "Illusory Script",
+        "source": "XPHB",
+        "page": 288,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 1,
+        "school": "I",
+        "time": [
+          {
+            "number": 1,
+            "unit": "minute"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "s": true,
+          "m": {
+            "text": "ink worth 10+ GP, which the spell consumes",
+            "cost": 1000,
+            "consume": true
+          }
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "day",
+              "amount": 10
+            }
+          }
+        ],
+        "meta": {
+          "ritual": true
+        },
+        "entries": [
+          "You write on parchment, paper, or another suitable material and imbue it with an illusion that lasts for the duration. To you and any creatures you designate when you cast the spell, the writing appears normal, seems to be written in your hand, and conveys whatever meaning you intended when you wrote the text. To all others, the writing appears as if it were written in an unknown or magical script that is unintelligible. Alternatively, the illusion can alter the meaning, handwriting, and language of the text, though the language must be one you know.",
+          "If the spell is dispelled, the original script and the illusion both disappear.",
+          "A creature that has {@sense Truesight|XPHB} can read the hidden message."
+        ]
+      }
+    }
+  }
+}

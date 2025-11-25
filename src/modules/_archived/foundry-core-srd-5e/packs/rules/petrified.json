@@ -1,0 +1,98 @@
+{
+  "name": "Petrified",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/conditions/petrified.svg",
+  "pages": [
+    {
+      "name": "Petrified",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Petrified</h2>\n\n<p><em>Source: XPHB, page 372</em></p>\n\nWhile you have the Petrified condition, you experience the following effects. You are transformed, along with any nonmagical objects you are wearing and carrying, into a solid inanimate substance (usually stone). Your weight increases by a factor of ten, and you cease aging.You have the Incapacitated|XPHB condition.Your Speed|XPHB is 0 and can't increase.Attack|XPHB rolls against you have Advantage|XPHB.You automatically fail Strength and Dexterity Saving Throw|XPHB|saving throws.You have Resistance|XPHB to all damage.You have Immunity|XPHB to the Poisoned|XPHB condition."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "condition",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 372,
+      "activeEffects": [
+        {
+          "key": "flags.dnd5e.petrified",
+          "mode": 5,
+          "value": "1"
+        }
+      ],
+      "_srdData": {
+        "name": "Petrified",
+        "source": "XPHB",
+        "page": 372,
+        "srd52": true,
+        "basicRules2024": true,
+        "entries": [
+          "While you have the Petrified condition, you experience the following effects.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Turned to Inanimate Substance",
+                "entries": [
+                  "You are transformed, along with any nonmagical objects you are wearing and carrying, into a solid inanimate substance (usually stone). Your weight increases by a factor of ten, and you cease aging."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Incapacitated",
+                "entries": [
+                  "You have the {@condition Incapacitated|XPHB} condition."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Speed 0",
+                "entries": [
+                  "Your {@variantrule Speed|XPHB} is 0 and can't increase."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Attacks Affected",
+                "entries": [
+                  "{@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Saving Throws Affected",
+                "entries": [
+                  "You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Resist Damage",
+                "entries": [
+                  "You have {@variantrule Resistance|XPHB} to all damage."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Poison Immunity",
+                "entries": [
+                  "You have {@variantrule Immunity|XPHB} to the {@condition Poisoned|XPHB} condition."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

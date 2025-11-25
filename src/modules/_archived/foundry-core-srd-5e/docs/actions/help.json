@@ -1,0 +1,44 @@
+{
+  "id": "action-help",
+  "name": "Help",
+  "description": "Aid another creature's ability check or attack roll, or administer first aid to stabilize a dying creature",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "For assisting ability checks: ally must be near enough for you to assist verbally or physically",
+    "For assisting attack rolls: enemy must be within 5 feet of you",
+    "For stabilizing: creature must have 0 Hit Points"
+  ],
+  "effects": {
+    "description": "When you take the Help action, you do one of the following: assist an ability check, assist an attack roll, or stabilize a dying creature.",
+    "mechanicalEffects": [
+      "Assist Ability Check: Choose one skill/tool proficiency and one ally. That ally has Advantage on their next ability check with that skill or tool before the start of your next turn",
+      "Assist Attack Roll: Distract an enemy within 5 feet of you. One ally has Advantage on their next attack roll against that enemy before the start of your next turn",
+      "Stabilize: Make a DC 10 Wisdom (Medicine) check. On a success, a creature with 0 Hit Points becomes Stable"
+    ]
+  },
+  "restrictions": [
+    "The GM has final say on whether your assistance is possible",
+    "Advantage expires at the start of your next turn if not used",
+    "You can only help one creature per Help action",
+    "For ability checks, you must have the appropriate skill or tool proficiency to grant Advantage",
+    "For attack rolls, the enemy must be within 5 feet of you"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:541-548",
+  "examples": [
+    "A character helps their ally pick a lock by holding a torch steady",
+    "A fighter distracts an orc, giving the rogue Advantage on their attack",
+    "A cleric stabilizes a dying ally with a successful Medicine check",
+    "A character helps an ally climb a wall by boosting them up"
+  ],
+  "relatedActions": [
+    "action-utilize",
+    "action-search"
+  ],
+  "additionalRules": {
+    "assistAbilityCheck": "Choose one of your skill or tool proficiencies and one ally who is near enough for you to assist verbally or physically when they make an ability check. That ally has Advantage on the next ability check they make with the chosen skill or tool. This benefit expires if the ally doesn't use it before the start of your next turn. The GM has final say on whether your assistance is possible.",
+    "assistAttackRoll": "You momentarily distract an enemy within 5 feet of you, giving Advantage to the next attack roll by one of your allies against that enemy. This benefit expires at the start of your next turn.",
+    "stabilizing": "A Stable creature doesn't make Death Saving Throws even though it has 0 Hit Points, but it still has the Unconscious condition. The creature remains Stable and Unconscious until it regains Hit Points or someone administers first aid.",
+    "firstAid": "You can use an action to administer first aid to an Unconscious creature that has been stabilized, making a DC 10 Wisdom (Medicine) check. This ends the Unconscious condition on the creature."
+  }
+}

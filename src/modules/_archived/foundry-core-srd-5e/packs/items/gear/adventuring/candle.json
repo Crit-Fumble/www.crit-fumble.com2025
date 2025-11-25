@@ -1,0 +1,77 @@
+{
+  "name": "Candle",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/candle.png",
+  "system": {
+    "description": {
+      "value": "For 1 hour, a lit Candle sheds Bright Light|XPHB in a 5-foot radius and Dim Light|XPHB for an additional 5 feet.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 224,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.01,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 224,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Candle",
+        "source": "XPHB",
+        "page": 224,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "value": 1,
+        "entries": [
+          "For 1 hour, a lit Candle sheds {@variantrule Bright Light|XPHB} in a 5-foot radius and {@variantrule Dim Light|XPHB} for an additional 5 feet."
+        ],
+        "light": [
+          {
+            "bright": 5,
+            "dim": 10
+          }
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

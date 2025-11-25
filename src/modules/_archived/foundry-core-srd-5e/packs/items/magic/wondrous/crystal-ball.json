@@ -1,0 +1,77 @@
+{
+  "name": "Crystal Ball",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/crystal-ball.png",
+  "system": {
+    "description": {
+      "value": "The typical crystal ball, a very rare item, is about 6 inches in diameter. While touching it, you can cast the scrying|XPHB spell (save DC 17) with it.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 245,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 245,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Crystal Ball",
+        "source": "XDMG",
+        "page": 245,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "very rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "weight": 3,
+        "entries": [
+          "The typical crystal ball, a very rare item, is about 6 inches in diameter. While touching it, you can cast the {@spell scrying|XPHB} spell (save {@dc 17}) with it."
+        ],
+        "attachedSpells": [
+          "scrying|xphb"
+        ],
+        "lootTables": [
+          "Arcana - Very Rare|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

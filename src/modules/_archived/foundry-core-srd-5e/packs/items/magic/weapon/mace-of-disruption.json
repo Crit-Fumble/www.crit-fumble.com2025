@@ -1,0 +1,95 @@
+{
+  "name": "Mace of Disruption",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/mace-of-disruption.png",
+  "system": {
+    "description": {
+      "value": "When you hit a Fiend or an Undead with this magic weapon, that creature takes an extra 2d6 Radiant damage. If the target has 25 Hit Points|XPHB or fewer after taking this damage, it must succeed on a DC 15 Wisdom saving throw or be destroyed. On a successful save, the creature has the Frightened|XPHB condition until the end of your next turn. While you hold this weapon, it sheds Bright Light|XPHB in a 20-foot radius and Dim Light|XPHB for an additional 20 feet.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 276,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 4,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 276,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Mace of Disruption",
+        "source": "XDMG",
+        "page": 276,
+        "srd52": true,
+        "basicRules2024": true,
+        "baseItem": "mace|xphb",
+        "type": "M|XPHB",
+        "rarity": "rare",
+        "reqAttune": true,
+        "weight": 4,
+        "weaponCategory": "simple",
+        "mastery": [
+          "Sap|XPHB"
+        ],
+        "dmg1": "1d6",
+        "dmgType": "B",
+        "entries": [
+          "When you hit a Fiend or an Undead with this magic weapon, that creature takes an extra {@damage 2d6} Radiant damage. If the target has 25 {@variantrule Hit Points|XPHB} or fewer after taking this damage, it must succeed on a {@dc 15} Wisdom saving throw or be destroyed. On a successful save, the creature has the {@condition Frightened|XPHB} condition until the end of your next turn.",
+          {
+            "type": "entries",
+            "name": "Light",
+            "entries": [
+              "While you hold this weapon, it sheds {@variantrule Bright Light|XPHB} in a 20-foot radius and {@variantrule Dim Light|XPHB} for an additional 20 feet."
+            ]
+          }
+        ],
+        "light": [
+          {
+            "bright": 20,
+            "dim": 40
+          }
+        ],
+        "lootTables": [
+          "Armaments - Rare|XDMG",
+          "Relics - Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

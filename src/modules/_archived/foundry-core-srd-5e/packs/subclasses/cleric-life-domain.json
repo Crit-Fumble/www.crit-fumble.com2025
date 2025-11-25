@@ -1,0 +1,69 @@
+{
+  "name": "Life Domain",
+  "type": "subclass",
+  "img": "modules/foundry-core-srd-5e/assets/subclasses/cleric-life-domain.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "identifier": "life",
+    "classIdentifier": "cleric",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "ability": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "className": "Cleric",
+      "classSource": "XPHB",
+      "_srdData": {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB",
+        "page": 73,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "additionalSpells": [
+          {
+            "prepared": {
+              "3": [
+                "aid|xphb",
+                "bless|xphb",
+                "cure wounds|xphb",
+                "lesser restoration|xphb"
+              ],
+              "5": [
+                "mass healing word|xphb",
+                "revivify|xphb"
+              ],
+              "7": [
+                "aura of life|xphb",
+                "death ward|xphb"
+              ],
+              "9": [
+                "greater restoration|xphb",
+                "mass cure wounds|xphb"
+              ]
+            }
+          }
+        ],
+        "subclassFeatures": [
+          "Life Domain|Cleric|XPHB|Life|XPHB|3",
+          "Blessed Healer|Cleric|XPHB|Life|XPHB|6",
+          "Supreme Healing|Cleric|XPHB|Life|XPHB|17"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

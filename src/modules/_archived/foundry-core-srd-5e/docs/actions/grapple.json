@@ -1,0 +1,46 @@
+{
+  "id": "action-grapple",
+  "name": "Grapple (via Unarmed Strike)",
+  "description": "Use an Unarmed Strike to grab and restrain a creature, giving it the Grappled condition",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must have a hand free",
+    "Target must be within 5 feet of you",
+    "Target must be no more than one size larger than you",
+    "Must use the Attack action and choose the Grapple option for your Unarmed Strike"
+  ],
+  "effects": {
+    "description": "When you make an Unarmed Strike and choose the Grapple option, the target must succeed on a Strength or Dexterity saving throw (target's choice) or gain the Grappled condition. Successfully grappling gives the target the Grappled condition.",
+    "mechanicalEffects": [
+      "Target makes a Strength or Dexterity saving throw (DC = 8 + your Strength modifier + your Proficiency Bonus)",
+      "On a failed save, target gains the Grappled condition",
+      "Grappled condition effects: target's Speed becomes 0 and can't increase; target has Disadvantage on attack rolls against anyone except the grappler; grappler can drag or carry the target when moving (costs 1 extra foot of movement per foot moved unless target is Tiny or two+ sizes smaller)"
+    ]
+  },
+  "restrictions": [
+    "Must have at least one hand free to grapple",
+    "Can only grapple one creature per hand (or other body part, if applicable)",
+    "Target must be no more than one size larger than you",
+    "Grapple ends if: grappler becomes Incapacitated, distance between grappler and target exceeds grapple range, grappler releases target (no action required), or target successfully escapes"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:519-528, 1082-1093",
+  "examples": [
+    "A barbarian grabs an orc to prevent it from fleeing",
+    "A fighter grapples a cultist to stop them from completing a ritual",
+    "A monk uses grappling to restrain an enemy without killing them",
+    "A character grapples and drags an enemy toward a hazard"
+  ],
+  "relatedActions": [
+    "action-attack",
+    "action-shove"
+  ],
+  "additionalRules": {
+    "grappledCondition": "While Grappled: Speed is 0 and can't increase; Disadvantage on attack rolls against any target other than the grappler; the grappler can drag or carry you when it moves (every foot costs it 1 extra foot unless you are Tiny or two+ sizes smaller)",
+    "escapingGrapple": "A Grappled creature can use its action to make a Strength (Athletics) or Dexterity (Acrobatics) check against the grapple's escape DC (same as the initial save DC). On a success, the condition ends.",
+    "endingGrapple": "The condition also ends if the grappler has the Incapacitated condition or if the distance between the Grappled target and the grappler exceeds the grapple's range. The grappler can also release the target at any time (no action required).",
+    "oneGrapplePerHand": "A creature must have a hand free to grapple another creature. Some stat blocks and game effects allow a creature to grapple using a tentacle, maw, or another body part. Whatever part a grappler uses, it can grapple only one creature at a time with that part.",
+    "movingWithGrappled": "The grappler can drag or carry the Grappled creature when moving, but every foot of movement costs the grappler 1 extra foot unless the target is Tiny or two or more sizes smaller than the grappler",
+    "unarmedStrikeOptions": "When making an Unarmed Strike, you choose one option: Damage (1 + Strength modifier bludgeoning damage), Grapple, or Shove"
+  }
+}

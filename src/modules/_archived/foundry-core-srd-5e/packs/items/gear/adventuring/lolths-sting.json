@@ -1,0 +1,74 @@
+{
+  "name": "Lolth's Sting",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/lolths-sting.png",
+  "system": {
+    "description": {
+      "value": "A creature subjected to Lolth's Sting must succeed on a DC 13 Constitution saving throw or have the Poisoned|XPHB condition for 1 hour. If the creature fails the save by 5 or more, the creature also has the Unconscious|XPHB condition while Poisoned|XPHB in this way. The creature wakes up if it takes damage or if another creature takes an action to shake it awake.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 91,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 200,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 91,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Lolth's Sting",
+        "source": "XDMG",
+        "page": 91,
+        "srd52": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "value": 20000,
+        "poison": true,
+        "entries": [
+          "A creature subjected to Lolth's Sting must succeed on a {@dc 13} Constitution saving throw or have the {@condition Poisoned|XPHB} condition for 1 hour. If the creature fails the save by 5 or more, the creature also has the {@condition Unconscious|XPHB} condition while {@condition Poisoned|XPHB} in this way. The creature wakes up if it takes damage or if another creature takes an action to shake it awake."
+        ],
+        "poisonTypes": [
+          "injury"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

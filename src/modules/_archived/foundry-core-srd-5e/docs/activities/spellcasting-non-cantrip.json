@@ -1,0 +1,78 @@
+{
+  "id": "activity-spellcasting-non-cantrip",
+  "name": "Spellcasting (Non-Cantrip)",
+  "description": "Casting spells above cantrip level, requiring spell slot expenditure",
+  "intensity": "moderate",
+  "category": "spellcasting",
+  "modes": ["combat", "exploration", "social", "downtime"],
+  "properties": {
+    "physicalDemand": "low",
+    "mentalDemand": "high",
+    "requiresConsciousness": true,
+    "compatiblePositions": ["standing", "sitting", "prone"],
+    "requiresSpellSlot": true,
+    "castingTime": "variable"
+  },
+  "prerequisites": [
+    "Spellcasting ability",
+    "Available spell slot of appropriate level",
+    "Spell known or prepared",
+    "Somatic components (free hands if required)",
+    "Verbal components (ability to speak if required)",
+    "Material components (if required)"
+  ],
+  "srdReferences": [
+    {
+      "source": "rulesglossary/rulesdefinitions/96-LongRest.md",
+      "quote": "Casting a spell other than a cantrip",
+      "context": "Immediately interrupts Long Rest"
+    },
+    {
+      "source": "rulesglossary/rulesdefinitions/125-ShortRest.md",
+      "context": "Any spell casting interrupts Short Rest"
+    },
+    {
+      "source": "spells/",
+      "context": "Individual spell descriptions define casting time, components, and effects"
+    }
+  ],
+  "effects": {
+    "interruptsLongRest": true,
+    "interruptsLongRestImmediately": true,
+    "interruptsShortRest": true,
+    "interruptsShortRestImmediately": true,
+    "grantsRestBenefits": false,
+    "enablesRecovery": false,
+    "consumesSpellSlot": true
+  },
+  "castingTimeCategories": {
+    "action": "Most combat spells (1 action)",
+    "bonusAction": "Quick spells requiring bonus action",
+    "reaction": "Spells cast in response to triggers (e.g., Shield, Counterspell)",
+    "minutes": "Ritual spells and longer casting times (1-10 minutes)",
+    "hours": "Complex rituals (1-8 hours)",
+    "days": "Epic rituals (1+ days)"
+  },
+  "componentTypes": {
+    "verbal": "Spoken incantation (requires ability to speak)",
+    "somatic": "Gestures (requires free hand)",
+    "material": "Physical components (consumed or focus)"
+  },
+  "spellSlotRecovery": {
+    "longRest": "All spell slots recovered",
+    "shortRest": "Some classes recover slots (e.g., Warlock)",
+    "arcaneRecovery": "Wizard can recover slots once per day during short rest"
+  },
+  "examples": [
+    "Casting Cure Wounds during combat",
+    "Using Detect Magic to investigate an object",
+    "Casting Invisibility before sneaking past guards",
+    "Performing Identify ritual on a magic item",
+    "Casting Sending to communicate over long distance"
+  ],
+  "exceptions": [
+    "Cantrips do NOT interrupt Short Rest (only non-cantrip spells)",
+    "Ritual casting extends casting time by 10 minutes but doesn't consume slot",
+    "Some features allow spell recovery without rest (e.g., Arcane Recovery)"
+  ]
+}

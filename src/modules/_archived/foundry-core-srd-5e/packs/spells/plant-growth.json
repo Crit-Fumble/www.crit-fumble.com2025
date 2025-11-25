@@ -1,0 +1,152 @@
+{
+  "name": "Plant Growth",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/plant-growth.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 3</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 150 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nThis spell channels vitality into plants. The casting time you use determines whether the spell has the Overgrowth or the Enrichment effect below. Choose a point within range. All normal plants in a 100-foot-radius Sphere [Area of Effect]|XPHB|Sphere centered on that point become thick and overgrown. A creature moving through that area must spend 4 feet of movement for every 1 foot it moves. You can exclude one or more areas of any size within the spell's area from being affected.All plants in a half-mile radius centered on a point within range become enriched for 365 days. The plants yield twice the normal amount of food when harvested. They can benefit from only one Plant Growth per year.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 150,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 3,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 305,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Plant Growth",
+        "source": "XPHB",
+        "page": 305,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 3,
+        "school": "T",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action",
+            "note": "Overgrowth"
+          },
+          {
+            "number": 8,
+            "unit": "hour",
+            "note": "Enrichment"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 150
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "This spell channels vitality into plants. The casting time you use determines whether the spell has the Overgrowth or the Enrichment effect below.",
+          {
+            "type": "entries",
+            "name": "Overgrowth",
+            "entries": [
+              "Choose a point within range. All normal plants in a 100-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on that point become thick and overgrown. A creature moving through that area must spend 4 feet of movement for every 1 foot it moves. You can exclude one or more areas of any size within the spell's area from being affected."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Enrichment",
+            "entries": [
+              "All plants in a half-mile radius centered on a point within range become enriched for 365 days. The plants yield twice the normal amount of food when harvested. They can benefit from only one Plant Growth per year."
+            ]
+          }
+        ],
+        "miscTags": [
+          "DFT"
+        ]
+      }
+    }
+  }
+}

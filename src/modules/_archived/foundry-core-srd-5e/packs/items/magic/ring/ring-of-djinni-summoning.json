@@ -1,0 +1,76 @@
+{
+  "name": "Ring of Djinni Summoning",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ring-of-djinni-summoning.png",
+  "system": {
+    "description": {
+      "value": "While wearing this ring, you can take a Magic|XPHB action to summon a particular Djinni|XMM from the Elemental Plane of Air. The djinni appears in an unoccupied space you choose within 120 feet of yourself. It remains as long as you maintain Concentration|XPHB, to a maximum of 1 hour, or until it drops to 0 Hit Points|XPHB. While summoned, the djinni is Friendly [Attitude]|XPHB|Friendly to you and your allies, and it obeys your commands. If you fail to command it, the djinni defends itself against attackers but takes no other actions. After the djinni departs, it can't be summoned again for 24 hours, and the ring becomes nonmagical if the djinni dies. Rings of Djinni Summoning are often created by the djinn they summon and given to mortals as gifts of friendship or tokens of esteem.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 292,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 292,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Ring of Djinni Summoning",
+        "source": "XDMG",
+        "page": 292,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "RG|XDMG",
+        "rarity": "legendary",
+        "reqAttune": true,
+        "entries": [
+          "While wearing this ring, you can take a {@action Magic|XPHB} action to summon a particular {@creature Djinni|XMM} from the Elemental Plane of Air. The djinni appears in an unoccupied space you choose within 120 feet of yourself. It remains as long as you maintain {@status Concentration|XPHB}, to a maximum of 1 hour, or until it drops to 0 {@variantrule Hit Points|XPHB}.",
+          "While summoned, the djinni is {@variantrule Friendly [Attitude]|XPHB|Friendly} to you and your allies, and it obeys your commands. If you fail to command it, the djinni defends itself against attackers but takes no other actions.",
+          "After the djinni departs, it can't be summoned again for 24 hours, and the ring becomes nonmagical if the djinni dies.",
+          "Rings of Djinni Summoning are often created by the djinn they summon and given to mortals as gifts of friendship or tokens of esteem."
+        ],
+        "lootTables": [
+          "Arcana - Legendary|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Robe of Stars",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/robe-of-stars.png",
+  "system": {
+    "description": {
+      "value": "This black or dark-blue robe is embroidered with small white or silver stars. You gain a +1 bonus to saving throws while you wear it. Six stars, located on the robe's upper-front portion, are particularly large. While wearing this robe, you can take a Magic|XPHB action to remove one of the stars and expend it to cast the level 5 version of Magic Missile|XPHB. Daily at dusk, 1d6 removed stars reappear on the robe. While you wear the robe, you can take a Magic|XPHB action to enter the Astral Plane along with everything you are wearing and carrying. You remain there until you take a Magic|XPHB action to return to the plane you were on. You reappear in the last space you occupied or, if that space is occupied, the nearest unoccupied space.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 297,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 297,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Robe of Stars",
+        "source": "XDMG",
+        "page": 297,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "very rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "bonusSavingThrow": "+1",
+        "rechargeAmount": "{@dice 1d6}",
+        "charges": 6,
+        "entries": [
+          "This black or dark-blue robe is embroidered with small white or silver stars. You gain a +1 bonus to saving throws while you wear it.",
+          "Six stars, located on the robe's upper-front portion, are particularly large. While wearing this robe, you can take a {@action Magic|XPHB} action to remove one of the stars and expend it to cast the level 5 version of {@spell Magic Missile|XPHB}. Daily at dusk, {@dice 1d6} removed stars reappear on the robe.",
+          "While you wear the robe, you can take a {@action Magic|XPHB} action to enter the Astral Plane along with everything you are wearing and carrying. You remain there until you take a {@action Magic|XPHB} action to return to the plane you were on. You reappear in the last space you occupied or, if that space is occupied, the nearest unoccupied space."
+        ],
+        "attachedSpells": {
+          "charges": {
+            "1": [
+              "magic missile|xphb#5"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

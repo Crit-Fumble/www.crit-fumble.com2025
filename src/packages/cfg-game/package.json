@@ -1,0 +1,65 @@
+{
+  "name": "@crit-fumble/game",
+  "version": "1.0.0",
+  "description": "Core game mechanics and systems for Crit-Fumble TTRPG platform",
+  "keywords": [
+    "ttrpg",
+    "rpg",
+    "game-mechanics",
+    "dnd",
+    "cypher-system",
+    "foundry-vtt"
+  ],
+  "author": "Crit-Fumble",
+  "license": "MIT",
+  "homepage": "https://www.crit-fumble.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crit-fumble/crit-fumble.git",
+    "directory": "www.crit-fumble.com/src/packages/cfg-game"
+  },
+  "bugs": {
+    "url": "https://github.com/crit-fumble/crit-fumble/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./behaviors": {
+      "types": "./dist/behaviors/index.d.ts",
+      "import": "./dist/behaviors/index.js",
+      "require": "./dist/behaviors/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

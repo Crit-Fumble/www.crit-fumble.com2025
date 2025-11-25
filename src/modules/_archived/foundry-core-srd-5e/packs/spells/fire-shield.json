@@ -1,0 +1,146 @@
+{
+  "name": "Fire Shield",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/fire-shield.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 4</strong> Evocation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined self</p>\n<p><strong>Components:</strong> V, S, M (a bit of phosphorus or a firefly)</p>\n<p><strong>Duration:</strong> 10 minutes</p>\n\nWispy flames wreathe your body for the duration, shedding Bright Light|XPHB in a 10-foot radius and Dim Light|XPHB for an additional 10 feet. The flames provide you with a warm shield or a chill shield, as you choose. The warm shield grants you Resistance|XPHB to Cold damage, and the chill shield grants you Resistance|XPHB to Fire damage. In addition, whenever a creature within 5 feet of you hits you with a melee attack roll, the shield erupts with flame. The attacker takes 2d8 Fire damage from a warm shield or 2d8 Cold damage from a chill shield.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 4,
+    "school": "evo",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "a bit of phosphorus or a firefly",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 274,
+      "school": "V",
+      "classes": [],
+      "_srdData": {
+        "name": "Fire Shield",
+        "source": "XPHB",
+        "page": 274,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 4,
+        "school": "V",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "self"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "a bit of phosphorus or a firefly"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 10
+            }
+          }
+        ],
+        "entries": [
+          "Wispy flames wreathe your body for the duration, shedding {@variantrule Bright Light|XPHB} in a 10-foot radius and {@variantrule Dim Light|XPHB} for an additional 10 feet.",
+          "The flames provide you with a warm shield or a chill shield, as you choose. The warm shield grants you {@variantrule Resistance|XPHB} to Cold damage, and the chill shield grants you {@variantrule Resistance|XPHB} to Fire damage.",
+          "In addition, whenever a creature within 5 feet of you hits you with a melee attack roll, the shield erupts with flame. The attacker takes {@damage 2d8} Fire damage from a warm shield or {@damage 2d8} Cold damage from a chill shield."
+        ],
+        "damageResist": [
+          "cold",
+          "fire"
+        ],
+        "damageInflict": [
+          "cold",
+          "fire"
+        ],
+        "miscTags": [
+          "LGT"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Pipes of Haunting",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/pipes-of-haunting.png",
+  "system": {
+    "description": {
+      "value": "These pipes have 3 charges and regain 1d3 expended charges daily at dawn. You can take a Magic|XPHB action to play them and expend 1 charge to create an eerie, spellbinding tune. Each creature of your choice within 30 feet of you must succeed on a DC 15 Wisdom saving throw or have the Frightened|XPHB condition for 1 minute. A creature that fails the save repeats it at the end of each of its turns, ending the effect on itself on a success. A creature that succeeds on its save is immune to the effect of these pipes for 24 hours.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 285,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 285,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Pipes of Haunting",
+        "source": "XDMG",
+        "page": 285,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "uncommon",
+        "wondrous": true,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d3}",
+        "charges": 3,
+        "entries": [
+          "These pipes have 3 charges and regain {@dice 1d3} expended charges daily at dawn. You can take a {@action Magic|XPHB} action to play them and expend 1 charge to create an eerie, spellbinding tune. Each creature of your choice within 30 feet of you must succeed on a {@dc 15} Wisdom saving throw or have the {@condition Frightened|XPHB} condition for 1 minute. A creature that fails the save repeats it at the end of each of its turns, ending the effect on itself on a success. A creature that succeeds on its save is immune to the effect of these pipes for 24 hours."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Implements - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

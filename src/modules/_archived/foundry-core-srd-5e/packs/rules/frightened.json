@@ -1,0 +1,63 @@
+{
+  "name": "Frightened",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/conditions/frightened.svg",
+  "pages": [
+    {
+      "name": "Frightened",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Frightened</h2>\n\n<p><em>Source: XPHB, page 367</em></p>\n\nWhile you have the Frightened condition, you experience the following effects. You have Disadvantage|XPHB on ability checks and attack rolls while the source of fear is within line of sight.You can't willingly move closer to the source of fear."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "condition",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 367,
+      "activeEffects": [
+        {
+          "key": "flags.dnd5e.frightened",
+          "mode": 5,
+          "value": "1"
+        }
+      ],
+      "_srdData": {
+        "name": "Frightened",
+        "source": "XPHB",
+        "page": 367,
+        "srd52": true,
+        "basicRules2024": true,
+        "entries": [
+          "While you have the Frightened condition, you experience the following effects.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Ability Checks and Attacks Affected",
+                "entries": [
+                  "You have {@variantrule Disadvantage|XPHB} on ability checks and attack rolls while the source of fear is within line of sight."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Can't Approach",
+                "entries": [
+                  "You can't willingly move closer to the source of fear."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

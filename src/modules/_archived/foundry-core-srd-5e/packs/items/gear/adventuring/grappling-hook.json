@@ -1,0 +1,69 @@
+{
+  "name": "Grappling Hook",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/grappling-hook.png",
+  "system": {
+    "description": {
+      "value": "As a Utilize|XPHB action, you can throw the Grappling Hook at a railing, a ledge, or another catch within 50 feet of yourself, and the hook catches on if you succeed on a DC 13 Dexterity (Acrobatics|XPHB) check. If you tied a Rope to the hook, you can then climb it.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 225,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 4,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 225,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Grappling Hook",
+        "source": "XPHB",
+        "page": 225,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 4,
+        "value": 200,
+        "entries": [
+          "As a {@action Utilize|XPHB} action, you can throw the Grappling Hook at a railing, a ledge, or another catch within 50 feet of yourself, and the hook catches on if you succeed on a {@dc 13} Dexterity ({@skill Acrobatics|XPHB}) check. If you tied a Rope to the hook, you can then climb it."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "name": "Produce Flame",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/produce-flame.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 0</strong> Conjuration</p>\n<p><strong>Casting Time:</strong> 1 bonus</p>\n<p><strong>Range:</strong> undefined self</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> 10 minutes</p>\n\nA flickering flame appears in your hand and remains there for the duration. While there, the flame emits no heat and ignites nothing, and it sheds Bright Light|XPHB in a 20-foot radius and Dim Light|XPHB for an additional 20 feet. The spell ends if you cast it again. Until the spell ends, you can take a Magic|XPHB action to hurl fire at a creature or an object within 60 feet of you. Make a ranged spell attack. On a hit, the target takes 1d8 Fire damage.\n\n<p><strong>At Higher Levels:</strong> The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "bonus",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "rsak",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [
+        [
+          "1d8",
+          "fire"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 0,
+    "school": "con",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 308,
+      "school": "C",
+      "classes": [],
+      "_srdData": {
+        "name": "Produce Flame",
+        "source": "XPHB",
+        "page": 308,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 0,
+        "school": "C",
+        "time": [
+          {
+            "number": 1,
+            "unit": "bonus"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "self"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 10
+            }
+          }
+        ],
+        "entries": [
+          "A flickering flame appears in your hand and remains there for the duration. While there, the flame emits no heat and ignites nothing, and it sheds {@variantrule Bright Light|XPHB} in a 20-foot radius and {@variantrule Dim Light|XPHB} for an additional 20 feet. The spell ends if you cast it again.",
+          "Until the spell ends, you can take a {@action Magic|XPHB} action to hurl fire at a creature or an object within 60 feet of you. Make a ranged spell attack. On a hit, the target takes {@damage 1d8} Fire damage."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Cantrip Upgrade",
+            "entries": [
+              "The damage increases by {@damage 1d8} when you reach levels 5 ({@damage 2d8}), 11 ({@damage 3d8}), and 17 ({@damage 4d8})."
+            ]
+          }
+        ],
+        "scalingLevelDice": {
+          "label": "Fire damage",
+          "scaling": {
+            "1": "1d8",
+            "5": "2d8",
+            "11": "3d8",
+            "17": "4d8"
+          }
+        },
+        "damageInflict": [
+          "fire"
+        ],
+        "spellAttack": [
+          "R"
+        ],
+        "miscTags": [
+          "LGT",
+          "OBJ",
+          "SCL"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

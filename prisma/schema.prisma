@@ -1,0 +1,2819 @@
+// Prisma schema for Crit-Fumble TTRPG Platform
+// See docs/DATABASE_SCHEMA.md for complete schema documentation
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// Authentication & User Management (Auth.js required tables)
+// ============================================================================
+
+// User tier levels for feature access and monthly Crit-Coin allocations
+// Order matters: LEGACY (-1), FREE (0), PRO (1), PLUS (2), MAX (3)
+enum UserTier {
+  LEGACY // Admin-only tier for 5+ year members, grants 5 coins/month
+  FREE // Default tier - standard features, 0 coins/month
+  PRO // Paid tier - enhanced features (stubbed, TBD)
+  PLUS // Paid tier - advanced features (stubbed, TBD)
+  MAX // Paid tier - all features (stubbed, TBD)
+}
+
+// CritUser - Platform/website user (auth, profile, payments, platform features)
+// Crit tables can reference Rpg tables, but Rpg tables should not reference Crit tables
+// NOTE: OAuth accounts are stored in the Account model (NextAuth standard)
+// Multiple accounts from the same or different providers can be linked to one CritUser
+model CritUser {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // User info
+  username String  @unique
+  email    String? @unique
+
+  // Profile completion status
+  profileCompleted Boolean @default(false) @map("profile_completed")
+  avatarUrl        String? @map("avatar_url") // User's chosen avatar (can override provider avatars)
+  displayName      String? @map("display_name") // User's display name (defaults to username if not set)
+  bio              String? // Short user biography/description
+
+  // User roles (owners have all roles by default)
+  // Possible values: 'GameMaster', 'Storyteller', 'Worldbuilder', 'Creator', 'Moderator', 'Admin'
+  roles      Json    @default("[]") @db.JsonB
+  viewAsRole String? @map("view_as_role") // Owner-only: view site as different role for testing
+
+  // DEPRECATED: Provider-specific fields (kept for backward compatibility during migration)
+  // These will be removed after migrating data to Account.metadata
+  // To get linked accounts, use: user.accounts relation
+  discordId       String? @unique @map("discord_id")
+  discordUsername String? @map("discord_username")
+  discordAvatar   String? @map("discord_avatar")
+
+  githubId       String? @unique @map("github_id")
+  githubUsername String? @map("github_username")
+  githubAvatar   String? @map("github_avatar")
+
+  twitchId       String? @unique @map("twitch_id")
+  twitchUsername String? @map("twitch_username")
+  twitchAvatar   String? @map("twitch_avatar")
+
+  battlenetId        String? @unique @map("battlenet_id")
+  battlenetBattletag String? @map("battlenet_battletag")
+
+  steamId       String? @unique @map("steam_id")
+  steamUsername String? @map("steam_username")
+  steamAvatar   String? @map("steam_avatar")
+
+  fandomId       String? @unique @map("fandom_id")
+  fandomUsername String? @map("fandom_username")
+
+  // Foundry VTT API Integration (not OAuth-based)
+  foundryApiUrl   String? @map("foundry_api_url") // User's Foundry instance URL
+  foundryApiKey   String? @map("foundry_api_key") // Encrypted API key
+  foundryUsername String? @map("foundry_username")
+  foundryUserId   String? @map("foundry_user_id")
+
+  // World Anvil OAuth
+  worldAnvilId           String?   @unique @map("world_anvil_id")
+  worldAnvilUsername     String?   @map("world_anvil_username")
+  worldAnvilToken        String?   @map("world_anvil_token") // Encrypted
+  worldAnvilRefreshToken String?   @map("world_anvil_refresh_token") // Encrypted
+  worldAnvilTokenExpires DateTime? @map("world_anvil_token_expires")
+
+  // Primary account selection for display (optional)
+  // Points to an Account.id to use for username/avatar display
+  primaryAccountId String? @map("primary_account_id")
+
+  // Stripe
+  stripeCustomerId String? @unique @map("stripe_customer_id")
+
+  // User preferences
+  settings Json @default("{}") @db.JsonB
+
+  // Status
+  isActive    Boolean   @default(true) @map("is_active")
+  lastLoginAt DateTime? @map("last_login_at")
+
+  // Tier and role management
+  tier                    UserTier  @default(FREE) // Subscription/feature tier
+  isAdmin                 Boolean   @default(false) @map("is_admin") // Admin privileges (can manage users, content, etc.)
+  isOwner                 Boolean   @default(false) @map("is_owner") // Owner privileges (full platform control)
+  lastMonthlyCoinsGranted DateTime? @map("last_monthly_coins_granted") // Last time monthly tier coins were granted
+
+  // Developer privileges (local development only)
+  // When all three verified fields match DEV_ env vars, user gets admin privileges
+  verifiedPhone   String? @map("verified_phone")
+  verifiedEmail   String? @map("verified_email")
+  verifiedDiscord String? @map("verified_discord")
+
+  // Auth.js relations
+  accounts Account[]
+  sessions Session[]
+
+  // Platform sessions (immutable audit log)
+  sessionLogs CritSessionLog[]
+
+  // Platform relations (Crit tables)
+  coinTransactions        CritCoinTransaction[]
+  storyCreditTransactions CritStoryCreditTransaction[]
+  purchases               CritPurchase[]
+  virtualDesktopSessions  CritVirtualDesktopSession[]
+  apiKeys                 CritApiKey[]
+
+  // Multiverse/Universe/Space ownership (Crit expansion features)
+  ownedMultiverses   CritMultiverse[]
+  ownedUniverses     CritUniverse[]
+  ownedOrbitalSpaces CritOrbitalSpace[]
+
+  // RPG World ownership (worlds are owned at platform level)
+  ownedWorlds RpgWorld[]
+
+  // Asset ownership (marketplace assets)
+  ownedAssets CritAsset[]
+
+  // Link to game identity (1:1 relationship)
+  rpgPlayer RpgPlayer?
+
+  // Core Concepts Wiki (admin-authored documentation)
+  authoredWikiPages   CoreConceptWiki[]         @relation("AuthoredWikiPages")
+  lastEditedWikiPages CoreConceptWiki[]         @relation("WikiLastEditor")
+  wikiRevisions       CoreConceptWikiRevision[]
+
+  // World-specific Wiki (user-authored world documentation)
+  authoredWorldWikiPages   RpgWorldWiki[]         @relation("AuthoredWorldWikiPages")
+  lastEditedWorldWikiPages RpgWorldWiki[]         @relation("EditedWorldWikiPages")
+  worldWikiRevisions       RpgWorldWikiRevision[] @relation("WorldWikiEdits")
+
+  @@index([discordId])
+  @@index([githubId])
+  @@index([twitchId])
+  @@index([battlenetId])
+  @@index([steamId])
+  @@index([fandomId])
+  @@index([worldAnvilId])
+  @@index([stripeCustomerId])
+  @@index([deletedAt])
+  @@map("crit_users")
+}
+
+// ============================================================================
+// Core Concepts Wiki & Documentation
+// ============================================================================
+
+// CoreConceptWiki - Admin-editable wiki pages for game rules and Core Concepts
+// Public-facing with three audience versions: GM, Player, World Builder
+model CoreConceptWiki {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Page identification
+  slug      String  @unique @db.VarChar(200) // URL-friendly identifier
+  title     String  @db.VarChar(200)
+  category  String  @db.VarChar(100) // 'players', 'teams', 'roles', 'scales', 'rules', etc.
+  icon      String? @db.VarChar(50) // Emoji or icon identifier
+  sortOrder Int     @default(0) @map("sort_order") // For ordering pages in navigation
+
+  // Content for different audiences (Markdown format)
+  gmContent      String @map("gm_content") @db.Text // Full details for Game Masters
+  playerContent  String @map("player_content") @db.Text // Simplified for Players
+  builderContent String @map("builder_content") @db.Text // In-depth for World Builders
+
+  // SEO & meta
+  description String? @db.Text // Short description for meta tags
+  keywords    String? @db.Text // Comma-separated keywords
+
+  // Publishing
+  isPublished Boolean   @default(false) @map("is_published")
+  publishedAt DateTime? @map("published_at")
+
+  // Authorship
+  authorId String   @map("author_id")
+  author   CritUser @relation("AuthoredWikiPages", fields: [authorId], references: [id])
+
+  lastEditedById String?   @map("last_edited_by_id")
+  lastEditedBy   CritUser? @relation("WikiLastEditor", fields: [lastEditedById], references: [id])
+
+  // Versioning (for AI-assisted edits and rollback)
+  revisions CoreConceptWikiRevision[]
+
+  // AI generation metadata
+  aiAssisted       Boolean @default(false) @map("ai_assisted") // Was AI used to generate/edit content?
+  aiModel          String? @db.VarChar(100) // e.g., "claude-sonnet-4", "gpt-4"
+  aiPromptMetadata Json    @default("{}") @map("ai_prompt_metadata") @db.JsonB // Store prompt info for reference
+
+  @@index([slug])
+  @@index([category])
+  @@index([authorId])
+  @@index([isPublished])
+  @@index([deletedAt])
+  @@map("core_concept_wiki")
+}
+
+// CoreConceptWikiRevision - Version history for wiki pages
+// Allows rollback and tracking of AI-assisted edits
+model CoreConceptWikiRevision {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Link to parent wiki page
+  wikiPageId String          @map("wiki_page_id")
+  wikiPage   CoreConceptWiki @relation(fields: [wikiPageId], references: [id], onDelete: Cascade)
+
+  // Revision metadata
+  versionNumber Int    @map("version_number") // Incremental version counter
+  changeNote    String @default("") @db.Text // What changed in this revision
+
+  // Snapshot of content at this revision
+  gmContent      String @map("gm_content") @db.Text
+  playerContent  String @map("player_content") @db.Text
+  builderContent String @map("builder_content") @db.Text
+
+  // Editor info
+  editorId String   @map("editor_id")
+  editor   CritUser @relation(fields: [editorId], references: [id])
+
+  // AI metadata
+  aiAssisted       Boolean @default(false) @map("ai_assisted")
+  aiModel          String? @db.VarChar(100)
+  aiPromptMetadata Json    @default("{}") @map("ai_prompt_metadata") @db.JsonB
+
+  @@index([wikiPageId])
+  @@index([editorId])
+  @@index([createdAt])
+  @@map("core_concept_wiki_revisions")
+}
+
+// ============================================================================
+// Core Concepts (In-Game)
+// ============================================================================
+
+// RpgPlayer - In-game player identity (characters, campaigns, game actions)
+// RPG tables are platform-agnostic and do not reference Crit tables
+model RpgPlayer {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Link to platform user (1:1 relationship)
+  userId String   @unique @map("user_id")
+  user   CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Player display name (can differ from CritUser username)
+  displayName String? @map("display_name") @db.VarChar(100)
+
+  // Default VTT Role (for sessions/campaigns)
+  defaultRole String @default("player") @map("default_role") // 'player' | 'gm' | 'spectator'
+
+  // Game preferences (separate from platform settings)
+  gameSettings Json @default("{}") @map("game_settings") @db.JsonB
+
+  // RPG ownership relations
+  ownedCampaigns RpgCampaign[]
+
+  // Player Characters (creatures controlled by this player)
+  controlledCharacters RpgCreature[]
+
+  // Uploaded assets (in-game assets)
+  uploadedAssets RpgAsset[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("rpg_players")
+}
+
+// Auth.js required tables
+// Account - OAuth provider accounts linked to a CritUser
+// Multiple accounts can be linked to one user (even from the same provider)
+// This is the source of truth for linked accounts
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  // Timestamps for account linking
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Provider-specific metadata (username, avatar, email, etc.)
+  // Schema varies by provider, stored as JSON
+  // Example for Discord: { "username": "user#1234", "avatar": "https://...", "email": "user@example.com" }
+  // Example for GitHub: { "login": "username", "avatar_url": "https://...", "email": "user@example.com" }
+  // Example for Twitch: { "preferred_username": "username", "picture": "https://...", "email": "user@example.com" }
+  metadata Json @default("{}") @db.JsonB
+
+  // Display name override (optional, for user customization)
+  displayName String? @map("display_name")
+
+  user CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider, userId]) // For efficient queries like "get all Discord accounts for user"
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  // Activity tracking
+  createdAt      DateTime @default(now()) @map("created_at")
+  lastActivityAt DateTime @default(now()) @map("last_activity_at")
+  ipAddress      String?  @map("ip_address") @db.VarChar(45) // IPv6 max length
+  userAgent      String?  @map("user_agent") @db.Text
+
+  user CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([lastActivityAt])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================================================
+// Player Session Audit Log (Immutable, Write-Only)
+// ============================================================================
+
+model CritSessionLog {
+  // Incremental ID (never reused, never deleted)
+  id BigInt @id @default(autoincrement())
+
+  // Timestamps (IMMUTABLE - no updated_at or deleted_at)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Player reference
+  playerId String @map("player_id")
+
+  // Session token (unique per session)
+  sessionToken String @map("session_token") @db.VarChar(500)
+
+  // Session metadata
+  ipAddress   String? @map("ip_address") @db.VarChar(45) // IPv6 max length
+  userAgent   String? @map("user_agent") @db.Text
+  loginMethod String  @map("login_method") @db.VarChar(50) // 'discord', 'world_anvil', etc.
+
+  // Session expiration (1 month from creation)
+  expiresAt DateTime @map("expires_at")
+
+  // Last activity timestamp (updated but record never deleted)
+  lastActivityAt DateTime @default(now()) @map("last_activity_at")
+
+  // Status (for session validity check)
+  isValid Boolean @default(true) @map("is_valid") // Can be set to false, but never deleted
+
+  // Logout tracking (if user explicitly logged out)
+  loggedOutAt DateTime? @map("logged_out_at")
+
+  // Additional metadata
+  metadata Json @default("{}")
+
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@index([playerId])
+  @@index([sessionToken])
+  @@index([createdAt])
+  @@index([expiresAt])
+  @@index([isValid])
+  @@map("player_sessions")
+}
+
+// ============================================================================
+// Crit-Coin Economy & Monetization (Non-Exportable, Private User Data)
+// ============================================================================
+
+model CritCoinTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  // NO updated_at or deleted_at - transactions are IMMUTABLE
+
+  playerId        String @map("player_id")
+  transactionType String @map("transaction_type") // 'credit' or 'debit'
+  amount          Int
+  balanceAfter    Int    @map("balance_after")
+  description     String @db.VarChar(500)
+
+  // Product reference
+  productId String?      @map("product_id")
+  product   CritProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  // Stripe payment reference
+  stripePaymentIntentId String? @map("stripe_payment_intent_id")
+  stripeChargeId        String? @map("stripe_charge_id")
+
+  // Expiration (for promotional credits)
+  expiresAt DateTime? @map("expires_at")
+
+  // Additional metadata
+  metadata Json @default("{}")
+
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@index([playerId])
+  @@index([createdAt])
+  @@index([productId])
+  @@index([expiresAt])
+  @@index([transactionType])
+  @@index([stripePaymentIntentId])
+  @@map("crit_coin_transactions")
+}
+
+// Story Credits - Earned currency that can be cashed out
+model CritStoryCreditTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  // NO updated_at or deleted_at - IMMUTABLE
+
+  playerId        String  @map("player_id")
+  transactionType String  @map("transaction_type") // 'earned', 'spent_redemption', 'spent_payout'
+  amount          Decimal @db.Decimal(10, 2) // Story Credits (can be fractional)
+  balanceAfter    Decimal @map("balance_after") @db.Decimal(10, 2)
+  description     String  @db.VarChar(500)
+
+  // Source tracking
+  source String @db.VarChar(100) // 'gm_session', 'content_approved', 'artwork_approved', 'asset_approved', etc
+
+  // Optional references
+  sessionId String?      @map("session_id")
+  session   CritSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  contentId String? @map("content_id") // Reference to approved content (future table)
+
+  // Payout tracking (if cashed out via Stripe Connect)
+  stripeTransferId String? @map("stripe_transfer_id") @db.VarChar(255)
+  payoutStatus     String? @map("payout_status") @db.VarChar(50) // 'pending', 'processing', 'completed', 'failed'
+
+  // Redemption tracking (if converted to Crit-Coins)
+  redemptionTransactionId String? @map("redemption_transaction_id") // Links to CritCoinTransaction if redeemed
+
+  // Metadata for audit trail
+  metadata Json @default("{}")
+
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
+
+  @@index([playerId])
+  @@index([createdAt])
+  @@index([source])
+  @@index([stripeTransferId])
+  @@index([payoutStatus])
+  @@index([transactionType])
+  @@map("story_credit_transactions")
+}
+
+model CritProduct {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Product identification
+  sku         String  @unique @db.VarChar(100)
+  name        String  @db.VarChar(255)
+  title       String  @db.VarChar(255)
+  description String? @db.Text
+
+  // Product type
+  productType     String  @map("product_type") @db.VarChar(50) // 'crit_coins', 'virtual_desktop', 'ai_credits'
+  productCategory String? @map("product_category") @db.VarChar(50)
+
+  // Pricing
+  priceUsd       Decimal? @map("price_usd") @db.Decimal(10, 2)
+  priceCritCoins Int?     @map("price_crit_coins")
+
+  // Product values
+  critCoinAmount    Int? @map("crit_coin_amount")
+  vdDurationMinutes Int? @map("vd_duration_minutes")
+  aiGenerationCount Int? @map("ai_generation_count")
+
+  // Availability
+  isActive       Boolean   @default(true) @map("is_active")
+  isFeatured     Boolean   @default(false) @map("is_featured")
+  availableFrom  DateTime? @map("available_from")
+  availableUntil DateTime? @map("available_until")
+  maxPurchases   Int?      @map("max_purchases_per_user")
+
+  // Stripe integration
+  stripeProductId String? @map("stripe_product_id") @db.VarChar(255)
+  stripePriceId   String? @map("stripe_price_id") @db.VarChar(255)
+
+  // Metadata
+  features     Json    @default("[]")
+  metadata     Json    @default("{}")
+  displayOrder Int     @default(0) @map("display_order")
+  imageUrl     String? @map("image_url") @db.Text
+
+  // Relations
+  transactions CritCoinTransaction[]
+  purchases    CritPurchase[]
+  vdSessions   CritVirtualDesktopSession[]
+
+  @@index([sku])
+  @@index([productType])
+  @@index([isActive])
+  @@index([deletedAt])
+  @@index([stripeProductId])
+  @@map("crit_products")
+}
+
+model CritPurchase {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  playerId  String @map("player_id")
+  productId String @map("product_id")
+
+  paymentMethod   String   @map("payment_method") @db.VarChar(50)
+  amountUsd       Decimal? @map("amount_usd") @db.Decimal(10, 2)
+  amountCritCoins Int?     @map("amount_crit_coins")
+
+  // Stripe details
+  stripePaymentIntentId String? @map("stripe_payment_intent_id") @db.VarChar(255)
+  stripeChargeId        String? @map("stripe_charge_id") @db.VarChar(255)
+  stripeInvoiceId       String? @map("stripe_invoice_id") @db.VarChar(255)
+  stripeReceiptUrl      String? @map("stripe_receipt_url") @db.Text
+
+  status        String  @default("completed") @db.VarChar(50)
+  transactionId String? @map("transaction_id")
+
+  metadata Json @default("{}")
+
+  user    CritUser    @relation(fields: [playerId], references: [id], onDelete: Restrict)
+  product CritProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([playerId])
+  @@index([productId])
+  @@index([createdAt])
+  @@index([stripePaymentIntentId])
+  @@index([status])
+  @@map("crit_purchases")
+}
+
+model CritVirtualDesktopSession {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  playerId  String  @map("player_id")
+  productId String? @map("product_id")
+
+  purchasedDurationMinutes Int @map("purchased_duration_minutes")
+
+  // Session timing
+  startedAt      DateTime? @map("started_at")
+  scheduledEndAt DateTime? @map("scheduled_end_at")
+  endedAt        DateTime? @map("ended_at")
+
+  // Status
+  status String @default("pending") @db.VarChar(50)
+
+  // Digital Ocean droplet info
+  dropletId     String? @map("droplet_id") @db.VarChar(255)
+  dropletIp     String? @map("droplet_ip") @db.VarChar(50)
+  dropletRegion String  @default("nyc3") @map("droplet_region") @db.VarChar(50)
+  dropletSize   String  @default("g-2vcpu-8gb") @map("droplet_size") @db.VarChar(50)
+
+  // Access credentials (encrypted)
+  vncPasswordEncrypted String? @map("vnc_password_encrypted") @db.Text
+  rdpPasswordEncrypted String? @map("rdp_password_encrypted") @db.Text
+  accessUrl            String? @map("access_url") @db.Text
+
+  // Usage tracking
+  actualDurationMinutes Int?    @map("actual_duration_minutes")
+  critCoinsSpent        Int     @map("crit_coins_spent")
+  transactionId         String? @map("transaction_id")
+
+  // Performance metrics
+  connectionCount Int       @default(0) @map("connection_count")
+  lastActivityAt  DateTime? @map("last_activity_at")
+
+  metadata Json @default("{}")
+
+  user    CritUser     @relation(fields: [playerId], references: [id], onDelete: Restrict)
+  product CritProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([playerId])
+  @@index([status])
+  @@index([dropletId])
+  @@index([createdAt])
+  @@index([startedAt])
+  @@index([scheduledEndAt])
+  @@map("crit_virtual_desktop_sessions")
+}
+
+model CritApiKey {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  playerId String @map("player_id")
+  provider String @db.VarChar(50) // 'anthropic', 'openai', 'world_anvil'
+  keyName  String @db.VarChar(255)
+
+  apiKeyEncrypted String @map("api_key_encrypted") @db.Text
+
+  isActive       Boolean   @default(true) @map("is_active")
+  isVerified     Boolean   @default(false) @map("is_verified")
+  lastVerifiedAt DateTime? @map("last_verified_at")
+  lastUsedAt     DateTime? @map("last_used_at")
+  usageCount     Int       @default(0) @map("usage_count")
+
+  monthlyLimitUsd      Decimal? @map("monthly_limit_usd") @db.Decimal(10, 2)
+  currentMonthUsageUsd Decimal  @default(0) @map("current_month_usage_usd") @db.Decimal(10, 2)
+
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, provider, keyName])
+  @@index([playerId])
+  @@index([provider])
+  @@index([isActive])
+  @@map("crit_api_keys")
+}
+
+model CritSession {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Session identification
+  sessionType String @map("session_type") @db.VarChar(50) // 'paid_gm', 'free', 'practice'
+  status      String @default("scheduled") @db.VarChar(50) // 'scheduled', 'active', 'completed', 'cancelled'
+
+  // Timing
+  scheduledStartAt DateTime  @map("scheduled_start_at")
+  actualStartAt    DateTime? @map("actual_start_at")
+  scheduledEndAt   DateTime  @map("scheduled_end_at")
+  actualEndAt      DateTime? @map("actual_end_at")
+  durationMinutes  Int?      @map("duration_minutes") // Actual duration
+
+  // Financial (for paid sessions)
+  gmHourlyRate   Decimal? @map("gm_hourly_rate") @db.Decimal(10, 2) // Crit-Coins per hour
+  totalCritCoins Decimal? @map("total_crit_coins") @db.Decimal(10, 2) // Total coins for session
+  platformFee    Decimal? @map("platform_fee") @db.Decimal(10, 2) // Platform's cut (if any)
+  gmEarnings     Decimal? @map("gm_earnings") @db.Decimal(10, 2) // GM's earnings in CC
+
+  // Payout tracking
+  payoutStatus     String?   @map("payout_status") @db.VarChar(50) // 'pending', 'paid_cash', 'paid_coins', null
+  payoutMethod     String?   @map("payout_method") @db.VarChar(50) // 'stripe', 'crit_coins', null
+  payoutAmount     Decimal?  @map("payout_amount") @db.Decimal(10, 2) // USD if cash, CC if coins
+  payoutDate       DateTime? @map("payout_date")
+  stripeTransferId String?   @map("stripe_transfer_id") @db.VarChar(255)
+
+  // Participants
+  playerCount Int @default(0) @map("player_count")
+  gmCount     Int @default(1) @map("gm_count")
+
+  // Game details
+  systemName     String? @map("system_name") @db.VarChar(255) // 'D&D 5e', 'Pathfinder', etc
+  campaignName   String? @map("campaign_name") @db.VarChar(255)
+  sessionTitle   String? @map("session_title") @db.VarChar(500)
+  sessionSummary String? @map("session_summary") @db.Text
+
+  // Metadata
+  metadata Json @default("{}")
+
+  // Relations
+  sessions                RpgSession[]
+  storyCreditTransactions CritStoryCreditTransaction[]
+
+  @@index([sessionType])
+  @@index([status])
+  @@index([scheduledStartAt])
+  @@index([payoutStatus])
+  @@map("crit_sessions")
+}
+
+// ============================================================================
+// RPG World Data Tables (Exportable User Data shared with owning creators and their players or spectators)
+// ============================================================================
+
+model RpgSession {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Link to financial session
+  sessionId String?      @map("crit_session_id")
+  session   CritSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // Session info
+  sessionNumber Int?     @map("session_number") // Session # in campaign
+  sessionTitle  String?  @map("session_title") @db.VarChar(500)
+  sessionDate   DateTime @map("session_date")
+
+  // Game system
+  systemName   String       @map("system_name") @db.VarChar(255) // 'D&D 5e', 'Pathfinder', etc
+  campaignId   String?      @map("campaign_id") // Link to rpgCampaigns
+  campaign     RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  campaignName String?      @map("campaign_name") @db.VarChar(255) // Cached name for denormalization
+
+  // Session content
+  sessionNotes String? @map("session_notes") @db.Text // GM notes
+  playerNotes  String? @map("player_notes") @db.Text // Player notes
+  chatLog      String? @map("chat_log") @db.Text // In-game chat
+  combatLog    String? @map("combat_log") @db.Text // Combat events
+  questUpdates String? @map("quest_updates") @db.Text // Quest progress
+
+  // Session summary
+  summary    String? @db.Text
+  highlights Json    @default("[]") // Array of highlight moments
+
+  // Participants (JSON arrays)
+  gmIds        Json @default("[]") @map("gm_ids") // Array of GM player IDs
+  playerIds    Json @default("[]") @map("player_ids") // Array of player IDs
+  characterIds Json @default("[]") @map("character_ids") // Array of character IDs used
+
+  // Session stats
+  encountersCount  Int  @default(0) @map("encounters_count")
+  combatsCount     Int  @default(0) @map("combats_count")
+  npcsMet          Json @default("[]") @map("npcs_met") // Array of NPC names/IDs
+  locationsVisited Json @default("[]") @map("locations_visited") // Array of location names/IDs
+  itemsAcquired    Json @default("[]") @map("items_acquired")
+  xpAwarded        Int? @map("xp_awarded")
+
+  // In-game time tracking (system-agnostic)
+  inGameTimeStart   Json? @map("in_game_time_start") // { day, month, year, hour, minute }
+  inGameTimeEnd     Json? @map("in_game_time_end") // { day, month, year, hour, minute }
+  inGameTimeElapsed Json? @map("in_game_time_elapsed") // { seconds, minutes, hours, days }
+
+  // Real-world session time
+  durationMinutes Int? @map("duration_minutes") // Real-world session duration
+
+  // Combat time tracking
+  roundsPlayed Int @default(0) @map("rounds_played")
+
+  // Exploration time tracking
+  travelDistanceMiles Float? @map("travel_distance_miles") // Miles traveled during session
+
+  // Social interaction tracking
+  npcsMetCount Int @default(0) @map("npcs_met_count")
+
+  // Relations
+  rpgHistory RpgHistory[]
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([sessionId])
+  @@index([systemName])
+  @@index([sessionDate])
+  @@index([campaignId])
+  @@map("rpg_sessions")
+}
+
+// RpgHistory (immutable event log with significance tracking)
+model RpgHistory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  // NO updated_at or deleted_at - events are IMMUTABLE
+
+  // Event info
+  eventType String @map("event_type") @db.VarChar(50)
+  // 'combat', 'social', 'exploration', 'quest_complete', 'character_death',
+  // 'character_resurrection', 'level_up', 'treasure_found', 'npc_met',
+  // 'location_discovered', 'trap_triggered', 'puzzle_solved', etc.
+
+  eventTitle       String  @map("event_title") @db.VarChar(500)
+  eventDescription String? @map("event_description") @db.Text
+
+  // Significance factor (1-10 scale)
+  // Calculated based on tier of play, character level, and event type
+  // 1-2: Minor (routine encounter, small treasure)
+  // 3-4: Notable (challenging encounter, quest side objective)
+  // 5-6: Important (boss fight, quest main objective)
+  // 7-8: Major (campaign milestone, character death/resurrection)
+  // 9-10: Epic (campaign-defining moment, BBEG defeat)
+  significance Int @default(1) @map("significance")
+
+  // In-game timestamp
+  inGameTime Json? @map("in_game_time")
+  // { day: 15, month: 3, year: 1492, hour: 14, minute: 30 }
+
+  // Session reference
+  sessionId String?     @map("rpg_session_id")
+  session   RpgSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // Location reference
+  locationSheetId String?   @map("location_sheet_id")
+  locationSheet   RpgSheet? @relation(fields: [locationSheetId], references: [id], onDelete: SetNull)
+
+  // Participants (players and GMs responsible for this event)
+  participantIds Json @default("[]") @map("participant_ids") // Array of Player IDs
+  gmIds          Json @default("[]") @map("gm_ids") // Array of GM Player IDs
+
+  // Character references (if applicable)
+  characterIds Json @default("[]") @map("character_ids") // Array of character IDs involved
+
+  // System-specific metadata
+  systemName     String? @map("system_name") @db.VarChar(100) // '5e', 'pathfinder', etc.
+  tierOfPlay     Int?    @map("tier_of_play") // D&D 5e: 1-4, Pathfinder: similar
+  characterLevel Int?    @map("character_level") // Average party level
+
+  // Timeline tracking - Prime timeline only
+  isPrime    Boolean @default(true) @map("is_prime") // Always true for rpg_history
+  worldId    String? @map("world_id") // Which world this event occurred in
+  universeId String? @map("universe_id") // Which universe this world is in
+
+  // Metadata (for extensibility)
+  metadata Json @default("{}")
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([significance])
+  @@index([systemName])
+  @@index([createdAt])
+  @@index([tierOfPlay])
+  @@index([locationSheetId])
+  @@index([isPrime])
+  @@index([worldId])
+  @@index([universeId])
+  @@map("rpg_history")
+}
+
+// Timeline metadata - tracks parallel timelines created by multiverse/time travel
+model RpgTimeline {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Timeline info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+
+  // Universe reference
+  universeId   String @map("universe_id")
+  universeCode String @map("universe_code") @db.VarChar(20) // 'CFG-II', 'CFG-XIII', etc.
+
+  // Timeline hierarchy
+  isPrime          Boolean       @default(false) @map("is_prime") // Is this the canonical timeline?
+  parentTimelineId String?       @map("parent_timeline_id") // Which timeline this branched from
+  parentTimeline   RpgTimeline?  @relation("TimelineBranches", fields: [parentTimelineId], references: [id], onDelete: SetNull)
+  childTimelines   RpgTimeline[] @relation("TimelineBranches")
+
+  // Branch information
+  branchDate   DateTime? @map("branch_date") // In-game date when divergence occurred
+  branchReason String?   @map("branch_reason") @db.VarChar(50) // 'multiverse_crossing', 'time_travel', 'deity_intervention', etc.
+
+  // Divergence tracking
+  divergenceScore Int @default(0) @map("divergence_score") // 0-100 scale
+
+  // Status
+  status String @default("active") @db.VarChar(20) // 'active', 'merged', 'collapsed', 'archived'
+
+  // Creator
+  createdBy   String? @map("created_by") // Player or creature ID who created this timeline
+  creatorType String? @map("creator_type") @db.VarChar(20) // 'player', 'gm', 'deity', 'system'
+
+  // Metadata
+  metadata Json @default("{}")
+
+  // Relations
+  alternateHistories RpgAltHistory[]
+
+  @@index([universeId])
+  @@index([universeCode])
+  @@index([isPrime])
+  @@index([parentTimelineId])
+  @@index([status])
+  @@index([createdBy])
+  @@index([branchDate])
+  @@map("rpg_timelines")
+}
+
+// Alternate timeline events - parallel to rpg_history but for non-prime timelines
+model RpgAltHistory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  // NO updated_at or deleted_at - events are IMMUTABLE
+
+  // Timeline reference
+  timelineId String      @map("timeline_id")
+  timeline   RpgTimeline @relation(fields: [timelineId], references: [id], onDelete: Cascade)
+
+  // Parent timeline reference (usually prime)
+  parentTimelineId String? @map("parent_timeline_id")
+
+  // Branch information (from timeline, but denormalized for queries)
+  branchDate   DateTime? @map("branch_date")
+  branchReason String?   @map("branch_reason") @db.VarChar(50)
+
+  // Event info (same as RpgHistory)
+  eventType        String  @map("event_type") @db.VarChar(50)
+  eventTitle       String  @map("event_title") @db.VarChar(500)
+  eventDescription String? @map("event_description") @db.Text
+  significance     Int     @default(1) @map("significance")
+
+  // In-game timestamp
+  inGameTime Json?     @map("in_game_time")
+  eventDate  DateTime? @map("event_date") // Parsed in-game date for sorting
+
+  // Location references
+  locationSheetId String? @map("location_sheet_id")
+  worldId         String? @map("world_id")
+  universeId      String? @map("universe_id")
+
+  // Session reference (may be null for system-generated events)
+  sessionId String? @map("rpg_session_id")
+
+  // Participants
+  participantIds Json @default("[]") @map("participant_ids")
+  gmIds          Json @default("[]") @map("gm_ids")
+  characterIds   Json @default("[]") @map("character_ids")
+
+  // Creator (creature who caused this event/branch)
+  creatureId String? @map("creature_id") // Which creature caused this event
+
+  // System-specific metadata
+  systemName     String? @map("system_name") @db.VarChar(100)
+  tierOfPlay     Int?    @map("tier_of_play")
+  characterLevel Int?    @map("character_level")
+
+  // Divergence tracking
+  divergenceScore   Int  @default(0) @map("divergence_score") // How much this event diverges from prime (0-100)
+  divergenceFactors Json @default("{}") @map("divergence_factors") // Breakdown of divergence calculation
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([timelineId])
+  @@index([parentTimelineId])
+  @@index([eventType])
+  @@index([significance])
+  @@index([locationSheetId])
+  @@index([worldId])
+  @@index([universeId])
+  @@index([sessionId])
+  @@index([creatureId])
+  @@index([eventDate])
+  @@index([createdAt])
+  @@map("rpg_alt_histories")
+}
+
+// ============================================================================
+// Assets - Core Concept (images, audio, video, 3D models, etc.)
+// Like other core concepts, Assets have both Rpg and Crit counterparts
+// ============================================================================
+
+// CritAsset - Marketplace assets with strict ownership/rights tracking
+// Owner has legal rights to publish and monetize the content
+model CritAsset {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Asset info
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  assetType   String  @map("asset_type") @db.VarChar(50)
+  // 'image', 'audio', 'video', 'tile', 'token', 'map', 'music', 'sfx', '3d_model', etc.
+
+  // File information
+  url      String @db.Text // Vercel Blob URL
+  mimeType String @map("mime_type") @db.VarChar(100)
+  fileSize BigInt @map("file_size") // bytes
+  filename String @db.VarChar(255)
+
+  // Dimensions (for images/video)
+  width  Int?
+  height Int?
+
+  // Duration (for audio/video in seconds)
+  duration Int?
+
+  // Ownership & Rights (STRICT - for marketplace)
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Marketplace settings
+  isPublic      Boolean  @default(false) @map("is_public")
+  isMarketplace Boolean  @default(false) @map("is_marketplace") // Available for purchase
+  price         Decimal? @db.Decimal(10, 2) // Crit-Coins price
+
+  // Categorization & Discovery
+  category String?  @db.VarChar(50)
+  tags     String[] @default([])
+
+  // Usage & Analytics
+  downloadCount Int @default(0) @map("download_count")
+  viewCount     Int @default(0) @map("view_count")
+
+  // File-specific metadata (JSON for flexibility)
+  metadata Json @default("{}") @db.JsonB
+  // Examples:
+  // - Tiles: { tileSize: 60, isTransparent: true, gridType: "square" }
+  // - Audio: { bitrate: 320, channels: 2, sampleRate: 44100 }
+  // - Images: { format: "png", hasAlpha: true, colorSpace: "sRGB" }
+
+  @@index([ownerId])
+  @@index([assetType])
+  @@index([category])
+  @@index([isPublic])
+  @@index([isMarketplace])
+  @@map("crit_assets")
+}
+
+// RpgAsset - In-game assets (less strict ownership tracking)
+// Tracks which player uploaded it and which world it originated from
+model RpgAsset {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Asset info
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  assetType   String  @map("asset_type") @db.VarChar(50)
+  // 'image', 'audio', 'video', 'tile', 'token', 'map', 'music', 'sfx', '3d_model', etc.
+
+  // File information
+  url      String @db.Text // Vercel Blob URL
+  mimeType String @map("mime_type") @db.VarChar(100)
+  fileSize BigInt @map("file_size") // bytes
+  filename String @db.VarChar(255)
+
+  // Dimensions (for images/video)
+  width  Int?
+  height Int?
+
+  // Duration (for audio/video in seconds)
+  duration Int?
+
+  // Ownership (tracks uploader and origin world)
+  uploadedBy String?    @map("uploaded_by")
+  uploader   RpgPlayer? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Visibility (within world/campaign)
+  isPublic Boolean @default(false) @map("is_public") // Visible to all players in world?
+
+  // Categorization
+  category String?  @db.VarChar(50)
+  tags     String[] @default([])
+
+  // Usage tracking
+  usageCount Int @default(0) @map("usage_count")
+
+  // File-specific metadata (JSON for flexibility)
+  metadata Json @default("{}") @db.JsonB
+
+  // Shortcode for QR code generation and asset lookup
+  // Format: 6-8 character alphanumeric (e.g., "A3F9K2")
+  shortcode String? @unique @db.VarChar(10)
+
+  @@index([uploadedBy])
+  @@index([worldId])
+  @@index([assetType])
+  @@index([category])
+  @@index([isPublic])
+  @@index([shortcode])
+  @@map("rpg_assets")
+}
+
+// ============================================================================
+// VTT Tile System (Maps, Boards, Cards)
+// ============================================================================
+
+// RpgTile - Template for tiles at different scales
+// A tile can have multiple scale versions as RpgAssets
+model RpgTile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Tile info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+
+  // Source information
+  sourceSet  String @map("source_set") @db.VarChar(100) // e.g., "Dungeon Crawl Stone Soup"
+  sourcePath String @map("source_path") @db.Text // Original file path
+  sourceSize Int    @default(32) @map("source_size") // Original pixel size (usually 32)
+
+  // Grid type and scale tier (0-11+)
+  gridType String @default("square") @map("grid_type") @db.VarChar(20)
+  // 'square' | 'hex' | 'voxel' | 'gridless'
+
+  scaleTier Int @default(1) @map("scale_tier")
+  // Tactical & Exploration (Tiers 0-3)
+  // 0=Interaction (gridless, 0.1"/px)
+  // 1=Combat (square, 1"/px, 5ft)
+  // 2=Adventure (square, 4"/px, 10ft)
+  // 3=Settlement (hex, 1ft/px, 30ft hex)
+  //
+  // Travel & Regional (Tiers 4-8)
+  // 4=County (hex, 1ft/px, 0.1mi/528ft hex)
+  // 5=Province (hex, 10ft/px, 1mi hex)
+  // 6=Kingdom (hex, 60ft/px, 6mi hex)
+  // 7=Continent (hex, 600ft/px, 60mi hex)
+  // 8=Realm (hex, 6000ft/px, 600mi hex)
+  //
+  // Cosmic Scale (Tiers 9-11)
+  // 9=World/Plane (voxel, 1mi/px, 1000mi voxel)
+  // 10=Orbit/Sector (voxel, 6mi/px, 6000mi voxel)
+  // 11=Void (voxel, 60mi/px, 60000mi voxel)
+
+  // Scale metadata
+  scaleUnit  String  @map("scale_unit") @db.VarChar(20) // 'inch', 'foot', 'mile', 'AU', 'LY'
+  pixelScale Decimal @map("pixel_scale") @db.Decimal(10, 4) // e.g., 0.1, 1, 10, 60, 600, 6000
+  tileSize   String  @map("tile_size") @db.VarChar(50) // '5ft', '30ft', '0.1mi', '1mi', '1000mi', etc.
+
+  // Dimensions (in pixels)
+  widthPx  Int @map("width_px") // e.g., 60, 30, 610, 1155
+  heightPx Int @map("height_px") // e.g., 60, 30, 528, 1000
+  depthPx  Int @default(1) @map("depth_px") // For 3D tiles
+
+  // Tile scale assets - references to RpgAsset at different resolutions
+  // Store asset IDs in JSON array with their scale/purpose
+  // Example: [
+  //   { "scale": "1x1", "assetId": "uuid-1x1", "width": 1, "height": 1 },
+  //   { "scale": "60x60", "assetId": "uuid-60x60", "width": 60, "height": 60 },
+  //   { "scale": "600x600", "assetId": "uuid-600x600", "width": 600, "height": 600 }
+  // ]
+  scaleAssets Json @default("[]") @map("scale_assets") @db.JsonB
+
+  // Categorization
+  category String   @db.VarChar(50) // 'floor', 'wall', 'decoration', 'object', 'effect', 'terrain'
+  tags     String[] @default([])
+
+  // Visual properties
+  isTransparent Boolean @default(true) @map("is_transparent")
+  hasAlpha      Boolean @default(true) @map("has_alpha")
+
+  // Tile properties (for auto-categorization)
+  terrainType String? @map("terrain_type") @db.VarChar(50) // 'dirt', 'stone', 'brick', etc.
+  variation   Int? // Variant number (e.g., dirt0, dirt1, dirt2)
+
+  // Stateful properties (immutable definitions)
+  // The TILE defines what states are possible and their behaviors
+  // The BOARD/SHEET stores the CURRENT state for each tile instance
+
+  // States this tile can be in (e.g., ["open", "closed"] for door tiles)
+  states Json @default("[]") @db.JsonB // Array of state names
+
+  // Default state (when first placed)
+  defaultState String? @map("default_state") @db.VarChar(50)
+
+  // Behavior properties per state
+  // Example: { "open": { "passability": 0, "obstruction": 0 }, "closed": { "passability": 100, "obstruction": 100 } }
+  stateBehaviors Json @default("{}") @map("state_behaviors") @db.JsonB
+
+  // Default properties (if no states defined)
+  // Passability: 0=fully passable, 50=half movement (difficult terrain), 100=blocked
+  defaultPassability Int @default(0) @map("default_passability")
+
+  // Obstruction: 0=clear vision, 1-99=obscured (affects AC), 100=blocked
+  defaultObstruction Int @default(0) @map("default_obstruction")
+
+  // Visual layer (for rendering order)
+  layer Int @default(0) // 0=floor, 1=object, 2=wall, 3=ceiling, 4=effect
+
+  // Tile role (for special mechanics)
+  role String? @db.VarChar(50) // 'door_top', 'door_middle', 'door_bottom', 'wall', 'floor', etc.
+
+  // License info
+  license        String  @default("CC0-1.0") @db.VarChar(50)
+  licenseUrl     String? @map("license_url") @db.Text
+  attribution    String? @db.Text
+  attributionUrl String? @map("attribution_url") @db.Text
+
+  // Usage tracking
+  isPublic   Boolean @default(true) @map("is_public")
+  usageCount Int     @default(0) @map("usage_count")
+
+  @@index([sourceSet])
+  @@index([category])
+  @@index([terrainType])
+  @@index([role])
+  @@index([isPublic])
+  @@index([gridType])
+  @@index([scaleTier])
+  @@index([gridType, scaleTier])
+  @@map("rpg_tiles")
+}
+
+// RpgExpansion (premium content - official expansions/adventures)
+// Unlocked via: Physical UPC scan (1 month), D&D Beyond/VTT ownership (permanent)
+model RpgExpansion {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Expansion info
+  name        String  @unique @db.VarChar(100)
+  title       String
+  description String? @db.Text
+  version     String  @db.VarChar(20)
+
+  // Dataset type
+  type String @db.VarChar(50) // 'core' | 'expansion'
+
+  // Source information
+  sourceType String  @map("source_type") @db.VarChar(50) // 'srd', 'official', 'homebrew', 'third-party'
+  sourceUrl  String? @map("source_url") @db.Text
+
+  // Legal/licensing
+  license           String  @default("CC-BY-4.0") @db.VarChar(100)
+  licenseUrl        String? @map("license_url") @db.Text
+  provider          String? @db.VarChar(200)
+  attribution       String? @db.Text
+  compatibilityStmt String? @map("compatibility_stmt") @db.Text
+
+  // Premium content settings
+  isPremium Boolean @default(false) @map("is_premium")
+
+  // UPC/ISBN for physical book verification (grants permanent campaign-wide access)
+  upcCodes  String[] @default([]) @map("upc_codes")
+  isbnCodes String[] @default([]) @map("isbn_codes")
+
+  // External marketplace integration (permanent access via verified ownership)
+  dndBeyondId      String? @unique @map("dndbeyond_id")
+  roll20Id         String? @unique @map("roll20_id")
+  foundryVttId     String? @unique @map("foundry_vtt_id")
+  fantasyGroundsId String? @unique @map("fantasy_grounds_id")
+  dmsGuildId       String? @unique @map("dms_guild_id")
+  worldAnvilId     String? @unique @map("world_anvil_id")
+
+  // Dataset files
+  datasetPath String @map("dataset_path") @db.Text // Path to JSON files
+
+  // Metadata
+  isPublic Boolean @default(false) @map("is_public")
+  isActive Boolean @default(true) @map("is_active")
+  metadata Json    @default("{}")
+
+  @@index([type])
+  @@index([sourceType])
+  @@index([isPremium])
+  @@index([isPublic, isActive])
+  @@map("rpg_expansions")
+}
+
+// RpgExpansionAccess (track player/campaign access to premium expansions)
+// Campaign-wide: If ONE player in a campaign owns content, ALL players have access
+model RpgExpansionAccess {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Player and expansion
+  playerId    String @map("player_id")
+  expansionId String @map("expansion_id")
+
+  // Access type (no crit-coin purchasing - only UPC or marketplace verification)
+  accessType String @map("access_type") @db.VarChar(50)
+  // 'upc_scan' - Physical book UPC verification
+  // 'dndbeyond' - D&D Beyond ownership verified
+  // 'roll20' - Roll20 marketplace purchase verified
+  // 'foundry_vtt' - Foundry VTT module ownership verified
+  // 'fantasy_grounds' - Fantasy Grounds ownership verified
+  // 'dms_guild' - DMsGuild purchase verified
+  // 'world_anvil' - World Anvil content ownership verified
+  // 'granted' - Admin granted access
+
+  // Campaign context (optional - if unlocked via campaign)
+  campaignId String? @map("campaign_id")
+
+  // Verification details
+  verificationCode String? @map("verification_code") // UPC code or external platform content ID
+  platformUserId   String? @map("platform_user_id") // External platform user ID
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@unique([playerId, expansionId])
+  @@index([playerId])
+  @@index([expansionId])
+  @@index([campaignId])
+  @@map("rpg_expansion_access")
+}
+
+// RpgSheet (universal container for tracking resources, game state, and entities)
+// Can represent locations, creatures, player hands, or any other game entity
+model RpgSheet {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Sheet info
+  name        String
+  description String? @db.Text
+  type        String  @db.VarChar(20) // 'character', 'location', 'creature', 'hand', 'overworld', 'interior', 'world', 'orbit', 'void', 'combat'
+
+  // Grid type and scale tier
+  gridType String @default("square") @map("grid_type") @db.VarChar(20)
+  // 'square' | 'hex' | 'voxel' | 'gridless'
+
+  scaleTier Int @default(1) @map("scale_tier")
+  // 0-11+, same as RpgTile scaleTier
+  // See RpgTile model for complete tier definitions
+
+  // Scale information (legacy, use scaleTier instead)
+  scale Int @default(60) // Pixels per 5ft square (or hex size for hex maps)
+
+  // Adventure/Campaign association
+  sessionId  String? @map("crit_session_id")
+  campaignId String? @map("campaign_id")
+
+  // Party position (in card coordinates)
+  partyX Int @default(0) @map("party_x")
+  partyY Int @default(0) @map("party_y")
+  partyZ Int @default(0) @map("party_z")
+
+  // Minimap cache
+  minimapUrl       String?   @map("minimap_url") @db.Text
+  minimapUpdatedAt DateTime? @map("minimap_updated_at")
+
+  // Bounds (for optimization)
+  minX Int? @map("min_x")
+  maxX Int? @map("max_x")
+  minY Int? @map("min_y")
+  maxY Int? @map("max_y")
+  minZ Int? @map("min_z")
+  maxZ Int? @map("max_z")
+
+  // Ownership
+  createdBy String   @map("created_by")
+  gmIds     String[] @default([]) @map("gm_ids") // GMs who can edit
+
+  // Sharing
+  isPublic   Boolean @default(false) @map("is_public")
+  isTemplate Boolean @default(false) @map("is_template")
+
+  // Relations
+  rpgHistory RpgHistory[]
+  boards     RpgBoard[]
+  voxels     RpgVoxel[]
+
+  // Metadata
+  metadata Json @default("{}")
+  tags     Json @default("[]") @db.JsonB // Organizational tags
+
+  @@index([sessionId])
+  @@index([campaignId])
+  @@index([createdBy])
+  @@index([isPublic, isTemplate])
+  @@map("rpg_sheets")
+}
+
+// Board (active 50x50x50 play area)
+model RpgBoard {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Board info
+  name        String
+  description String? @db.Text
+
+  // Active session
+  sessionId String @unique @map("crit_session_id")
+
+  // Source sheet
+  sheetId String   @map("sheet_id")
+  sheet   RpgSheet @relation(fields: [sheetId], references: [id])
+
+  // Board center (in card coordinates from sheet)
+  centerX Int @default(0) @map("center_x")
+  centerY Int @default(0) @map("center_y")
+  centerZ Int @default(0) @map("center_z")
+
+  // Board size (always 50x50x50 max)
+  sizeX Int @default(50) @map("size_x")
+  sizeY Int @default(50) @map("size_y")
+  sizeZ Int @default(50) @map("size_z")
+
+  // Viewport state (for reconnection)
+  viewportX    Float? @map("viewport_x")
+  viewportY    Float? @map("viewport_y")
+  viewportZoom Float? @default(1.0) @map("viewport_zoom")
+
+  // Active tokens/agents on board
+  activeTokens Json @default("[]") @map("active_tokens")
+
+  // Turn tracking (system-defined)
+  turnOrder   Json @default("[]") @map("turn_order")
+  currentTurn Int? @map("current_turn")
+
+  // Time tracking (system-agnostic)
+  currentRound    Int?   @map("current_round") // Round/turn counter
+  inGameTime      Json?  @map("in_game_time") // { day, month, year, hour, minute }
+  timeScaleConfig Json?  @map("time_scale_config") // System-specific config
+  activeMode      String @default("play") @map("active_mode") @db.VarChar(50) // System-defined mode
+
+  // Relations
+  voxels    RpgVoxel[]
+  locations RpgLocation[] @relation("LocationTemplate") // Locations using this board as a template
+
+  // Metadata
+  metadata Json @default("{}")
+  tags     Json @default("[]") @db.JsonB // Organizational tags
+
+  @@index([sessionId])
+  @@index([sheetId])
+  @@index([activeMode])
+  @@map("rpg_boards")
+}
+
+// ============================================================================
+// Spatial Objects (Doors, Furniture, Destructible Objects)
+// ============================================================================
+
+// Object (pre-defined object templates)
+// RpgThing - Things that exist in the game world (items, equipment, furniture, etc)
+// Flexible, system-defined types and properties
+// Not creatures - everything else that can exist in a location or be carried
+model RpgThing {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Thing info
+  name        String  @db.VarChar(200)
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+
+  // System-defined type and properties (data-driven)
+  thingType  String @map("thing_type") @db.VarChar(50) // 'weapon', 'armor', 'door', 'furniture', 'consumable', etc
+  properties Json   @default("{}") @db.JsonB // Flexible properties defined by system
+
+  // Visual representation
+  imageUrl String? @map("image_url") @db.Text
+  modelUrl String? @map("model_url") @db.Text
+
+  // System reference
+  systemName String @map("system_name") @db.VarChar(100)
+  sourceSet  String @default("core") @map("source_set") @db.VarChar(100)
+
+  // Ownership
+  createdBy String  @map("created_by")
+  isPublic  Boolean @default(false) @map("is_public")
+
+  // Metadata
+  metadata Json @default("{}")
+  tags     Json @default("[]") @db.JsonB // Organizational tags
+
+  @@index([thingType])
+  @@index([systemName])
+  @@index([createdBy])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_things")
+}
+
+// ============================================================================
+// NPC Behaviors and Needs
+// ============================================================================
+
+// RpgCreature - All creatures including NPCs and Player Characters
+// Extended creature/character data with behavior axes and needs tracking
+// Integrates with existing Character/Creature systems
+model RpgCreature {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // World assignment
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Player ownership (null for NPCs, set for player characters)
+  playerId String?    @map("player_id")
+  player   RpgPlayer? @relation(fields: [playerId], references: [id], onDelete: SetNull)
+
+  // GM approval (for player characters only)
+  approvalStatus String?   @default("approved") @map("approval_status") @db.VarChar(20)
+  // null or 'approved' for NPCs, 'pending'/'approved'/'rejected'/'retired' for PCs
+  approvedBy     String?   @map("approved_by") // GM player ID
+  approvedAt     DateTime? @map("approved_at")
+
+  // Basic creature info
+  name       String  @db.VarChar(100)
+  race       String? @db.VarChar(50)
+  class      String? @db.VarChar(50)
+  profession String? @db.VarChar(50)
+  level      Int     @default(0)
+  imageUrl   String? @map("image_url")
+
+  // Four behavior axes (0-100)
+  lawfulness Int @default(50) // 0=Chaotic, 100=Lawful
+  goodness   Int @default(50) // 0=Evil, 100=Good
+  faith      Int @default(50) // 0=Atheist, 100=Zealot
+  courage    Int @default(50) // 0=Cowardly, 100=Heroic
+
+  // Traditional alignment (computed from axes)
+  alignment String? @db.VarChar(20) // "Lawful Good", "Chaotic Neutral", etc.
+
+  // Five needs (0-100, higher = more satisfied)
+  foodNeed       Int @default(85) @map("food_need")
+  waterNeed      Int @default(90) @map("water_need")
+  sleepNeed      Int @default(100) @map("sleep_need")
+  relaxationNeed Int @default(60) @map("relaxation_need")
+  adventureNeed  Int @default(100) @map("adventure_need")
+
+  // Need depletion rates (how fast needs decrease per cycle)
+  needDepletionRates Json @default("{}") @map("need_depletion_rates") @db.JsonB
+  // { "food": -10, "water": -12, "sleep": -6.25, "relaxation": -8, "adventure": 0 }
+
+  // Profession data
+  professionData Json @default("{}") @map("profession_data") @db.JsonB
+  // {
+  //   "type": "blacksmith",
+  //   "facility": "facility-id",
+  //   "income": 3,
+  //   "schedule": { "workDays": [...], "workHours": { "start": 8, "end": 18 } }
+  // }
+
+  // Residence
+  residence Json @default("{}") @db.JsonB
+  // { "facility": "facility-id", "location": "settlement-id" }
+
+  // Inventory (pixel and item references)
+  inventory Json @default("[]") @db.JsonB
+  // [
+  //   { "itemId": "uuid", "count": 1 },
+  //   { "pixelId": "uuid", "count": 450 }
+  // ]
+
+  // Daily routine
+  routine Json @default("[]") @db.JsonB
+  // [
+  //   { "time": "06:00", "activity": "wake", "location": "home" },
+  //   { "time": "08:00", "activity": "work", "location": "forge", "duration": 240 }
+  // ]
+
+  // Relationships
+  relationships Json @default("[]") @db.JsonB
+  // [
+  //   { "npcId": "uuid", "relationship": "friendly", "value": 75 }
+  // ]
+
+  // Current state
+  currentActivity String?   @map("current_activity") @db.VarChar(100)
+  currentLocation String?   @map("current_location") @db.VarChar(100)
+  lastUpdate      DateTime? @map("last_update")
+
+  // Simulation zone
+  simulationZone String @default("inactive") @map("simulation_zone") @db.VarChar(20)
+  // 'active' (near players, real-time), 'distant' (batch hourly), 'inactive' (frozen)
+
+  // Notes
+  notes String[] @default([])
+
+  // Tags
+  tags Json @default("[]") @db.JsonB // Organizational tags
+
+  // Relations
+  activities RpgActivity[]
+
+  @@index([worldId])
+  @@index([playerId])
+  @@index([approvalStatus])
+  @@index([profession])
+  @@index([simulationZone])
+  @@index([currentLocation])
+  @@index([deletedAt])
+  @@map("rpg_creatures")
+}
+
+// ============================================================================
+// Foundry VTT License Pool & Instance Management
+// ============================================================================
+
+model FoundryLicense {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // License details
+  licenseKey String @unique @map("license_key") // Encrypted in storage
+  username   String @map("username") // Foundry account username
+  password   String @map("password") // Encrypted
+
+  // License tier & limits
+  tier                 String @default("free") // 'free', 'premium', 'enterprise'
+  maxWorlds            Int    @default(1) @map("max_worlds") // Max worlds per instance
+  maxConcurrentPlayers Int    @default(10) @map("max_concurrent_players")
+
+  // Status
+  status String @default("available") // 'available', 'in_use', 'expired', 'suspended'
+
+  // Usage tracking
+  lastUsedAt DateTime? @map("last_used_at")
+  usageCount Int       @default(0) @map("usage_count")
+
+  // Instance assignment (if currently in use)
+  currentInstanceId String?          @unique @map("current_instance_id")
+  instance          FoundryInstance? @relation("LicenseToInstance")
+
+  // Metadata
+  notes String? // Admin notes
+
+  @@index([status])
+  @@index([tier])
+  @@map("foundry_licenses")
+}
+
+model FoundryInstance {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Container details
+  containerName String  @unique @map("container_name") // Docker container name
+  containerid   String? @unique @map("container_id") // Docker container ID
+  port          Int     @unique // Exposed port (e.g., 30001, 30002)
+
+  // License assignment
+  licenseId String         @unique @map("license_id")
+  license   FoundryLicense @relation("LicenseToInstance", fields: [licenseId], references: [id], onDelete: Cascade)
+
+  // Game system tracking (NEW for multi-system support)
+  // Tracks which game systems are installed on this instance
+  // Multiple worlds can use different systems within one instance
+  installedSystems Json @default("[]") @map("installed_systems") @db.JsonB
+  // Example: ["dnd5e", "cyphersystem", "pf2e"]
+  // Each system entry can include version info
+
+  // Status
+  status String @default("starting") // 'starting', 'running', 'stopping', 'stopped', 'failed'
+  health String @default("unknown") // 'healthy', 'unhealthy', 'unknown'
+
+  // Capacity limits
+  maxWorlds  Int @default(10) @map("max_worlds")
+  maxPlayers Int @default(10) @map("max_players")
+
+  // Worlds currently loaded on this instance
+  worldSnapshots FoundryWorldSnapshot[]
+
+  // Usage stats
+  activeWorlds    Int       @default(0) @map("active_worlds")
+  activePlayers   Int       @default(0) @map("active_players")
+  totalUptime     Int       @default(0) @map("total_uptime") // Seconds
+  lastHealthCheck DateTime? @map("last_health_check")
+  lastActivityAt  DateTime? @map("last_activity_at")
+
+  // Auto-shutdown configuration
+  autoShutdownEnabled Boolean @default(true) @map("auto_shutdown_enabled")
+  autoShutdownMinutes Int     @default(30) @map("auto_shutdown_minutes") // Shutdown after N minutes of inactivity
+
+  // Metadata
+  startedAt DateTime? @map("started_at")
+  stoppedAt DateTime? @map("stopped_at")
+  errorLog  String?   @map("error_log")
+
+  @@index([status])
+  @@index([health])
+  @@index([licenseId])
+  @@map("foundry_instances")
+}
+
+// Links RPG worlds to Foundry instance runtime
+// RPG tables are source of truth, this tracks where world is currently loaded
+model FoundryWorldSnapshot {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Link to RPG world (source of truth in rpg_worlds table) - 1:1 relationship
+  worldId String   @unique @map("world_id")
+  world   RpgWorld @relation(fields: [worldId], references: [id], onDelete: Cascade)
+
+  // Currently loaded on this Foundry instance (null = stored in DB only)
+  instanceId String?          @map("instance_id")
+  instance   FoundryInstance? @relation(fields: [instanceId], references: [id], onDelete: SetNull)
+
+  // Game system for this world (NEW for multi-system support)
+  gameSystem    String  @default("dnd5e") @map("game_system") // "dnd5e", "cyphersystem", "pf2e", etc.
+  systemVersion String? @map("system_version") // e.g., "5.2.0", "3.4.3"
+
+  // Snapshot status
+  status String @default("stored") // 'stored' (DB only), 'loading', 'active', 'saving', 'migrating'
+
+  // Last database sync
+  lastSyncAt   DateTime  @map("last_sync_at")
+  lastLoadedAt DateTime? @map("last_loaded_at")
+  lastSavedAt  DateTime? @map("last_saved_at")
+
+  // Access details (when loaded on instance)
+  accessUrl String? @map("access_url")
+  joinCode  String? @unique @map("join_code")
+
+  // Activity tracking
+  currentPlayers       Int       @default(0) @map("current_players")
+  lastActivityAt       DateTime? @map("last_activity_at")
+  totalPlaytimeSeconds Int       @default(0) @map("total_playtime_seconds")
+
+  // Migration tracking (for moving between instances)
+  previousInstanceId   String?   @map("previous_instance_id")
+  migrationStartedAt   DateTime? @map("migration_started_at")
+  migrationCompletedAt DateTime? @map("migration_completed_at")
+
+  @@index([instanceId])
+  @@index([status])
+  @@index([gameSystem])
+  @@map("foundry_world_snapshots")
+}
+
+// ============================================================================
+// RPG Core Concepts - Additional Tables
+// ============================================================================
+
+// ============================================================================
+// DEPRECATED EXPANSION TABLES
+// ============================================================================
+// The following Crit* expansion tables (CritOrbitalSpace, CritUniverse, CritMultiverse)
+// are DEPRECATED in favor of the hierarchical RpgLocation system.
+//
+// NEW APPROACH: RpgLocation now supports all scales from rooms to universes
+// - RpgLocation can contain other RpgLocations (hierarchical)
+// - RpgLocation can contain RpgWorlds (via containerLocationId)
+// - locationScale field defines the scope (Adventure Location → Universe)
+//
+// MIGRATION STRATEGY:
+// - Keep these tables for backward compatibility
+// - New data should use RpgLocation with appropriate locationScale
+// - Gradually migrate existing CritOrbitalSpace/Universe data to RpgLocation
+// - These tables will be removed in a future version
+// ============================================================================
+
+// CritOrbitalSpace - DEPRECATED: Use RpgLocation with locationScale='Orbital Space'
+// Container for world(s), moons, satellites, alternate planes/dimensions/timelines
+// Most game worlds exist within an orbital space. Everything follows same game system rules.
+// Part of hierarchy: CritMultiverse → CritUniverse → CritOrbitalSpace → RpgWorld
+model CritOrbitalSpace {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Orbital Space info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  systemName  String  @map("system_name") @db.VarChar(100) // Primary TTRPG system for this space
+
+  // OWNERSHIP - Critical for access control
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Universe link (optional - space can exist independently or within a universe)
+  universeId String?       @map("universe_id")
+  universe   CritUniverse? @relation(fields: [universeId], references: [id], onDelete: SetNull)
+
+  // Space metadata
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}") @db.JsonB
+
+  // Relations
+  worlds RpgWorld[] // Worlds, moons, planes, dimensions within this space
+
+  @@index([systemName])
+  @@index([ownerId])
+  @@index([universeId])
+  @@index([deletedAt])
+  @@map("crit_orbital_spaces")
+}
+
+// CritUniverse - DEPRECATED: Use RpgLocation with locationScale='Universe'
+// Container for multiple orbital spaces (different systems allowed, related genres)
+// Part of hierarchy: CritMultiverse → CritUniverse → CritOrbitalSpace → RpgWorld
+model CritUniverse {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Universe info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  genre       String? @db.VarChar(100) // 'fantasy', 'sci-fi', 'horror', etc.
+
+  // OWNERSHIP - Critical for access control
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Multiverse link (optional - universe can exist independently or within a multiverse)
+  multiverseId String?         @map("multiverse_id")
+  multiverse   CritMultiverse? @relation(fields: [multiverseId], references: [id], onDelete: SetNull)
+
+  // Universe metadata
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}") @db.JsonB
+
+  // Relations
+  orbitalSpaces  CritOrbitalSpace[] // Orbital spaces within this universe
+  coreMultiverse CritMultiverse?    @relation("CoreUniverse") // If this is the core universe for a multiverse
+
+  @@index([genre])
+  @@index([ownerId])
+  @@index([multiverseId])
+  @@index([deletedAt])
+  @@map("crit_universes")
+}
+
+// CritMultiverse - DEPRECATED: Not needed as a table
+// The multiverse is simply the conceptual collection of all universes (RpgLocations with locationScale='Universe')
+// Contains "Core" universe (story-only, not used as setting) and derivative game universes
+// Derivative universes numbered incrementally: "-XIV", "-III", etc.
+// NOTE: This table is kept for backward compatibility but should not be used for new data
+model CritMultiverse {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Multiverse info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+
+  // OWNERSHIP - Critical for access control
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Core universe designation
+  coreUniverseId String?       @unique @map("core_universe_id")
+  coreUniverse   CritUniverse? @relation("CoreUniverse", fields: [coreUniverseId], references: [id], onDelete: SetNull)
+
+  // Multiverse metadata
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}") @db.JsonB
+
+  // Relations
+  universes CritUniverse[] // All universes in this multiverse
+
+  @@index([ownerId])
+  @@index([deletedAt])
+  @@map("crit_multiverses")
+}
+
+// RPG World - The actual world/planet (1:1 with FoundryWorldSnapshot)
+// Source of truth for campaign worlds. Can extract data from Foundry snapshot
+// and update snapshot when "downtime" activities occur while world is offline.
+model RpgWorld {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // World info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  systemName  String  @map("system_name") @db.VarChar(100) // 'dnd5e', 'pathfinder', etc.
+
+  // World scale - defines the scope and size of the game world
+  // Based on VTT Image Scale Guidelines and CFG Expansions
+  worldScale String @default("Realm") @map("world_scale") @db.VarChar(50)
+  // Valid values: 'Adventure Location', 'Settlement', 'Region', 'Continent', 'Realm' (default), 'Planet', 'Orbital Space', 'Universe'
+  // Adventure Location: Dungeon, building, small area (10ft grid)
+  // Settlement: Village, town, city (30ft hex)
+  // Region: County, province, kingdom (0.1-6 mile hex)
+  // Continent: Large landmass, ocean (60 mile hex)
+  // Realm: Multiple continents (600 mile hex) - between continent and planet
+  // Planet: Entire world/plane (1,000 mile voxel)
+  // Orbital Space: Planet + moons + alternate planes (6,000 mile voxel)
+  // Universe: Multiple orbital spaces in one game system
+
+  // OWNERSHIP - Critical for access control
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Container location (optional - for hierarchical organization)
+  // Worlds can be contained within locations like Orbital Spaces, Star Systems, Galaxies, etc.
+  containerLocationId String?      @map("container_location_id")
+  containerLocation   RpgLocation? @relation("LocationContainsWorlds", fields: [containerLocationId], references: [id], onDelete: SetNull)
+
+  // Orbital Space link (DEPRECATED - use containerLocation instead)
+  // Keeping for backward compatibility, will be migrated to containerLocation
+  orbitalSpaceId String?           @map("orbital_space_id")
+  orbitalSpace   CritOrbitalSpace? @relation(fields: [orbitalSpaceId], references: [id], onDelete: SetNull)
+
+  // World nesting - worlds can contain other worlds (universe contains worlds)
+  // A universe is simply a top-level RpgWorld with containerWorldId: null
+  containerWorldId String?    @map("container_world_id")
+  containerWorld   RpgWorld?  @relation("WorldNesting", fields: [containerWorldId], references: [id], onDelete: SetNull)
+  containedWorlds  RpgWorld[] @relation("WorldNesting")
+
+  // Foundry VTT link (1:1 relationship with snapshot)
+  foundryWorldId String? @unique @map("foundry_world_id") // Foundry's internal world ID
+
+  // World metadata
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}") @db.JsonB
+  tags     Json @default("[]") @db.JsonB // Organizational tags
+
+  // Relations
+  worldSnapshot FoundryWorldSnapshot? // 1:1 relationship
+  wikiPages     RpgWorldWiki[] // World-specific wiki pages
+  creatures     RpgCreature[]
+  locations     RpgLocation[]         @relation("WorldLocations") // Locations within this world
+  activities    RpgActivity[]
+  campaigns     RpgCampaign[] // Campaigns using this world
+  assets        RpgAsset[] // Assets originated from this world
+
+  @@index([systemName])
+  @@index([ownerId])
+  @@index([containerLocationId])
+  @@index([orbitalSpaceId])
+  @@index([containerWorldId])
+  @@index([foundryWorldId])
+  @@index([deletedAt])
+  @@map("rpg_worlds")
+}
+
+// RpgWorldWiki - World-specific wiki pages
+// Each RpgWorld can have its own wiki for documenting lore, NPCs, locations, etc.
+model RpgWorldWiki {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Link to world
+  worldId String   @map("world_id")
+  world   RpgWorld @relation(fields: [worldId], references: [id], onDelete: Cascade)
+
+  // Page identification
+  slug      String  @db.VarChar(200) // URL-friendly identifier (unique per world)
+  title     String  @db.VarChar(200)
+  category  String? @db.VarChar(100) // 'lore', 'npcs', 'locations', 'items', 'quests', 'history', etc.
+  icon      String? @db.VarChar(50) // Emoji or icon identifier
+  sortOrder Int     @default(0) @map("sort_order") // For ordering pages in navigation
+
+  // Content (Markdown format)
+  content String @db.Text
+
+  // Optional: Different content for different roles
+  gmContent     String? @map("gm_content") @db.Text // GM-only secrets
+  playerContent String? @map("player_content") @db.Text // Player-visible content
+
+  // SEO & meta
+  description String? @db.Text // Short description
+  keywords    String? @db.Text // Comma-separated keywords
+
+  // Publishing & Visibility
+  isPublished Boolean   @default(false) @map("is_published") // Published in world wiki?
+  isPublic    Boolean   @default(false) @map("is_public") // Visible to non-campaign members?
+  publishedAt DateTime? @map("published_at")
+
+  // Authorship
+  authorId String   @map("author_id")
+  author   CritUser @relation("AuthoredWorldWikiPages", fields: [authorId], references: [id])
+
+  lastEditedById String?   @map("last_edited_by_id")
+  lastEditedBy   CritUser? @relation("EditedWorldWikiPages", fields: [lastEditedById], references: [id])
+
+  // Metadata
+  metadata Json @default("{}") @db.JsonB
+
+  // Relations
+  revisions RpgWorldWikiRevision[]
+
+  @@unique([worldId, slug]) // Slug must be unique per world
+  @@index([worldId])
+  @@index([authorId])
+  @@index([category])
+  @@index([isPublished])
+  @@index([deletedAt])
+  @@map("rpg_world_wiki_pages")
+}
+
+// RpgWorldWikiRevision - Revision history for world wiki pages
+model RpgWorldWikiRevision {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Link to parent wiki page
+  wikiPageId String       @map("wiki_page_id")
+  wikiPage   RpgWorldWiki @relation(fields: [wikiPageId], references: [id], onDelete: Cascade)
+
+  // Revision metadata
+  versionNumber Int    @map("version_number") // Incremental version counter
+  changeNote    String @default("") @db.Text // What changed in this revision
+
+  // Snapshot of content at this revision
+  content       String  @db.Text
+  gmContent     String? @map("gm_content") @db.Text
+  playerContent String? @map("player_content") @db.Text
+
+  // Editor info
+  editorId String   @map("editor_id")
+  editor   CritUser @relation("WorldWikiEdits", fields: [editorId], references: [id])
+
+  // AI metadata
+  aiAssisted       Boolean @default(false) @map("ai_assisted")
+  aiModel          String? @db.VarChar(100)
+  aiPromptMetadata Json    @default("{}") @map("ai_prompt_metadata") @db.JsonB
+
+  @@index([wikiPageId])
+  @@index([editorId])
+  @@index([createdAt])
+  @@map("rpg_world_wiki_revisions")
+}
+
+// RPG Campaign - A series of connected game sessions
+model RpgCampaign {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Campaign info
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  systemName  String  @map("system_name") @db.VarChar(100) // 'dnd5e', 'pathfinder', etc.
+
+  // Campaign status
+  status      String    @default("planning") // 'planning', 'active', 'paused', 'completed', 'abandoned'
+  startedAt   DateTime? @map("started_at") // When first session was played
+  completedAt DateTime? @map("completed_at") // When campaign ended
+
+  // World link - simplified to single world per campaign
+  // Campaigns that span multiple worlds can store references in metadata JSON
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Campaign owner/creator (primary GM who created the campaign)
+  ownerId String    @map("owner_id")
+  owner   RpgPlayer @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Campaign settings
+  settings Json @default("{}") @db.JsonB // Campaign-specific settings
+  metadata Json @default("{}") @db.JsonB // Custom metadata
+  tags     Json @default("[]") @db.JsonB // Organizational tags
+
+  // Campaign image
+  imageUrl  String? @map("image_url") @db.VarChar(500)
+  bannerUrl String? @map("banner_url") @db.VarChar(500)
+
+  // Invite/join settings
+  isPublic   Boolean @default(false) @map("is_public") // Can anyone discover this?
+  isOpen     Boolean @default(false) @map("is_open") // Can anyone join without approval?
+  inviteCode String? @unique @map("invite_code") // Code for joining
+
+  // Campaign stats
+  sessionCount      Int @default(0) @map("session_count")
+  totalPlaytimeMins Int @default(0) @map("total_playtime_mins")
+
+  // Relations
+  sessions RpgSession[] // Game sessions in this campaign
+
+  @@index([systemName])
+  @@index([ownerId])
+  @@index([worldId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("rpg_campaigns")
+}
+
+// RpgType - Entity type templates (classes, races, creature types, etc.)
+model RpgType {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Type info
+  name        String  @db.VarChar(100)
+  title       String  @db.VarChar(100)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'class', 'race', 'creature', 'item'
+
+  // Type definition
+  attributes Json @default("{}") @db.JsonB // Base attributes from this type
+  abilities  Json @default("[]") @db.JsonB // Abilities granted by this type
+  properties Json @default("{}") @db.JsonB // Other properties
+
+  // System reference
+  systemName String @map("system_name") @db.VarChar(100)
+  sourceSet  String @default("core") @map("source_set") @db.VarChar(100)
+  license    String @default("CC0-1.0") @db.VarChar(50)
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+
+  @@index([category])
+  @@index([systemName])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_types")
+}
+
+// RpgTable - Random tables, lookup tables, and roll tables
+model RpgTable {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Table info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'loot', 'encounter', 'weather', 'random'
+
+  // Table entries
+  entries     Json    @default("[]") @db.JsonB // Array of table entries with weights/ranges
+  diceFormula String? @map("dice_formula") @db.VarChar(50) // e.g., "1d100", "2d6"
+
+  // System reference
+  systemName String? @map("system_name") @db.VarChar(100)
+  worldId    String? @map("world_id") // Optional world-specific table
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+
+  @@index([category])
+  @@index([systemName])
+  @@index([worldId])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_tables")
+}
+
+// RpgCard - Game cards (spell cards, item cards, ability cards, etc.)
+model RpgCard {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Card info
+  name        String  @db.VarChar(200)
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+  cardType    String  @map("card_type") @db.VarChar(50) // 'spell', 'item', 'ability', 'npc'
+
+  // Card data
+  properties Json    @default("{}") @db.JsonB // Flexible card properties
+  imageUrl   String? @map("image_url") @db.Text
+
+  // Deck associations
+  deckIds Json @default("[]") @map("deck_ids") @db.JsonB // Array of deck IDs
+
+  // System reference
+  systemName String @map("system_name") @db.VarChar(100)
+  sourceSet  String @default("core") @map("source_set") @db.VarChar(100)
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+
+  @@index([cardType])
+  @@index([systemName])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_cards")
+}
+
+// RpgDeck - Collections of cards
+model RpgDeck {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Deck info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  deckType    String  @map("deck_type") @db.VarChar(50) // 'spell', 'item', 'encounter', 'loot'
+
+  // Deck contents
+  cardIds    Json    @default("[]") @map("card_ids") @db.JsonB // Array of card IDs
+  drawOrder  Json    @default("[]") @map("draw_order") @db.JsonB // Current draw order
+  isShuffled Boolean @default(false) @map("is_shuffled")
+
+  // Session context
+  sessionId String? @map("session_id")
+
+  // Ownership
+  createdBy String  @map("created_by")
+  isPublic  Boolean @default(false) @map("is_public")
+
+  @@index([deckType])
+  @@index([sessionId])
+  @@index([createdBy])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_decks")
+}
+
+// RpgRule - Game rules and mechanics
+model RpgRule {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Rule info
+  name        String  @db.VarChar(200)
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'combat', 'magic', 'social', 'movement'
+
+  // Rule definition
+  trigger   Json? @db.JsonB // When this rule applies
+  condition Json? @db.JsonB // Conditions that must be met
+  effect    Json? @db.JsonB // What happens when rule is applied
+
+  // System reference
+  systemName String @map("system_name") @db.VarChar(100)
+  sourceSet  String @default("core") @map("source_set") @db.VarChar(100)
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+
+  @@index([category])
+  @@index([systemName])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_rules")
+}
+
+// RpgEvent - Game events log
+// Flexible event system that supports location-driven events, combat, chat, etc.
+model RpgEvent {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Event info
+  eventType   String  @map("event_type") @db.VarChar(50) // 'region_enter', 'region_exit', 'combat', 'roll', 'action', 'trigger', 'chat', 'movement', etc.
+  action      String  @db.VarChar(200) // "enters tavern", "casts fireball", "says hello", "moves to location"
+  description String? @db.Text
+
+  // Session context
+  sessionId String @map("session_id")
+
+  // Core Concepts References (system-defined via JSON)
+  // These are flexible arrays/objects that each system can structure as needed
+  players   Json @default("[]") @db.JsonB // Array of RpgPlayer IDs involved in event
+  tokens    Json @default("[]") @db.JsonB // Array of token data: [{tokenId, name, position, etc}]
+  locations Json @default("[]") @db.JsonB // Array of RpgLocation IDs or location data
+  things    Json @default("[]") @db.JsonB // Array of RpgThing IDs involved (items, doors, furniture)
+
+  // Activity reference (if this event is part of a creature's activity)
+  activityId String? @map("activity_id") // Links to RpgActivity for creature actions
+
+  // Movement/Position data (for location-driven events)
+  movement Json? @db.JsonB // {from: {x, y, elevation}, to: {x, y, elevation}, waypoints: [...]}
+
+  // Legacy fields (kept for backward compatibility)
+  actorId  String? @map("actor_id") // Primary actor (deprecated in favor of players array)
+  targetId String? @map("target_id") // Primary target (deprecated in favor of tokens/things arrays)
+  result   Json?   @db.JsonB // Outcome data
+
+  // System-defined custom data
+  // Each RPG system can store whatever additional data it needs
+  systemData Json @default("{}") @db.JsonB
+
+  // General metadata
+  metadata Json @default("{}") @db.JsonB
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([actorId])
+  @@index([activityId])
+  @@index([createdAt])
+  @@map("rpg_events")
+}
+
+// RpgGoal - Campaign goals and objectives
+model RpgGoal {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Goal info
+  title       String @db.VarChar(200)
+  description String @db.Text
+  status      String @default("active") @db.VarChar(20) // 'active', 'completed', 'failed'
+
+  // Goal hierarchy
+  campaignId   String? @map("campaign_id")
+  parentGoalId String? @map("parent_goal_id")
+
+  // Completion criteria
+  criteria Json  @default("{}") @db.JsonB
+  progress Json? @db.JsonB // Current progress towards goal
+  rewards  Json? @db.JsonB // Rewards for completing goal
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([campaignId])
+  @@index([parentGoalId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("rpg_goals")
+}
+
+// RpgMode - Game mode definitions
+model RpgMode {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Mode info
+  modeId      String  @unique @map("mode_id") @db.VarChar(50) // 'combat', 'exploration', etc.
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+
+  // Mode configuration
+  uiConfig Json @default("{}") @map("ui_config") @db.JsonB // UI state for this mode
+  actions  Json @default("[]") @db.JsonB // Available actions in this mode
+
+  // System reference
+  systemName String? @map("system_name") @db.VarChar(100)
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+  isCustom Boolean @default(false) @map("is_custom")
+
+  @@index([modeId])
+  @@index([systemName])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_modes")
+}
+
+// RpgSystem - Game systems (assemblies of rules)
+model RpgSystem {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // System info
+  systemId    String  @unique @map("system_id") @db.VarChar(50) // 'weather', 'travel', etc.
+  name        String  @db.VarChar(100)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'environmental', 'exploration', 'downtime', 'social'
+
+  // System configuration
+  isActive      Boolean @default(false) @map("is_active")
+  configuration Json    @default("{}") @db.JsonB
+  ruleIds       Json    @default("[]") @map("rule_ids") @db.JsonB // Rules used by this system
+
+  // System reference
+  gameSystem String? @map("game_system") @db.VarChar(100) // Which game system this is for
+
+  // Usage
+  isPublic Boolean @default(true) @map("is_public")
+  isCustom Boolean @default(false) @map("is_custom")
+
+  // Relations
+  subSystems RpgSubSystem[]
+
+  @@index([systemId])
+  @@index([category])
+  @@index([gameSystem])
+  @@index([isActive])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("rpg_systems")
+}
+
+// ============================================================================
+// Creator Marketplace
+// ============================================================================
+
+// MarketplaceCommission - Custom content commissions
+model CritMarketplaceCommission {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Commission details
+  type        String @db.VarChar(50) // 'character_portrait', 'npc_voice', 'quest_text', etc.
+  title       String @db.VarChar(200)
+  description String @db.Text
+
+  // Payment
+  paymentType String    @default("story_credits") @map("payment_type") @db.VarChar(20)
+  // 'crit_coins' or 'story_credits'
+  budget      Decimal   @db.Decimal(10, 2) // Amount in the specified currency
+  deadline    DateTime?
+
+  // Parties
+  requestorId String  @map("requestor_id")
+  creatorId   String? @map("creator_id")
+
+  // Status
+  status String @default("open") @db.VarChar(20)
+  // 'open', 'in_progress', 'submitted', 'approved', 'completed', 'cancelled'
+
+  // Escrow (always in Story Credits)
+  escrowHeld   Boolean  @default(false) @map("escrow_held")
+  escrowAmount Decimal? @map("escrow_amount") @db.Decimal(10, 2) // Story Credits held in escrow
+  escrowTxId   String?  @unique @map("escrow_tx_id") // Links to StoryCreditTransaction
+
+  // Payment tracking
+  coinTxId       String?  @unique @map("coin_tx_id") // If paid with Crit-Coins
+  platformMargin Decimal? @map("platform_margin") @db.Decimal(10, 2) // For Crit-Coins payments (20%)
+
+  // Deliverables
+  deliveryFiles Json?     @map("delivery_files") @db.JsonB // Array of file URLs
+  deliveredAt   DateTime? @map("delivered_at")
+  approvedAt    DateTime? @map("approved_at")
+
+  // Reviews
+  requestorRating Int?    @map("requestor_rating") // 1-5
+  creatorRating   Int?    @map("creator_rating") // 1-5
+  requestorReview String? @map("requestor_review") @db.Text
+  creatorReview   String? @map("creator_review") @db.Text
+
+  @@index([requestorId])
+  @@index([creatorId])
+  @@index([status])
+  @@index([type])
+  @@index([paymentType])
+  @@index([deletedAt])
+  @@map("crit_marketplace_commissions")
+}
+
+// CommissionProposal - Artist proposals for commissions
+model CritCommissionProposal {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  commissionId String @map("commission_id")
+  creatorId    String @map("creator_id")
+
+  // Proposal details
+  price         Decimal @db.Decimal(10, 2) // Counter-offer price (in commission's currency)
+  message       String  @db.Text
+  portfolioUrls Json?   @map("portfolio_urls") @db.JsonB
+  estimatedDays Int?    @map("estimated_days")
+
+  // Status
+  status String @default("pending") @db.VarChar(20)
+  // 'pending', 'accepted', 'rejected', 'withdrawn'
+
+  @@index([commissionId])
+  @@index([creatorId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("crit_commission_proposals")
+}
+
+// ============================================================================
+// Player Characters & Downtime
+// ============================================================================
+
+// RpgActivity -  either during or between sessions, "downtime" flag (Player or NPC)
+model RpgActivity {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Creature performing activity (Player Character or NPC)
+  creatureId String?      @map("creature_id")
+  creature   RpgCreature? @relation(fields: [creatureId], references: [id], onDelete: Cascade)
+
+  // World context
+  worldId String   @map("world_id")
+  world   RpgWorld @relation(fields: [worldId], references: [id], onDelete: Cascade)
+
+  // Submitted by (player or AI simulation)
+  submittedBy   String  @map("submitted_by") // Player ID who submitted
+  isAISimulated Boolean @default(false) @map("is_ai_simulated") // True if AI-driven
+
+  // Activity type
+  activityType String @map("activity_type") @db.VarChar(50)
+  // 'crafting', 'training', 'research', 'carousing', 'crime', 'pit_fighting', 'work', 'rest'
+
+  // Activity details
+  title        String @db.VarChar(200)
+  description  String @db.Text
+  durationDays Int    @default(1) @map("duration_days") // How many days this takes
+
+  // Resources spent
+  goldSpent Int  @default(0) @map("gold_spent")
+  itemsUsed Json @default("[]") @map("items_used") @db.JsonB
+
+  // GM approval workflow
+  status String @default("pending") @map("status") @db.VarChar(20)
+  // 'pending', 'approved', 'rejected', 'completed', 'rolled'
+
+  approvedBy String?   @map("approved_by") // GM player ID
+  approvedAt DateTime? @map("approved_at")
+
+  rejectionReason String? @map("rejection_reason") @db.Text
+
+  // Results (filled in by GM or dice rolls)
+  outcome String? @db.Text
+  rewards Json?   @default("{}") @db.JsonB
+  // { "gold": 50, "experience": 100, "items": [...] }
+
+  // Dice rolls required
+  rollsRequired Json? @default("[]") @map("rolls_required") @db.JsonB
+  // [{ "type": "ability_check", "ability": "strength", "dc": 15 }]
+
+  rollsCompleted Json? @default("[]") @map("rolls_completed") @db.JsonB
+  // [{ "roll": "1d20+3", "result": 18, "success": true }]
+
+  @@index([creatureId])
+  @@index([worldId])
+  @@index([status])
+  @@index([activityType])
+  @@index([deletedAt])
+  @@map("rpg_activities")
+}
+
+// ============================================================================
+// Views (created after migration)
+
+// ============================================================================
+// Additional Core Concept Tables
+// ============================================================================
+
+// RpgSubSystem - Child systems under RpgSystem
+model RpgSubSystem {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // SubSystem info
+  name        String  @db.VarChar(200)
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'advancement', 'magic', 'crafting', etc.
+
+  // Parent system
+  systemId String    @map("system_id")
+  system   RpgSystem @relation(fields: [systemId], references: [id], onDelete: Cascade)
+
+  // Order in parent system
+  displayOrder Int @default(0) @map("display_order")
+
+  // Rules associated with this subsystem
+  ruleIds Json @default("[]") @map("rule_ids") @db.JsonB
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([systemId])
+  @@index([category])
+  @@index([deletedAt])
+  @@map("rpg_sub_systems")
+}
+
+// RpgAttribute - Trackable attributes (HP, XP, Name, etc.)
+model RpgAttribute {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Attribute info
+  name        String  @db.VarChar(100)
+  title       String  @db.VarChar(100)
+  description String? @db.Text
+  category    String  @db.VarChar(50) // 'stat', 'skill', 'resource', 'meta'
+
+  // Data type
+  dataType     String  @map("data_type") @db.VarChar(20) // 'number', 'string', 'boolean', 'json'
+  defaultValue String? @map("default_value") @db.Text
+
+  // Constraints
+  minValue Decimal? @map("min_value") @db.Decimal(10, 2)
+  maxValue Decimal? @map("max_value") @db.Decimal(10, 2)
+
+  // System reference
+  systemName String  @map("system_name") @db.VarChar(100)
+  isCore     Boolean @default(false) @map("is_core") // Core to system or optional
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([systemName])
+  @@index([category])
+  @@index([deletedAt])
+  @@map("rpg_attributes")
+}
+
+// RpgLocation - Hierarchical location system supporting all scales from rooms to universes
+// Locations can contain other locations AND worlds, enabling flexible scale hierarchies
+model RpgLocation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Location info
+  name         String  @db.VarChar(200)
+  title        String  @db.VarChar(200)
+  description  String? @db.Text
+  locationType String  @map("location_type") @db.VarChar(50) // 'underground', 'structure', 'city', 'wilderness', 'plane', 'interior', 'settlement', 'orbital-space', 'star-system', 'sector', 'galaxy', 'universe'
+
+  // Location scale - defines the scope and size of this location
+  // Based on VTT Image Scale Guidelines
+  locationScale String @default("Realm") @map("location_scale") @db.VarChar(50)
+  // Valid values (28 scales total):
+  // Micro: 'Interaction', 'Arena'
+  // Terrestrial: 'Building', 'Settlement'
+  // Travel: 'County', 'Province', 'Kingdom', 'Continent'
+  // Planetary: 'Realm' (default), 'Planet', 'Orbital Space', 'Star System'
+  // Astronomical: 'Inner System', 'Planetary System', 'Outer System', 'Extended System'
+  // Inter-Stellar: 'Local Binary', 'Stellar Neighborhood', 'Stellar Region', 'Sector'
+  // Galactic: 'Regional Sector', 'Galactic Arm Segment', 'Galactic Arm', 'Galaxy'
+  // Universal: 'Local Group', 'Galactic Cluster', 'Supercluster', 'Universe'
+
+  // Hierarchical relationships
+  parentLocationId String?       @map("parent_location_id")
+  parentLocation   RpgLocation?  @relation("LocationHierarchy", fields: [parentLocationId], references: [id], onDelete: SetNull)
+  childLocations   RpgLocation[] @relation("LocationHierarchy")
+
+  // World reference (optional - large-scale locations like galaxies don't belong to a single world)
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation("WorldLocations", fields: [worldId], references: [id], onDelete: Cascade)
+
+  // Contained worlds (for large-scale locations like orbital spaces, star systems, galaxies, universes)
+  containedWorlds RpgWorld[] @relation("LocationContainsWorlds")
+
+  // Template and map composition (for procedural generation and map building)
+  // RpgBoard template defines generation rules for this location type
+  boardTemplateId String?   @map("board_template_id")
+  boardTemplate   RpgBoard? @relation("LocationTemplate", fields: [boardTemplateId], references: [id], onDelete: SetNull)
+
+  // Map cards - composable map sections (RpgCard IDs for rooms, corridors, terrain features)
+  mapCardIds Json @default("[]") @map("map_card_ids") @db.JsonB // Array of RpgCard IDs
+
+  // NPC and creature generation settings
+  npcGenerationRules  Json @default("{}") @map("npc_generation_rules") @db.JsonB
+  lootGenerationRules Json @default("{}") @map("loot_generation_rules") @db.JsonB
+  encounterRules      Json @default("{}") @map("encounter_rules") @db.JsonB
+
+  // Environmental properties
+  climate     String? @db.VarChar(50)
+  terrain     String? @db.VarChar(50)
+  dangerLevel Int     @default(1) @map("danger_level") // 1-20
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([worldId])
+  @@index([parentLocationId])
+  @@index([locationType])
+  @@index([locationScale])
+  @@index([boardTemplateId])
+  @@index([deletedAt])
+  @@map("rpg_locations")
+}
+
+// Note: Merged into RpgThing model above
+// Behavior scripts, loot generation, and system-specific properties
+// are stored in the flexible properties JSON field
+
+// RpgBook - Books and compendiums
+model RpgBook {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Book info
+  name        String  @db.VarChar(200)
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+  bookType    String  @map("book_type") @db.VarChar(50) // 'rulebook', 'adventure', 'supplement', 'setting'
+
+  // Publication info
+  publisher   String?   @db.VarChar(100)
+  isbn        String?   @db.VarChar(20)
+  publishDate DateTime? @map("publish_date")
+  edition     String?   @db.VarChar(50)
+
+  // Content references
+  ruleIds   Json @default("[]") @map("rule_ids") @db.JsonB
+  cardIds   Json @default("[]") @map("card_ids") @db.JsonB
+  tableIds  Json @default("[]") @map("table_ids") @db.JsonB
+  systemIds Json @default("[]") @map("system_ids") @db.JsonB
+  modeIds   Json @default("[]") @map("mode_ids") @db.JsonB
+
+  // System reference
+  systemName String @map("system_name") @db.VarChar(100)
+
+  // Access control
+  isPublic    Boolean @default(false) @map("is_public")
+  requiresSRD Boolean @default(false) @map("requires_srd") // System Reference Document
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([systemName])
+  @@index([bookType])
+  @@index([publisher])
+  @@index([deletedAt])
+  @@map("rpg_books")
+}
+
+// RpgVoxel - Volumetric positioning for gridless/narrative movement
+model RpgVoxel {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Position (voxel coordinates)
+  x Int
+  y Int
+  z Int
+
+  // Parent sheet or board
+  sheetId String?   @map("sheet_id")
+  sheet   RpgSheet? @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+
+  boardId String?   @map("board_id")
+  board   RpgBoard? @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  // Voxel type - distinguishes purpose/usage
+  voxelType String @default("terrain") @map("voxel_type") @db.VarChar(50)
+  // 'terrain' - Regular voxel with terrain/passability
+  // 'drawing' - Foundry drawing/annotation (line, shape, text)
+  // 'marker' - Point of interest marker
+  // 'effect' - Visual effect area
+  // 'wall' - Blocking wall
+  // 'light' - Light source
+  // 'sound' - Sound emitter
+
+  // Voxel size (in feet or other units)
+  size     Int    @default(5) // Size of voxel in feet
+  sizeUnit String @default("feet") @map("size_unit") @db.VarChar(20)
+
+  // Tokens/creatures in this voxel
+  occupantIds Json @default("[]") @map("occupant_ids") @db.JsonB
+
+  // Environmental properties
+  terrainType String? @map("terrain_type") @db.VarChar(50)
+  passability Int     @default(0) // 0=clear, 50=difficult, 100=blocked
+  obstruction Int     @default(0) // 0=clear vision, 100=blocked
+
+  // Drawing/annotation properties (for voxelType='drawing')
+  // Store shape, color, stroke, text in metadata JSON
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@unique([sheetId, x, y, z])
+  @@unique([boardId, x, y, z])
+  @@index([x, y, z])
+  @@map("rpg_voxels")
+}
+
+// ============================================================================
+
+// CREATE VIEW crit_coin_balances AS
+// SELECT
+//   player_id,
+//   SUM(CASE WHEN transaction_type = 'credit' THEN amount ELSE -amount END) as total_balance,
+//   SUM(CASE
+//     WHEN transaction_type = 'credit'
+//     AND (expires_at IS NULL OR expires_at > NOW())
+//     THEN amount
+//     WHEN transaction_type = 'debit'
+//     THEN -amount
+//     ELSE 0
+//   END) as available_balance
+// FROM crit_coin_transactions
+// GROUP BY player_id;

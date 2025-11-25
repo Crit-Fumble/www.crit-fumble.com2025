@@ -1,0 +1,81 @@
+{
+  "name": "Gem of Seeing",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/gem-of-seeing.png",
+  "system": {
+    "description": {
+      "value": "This gem has 3 charges. As a Magic|XPHB action, you can expend 1 charge. For the next 10 minutes, you have Truesight|XPHB out to 120 feet when you peer through the gem. The gem regains 1d3 expended charges daily at dawn.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 264,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 264,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Gem of Seeing",
+        "source": "XDMG",
+        "page": 264,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d3}",
+        "charges": 3,
+        "entries": [
+          "This gem has 3 charges. As a {@action Magic|XPHB} action, you can expend 1 charge. For the next 10 minutes, you have {@sense Truesight|XPHB} out to 120 feet when you peer through the gem.",
+          "The gem regains {@dice 1d3} expended charges daily at dawn."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

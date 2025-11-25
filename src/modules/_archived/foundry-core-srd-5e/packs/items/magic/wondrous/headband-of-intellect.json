@@ -1,0 +1,82 @@
+{
+  "name": "Headband of Intellect",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/headband-of-intellect.png",
+  "system": {
+    "description": {
+      "value": "Your Intelligence score is 19 while you wear this headband. It has no effect on you if your Intelligence is 19 or higher without it.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 268,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 268,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Headband of Intellect",
+        "source": "XDMG",
+        "page": 268,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "uncommon",
+        "reqAttune": true,
+        "wondrous": true,
+        "ability": {
+          "static": {
+            "int": 19
+          }
+        },
+        "entries": [
+          "Your Intelligence score is 19 while you wear this headband. It has no effect on you if your Intelligence is 19 or higher without it."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Arcana - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

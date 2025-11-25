@@ -1,0 +1,64 @@
+{
+  "name": "Linen (1 sq. yd.)",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/linen-1-sq-yd.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 213,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 213,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Linen (1 sq. yd.)",
+        "source": "XDMG",
+        "page": 213,
+        "srd52": true,
+        "type": "TG|XDMG",
+        "rarity": "none",
+        "value": 500
+      }
+    }
+  }
+}

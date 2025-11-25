@@ -1,0 +1,73 @@
+{
+  "name": "Horseshoes of Speed",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/horseshoes-of-speed.png",
+  "system": {
+    "description": {
+      "value": "These horseshoes come in a set of four. As a Magic|XPHB action, you can touch one of the horseshoes to the hoof of a horse or similar creature, whereupon the horseshoe affixes itself to the hoof. Removing a horseshoe also takes a Magic|XPHB action. While all four horseshoes are attached to the same creature, its Speed|XPHB is increased by 30 feet.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 270,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 270,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Horseshoes of Speed",
+        "source": "XDMG",
+        "page": 270,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "wondrous": true,
+        "entries": [
+          "These horseshoes come in a set of four. As a {@action Magic|XPHB} action, you can touch one of the horseshoes to the hoof of a horse or similar creature, whereupon the horseshoe affixes itself to the hoof. Removing a horseshoe also takes a {@action Magic|XPHB} action.",
+          "While all four horseshoes are attached to the same creature, its {@variantrule Speed|XPHB} is increased by 30 feet."
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG",
+          "Implements - Rare|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

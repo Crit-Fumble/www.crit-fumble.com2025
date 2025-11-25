@@ -1,0 +1,31 @@
+{
+  "name": "@crit-fumble/foundryvtt-client",
+  "version": "0.1.0",
+  "description": "Client-side automation and testing utilities for Foundry VTT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest"
+  },
+  "keywords": [
+    "foundry-vtt",
+    "automation",
+    "testing",
+    "playwright",
+    "puppeteer"
+  ],
+  "author": "Crit-Fumble",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "puppeteer": "^21.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  }
+}

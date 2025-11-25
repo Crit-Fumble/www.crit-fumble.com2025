@@ -1,0 +1,26 @@
+{
+  "name": "Concentration",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/concentration.svg",
+  "pages": [
+    {
+      "name": "Concentration",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Concentration</h2>\n\n<p><em>Maintaining focus on magical effects</em></p>\n\n<h3>Concentration Spells</h3>\n<p>Some spells require you to maintain concentration to keep their magic active. If you lose concentration, the spell ends.</p>\n\n<h3>Maintaining Concentration</h3>\n<ul>\n  <li>You can concentrate on only one spell at a time</li>\n  <li>Casting another concentration spell ends the first</li>\n  <li>You must maintain concentration for the spell's duration</li>\n</ul>\n\n<h3>Breaking Concentration</h3>\n<p>You lose concentration if:</p>\n<ul>\n  <li><strong>You cast another concentration spell</strong></li>\n  <li><strong>You take damage:</strong> Make a Constitution saving throw (DC = 10 or half the damage taken, whichever is higher)</li>\n  <li><strong>You're incapacitated or killed</strong></li>\n  <li><strong>Environmental phenomenon:</strong> DM may require DC 10 Constitution save</li>\n</ul>\n\n<h3>Concentration Check</h3>\n<p><strong>DC:</strong> 10 or half the damage taken (whichever is higher)</p>\n<p><strong>Roll:</strong> Constitution saving throw</p>\n<p><strong>Success:</strong> Maintain concentration</p>\n<p><strong>Failure:</strong> Spell ends</p>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-concentration",
+      "srd52": true
+    }
+  }
+}

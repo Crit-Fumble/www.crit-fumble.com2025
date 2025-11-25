@@ -1,0 +1,488 @@
+{
+  "id": "srd-location-instant-fortress",
+  "name": "Instant Fortress",
+  "description": "A 20-foot square adamantine tower with arrow slits and a battlement, summoned from the Instant Fortress magic item (SRD p100).",
+  "type": "adventure",
+  "schemaVersion": "1.0",
+  "worldographerVersion": "1.0",
+
+  "width": 4,
+  "height": 4,
+
+  "grid": {
+    "type": "square",
+    "squareSize": 60,
+    "scale": {
+      "level": "adventure",
+      "tileSize": "10ft",
+      "pixelRatio": "4in/pixel",
+      "tileDimensions": "30x30x3"
+    },
+    "mapProjection": "FLAT"
+  },
+
+  "tiles": [
+    {
+      "col": 0,
+      "row": 0,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 0,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false,
+      "structure": {
+        "name": "Instant Fortress - Ground Floor",
+        "width": 20,
+        "height": 15,
+        "depth": 20,
+        "floors": 2,
+        "material": "adamantine",
+        "ac": 23,
+        "hp": 100,
+        "immunities": ["bludgeoning", "piercing", "slashing"],
+        "resistances": ["all_other_damage"],
+        "features": ["arrow_slits", "battlement", "magical_stability"],
+        "doors": [
+          {
+            "x": 10,
+            "y": 0,
+            "locked": false,
+            "hp": 100,
+            "ac": 23,
+            "material": "adamantine"
+          }
+        ]
+      }
+    },
+    {
+      "col": 1,
+      "row": 0,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 0,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false
+    },
+    {
+      "col": 0,
+      "row": 1,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 0,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false
+    },
+    {
+      "col": 1,
+      "row": 1,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 0,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false
+    },
+    {
+      "col": 0,
+      "row": 2,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 15,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false,
+      "customData": {
+        "floor": 2,
+        "note": "Second floor, 15 feet above ground"
+      }
+    },
+    {
+      "col": 1,
+      "row": 2,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_floor",
+        "elevation": 15,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": false,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false,
+      "customData": {
+        "floor": 2
+      }
+    },
+    {
+      "col": 0,
+      "row": 3,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_roof",
+        "elevation": 30,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": true,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false,
+      "customData": {
+        "floor": "roof",
+        "note": "Battlement roof, 30 feet high"
+      },
+      "structure": {
+        "name": "Instant Fortress - Roof",
+        "width": 20,
+        "height": 5,
+        "depth": 20,
+        "material": "adamantine",
+        "ac": 23,
+        "hp": 100,
+        "immunities": ["bludgeoning", "piercing", "slashing"],
+        "resistances": ["all_other_damage"],
+        "features": ["battlement", "trapdoor"]
+      }
+    },
+    {
+      "col": 1,
+      "row": 3,
+      "viewLevel": "adventure",
+      "terrain": {
+        "type": "structure_roof",
+        "elevation": 30,
+        "icy": false,
+        "passability": {
+          "walkable": true,
+          "swimmable": false,
+          "flyable": true,
+          "difficultTerrain": false
+        },
+        "movementCost": 1
+      },
+      "gmOnly": false,
+      "explored": false,
+      "customData": {
+        "floor": "roof"
+      }
+    }
+  ],
+
+  "features": [
+    {
+      "id": "feat-door",
+      "featureType": "door",
+      "label": "Entrance Door",
+      "positions": {
+        "adventureX": 60,
+        "adventureY": 0
+      },
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false,
+      "tileCol": 0,
+      "tileRow": 0
+    },
+    {
+      "id": "feat-ladder",
+      "featureType": "ladder",
+      "label": "Ladder to Second Floor",
+      "positions": {
+        "adventureX": 15,
+        "adventureY": 15
+      },
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false,
+      "tileCol": 0,
+      "tileRow": 1
+    },
+    {
+      "id": "feat-trapdoor",
+      "featureType": "trapdoor",
+      "label": "Trapdoor to Roof",
+      "positions": {
+        "adventureX": 15,
+        "adventureY": 45
+      },
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false,
+      "tileCol": 0,
+      "tileRow": 2
+    }
+  ],
+
+  "labels": [
+    {
+      "id": "label-ground",
+      "text": "Ground Floor",
+      "positions": {
+        "adventureX": 30,
+        "adventureY": 15
+      },
+      "font": {
+        "family": "Arial",
+        "size": 12,
+        "color": "#333333",
+        "bold": true,
+        "italic": false
+      },
+      "outline": {
+        "color": "#ffffff",
+        "width": 1
+      },
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false
+    },
+    {
+      "id": "label-second",
+      "text": "Second Floor",
+      "positions": {
+        "adventureX": 30,
+        "adventureY": 45
+      },
+      "font": {
+        "family": "Arial",
+        "size": 12,
+        "color": "#333333",
+        "bold": true,
+        "italic": false
+      },
+      "outline": {
+        "color": "#ffffff",
+        "width": 1
+      },
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false
+    },
+    {
+      "id": "label-roof",
+      "text": "Roof (Battlement)",
+      "positions": {
+        "adventureX": 30,
+        "adventureY": 75
+      },
+      "font": {
+        "family": "Arial",
+        "size": 12,
+        "color": "#333333",
+        "bold": true,
+        "italic": false
+      },
+      "outline": {
+        "color": "#ffffff",
+        "width": 1
+      },
+      "visibility": {
+        "visibleWorld": false,
+        "visibleContinent": false,
+        "visibleKingdom": false,
+        "visibleProvince": false,
+        "visibleCounty": false,
+        "visibleSettlement": false,
+        "visibleAdventure": true,
+        "visibleCombat": true,
+        "visibleInteraction": true
+      },
+      "gmOnly": false
+    }
+  ],
+
+  "shapes": [
+    {
+      "id": "shape-walls",
+      "name": "Tower Walls",
+      "shapeType": "polygon",
+      "points": [
+        { "x": 0, "y": 0 },
+        { "x": 60, "y": 0 },
+        { "x": 60, "y": 60 },
+        { "x": 0, "y": 60 },
+        { "x": 0, "y": 0 }
+      ],
+      "viewLevel": "adventure",
+      "stroke": {
+        "color": "#666666",
+        "width": 3,
+        "style": "solid"
+      },
+      "fill": {
+        "color": "#999999",
+        "opacity": 0.3
+      },
+      "gmOnly": false
+    }
+  ],
+
+  "notes": [
+    {
+      "id": "note-001",
+      "title": "Instant Fortress Properties",
+      "category": "custom",
+      "content": "**Source**: SRD Magic Items - Instant Fortress (p100)\n\n**Dimensions**: 20 feet on a side, 30 feet high\n\n**Structure**:\n- Ground Floor (0-15ft)\n- Second Floor (15-30ft)\n- Roof with battlement (30ft)\n- Ladder, staircase, or ramp connecting floors\n- Trapdoor to roof\n\n**Properties**:\n- **Material**: Adamantine\n- **AC**: 20 (roof, door, walls)\n- **HP**: 100 (each section)\n- **Immunities**: Bludgeoning, Piercing, Slashing (except siege equipment)\n- **Resistances**: All other damage\n- **Special**: Cannot be tipped over (magical)\n\n**Features**:\n- Arrow slits on all sides\n- Battlement atop roof\n- Single door (opens only to attuned user)\n- Immune to Knock spell\n\n**Repair**: Only Wish spell can repair (counts as 8th level spell replication)",
+      "position": {
+        "viewLevel": "adventure",
+        "x": 0,
+        "y": 0
+      },
+      "tileCol": 0,
+      "tileRow": 0,
+      "gmOnly": true,
+      "createdAt": "2025-01-19T00:00:00.000Z",
+      "updatedAt": "2025-01-19T00:00:00.000Z"
+    }
+  ],
+
+  "layers": [],
+
+  "terrainDefinitions": [
+    {
+      "name": "structure_floor",
+      "displayName": "Stone Floor",
+      "color": "#888888",
+      "texture": "opengameart/tiles/stone-floor.png",
+      "passability": {
+        "walkable": true,
+        "swimmable": false,
+        "flyable": false,
+        "difficultTerrain": false
+      },
+      "movementCost": 1,
+      "defenseBonus": 0,
+      "description": "Interior stone floor of the fortress"
+    },
+    {
+      "name": "structure_roof",
+      "displayName": "Roof (Battlement)",
+      "color": "#777777",
+      "texture": "opengameart/tiles/stone-battlement.png",
+      "passability": {
+        "walkable": true,
+        "swimmable": false,
+        "flyable": true,
+        "difficultTerrain": false
+      },
+      "movementCost": 1,
+      "defenseBonus": 4,
+      "description": "Roof with battlement providing cover (+4 AC)"
+    }
+  ],
+
+  "creatures": [],
+  "items": [],
+  "childLocations": []
+}

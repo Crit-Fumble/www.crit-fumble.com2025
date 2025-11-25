@@ -1,0 +1,157 @@
+{
+  "name": "Spiritual Weapon",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/spiritual-weapon.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 2</strong> Evocation</p>\n<p><strong>Casting Time:</strong> 1 bonus</p>\n<p><strong>Range:</strong> 60 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Concentration, up to 1 minute</p>\n\nYou create a floating, spectral force that resembles a weapon of your choice and lasts for the duration. The force appears within range in a space of your choice, and you can immediately make one melee spell attack against one creature within 5 feet of the force. On a hit, the target takes Force damage equal to 1d8 plus your spellcasting ability modifier. As a Bonus Action|XPHB on your later turns, you can move the force up to 20 feet and repeat the attack against a creature within 5 feet of it.\n\n<p><strong>At Higher Levels:</strong> The damage increases by 1d8|2-9|1d8 for every slot level above 2.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "bonus",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 60,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "msak",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "evo",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 319,
+      "school": "V",
+      "classes": [],
+      "_srdData": {
+        "name": "Spiritual Weapon",
+        "source": "XPHB",
+        "page": 319,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 2,
+        "school": "V",
+        "time": [
+          {
+            "number": 1,
+            "unit": "bonus"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 60
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "You create a floating, spectral force that resembles a weapon of your choice and lasts for the duration. The force appears within range in a space of your choice, and you can immediately make one melee spell attack against one creature within 5 feet of the force. On a hit, the target takes Force damage equal to {@damage 1d8} plus your spellcasting ability modifier.",
+          "As a {@variantrule Bonus Action|XPHB} on your later turns, you can move the force up to 20 feet and repeat the attack against a creature within 5 feet of it."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The damage increases by {@scaledamage 1d8|2-9|1d8} for every slot level above 2."
+            ]
+          }
+        ],
+        "damageInflict": [
+          "force"
+        ],
+        "spellAttack": [
+          "M"
+        ],
+        "miscTags": [
+          "UBA"
+        ],
+        "areaTags": [
+          "ST"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

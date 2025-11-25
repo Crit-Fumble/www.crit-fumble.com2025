@@ -1,0 +1,69 @@
+{
+  "name": "Robe",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/robe.png",
+  "system": {
+    "description": {
+      "value": "A Robe has vocational or ceremonial significance. Some events and locations admit only people wearing a Robe bearing certain colors or symbols.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 4,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Robe",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 4,
+        "value": 100,
+        "entries": [
+          "A Robe has vocational or ceremonial significance. Some events and locations admit only people wearing a Robe bearing certain colors or symbols."
+        ]
+      }
+    }
+  }
+}

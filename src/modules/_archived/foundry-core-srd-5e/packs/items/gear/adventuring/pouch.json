@@ -1,0 +1,81 @@
+{
+  "name": "Pouch",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/pouch.png",
+  "system": {
+    "description": {
+      "value": "A Pouch holds up to 6 pounds within one-fifth of a cubic foot.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Pouch",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 1,
+        "value": 50,
+        "entries": [
+          "A Pouch holds up to 6 pounds within one-fifth of a cubic foot."
+        ],
+        "containerCapacity": {
+          "weight": [
+            6
+          ],
+          "item": [
+            {
+              "firearm bullet|xphb": 10,
+              "sling bullet|xphb": 20,
+              "needle|xphb": 50
+            }
+          ]
+        }
+      }
+    }
+  }
+}

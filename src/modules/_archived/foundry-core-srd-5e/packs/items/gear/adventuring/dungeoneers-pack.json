@@ -1,0 +1,89 @@
+{
+  "name": "Dungeoneer's Pack",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/dungeoneers-pack.png",
+  "system": {
+    "description": {
+      "value": "A Dungeoneer's Pack contains the following items: Backpack|XPHB, Caltrops|XPHB, Crowbar|XPHB, 2 flasks of Oil|XPHB, 10 days of Rations|XPHB, Rope|XPHB, Tinderbox|XPHB, 10 Torch|XPHB|Torches, and Waterskin|XPHB.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 225,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 55,
+      "units": "lb"
+    },
+    "price": {
+      "value": 12,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 225,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Dungeoneer's Pack",
+        "source": "XPHB",
+        "page": 225,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 55,
+        "value": 1200,
+        "entries": [
+          "A Dungeoneer's Pack contains the following items: {@item Backpack|XPHB}, {@item Caltrops|XPHB}, {@item Crowbar|XPHB}, 2 flasks of {@item Oil|XPHB}, 10 days of {@item Rations|XPHB}, {@item Rope|XPHB}, {@item Tinderbox|XPHB}, 10 {@item Torch|XPHB|Torches}, and {@item Waterskin|XPHB}."
+        ],
+        "packContents": [
+          "backpack|xphb",
+          "caltrops|xphb",
+          "crowbar|xphb",
+          {
+            "item": "oil|xphb",
+            "quantity": 2
+          },
+          {
+            "item": "rations|xphb",
+            "quantity": 10
+          },
+          "rope|xphb",
+          "tinderbox|xphb",
+          {
+            "item": "torch|xphb",
+            "quantity": 10
+          },
+          "waterskin|xphb"
+        ]
+      }
+    }
+  }
+}

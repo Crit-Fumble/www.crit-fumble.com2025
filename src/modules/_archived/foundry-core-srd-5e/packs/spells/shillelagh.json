@@ -1,0 +1,161 @@
+{
+  "name": "Shillelagh",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/shillelagh.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 0</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 1 bonus</p>\n<p><strong>Range:</strong> undefined self</p>\n<p><strong>Components:</strong> V, S, M (mistletoe)</p>\n<p><strong>Duration:</strong> 1 minute</p>\n\nA Club or Quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a d8. If the attack deals damage, it can be Force damage or the weapon's normal damage type (your choice). The spell ends early if you cast it again or if you let go of the weapon.\n\n<p><strong>At Higher Levels:</strong> The damage die changes when you reach levels 5 (d10), 11 (d12), and 17 (2d6).</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "bonus",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [
+        [
+          "1d8",
+          ""
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 0,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "mistletoe",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 316,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Shillelagh",
+        "source": "XPHB",
+        "page": 316,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 0,
+        "school": "T",
+        "time": [
+          {
+            "number": 1,
+            "unit": "bonus"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "self"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "mistletoe"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            }
+          }
+        ],
+        "entries": [
+          "A Club or Quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a {@dice d8}. If the attack deals damage, it can be Force damage or the weapon's normal damage type (your choice).",
+          "The spell ends early if you cast it again or if you let go of the weapon."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Cantrip Upgrade",
+            "entries": [
+              "The damage die changes when you reach levels 5 ({@damage d10}), 11 ({@damage d12}), and 17 ({@damage 2d6})."
+            ]
+          }
+        ],
+        "scalingLevelDice": {
+          "label": "damage",
+          "scaling": {
+            "1": "1d8",
+            "5": "1d10",
+            "11": "1d12",
+            "17": "2d6"
+          }
+        },
+        "miscTags": [
+          "AAD",
+          "SCL"
+        ]
+      }
+    }
+  }
+}

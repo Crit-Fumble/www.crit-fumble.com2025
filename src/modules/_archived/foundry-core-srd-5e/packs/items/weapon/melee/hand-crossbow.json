@@ -1,0 +1,120 @@
+{
+  "name": "Hand Crossbow",
+  "type": "weapon",
+  "img": "modules/foundry-core-srd-5e/assets/items/weapons/hand-crossbow.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 215,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 75,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [
+        [
+          "1d6",
+          "piercing"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "base",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "amm",
+      "lgt",
+      "lod"
+    ],
+    "weaponType": "martial",
+    "proficient": 0,
+    "mastery": "vex"
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 215,
+      "itemType": "weapon",
+      "_srdData": {
+        "name": "Hand Crossbow",
+        "source": "XPHB",
+        "page": 215,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "R|XPHB",
+        "rarity": "none",
+        "weight": 3,
+        "value": 7500,
+        "weaponCategory": "martial",
+        "property": [
+          "A|XPHB",
+          "L|XPHB",
+          "LD|XPHB"
+        ],
+        "mastery": [
+          "Vex|XPHB"
+        ],
+        "range": "30/120",
+        "dmg1": "1d6",
+        "dmgType": "P",
+        "crossbow": true,
+        "weapon": true,
+        "ammoType": "bolt|xphb",
+        "hasFluffImages": true
+      }
+    }
+  }
+}

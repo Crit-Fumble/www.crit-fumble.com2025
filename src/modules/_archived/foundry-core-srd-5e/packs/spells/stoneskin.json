@@ -1,0 +1,146 @@
+{
+  "name": "Stoneskin",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/stoneskin.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 4</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> Concentration, up to 1 hour</p>\n\nUntil the spell ends, one willing creature you touch has Resistance|XPHB to Bludgeoning, Piercing, and Slashing damage.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 4,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 321,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Stoneskin",
+        "source": "XPHB",
+        "page": 321,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 4,
+        "school": "T",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "diamond dust worth 100+ GP, which the spell consumes",
+            "cost": 10000,
+            "consume": true
+          }
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "Until the spell ends, one willing creature you touch has {@variantrule Resistance|XPHB} to Bludgeoning, Piercing, and Slashing damage."
+        ],
+        "damageResist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

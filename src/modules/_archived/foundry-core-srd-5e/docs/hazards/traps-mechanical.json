@@ -1,0 +1,150 @@
+{
+  "id": "hazard-traps-mechanical",
+  "name": "Mechanical Traps",
+  "description": "Physical traps using mechanical components like pressure plates, trip wires, springs, and weighted objects to harm or hinder intruders",
+  "type": "trap",
+  "category": "mechanical",
+  "trigger": "Varies by trap - pressure plates, trip wires, improper key usage, opening locks incorrectly",
+  "damage": {
+    "amount": "varies by trap and level",
+    "type": "bludgeoning, piercing, poison, or other physical damage",
+    "frequency": "typically instantaneous, some reset"
+  },
+  "savingThrow": {
+    "ability": "typically DEX, sometimes STR",
+    "dc": "varies by trap and level (10-19)",
+    "onSuccess": "typically half damage or avoidance",
+    "onFailure": "full damage and/or conditions"
+  },
+  "duration": "instantaneous or until trap resets",
+  "trapComponents": {
+    "severity": "Nuisance or Deadly for characters of certain levels",
+    "trigger": "What activates the trap (pressure plate, trip wire, improper action)",
+    "duration": "How long effect lasts, whether trap resets",
+    "detectAndDisarm": "DC and method for finding and disabling trap",
+    "scaling": "How trap scales for higher character levels"
+  },
+  "exampleTraps": [
+    {
+      "name": "Collapsing Roof",
+      "severity": "Deadly (Levels 1-4)",
+      "trigger": "Crossing a trip wire",
+      "damage": "11 (2d10) Bludgeoning, DEX DC 13 save for half",
+      "effect": "Area becomes Difficult Terrain from rubble",
+      "detect": "DC 11 Wisdom (Perception) as Search action",
+      "disarm": "Cut or avoid trip wire (no check)",
+      "scaling": "5-10: 22 (4d10) DC 15 | 11-16: 55 (10d10) DC 17 | 17-20: 99 (18d10) DC 19",
+      "srdLine": "407-426"
+    },
+    {
+      "name": "Falling Net",
+      "severity": "Nuisance (Levels 1-4)",
+      "trigger": "Crossing a trip wire",
+      "damage": "None",
+      "effect": "Restrained condition until escape. DC 10 STR (Athletics) to escape as action",
+      "detect": "DC 11 Wisdom (Perception) as Search action",
+      "disarm": "Cut or avoid trip wire (no check)",
+      "destroy": "Net can be destroyed (see Adventuring Gear)",
+      "setting": "DC 13 DEX (Sleight of Hand) to set trap, 10 minutes",
+      "scaling": "5-10: DC 12 | 11-16: DC 14 | 17-20: DC 16",
+      "srdLine": "428-447"
+    },
+    {
+      "name": "Hidden Pit",
+      "severity": "Nuisance (Levels 1-4)",
+      "trigger": "Moving onto pit's hinged lid",
+      "damage": "3 (1d6) Bludgeoning from 10-foot fall",
+      "effect": "None",
+      "detect": "DC 15 Intelligence (Investigation) as Study action",
+      "disarm": "Wedge Iron Spike between lid and floor, or use Arcane Lock",
+      "escape": "Requires Climb Speed, climbing gear, or magic",
+      "scaling": "5-10: 30ft/10 (3d6) | 11-16: 60ft/21 (6d6) | 17-20: 120ft/42 (12d6)",
+      "srdLine": "468-487"
+    },
+    {
+      "name": "Poisoned Needle",
+      "severity": "Nuisance (Levels 1-4)",
+      "trigger": "Opening lock improperly or failing to disarm",
+      "damage": "5 (1d10) Poison, CON DC 11 save for half",
+      "effect": "Poisoned condition for 1 hour on failed save",
+      "avoid": "Knock spell prevents triggering",
+      "detect": "DC 15 Wisdom (Perception) as Search action",
+      "disarm": "DC 15 DEX (Sleight of Hand), triggers on failure",
+      "scaling": "5-10: 11 (2d10) DC 13 | 11-16: 22 (4d10) DC 15 | 17-20: 55 (10d10) DC 17",
+      "srdLine": "505-521"
+    },
+    {
+      "name": "Spiked Pit",
+      "severity": "Deadly (Levels 1-4)",
+      "trigger": "Moving onto pit's hinged lid",
+      "damage": "3 (1d6) Bludgeoning from 10-foot fall + 9 (2d8) Piercing from spikes",
+      "effect": "None",
+      "detect": "DC 15 Intelligence (Investigation) as Study action",
+      "disarm": "Wedge Iron Spike between lid and floor, or use Arcane Lock",
+      "escape": "Requires Climb Speed, climbing gear, or magic",
+      "scaling": "5-10: 30ft/10 (3d6) Blud + 13 (3d8) Pierce | 11-16: 60ft/21 (6d6) + 36 (8d8) | 17-20: 120ft/42 (12d6) + 57 (13d8)",
+      "srdLine": "556-576"
+    },
+    {
+      "name": "Poisoned Darts",
+      "severity": "Deadly (Levels 1-4)",
+      "trigger": "Moving onto pressure plate",
+      "damage": "1d3 darts, 3 (1d6) Poison per dart, DEX DC 13 save to avoid",
+      "effect": "Resets at start of next turn if activated fewer than 3 times",
+      "detect": "DC 15 Wisdom (Perception) as Search action for wall holes",
+      "disarm": "Plug holes with wax/cloth, or wedge pressure plate",
+      "scaling": "5-10: 7 (2d6) per dart | 11-16: 14 (4d6) per dart | 17-20: 24 (7d6) per dart",
+      "srdLine": "489-503"
+    },
+    {
+      "name": "Rolling Stone",
+      "severity": "Deadly (11-16) or Nuisance (17-20)",
+      "trigger": "Moving onto pressure plate",
+      "damage": "55 (10d10) Bludgeoning, DEX DC 15 save to avoid, plus Prone condition",
+      "effect": "5-foot-radius stone rolls Initiative +8, moves 60 feet per turn. Stops when hits wall",
+      "detect": "DC 15 Intelligence (Investigation) as Study action",
+      "disarm": "Wedge pressure plate with Iron Spike",
+      "destroy": "Large object, AC 17, HP 100, Damage Threshold 10",
+      "slow": "DC 20 STR (Athletics) as action reduces movement by 15 feet",
+      "srdLine": "523-544"
+    }
+  ],
+  "detection": {
+    "difficulty": "DC 10-15",
+    "method": "Wisdom (Perception) for visual elements, Intelligence (Investigation) for mechanisms, Study action for complex analysis"
+  },
+  "mitigation": [
+    "Use Search action to detect trap components (trip wires, pressure plates)",
+    "Use Study action to analyze mechanisms and construction",
+    "Disable triggers (wedge pressure plates, cut trip wires)",
+    "Use Thieves' Tools to disarm complex mechanisms",
+    "Destroy trap components (nets, darts)",
+    "Bypass entirely with magic (Misty Step, Spider Climb)",
+    "Have high Dexterity for saving throws",
+    "Use pole or servant to trigger traps safely",
+    "Cast spells to avoid triggers (Knock, Arcane Lock)"
+  ],
+  "designPrinciples": [
+    "Use traps sparingly - too many slow game down",
+    "Best traps are fleeting distractions or deadly puzzles requiring teamwork",
+    "Avoid undetectable and inescapable traps - rarely fun",
+    "Nuisance traps unlikely to seriously harm characters of indicated levels",
+    "Deadly traps can grievously damage characters of indicated levels",
+    "Scale carefully - nuisance at high level can be deadly at low level"
+  ],
+  "srdReference": {
+    "file": "dndsrd5.2_markdown/src/09_GameplayToolbox.md",
+    "section": "Traps",
+    "lines": "383-576",
+    "quote": "Traps should be used sparingly, lest they lose their charm. A hidden pit can be a fun surprise, but too many traps in an adventure can lead players to become overly cautious, which slows down the game. The best traps are fleeting distractions that skilled characters can overcome in a short amount of time or deadly puzzles that require quick thinking and teamwork to overcome."
+  },
+  "relatedConcepts": {
+    "damageTypes": ["bludgeoning", "piercing", "poison"],
+    "conditions": ["restrained", "poisoned", "prone"],
+    "abilities": ["dexterity", "strength", "wisdom", "intelligence"],
+    "skills": ["perception", "investigation", "athletics", "sleight-of-hand"],
+    "tools": ["thieves-tools"],
+    "actions": ["search", "study", "action"],
+    "equipment": ["iron-spike", "rope", "climbing-gear"]
+  }
+}

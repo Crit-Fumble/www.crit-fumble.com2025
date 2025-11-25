@@ -1,0 +1,157 @@
+{
+  "name": "Find Steed",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/find-steed.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 2</strong> Conjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 30 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nYou summon an otherworldly being that appears as a loyal steed in an unoccupied space of your choice within range. This creature uses the Otherworldly Steed|XPHB stat block. If you already have a steed from this spell, the steed is replaced by the new one. The steed resembles a Large, rideable animal of your choice, such as a horse, a camel, a dire wolf, or an elk. Whenever you cast the spell, choose the steed's creature type—Celestial, Fey, or Fiend—which determines certain traits in the stat block. The steed is an ally to you and your allies. In combat, it shares your Initiative|XPHB count, and it functions as a controlled mount while you ride it (as defined in the rules on mounted combat|XPHB|1|Mounted Combat). If you have the Incapacitated|XPHB condition, the steed takes its turn immediately after yours and acts independently, focusing on protecting you.The steed disappears if it drops to 0 Hit Points|XPHB or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the steed that disappeared or a different one.\n\n<p><strong>At Higher Levels:</strong> Use the spell slot's level for the spell's level in the stat block.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "con",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 272,
+      "school": "C",
+      "classes": [],
+      "_srdData": {
+        "name": "Find Steed",
+        "source": "XPHB",
+        "page": 272,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 2,
+        "school": "C",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 30
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "You summon an otherworldly being that appears as a loyal steed in an unoccupied space of your choice within range. This creature uses the {@creature Otherworldly Steed|XPHB} stat block. If you already have a steed from this spell, the steed is replaced by the new one.",
+          "The steed resembles a Large, rideable animal of your choice, such as a horse, a camel, a dire wolf, or an elk. Whenever you cast the spell, choose the steed's creature type—Celestial, Fey, or Fiend—which determines certain traits in the stat block.",
+          {
+            "type": "entries",
+            "name": "Combat",
+            "entries": [
+              "The steed is an ally to you and your allies. In combat, it shares your {@variantrule Initiative|XPHB} count, and it functions as a controlled mount while you ride it (as defined in the rules on {@book mounted combat|XPHB|1|Mounted Combat}). If you have the {@condition Incapacitated|XPHB} condition, the steed takes its turn immediately after yours and acts independently, focusing on protecting you."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Disappearance of the Steed",
+            "entries": [
+              "The steed disappears if it drops to 0 {@variantrule Hit Points|XPHB} or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the steed that disappeared or a different one."
+            ]
+          }
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "Use the spell slot's level for the spell's level in the stat block."
+            ]
+          }
+        ],
+        "miscTags": [
+          "PRM",
+          "SMN"
+        ]
+      }
+    }
+  }
+}

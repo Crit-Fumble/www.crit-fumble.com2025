@@ -1,0 +1,91 @@
+{
+  "name": "Burglar's Pack",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/burglars-pack.png",
+  "system": {
+    "description": {
+      "value": "A Burglar's Pack contains the following items: Backpack|XPHB, Ball Bearings|XPHB, Bell|XPHB, 10 Candle|XPHB|Candles, Crowbar|XPHB, Hooded Lantern|XPHB, 7 flasks of Oil|XPHB, 5 days of Rations|XPHB, Rope|XPHB, Tinderbox|XPHB, and Waterskin|XPHB.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 224,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 47.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 16,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 224,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Burglar's Pack",
+        "source": "XPHB",
+        "page": 224,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 47.5,
+        "value": 1600,
+        "entries": [
+          "A Burglar's Pack contains the following items: {@item Backpack|XPHB}, {@item Ball Bearings|XPHB}, {@item Bell|XPHB}, 10 {@item Candle|XPHB|Candles}, {@item Crowbar|XPHB}, {@item Hooded Lantern|XPHB}, 7 flasks of {@item Oil|XPHB}, 5 days of {@item Rations|XPHB}, {@item Rope|XPHB}, {@item Tinderbox|XPHB}, and {@item Waterskin|XPHB}."
+        ],
+        "packContents": [
+          "backpack|xphb",
+          "ball bearings|xphb",
+          "bell|xphb",
+          {
+            "item": "candle|xphb",
+            "quantity": 10
+          },
+          "crowbar|xphb",
+          "hooded lantern|xphb",
+          {
+            "item": "oil|xphb",
+            "quantity": 7
+          },
+          {
+            "item": "rations|xphb",
+            "quantity": 5
+          },
+          "rope|xphb",
+          "tinderbox|xphb",
+          "waterskin|xphb"
+        ]
+      }
+    }
+  }
+}

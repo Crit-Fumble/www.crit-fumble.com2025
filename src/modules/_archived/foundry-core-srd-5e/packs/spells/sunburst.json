@@ -1,0 +1,148 @@
+{
+  "name": "Sunburst",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/sunburst.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 8</strong> Evocation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 150 feet</p>\n<p><strong>Components:</strong> V, S, M (a piece of sunstone)</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nBrilliant sunlight flashes in a 60-foot-radius Sphere [Area of Effect]|XPHB|Sphere centered on a point you choose within range. Each creature in the Sphere [Area of Effect]|XPHB|Sphere makes a Constitution saving throw. On a failed save, a creature takes 12d6 Radiant damage and has the Blinded|XPHB condition for 1 minute. On a successful save, it takes half as much damage only. A creature Blinded|XPHB by this spell makes another Constitution saving throw at the end of each of its turns, ending the effect on itself on a success. This spell dispels Darkness|XPHB in its area that was created by any spell.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 150,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "con",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 8,
+    "school": "evo",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "a piece of sunstone",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 329,
+      "school": "V",
+      "classes": [],
+      "_srdData": {
+        "name": "Sunburst",
+        "source": "XPHB",
+        "page": 329,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 8,
+        "school": "V",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 150
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "a piece of sunstone"
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "Brilliant sunlight flashes in a 60-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point you choose within range. Each creature in the {@variantrule Sphere [Area of Effect]|XPHB|Sphere} makes a Constitution saving throw. On a failed save, a creature takes {@damage 12d6} Radiant damage and has the {@condition Blinded|XPHB} condition for 1 minute. On a successful save, it takes half as much damage only.",
+          "A creature {@condition Blinded|XPHB} by this spell makes another Constitution saving throw at the end of each of its turns, ending the effect on itself on a success.",
+          "This spell dispels {@variantrule Darkness|XPHB} in its area that was created by any spell."
+        ],
+        "damageInflict": [
+          "radiant"
+        ],
+        "conditionInflict": [
+          "blinded"
+        ],
+        "savingThrow": [
+          "constitution"
+        ],
+        "miscTags": [
+          "LGT",
+          "LGTS"
+        ],
+        "areaTags": [
+          "S"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "name": "Musket",
+  "type": "weapon",
+  "img": "modules/foundry-core-srd-5e/assets/items/weapons/musket.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 215,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 10,
+      "units": "lb"
+    },
+    "price": {
+      "value": 500,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [
+        [
+          "1d12",
+          "piercing"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "base",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "amm",
+      "lod",
+      "two"
+    ],
+    "weaponType": "martial",
+    "proficient": 0,
+    "mastery": "slow"
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 215,
+      "itemType": "weapon",
+      "_srdData": {
+        "name": "Musket",
+        "source": "XPHB",
+        "page": 215,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "R|XPHB",
+        "rarity": "none",
+        "weight": 10,
+        "value": 50000,
+        "weaponCategory": "martial",
+        "property": [
+          "A|XPHB",
+          "LD|XPHB",
+          "2H|XPHB"
+        ],
+        "mastery": [
+          "Slow|XPHB"
+        ],
+        "range": "40/120",
+        "dmg1": "1d12",
+        "dmgType": "P",
+        "firearm": true,
+        "weapon": true,
+        "ammoType": "firearm bullet|xphb",
+        "hasFluffImages": true
+      }
+    }
+  }
+}

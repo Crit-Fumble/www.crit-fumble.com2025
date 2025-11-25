@@ -1,0 +1,60 @@
+{
+  "id": "damage-slashing",
+  "name": "Slashing",
+  "description": "Damage from cutting and slicing attacks using bladed weapons, claws, and other sharp-edged implements that rend flesh and sever limbs.",
+  "category": "physical",
+  "characteristics": {
+    "sourceExamples": [
+      "Claws",
+      "Cutting objects",
+      "Swords and scimitars",
+      "Axes and halberds",
+      "Bladed weapons",
+      "Razor-sharp edges",
+      "Whips and chains"
+    ],
+    "resistanceCommon": [
+      "Some armored creatures",
+      "Creatures with thick hides",
+      "Certain constructs"
+    ],
+    "immunityCommon": [
+      "Incorporeal creatures (without magical weapons)",
+      "Some oozes",
+      "Specific magical creatures"
+    ],
+    "vulnerabilityCommon": [
+      "Very rare in base rules",
+      "Some creatures with soft tissue (DM discretion)"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Effective for cutting through materials",
+      "Common damage type for melee weapons",
+      "Many two-handed weapons deal slashing damage",
+      "Natural weapon attacks (claws) often deal slashing damage",
+      "Resistance to nonmagical slashing is common among certain creatures",
+      "Can be used to cut ropes, vines, and similar objects",
+      "Blade Barrier creates a wall of slashing damage"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Longsword weapon",
+    "Greatsword weapon",
+    "Scimitar weapon",
+    "Greataxe weapon",
+    "Battleaxe weapon",
+    "Glaive weapon",
+    "Halberd weapon",
+    "Whip weapon",
+    "Handaxe weapon",
+    "Sickle weapon",
+    "Vorpal Sword",
+    "Blade Barrier (spell)",
+    "Dragon claw attacks"
+  ]
+}

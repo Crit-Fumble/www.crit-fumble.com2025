@@ -1,0 +1,149 @@
+{
+  "name": "Fog Cloud",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/fog-cloud.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 1</strong> Conjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 120 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Concentration, up to 1 hour</p>\n\nYou create a 20-foot-radius Sphere [Area of Effect]|XPHB|Sphere of fog centered on a point within range. The Sphere [Area of Effect]|XPHB|Sphere is Heavily Obscured|XPHB. It lasts for the duration or until a strong wind (such as one created by Gust of Wind|XPHB) disperses it.\n\n<p><strong>At Higher Levels:</strong> The fog's radius increases by 20 feet for each spell slot level above 1.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 120,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 1,
+    "school": "con",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 276,
+      "school": "C",
+      "classes": [],
+      "_srdData": {
+        "name": "Fog Cloud",
+        "source": "XPHB",
+        "page": 276,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 1,
+        "school": "C",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 120
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "You create a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} of fog centered on a point within range. The {@variantrule Sphere [Area of Effect]|XPHB|Sphere} is {@variantrule Heavily Obscured|XPHB}. It lasts for the duration or until a strong wind (such as one created by {@spell Gust of Wind|XPHB}) disperses it."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The fog's radius increases by 20 feet for each spell slot level above 1."
+            ]
+          }
+        ],
+        "miscTags": [
+          "OBS"
+        ],
+        "areaTags": [
+          "S"
+        ]
+      }
+    }
+  }
+}

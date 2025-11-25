@@ -1,0 +1,83 @@
+{
+  "name": "Boots of Striding and Springing",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/boots-of-striding-and-springing.png",
+  "system": {
+    "description": {
+      "value": "While you wear these boots, your Speed|XPHB becomes 30 feet unless your Speed|XPHB is higher, and your Speed|XPHB isn't reduced by you carrying weight in excess of your carrying capacity or wearing Heavy Armor. Once on each of your turns, you can jump up to 30 feet by spending only 10 feet of movement.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 240,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 240,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Boots of Striding and Springing",
+        "source": "XDMG",
+        "page": 240,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "uncommon",
+        "reqAttune": true,
+        "wondrous": true,
+        "modifySpeed": {
+          "static": {
+            "walk": 30
+          }
+        },
+        "entries": [
+          "While you wear these boots, your {@variantrule Speed|XPHB} becomes 30 feet unless your {@variantrule Speed|XPHB} is higher, and your {@variantrule Speed|XPHB} isn't reduced by you carrying weight in excess of your carrying capacity or wearing Heavy Armor.",
+          "Once on each of your turns, you can jump up to 30 feet by spending only 10 feet of movement."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Implements - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

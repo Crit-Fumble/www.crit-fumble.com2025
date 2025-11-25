@@ -1,0 +1,79 @@
+{
+  "name": "Pearl of Power",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/pearl-of-power.png",
+  "system": {
+    "description": {
+      "value": "While this pearl is on your person, you can take a Magic|XPHB action to regain one expended spell slot of level 3 or lower. Once you use the pearl, it can't be used again until the next dawn.\n\n<p><strong>Attunement:</strong> by a spellcaster</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 284,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 284,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Pearl of Power",
+        "source": "XDMG",
+        "page": 284,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "uncommon",
+        "reqAttune": "by a spellcaster",
+        "reqAttuneTags": [
+          {
+            "spellcasting": true
+          }
+        ],
+        "wondrous": true,
+        "entries": [
+          "While this pearl is on your person, you can take a {@action Magic|XPHB} action to regain one expended spell slot of level 3 or lower. Once you use the pearl, it can't be used again until the next dawn."
+        ],
+        "lootTables": [
+          "Arcana - Uncommon|XDMG",
+          "Relics - Uncommon|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

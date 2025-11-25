@@ -1,0 +1,33 @@
+{
+  "name": "Travel Mode",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/modes/travel.svg",
+  "pages": [
+    {
+      "name": "Travel Mode",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Travel Mode</h2>\n\n<p><em>Systems and mechanics for journeys and overland movement</em></p>\n\n<p>When the party is moving between locations over significant distances, you're in <strong>Travel Mode</strong>. This mode abstracts moment-to-moment details to focus on the journey as a whole.</p>\n\n<h3>Core Systems for Travel</h3>\n\n<h4>Movement & Travel</h4>\n<p>The primary system for this mode:</p>\n<ul>\n  <li><strong>Travel Pace:</strong>\n    <ul>\n      <li>Fast (30 miles/day): -5 to passive Perception</li>\n      <li>Normal (24 miles/day): Standard movement</li>\n      <li>Slow (18 miles/day): Can use Stealth</li>\n    </ul>\n  </li>\n  <li><strong>Mounts & Vehicles:</strong> Faster travel speeds</li>\n  <li><strong>Forced March:</strong> Travel beyond 8 hours requires CON saves</li>\n</ul>\n\n<h4>Exploration Activities</h4>\n<p>What you do while traveling:</p>\n<ul>\n  <li><strong>Navigating:</strong> Wilderness Survival check to avoid getting lost</li>\n  <li><strong>Drawing Maps:</strong> Recording your route</li>\n  <li><strong>Foraging:</strong> Finding food (1d6 + WIS pounds on DC 15)</li>\n  <li><strong>Tracking:</strong> Following another group</li>\n  <li><strong>Keeping Watch:</strong> Staying alert during travel</li>\n</ul>\n\n<h4>Environmental Effects & Hazards</h4>\n<p>Challenges during travel:</p>\n<ul>\n  <li><strong>Extreme Heat:</strong> CON save (DC 5 +1/hour) or gain Exhaustion</li>\n  <li><strong>Extreme Cold:</strong> DC 10 CON save per hour or gain Exhaustion</li>\n  <li><strong>Storms:</strong> Difficult terrain, navigation challenges</li>\n  <li><strong>Getting Lost:</strong> Navigation failures lead to wasted time</li>\n</ul>\n\n<h4>Exhaustion & Resting</h4>\n<p>Recovery during journeys:</p>\n<ul>\n  <li><strong>Forced March:</strong> CON save (DC 10 +1/hour) or gain Exhaustion</li>\n  <li><strong>Long Rest:</strong> 8-hour rest to regain HP and reduce Exhaustion</li>\n  <li><strong>Short Rest:</strong> 1-hour break to spend Hit Dice</li>\n</ul>\n\n<h3>Travel Activities by Role</h3>\n<ul>\n  <li><strong>Navigator:</strong> Makes Survival checks to avoid getting lost</li>\n  <li><strong>Scout:</strong> Moves ahead to spot danger</li>\n  <li><strong>Forager:</strong> Gathers food and water for the party</li>\n  <li><strong>Lookout:</strong> Watches for threats</li>\n</ul>\n\n<h3>Transitioning Out of Travel Mode</h3>\n<p>Travel mode typically transitions to:</p>\n<ul>\n  <li><strong>Exploration Mode:</strong> When arriving at a destination to investigate</li>\n  <li><strong>Combat Mode:</strong> When ambushed or encountering hostile creatures</li>\n  <li><strong>Interaction Mode:</strong> When arriving at settlements or meeting travelers</li>\n  <li><strong>Downtime Mode:</strong> When spending extended time at a destination</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "game-mode",
+      "modeId": "travel",
+      "srd52": true,
+      "relatedSystems": [
+        "movement-travel",
+        "exploration-activities",
+        "environmental-effects",
+        "exhaustion",
+        "resting"
+      ]
+    }
+  }
+}

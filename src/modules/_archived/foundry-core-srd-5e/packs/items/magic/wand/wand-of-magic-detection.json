@@ -1,0 +1,86 @@
+{
+  "name": "Wand of Magic Detection",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/wand-of-magic-detection.png",
+  "system": {
+    "description": {
+      "value": "This wand has 3 charges. While holding it, you can expend 1 charge to cast Detect Magic|XPHB from it. The wand regains 1d3 expended charges daily at dawn.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 320,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 320,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Wand of Magic Detection",
+        "source": "XDMG",
+        "page": 320,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "WD|XDMG",
+        "rarity": "uncommon",
+        "weight": 1,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d3}",
+        "charges": 3,
+        "entries": [
+          "This wand has 3 charges. While holding it, you can expend 1 charge to cast {@spell Detect Magic|XPHB} from it. The wand regains {@dice 1d3} expended charges daily at dawn."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "attachedSpells": {
+          "charges": {
+            "1": [
+              "detect magic|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Uncommon|XDMG",
+          "Relics - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

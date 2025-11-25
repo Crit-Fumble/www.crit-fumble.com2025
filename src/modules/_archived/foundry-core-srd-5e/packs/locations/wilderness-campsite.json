@@ -1,0 +1,219 @@
+{
+  "id": "srd-location-wilderness-campsite",
+  "name": "Wilderness Campsite",
+  "description": "A basic wilderness campsite for resting during travel. Provides facilities for Short Rest and Long Rest activities per SRD rules.",
+  "type": "adventure",
+  "schemaVersion": "1.0",
+
+  "width": 6,
+  "height": 6,
+
+  "grid": {
+    "type": "square",
+    "squareSize": 60,
+    "scale": {
+      "level": "adventure",
+      "tileSize": "10ft",
+      "pixelRatio": "4in/pixel",
+      "tileDimensions": "30x30x3"
+    },
+    "mapProjection": "FLAT"
+  },
+
+  "tiles": [
+    {"col": 0, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 0, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "campfire"}},
+    {"col": 3, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "campfire"}},
+    {"col": 4, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 1, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "tent"}},
+    {"col": 2, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "campfire"}},
+    {"col": 3, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "campfire"}},
+    {"col": 4, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "tent"}},
+    {"col": 5, "row": 2, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "tent"}},
+    {"col": 2, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "watch_post"}},
+    {"col": 3, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"facility": "tent"}},
+    {"col": 5, "row": 3, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 4, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 5, "viewLevel": "adventure", "terrain": {"type": "campsite_ground", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true}
+  ],
+
+  "features": [
+    {
+      "id": "feat-campfire",
+      "featureType": "campfire",
+      "label": "Campfire",
+      "positions": {"adventureX": 90, "adventureY": 60},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 2,
+      "tileRow": 2
+    },
+    {
+      "id": "feat-tent-1",
+      "featureType": "tent",
+      "label": "Tent",
+      "positions": {"adventureX": 45, "adventureY": 75},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 1,
+      "tileRow": 2
+    },
+    {
+      "id": "feat-tent-2",
+      "featureType": "tent",
+      "label": "Tent",
+      "positions": {"adventureX": 135, "adventureY": 75},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 4,
+      "tileRow": 2
+    },
+    {
+      "id": "feat-tent-3",
+      "featureType": "tent",
+      "label": "Tent",
+      "positions": {"adventureX": 45, "adventureY": 105},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 1,
+      "tileRow": 3
+    },
+    {
+      "id": "feat-tent-4",
+      "featureType": "tent",
+      "label": "Tent",
+      "positions": {"adventureX": 135, "adventureY": 105},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 4,
+      "tileRow": 3
+    },
+    {
+      "id": "feat-watch-post",
+      "featureType": "watch_post",
+      "label": "Watch Post",
+      "positions": {"adventureX": 75, "adventureY": 105},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 2,
+      "tileRow": 3
+    }
+  ],
+
+  "labels": [
+    {"id": "label-campfire", "text": "Campfire (Warmth)", "positions": {"adventureX": 90, "adventureY": 50}, "font": {"family": "Arial", "size": 10, "color": "#ff6600", "bold": false, "italic": false}, "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true}, "gmOnly": false},
+    {"id": "label-watch", "text": "Watch Post", "positions": {"adventureX": 75, "adventureY": 95}, "font": {"family": "Arial", "size": 9, "color": "#666666", "bold": false, "italic": true}, "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": false, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true}, "gmOnly": false}
+  ],
+
+  "shapes": [],
+
+  "notes": [
+    {
+      "id": "note-rest-rules",
+      "title": "Resting at Camp (SRD Rules)",
+      "category": "custom",
+      "content": "**Short Rest** (1 hour):\n- Must have at least 1 Hit Point to start\n- No strenuous activity (reading, talking, eating, standing watch OK)\n- Spend Hit Point Dice to regain HP\n- Recharge features that refresh on Short Rest\n- **Interrupted by**: Rolling Initiative, casting spell (except cantrip), taking damage\n\n**Long Rest** (8 hours):\n- At least 6 hours sleep + 2 hours light activity\n- Must have at least 1 Hit Point to start\n- Benefits: Regain all HP, all spent Hit Dice, reduce Exhaustion by 1, restore ability scores\n- **Interrupted by**: Rolling Initiative, casting spell (except cantrip), taking damage, 1 hour walking/exertion\n- If rested 1+ hours before interruption, gain Short Rest benefits\n- Can resume after interruption (+1 hour per interruption)\n- Must wait 16 hours before starting another Long Rest\n\n**Campsite Facilities**:\n- **Campfire**: Provides warmth, light, cooking (prevents Extreme Cold hazard)\n- **Tents**: Shelter from precipitation (prevents Heavy Precipitation penalties)\n- **Watch Post**: Standing watch is light activity (allowed during rest)\n- **Capacity**: ~4-6 adventurers",
+      "position": {"viewLevel": "adventure", "x": 90, "y": 90},
+      "gmOnly": true,
+      "createdAt": "2025-01-19T00:00:00.000Z",
+      "updatedAt": "2025-01-19T00:00:00.000Z"
+    }
+  ],
+
+  "layers": [],
+
+  "terrainDefinitions": [
+    {
+      "name": "campsite_ground",
+      "displayName": "Cleared Ground",
+      "color": "#8b7355",
+      "texture": "opengameart/tiles/dirt-ground.png",
+      "passability": {"walkable": true, "swimmable": false, "flyable": true, "difficultTerrain": false},
+      "movementCost": 1,
+      "defenseBonus": 0,
+      "description": "Cleared wilderness ground suitable for camping"
+    }
+  ],
+
+  "creatures": [],
+  "items": [],
+  "childLocations": [],
+
+  "facilities": [
+    {
+      "id": "facility-campfire",
+      "name": "Campfire",
+      "type": "warmth",
+      "description": "Provides warmth, light, and cooking. Prevents Extreme Cold environmental hazard.",
+      "benefits": ["warmth", "light", "cooking"],
+      "preventedHazards": ["extreme_cold"],
+      "tileCol": 2,
+      "tileRow": 2
+    },
+    {
+      "id": "facility-tents",
+      "name": "Tents (4 total)",
+      "type": "shelter",
+      "description": "Basic shelter from elements. Prevents Heavy Precipitation penalties.",
+      "benefits": ["shelter", "privacy"],
+      "preventedHazards": ["heavy_precipitation"],
+      "capacity": 4,
+      "tileCols": [1, 4, 1, 4],
+      "tileRows": [2, 2, 3, 3]
+    },
+    {
+      "id": "facility-watch-post",
+      "name": "Watch Post",
+      "type": "security",
+      "description": "Designated area for standing watch. Standing watch is light activity allowed during Long Rest.",
+      "benefits": ["security", "alertness"],
+      "tileCol": 2,
+      "tileRow": 3
+    }
+  ]
+}

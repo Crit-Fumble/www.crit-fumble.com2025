@@ -1,0 +1,69 @@
+{
+  "name": "Riding Saddle",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/riding-saddle.png",
+  "system": {
+    "description": {
+      "value": "A saddle comes with a bit, a bridle, reins, and any other equipment needed to use the saddle.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 25,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Riding Saddle",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "TAH|XPHB",
+        "rarity": "none",
+        "weight": 25,
+        "value": 1000,
+        "entries": [
+          "A saddle comes with a bit, a bridle, reins, and any other equipment needed to use the saddle."
+        ]
+      }
+    }
+  }
+}

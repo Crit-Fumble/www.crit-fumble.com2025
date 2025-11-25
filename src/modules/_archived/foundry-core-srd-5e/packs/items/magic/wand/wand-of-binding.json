@@ -1,0 +1,121 @@
+{
+  "name": "Wand of Binding",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/wand-of-binding.png",
+  "system": {
+    "description": {
+      "value": "This wand has 7 charges. While holding the wand, you can cast one of the spells (save DC 17) on the following table from it. The table indicates how many charges you must expend to cast the spell.The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 318,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 318,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Wand of Binding",
+        "source": "XDMG",
+        "page": 318,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "WD|XDMG",
+        "rarity": "rare",
+        "reqAttune": true,
+        "weight": 1,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d6 + 1}",
+        "charges": 7,
+        "entries": [
+          "This wand has 7 charges.",
+          {
+            "type": "entries",
+            "name": "Spells",
+            "entries": [
+              "While holding the wand, you can cast one of the spells (save {@dc 17}) on the following table from it. The table indicates how many charges you must expend to cast the spell.",
+              {
+                "type": "table",
+                "colStyles": [
+                  "col-10",
+                  "col-2 text-center"
+                ],
+                "colLabels": [
+                  "Spell",
+                  "Charge Cost"
+                ],
+                "rows": [
+                  [
+                    "{@spell Hold Monster|XPHB}",
+                    "5"
+                  ],
+                  [
+                    "{@spell Hold Person|XPHB}",
+                    "2"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Regaining Charges",
+            "entries": [
+              "The wand regains {@dice 1d6 + 1} expended charges daily at dawn. If you expend the wand's last charge, roll {@dice 1d20}. On a 1, the wand crumbles into ashes and is destroyed."
+            ]
+          }
+        ],
+        "attachedSpells": {
+          "charges": {
+            "2": [
+              "hold person|xphb"
+            ],
+            "5": [
+              "hold monster|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ]
+      }
+    }
+  }
+}

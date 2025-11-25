@@ -1,0 +1,145 @@
+{
+  "name": "Heal",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/heal.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 6</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 60 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nChoose a creature that you can see within range. Positive energy washes through the target, restoring 70 Hit Points|XPHB. This spell also ends the Blinded|XPHB, Deafened|XPHB, and Poisoned|XPHB conditions on the target.\n\n<p><strong>At Higher Levels:</strong> The healing increases by 70|6-9|10 for each spell slot level above 6.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 60,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 6,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 284,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Heal",
+        "source": "XPHB",
+        "page": 284,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 6,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 60
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "Choose a creature that you can see within range. Positive energy washes through the target, restoring 70 {@variantrule Hit Points|XPHB}. This spell also ends the {@condition Blinded|XPHB}, {@condition Deafened|XPHB}, and {@condition Poisoned|XPHB} conditions on the target."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The healing increases by {@scaledice 70|6-9|10} for each spell slot level above 6."
+            ]
+          }
+        ],
+        "miscTags": [
+          "HL",
+          "SGT"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "name": "Flute",
+  "type": "tool",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/flute.png",
+  "system": {
+    "description": {
+      "value": "• Charisma\n• Play a known tune (DC 10), or improvise a song (DC 15)",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "",
+      "cost": null,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "base",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "tool",
+      "_srdData": {
+        "name": "Flute",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "INS|XPHB",
+        "rarity": "none",
+        "weight": 1,
+        "value": 200,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Charisma"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Play a known tune ({@dc 10}), or improvise a song ({@dc 15})"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

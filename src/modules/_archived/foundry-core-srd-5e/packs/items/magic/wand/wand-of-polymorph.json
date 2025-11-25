@@ -1,0 +1,96 @@
+{
+  "name": "Wand of Polymorph",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/wand-of-polymorph.png",
+  "system": {
+    "description": {
+      "value": "This wand has 7 charges. While holding it, you can expend 1 charge to cast Polymorph|XPHB (save DC 15) from it. The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed.\n\n<p><strong>Attunement:</strong> by a spellcaster</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 321,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 321,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Wand of Polymorph",
+        "source": "XDMG",
+        "page": 321,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "WD|XDMG",
+        "rarity": "very rare",
+        "reqAttune": "by a spellcaster",
+        "reqAttuneTags": [
+          {
+            "spellcasting": true
+          }
+        ],
+        "weight": 1,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d6 + 1}",
+        "charges": 7,
+        "entries": [
+          "This wand has 7 charges. While holding it, you can expend 1 charge to cast {@spell Polymorph|XPHB} (save {@dc 15}) from it.",
+          {
+            "type": "entries",
+            "name": "Regaining Charges",
+            "entries": [
+              "The wand regains {@dice 1d6 + 1} expended charges daily at dawn. If you expend the wand's last charge, roll {@dice 1d20}. On a 1, the wand crumbles into ashes and is destroyed."
+            ]
+          }
+        ],
+        "attachedSpells": {
+          "charges": {
+            "1": [
+              "polymorph|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

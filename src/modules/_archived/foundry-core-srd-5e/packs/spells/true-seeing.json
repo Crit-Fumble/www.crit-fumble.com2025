@@ -1,0 +1,137 @@
+{
+  "name": "True Seeing",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/true-seeing.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 6</strong> Divination</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> 1 hour</p>\n\nFor the duration, the willing creature you touch has Truesight|XPHB with a range of 120 feet.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 6,
+    "school": "div",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 336,
+      "school": "D",
+      "classes": [],
+      "_srdData": {
+        "name": "True Seeing",
+        "source": "XPHB",
+        "page": 336,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 6,
+        "school": "D",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "mushroom powder worth 25+ GP, which the spell consumes",
+            "cost": 2500,
+            "consume": true
+          }
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 1
+            }
+          }
+        ],
+        "entries": [
+          "For the duration, the willing creature you touch has {@sense Truesight|XPHB} with a range of 120 feet."
+        ]
+      }
+    }
+  }
+}

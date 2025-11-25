@@ -1,0 +1,121 @@
+{
+  "id": "hazard-poison-inhaled",
+  "name": "Inhaled Poison",
+  "description": "Poisonous powders and gases that take effect when inhaled, affecting nasal membranes, tear ducts, and other body parts",
+  "type": "poison",
+  "category": "inhaled",
+  "trigger": "Being within the poison's area of effect when powder is blown or gas released",
+  "application": {
+    "method": "Blowing powder or releasing gas",
+    "areaOfEffect": "5-foot Cube",
+    "duration": "Cloud dissipates immediately after initial effect",
+    "special": "Holding breath is ineffective - affects nasal membranes, tear ducts, and other body parts"
+  },
+  "damage": {
+    "amount": "varies by specific poison",
+    "type": "poison",
+    "frequency": "immediate or recurring"
+  },
+  "savingThrow": {
+    "ability": "CON",
+    "dc": "varies by poison (13-15)",
+    "onSuccess": "varies by poison",
+    "onFailure": "full damage and conditions"
+  },
+  "duration": "varies by poison (minutes to hours)",
+  "samplePoisons": [
+    {
+      "name": "Burnt Othur Fumes",
+      "cost": "500 GP",
+      "dc": 13,
+      "damage": "10 (3d6) Poison damage initially, then 3 (1d6) per turn",
+      "effect": "Repeats save at start of each turn. On failure: 3 (1d6) damage. After 3 successful saves: poison ends",
+      "timing": "Recurring",
+      "srdLine": "312-316"
+    },
+    {
+      "name": "Essence of Ether",
+      "cost": "300 GP",
+      "dc": 15,
+      "damage": "None",
+      "effect": "Poisoned condition for 8 hours. Also Unconscious while Poisoned. Wakes if damaged or shaken awake (action)",
+      "timing": "Long duration",
+      "special": "Useful for anesthesia or kidnapping",
+      "srdLine": "324-328"
+    },
+    {
+      "name": "Malice",
+      "cost": "250 GP",
+      "dc": 15,
+      "damage": "None",
+      "effect": "Poisoned condition for 1 hour. Also Blinded while Poisoned",
+      "timing": "1 hour duration",
+      "srdLine": "330-334"
+    }
+  ],
+  "effects": {
+    "immediate": [
+      "Poison damage (if applicable)",
+      "Poisoned condition (if applicable)",
+      "Additional conditions (Unconscious, Blinded)"
+    ],
+    "ongoing": [
+      "Burnt Othur Fumes: Recurring damage requiring repeated saves",
+      "Essence of Ether: Extended unconsciousness for 8 hours",
+      "Malice: Blinded for full hour duration"
+    ],
+    "conditions": [
+      "poisoned",
+      "unconscious",
+      "blinded"
+    ]
+  },
+  "detection": {
+    "difficulty": "DC 10-15",
+    "method": "Wisdom (Perception) to notice container/mechanism, see cloud forming, or smell gas"
+  },
+  "mitigation": [
+    "Avoid entering the 5-foot Cube area of effect",
+    "Stay upwind of potential gas sources",
+    "Use air-filtering mask or similar protection (GM discretion)",
+    "Have Resistance or Immunity to Poison damage",
+    "Use Protection from Poison spell (Advantage on saves, Resistance to damage)",
+    "Cast Gust of Wind or similar magic to disperse gas before it affects area",
+    "For Essence of Ether: Ally can shake unconscious victim awake (action)",
+    "Note: Holding breath does NOT work - poison affects external membranes"
+  ],
+  "tacticalConsiderations": [
+    "Affects all creatures in 5-foot Cube simultaneously",
+    "Cloud dissipates immediately - single application",
+    "Cannot be avoided by holding breath",
+    "Excellent for ambushes in enclosed spaces",
+    "Burnt Othur Fumes deals recurring damage, hard to survive",
+    "Essence of Ether ideal for non-lethal captures",
+    "Malice useful for disabling vision-dependent enemies",
+    "Area effect makes it dangerous to use near allies",
+    "Can be deployed by trap mechanisms"
+  ],
+  "srdReference": {
+    "file": "dndsrd5.2_markdown/src/09_GameplayToolbox.md",
+    "section": "Poison - Inhaled Type",
+    "lines": "288-292",
+    "quote": "Poisonous powders and gases take effect when inhaled. Blowing the powder or releasing the gas subjects creatures in a 5-foot Cube to its effect. The resulting cloud dissipates immediately afterward. Holding one's breath is ineffective against inhaled poisons, as they affect nasal membranes, tear ducts, and other parts of the body."
+  },
+  "examples": [
+    "Burnt Othur Fumes released from trap in narrow corridor",
+    "Essence of Ether used to anesthetize surgery patient or kidnap victim",
+    "Malice deployed against archers or spellcasters to blind them",
+    "Gas trap triggered by pressure plate in dungeon",
+    "Poisoned incense in ceremonial chamber",
+    "Alchemical grenade releasing poison gas"
+  ],
+  "relatedConcepts": {
+    "damageTypes": ["poison"],
+    "conditions": ["poisoned", "unconscious", "blinded"],
+    "abilities": ["constitution"],
+    "skills": ["perception"],
+    "tools": ["poisoners-kit"],
+    "spells": ["protection-from-poison", "gust-of-wind"],
+    "actions": ["action"]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "name": "Ladder",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ladder.png",
+  "system": {
+    "description": {
+      "value": "A Ladder is 10 feet tall. You must climb to move up or down it.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 226,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 25,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 226,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ladder",
+        "source": "XPHB",
+        "page": 226,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 25,
+        "value": 10,
+        "entries": [
+          "A Ladder is 10 feet tall. You must climb to move up or down it."
+        ]
+      }
+    }
+  }
+}

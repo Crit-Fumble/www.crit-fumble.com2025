@@ -1,0 +1,185 @@
+{
+  "id": "srd-location-generic-temple",
+  "name": "Generic Temple",
+  "description": "A basic temple structure suitable for sanctuary designation (Word of Recall spell) and divine worship. Stone construction with main hall and altar.",
+  "type": "adventure",
+  "schemaVersion": "1.0",
+
+  "width": 6,
+  "height": 8,
+
+  "grid": {
+    "type": "square",
+    "squareSize": 60,
+    "scale": {
+      "level": "adventure",
+      "tileSize": "10ft",
+      "pixelRatio": "4in/pixel",
+      "tileDimensions": "30x30x3"
+    },
+    "mapProjection": "FLAT"
+  },
+
+  "tiles": [
+    {"col": 0, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 0, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 1, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 2, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 3, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 4, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 5, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 1, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"note": "Altar platform, 1ft raised"}},
+    {"col": 3, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 1, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true, "customData": {"note": "Altar platform, 1ft raised"}},
+    {"col": 4, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 6, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+
+    {"col": 0, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 1, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 2, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 3, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_wall", "elevation": 0, "icy": false, "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 999}, "gmOnly": false, "explored": true},
+    {"col": 4, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true},
+    {"col": 5, "row": 7, "viewLevel": "adventure", "terrain": {"type": "temple_floor", "elevation": 0, "icy": false, "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false}, "movementCost": 1}, "gmOnly": false, "explored": true}
+  ],
+
+  "features": [
+    {
+      "id": "feat-entrance-doors",
+      "featureType": "double_doors",
+      "label": "Temple Entrance",
+      "positions": {"adventureX": 90, "adventureY": 0},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": true, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false
+    },
+    {
+      "id": "feat-altar",
+      "featureType": "altar",
+      "label": "Sacred Altar",
+      "positions": {"adventureX": 90, "adventureY": 180},
+      "rotation": 0,
+      "scale": 1.0,
+      "opacity": 1.0,
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": true, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false,
+      "tileCol": 2,
+      "tileRow": 6
+    }
+  ],
+
+  "labels": [
+    {
+      "id": "label-main",
+      "text": "Main Hall",
+      "positions": {"adventureX": 90, "adventureY": 90},
+      "font": {"family": "Arial", "size": 14, "color": "#333333", "bold": true, "italic": false},
+      "outline": {"color": "#ffffff", "width": 1},
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": true, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false
+    },
+    {
+      "id": "label-altar",
+      "text": "Altar",
+      "positions": {"adventureX": 90, "adventureY": 195},
+      "font": {"family": "Arial", "size": 12, "color": "#666666", "bold": false, "italic": true},
+      "visibility": {"visibleWorld": false, "visibleContinent": false, "visibleKingdom": false, "visibleProvince": false, "visibleCounty": false, "visibleSettlement": true, "visibleAdventure": true, "visibleCombat": true, "visibleInteraction": true},
+      "gmOnly": false
+    }
+  ],
+
+  "shapes": [],
+
+  "notes": [
+    {
+      "id": "note-sanctuary",
+      "title": "Sanctuary Designation (Word of Recall)",
+      "category": "religion",
+      "content": "**Purpose**: This temple can be designated as a sanctuary for the **Word of Recall** spell.\n\n**Spell Reference**: *Word of Recall* (Level 6 Conjuration, Cleric)\n- **Casting Time**: Action\n- **Range**: 5 feet\n- **Components**: V\n- **Duration**: Instantaneous\n\n**Sanctuary Setup**: A cleric must cast *Word of Recall* in this temple to designate it as their sanctuary. Once designated, they can teleport themselves and up to 5 willing creatures here from anywhere.\n\n**Building Properties**:\n- **Dimensions**: 60ft × 80ft (main hall)\n- **Material**: Stone\n- **AC**: 17 (stone walls)\n- **HP**: 500+ (large structure)\n- **Features**: Double entrance doors, raised altar platform (+1ft elevation)\n- **Capacity**: ~50 worshippers in main hall",
+      "position": {"viewLevel": "adventure", "x": 90, "y": 120},
+      "gmOnly": true,
+      "createdAt": "2025-01-19T00:00:00.000Z",
+      "updatedAt": "2025-01-19T00:00:00.000Z"
+    }
+  ],
+
+  "layers": [],
+
+  "terrainDefinitions": [
+    {
+      "name": "temple_floor",
+      "displayName": "Temple Floor",
+      "color": "#cccccc",
+      "texture": "opengameart/tiles/marble-floor.png",
+      "passability": {"walkable": true, "swimmable": false, "flyable": false, "difficultTerrain": false},
+      "movementCost": 1,
+      "defenseBonus": 0,
+      "description": "Polished stone floor of the temple"
+    },
+    {
+      "name": "temple_wall",
+      "displayName": "Temple Wall",
+      "color": "#888888",
+      "texture": "opengameart/tiles/stone-wall.png",
+      "passability": {"walkable": false, "swimmable": false, "flyable": false, "difficultTerrain": false},
+      "movementCost": 999,
+      "defenseBonus": 0,
+      "description": "Solid stone wall (impassable)"
+    }
+  ],
+
+  "creatures": [],
+  "items": [],
+  "childLocations": [],
+
+  "structure": {
+    "name": "Generic Temple",
+    "width": 60,
+    "height": 80,
+    "floors": 1,
+    "material": "stone",
+    "ac": 17,
+    "hp": 500,
+    "features": ["altar", "double_doors", "raised_platform"],
+    "doors": [
+      {"x": 30, "y": 0, "locked": false, "hp": 18, "ac": 15, "material": "wood"}
+    ]
+  }
+}

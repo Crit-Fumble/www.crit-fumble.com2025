@@ -1,0 +1,81 @@
+{
+  "id": "travel-pace-fast",
+  "name": "Fast Pace",
+  "description": "A hurried travel pace that prioritizes speed over awareness and stealth. Characters move quickly, focusing on covering as much ground as possible while paying less attention to their surroundings. This pace is used when time is of the essence and the risks of moving quickly are acceptable.",
+  "movement": {
+    "speedMultiplier": 1.33,
+    "perMinute": 400,
+    "perHour": 4,
+    "perDay": 30,
+    "unit": "feet (minute) / miles (hour, day)"
+  },
+  "effects": {
+    "advantageOn": [],
+    "disadvantageOn": [
+      "Wisdom (Perception) checks",
+      "Wisdom (Survival) checks",
+      "Dexterity (Stealth) checks"
+    ],
+    "stealthPossible": false,
+    "stealthAdvantage": false,
+    "mechanicalEffects": [
+      "Imposes Disadvantage on Wisdom (Perception or Survival) checks",
+      "Imposes Disadvantage on Dexterity (Stealth) checks",
+      "Covers 33% more distance than Normal pace",
+      "Increases risk of missing important details or threats",
+      "Makes the party more noticeable and easier to detect"
+    ]
+  },
+  "restrictions": [
+    "Cannot be used if terrain limits maximum pace to Slow or Normal",
+    "Requires good roads to increase pace from Normal to Fast in some terrains",
+    "Arctic terrain requires appropriate equipment (such as skis) to maintain Fast pace",
+    "Mounts can move at twice the listed distance for 1 hour, after which they need a Short or Long Rest before they can move at that increased pace again",
+    "Characters flying or with special movement that ignores Difficult Terrain can move at Fast pace regardless of terrain"
+  ],
+  "terrain": {
+    "note": "Many terrain types do not allow Fast pace without good roads (see Travel Terrain table)",
+    "difficultTerrain": "Difficult Terrain halves movement speed, which typically prevents Fast pace",
+    "roads": "Good roads can enable Fast pace in terrain that normally allows only Normal pace",
+    "flying": "Flying characters or those who ignore Difficult Terrain can use Fast pace regardless of terrain below"
+  },
+  "calculations": {
+    "formula": "Fast pace = Normal pace × 1⅓ (round down)",
+    "specialMovement": "For creatures with magical speed, use: Miles per day (Normal) × 1⅓ = Fast pace miles per day (round down)"
+  },
+  "srdReference": "data/5e/srd/split/playingthegame/06-Exploration.md",
+  "additionalReferences": [
+    "data/5e/srd/split/gameplaytoolbox/00-TravelPace.md"
+  ],
+  "examples": [
+    "Racing to reach a destination before a deadline",
+    "Fleeing from pursuers over long distances",
+    "Traveling on well-maintained roads when speed is critical",
+    "Flying characters moving quickly through open air",
+    "Urgent delivery missions or time-sensitive quests",
+    "Trying to catch up to someone who left earlier"
+  ],
+  "integration": {
+    "foundryVTT": {
+      "automation": "Calculates faster travel times with automatic disadvantage tracking",
+      "tracking": "Tracks journey progress at increased speed",
+      "skillChecks": "Automatically applies Disadvantage to Perception, Survival, and Stealth checks",
+      "journalEntries": "Records urgent travel segments in adventure logs",
+      "warnings": "Can alert GM/players about reduced awareness penalties"
+    },
+    "relatedSystems": [
+      "travel-mode",
+      "travel-activities",
+      "exploration-activities",
+      "chase-rules",
+      "mounted-travel",
+      "flying-movement"
+    ]
+  },
+  "notes": {
+    "tradeoff": "Speed comes at the cost of awareness and stealth - the party is much more likely to miss clues, walk into ambushes, or be detected",
+    "tactical": "Generally not recommended in dangerous areas unless time pressure justifies the risks",
+    "fatigue": "While Fast pace itself doesn't cause exhaustion, it's often combined with extended travel which does",
+    "detection": "The party makes more noise and is less careful, making them easier to spot or hear"
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "name": "Control Weather",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/control-weather.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 8</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 10 minutes</p>\n<p><strong>Range:</strong> sphere</p>\n<p><strong>Components:</strong> V, S, M (burning incense)</p>\n<p><strong>Duration:</strong> Concentration, up to 8 hours</p>\n\nYou take control of the weather within 5 miles of you for the duration. You must be outdoors to cast this spell, and it ends early if you go indoors. When you cast the spell, you change the current weather conditions, which are determined by the DM. You can change precipitation, temperature, and wind. It takes 1d4 × 10 minutes for the new conditions to take effect. Once they do so, you can change the conditions again. When the spell ends, the weather gradually returns to normal. When you change the weather conditions, find a current condition on the following tables and change its stage by one, up or down. When changing the wind, you can change its direction.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "minute",
+      "cost": 10,
+      "condition": ""
+    },
+    "duration": {
+      "value": 8,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 5,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 8,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "burning incense",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 257,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Control Weather",
+        "source": "XPHB",
+        "page": 257,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 8,
+        "school": "T",
+        "time": [
+          {
+            "number": 10,
+            "unit": "minute"
+          }
+        ],
+        "range": {
+          "type": "sphere",
+          "distance": {
+            "type": "miles",
+            "amount": 5
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "burning incense"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 8
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "You take control of the weather within 5 miles of you for the duration. You must be outdoors to cast this spell, and it ends early if you go indoors.",
+          "When you cast the spell, you change the current weather conditions, which are determined by the DM. You can change precipitation, temperature, and wind. It takes {@dice 1d4 × 10} minutes for the new conditions to take effect. Once they do so, you can change the conditions again. When the spell ends, the weather gradually returns to normal.",
+          "When you change the weather conditions, find a current condition on the following tables and change its stage by one, up or down. When changing the wind, you can change its direction.",
+          {
+            "type": "table",
+            "caption": "Precipitation",
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "Stage",
+              "Condition"
+            ],
+            "rows": [
+              [
+                "1",
+                "Clear"
+              ],
+              [
+                "2",
+                "Light clouds"
+              ],
+              [
+                "3",
+                "Overcast or ground fog"
+              ],
+              [
+                "4",
+                "Rain, hail, or snow"
+              ],
+              [
+                "5",
+                "Torrential rain, driving hail, or blizzard"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "caption": "Temperature",
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "Stage",
+              "Condition"
+            ],
+            "rows": [
+              [
+                "1",
+                "Heat wave"
+              ],
+              [
+                "2",
+                "Hot"
+              ],
+              [
+                "3",
+                "Warm"
+              ],
+              [
+                "4",
+                "Cool"
+              ],
+              [
+                "5",
+                "Cold"
+              ],
+              [
+                "6",
+                "Freezing"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "caption": "Wind",
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "Stage",
+              "Condition"
+            ],
+            "rows": [
+              [
+                "1",
+                "Calm"
+              ],
+              [
+                "2",
+                "Moderate wind"
+              ],
+              [
+                "3",
+                "Strong wind"
+              ],
+              [
+                "4",
+                "Gale"
+              ],
+              [
+                "5",
+                "Storm"
+              ]
+            ]
+          }
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

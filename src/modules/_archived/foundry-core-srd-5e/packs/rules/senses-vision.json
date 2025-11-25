@@ -1,0 +1,26 @@
+{
+  "name": "Senses & Vision",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/senses.svg",
+  "pages": [
+    {
+      "name": "Senses & Vision",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Senses & Vision</h2>\n\n<p><em>Perception abilities beyond normal human senses</em></p>\n\n<h3>Standard Vision</h3>\n<p>Most creatures can see in bright light and dim light within a normal range.</p>\n\n<h3>Special Senses</h3>\n\n<h4>Blindsight</h4>\n<p>Perceive your surroundings without relying on sight, within a specific radius. Creatures with Blindsight can perceive their environment even in darkness or when blinded.</p>\n<ul>\n  <li>Detects creatures that are invisible or hidden</li>\n  <li>Not fooled by illusions</li>\n  <li>Range typically 10-60 feet</li>\n</ul>\n\n<h4>Darkvision</h4>\n<p>See in darkness (both magical and nonmagical) as if it were dim light, within a specific radius (usually 60 feet).</p>\n<ul>\n  <li>You can see in dim light as if it were bright light</li>\n  <li>You can see in darkness as if it were dim light</li>\n  <li>Can't discern color in darkness, only shades of gray</li>\n  <li>Range typically 60 or 120 feet</li>\n</ul>\n\n<h4>Tremorsense</h4>\n<p>Detect and pinpoint the origin of vibrations within a specific radius, provided you and the source are in contact with the same ground or substance.</p>\n<ul>\n  <li>Perceive creatures touching the ground</li>\n  <li>Can detect burrowing creatures</li>\n  <li>Doesn't work through the air</li>\n  <li>Range typically 10-60 feet</li>\n</ul>\n\n<h4>Truesight</h4>\n<p>The ultimate form of perception within a specific radius:</p>\n<ul>\n  <li>See in normal and magical darkness</li>\n  <li>See invisible creatures and objects</li>\n  <li>Automatically detect visual illusions and succeed on saves against them</li>\n  <li>Perceive the original form of shapechangers and creatures transformed by magic</li>\n  <li>See into the Ethereal Plane</li>\n  <li>Range typically 10-120 feet</li>\n</ul>\n\n<h3>Light and Visibility</h3>\n\n<h4>Bright Light</h4>\n<p>Normal vision. Most creatures can see normally.</p>\n\n<h4>Dim Light (Lightly Obscured)</h4>\n<p>Creates a lightly obscured area:</p>\n<ul>\n  <li>Disadvantage on Perception checks that rely on sight</li>\n  <li>Examples: patchy fog, moderate foliage</li>\n</ul>\n\n<h4>Darkness (Heavily Obscured)</h4>\n<p>Creates a heavily obscured area:</p>\n<ul>\n  <li>Blocks vision entirely</li>\n  <li>Creatures are effectively Blinded when trying to see through it</li>\n  <li>Examples: complete darkness, opaque fog, dense foliage</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-senses",
+      "srd52": true
+    }
+  }
+}

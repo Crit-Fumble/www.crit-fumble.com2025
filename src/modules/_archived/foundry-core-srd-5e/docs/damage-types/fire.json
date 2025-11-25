@@ -1,0 +1,67 @@
+{
+  "id": "damage-fire",
+  "name": "Fire",
+  "description": "Damage from flames, extreme heat, and burning that can ignite flammable materials and cause ongoing burns.",
+  "category": "elemental",
+  "characteristics": {
+    "sourceExamples": [
+      "Flames",
+      "Unbearable heat",
+      "Dragon breath (Red/Gold/Brass dragons)",
+      "Fire spells",
+      "Burning objects",
+      "Lava and magma",
+      "Extreme heat environments"
+    ],
+    "resistanceCommon": [
+      "Red dragons",
+      "Gold dragons",
+      "Brass dragons",
+      "Fire giants",
+      "Efreet",
+      "Fire elementals",
+      "Salamanders",
+      "Azers",
+      "Hell hounds"
+    ],
+    "immunityCommon": [
+      "Adult/Ancient red dragons",
+      "Adult/Ancient gold dragons",
+      "Fire elementals",
+      "Balors",
+      "Pit fiends",
+      "Phoenix (if present in campaign)"
+    ],
+    "vulnerabilityCommon": [
+      "Treants",
+      "Shambling mounds (actually absorb lightning)",
+      "Plants and plant creatures",
+      "Ice-based creatures (rare)"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Can ignite flammable objects not being worn or carried",
+      "Most common elemental damage type",
+      "Fire damage from spells like Fireball ignites objects automatically",
+      "Extreme heat hazard deals 1d10 fire damage per hour",
+      "Can spread to adjacent flammable materials",
+      "May cause ongoing burning (specific effects or DM discretion)"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Fireball (spell)",
+    "Fire Bolt (cantrip)",
+    "Burning Hands (spell)",
+    "Delayed Blast Fireball (spell)",
+    "Fire Shield (spell)",
+    "Flame Blade (spell)",
+    "Wall of Fire (spell)",
+    "Red dragon breath weapon",
+    "Flaming sphere (spell)",
+    "Flame tongue weapon"
+  ]
+}

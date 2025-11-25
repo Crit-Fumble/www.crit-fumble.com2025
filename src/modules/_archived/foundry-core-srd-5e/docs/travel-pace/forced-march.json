@@ -1,0 +1,152 @@
+{
+  "id": "travel-pace-forced-march",
+  "name": "Forced March (Extended Travel)",
+  "description": "Extended travel beyond the normal 8-hour daily limit. Characters can push themselves to travel for additional hours per day at the risk of exhaustion. This represents the strain of traveling beyond the body's normal sustainable limits, whether to reach a destination urgently or to escape danger.",
+  "movement": {
+    "baseRequirement": "8 hours of travel at chosen pace (Fast, Normal, or Slow)",
+    "extendedHours": "Each additional hour beyond 8 hours",
+    "speedMultiplier": "Same as chosen travel pace",
+    "unit": "Based on selected pace (Fast/Normal/Slow)"
+  },
+  "exhaustionMechanics": {
+    "trigger": "At the end of each hour of travel beyond 8 hours",
+    "savingThrow": {
+      "type": "Constitution saving throw",
+      "baseDC": 10,
+      "scaling": "+1 DC for each hour past 8 hours",
+      "examples": [
+        "Hour 9: DC 11 (10 + 1)",
+        "Hour 10: DC 12 (10 + 2)",
+        "Hour 11: DC 13 (10 + 3)",
+        "Hour 12: DC 14 (10 + 4)",
+        "Hour 13: DC 15 (10 + 5)",
+        "Hour 14: DC 16 (10 + 6)",
+        "Hour 15: DC 17 (10 + 7)",
+        "Hour 16: DC 18 (10 + 8)"
+      ]
+    },
+    "onFailure": "Gain 1 Exhaustion level",
+    "onSuccess": "No exhaustion gained for that hour",
+    "cumulative": "Each failed save adds another level of Exhaustion"
+  },
+  "exhaustionEffects": {
+    "description": "Exhaustion is a cumulative condition with severe consequences",
+    "levels": [
+      {
+        "level": 1,
+        "effects": "D20 Tests reduced by 2, Speed reduced by 5 feet"
+      },
+      {
+        "level": 2,
+        "effects": "D20 Tests reduced by 4, Speed reduced by 10 feet"
+      },
+      {
+        "level": 3,
+        "effects": "D20 Tests reduced by 6, Speed reduced by 15 feet"
+      },
+      {
+        "level": 4,
+        "effects": "D20 Tests reduced by 8, Speed reduced by 20 feet"
+      },
+      {
+        "level": 5,
+        "effects": "D20 Tests reduced by 10, Speed reduced by 25 feet"
+      },
+      {
+        "level": 6,
+        "effects": "Death"
+      }
+    ],
+    "recovery": "Finishing a Long Rest removes 1 Exhaustion level",
+    "removal": "When Exhaustion level reaches 0, the condition ends"
+  },
+  "effects": {
+    "mechanicalEffects": [
+      "Each hour beyond 8 requires a Constitution saving throw",
+      "DC starts at 11 (for hour 9) and increases by 1 each additional hour",
+      "Failed saves result in gaining 1 level of Exhaustion",
+      "Exhaustion reduces all D20 Tests by 2 per level",
+      "Exhaustion reduces Speed by 5 feet per level",
+      "Multiple levels of exhaustion can be gained in a single extended travel period",
+      "Exhaustion level 6 results in death"
+    ],
+    "strategicConsiderations": [
+      "Risk increases dramatically with each additional hour",
+      "Constitution modifier heavily influences sustainability",
+      "High Constitution characters can travel longer safely",
+      "Party must consider whether the time gained is worth the exhaustion risk",
+      "Accumulated exhaustion affects combat ability if encounters occur"
+    ]
+  },
+  "restrictions": [
+    "Still subject to all travel pace restrictions (terrain, speed reductions, etc.)",
+    "Each character makes their own saving throw - some may gain exhaustion while others don't",
+    "Exhaustion gained reduces Speed, which may force the group to Slow pace",
+    "If any group member's Speed is reduced to half or less, entire group must use Slow pace",
+    "Characters already exhausted face increasing penalties on subsequent saves"
+  ],
+  "specialCircumstances": {
+    "highAltitude": "At 10,000+ feet elevation, each hour counts as 2 hours for extended travel purposes (unless acclimated)",
+    "mountedTravel": "Mounts have their own exhaustion mechanics and may not be able to sustain extended travel",
+    "vehicles": "Characters in vehicles don't make these saves, but drivers/pilots might at GM discretion",
+    "magicalSpeed": "Special movement from spells or items may bypass some terrain restrictions but not exhaustion from extended hours"
+  },
+  "calculations": {
+    "dcProgression": "DC = 10 + (hours traveled - 8)",
+    "exhaustionPenalty": "All D20 Tests: -(exhaustion level × 2)",
+    "speedReduction": "Speed reduction: exhaustion level × 5 feet",
+    "totalDistance": "Base pace × total hours traveled (if character can maintain the pace)"
+  },
+  "srdReference": "data/5e/srd/split/gameplaytoolbox/00-TravelPace.md",
+  "additionalReferences": [
+    "data/5e/srd/split/rulesglossary/rulesdefinitions/62-ExhaustionCondition.md",
+    "data/5e/srd/split/gameplaytoolbox/03-EnvironmentalEffects.md"
+  ],
+  "examples": [
+    "Racing to reach a city before siege engines arrive (traveling 12 hours per day)",
+    "Fleeing across the wilderness from pursuing enemies for multiple days",
+    "Urgent diplomatic mission requiring faster-than-normal travel",
+    "Trying to reach safety before nightfall in dangerous territory",
+    "Pushing through the final miles to reach a destination despite fatigue",
+    "Emergency evacuation or rescue mission with time constraints"
+  ],
+  "integration": {
+    "foundryVTT": {
+      "automation": "Can trigger automatic Constitution saving throws at the end of each extended hour",
+      "tracking": "Tracks hours traveled and exhaustion DC progression",
+      "exhaustionManagement": "Automatically applies exhaustion penalties to character sheets",
+      "journalEntries": "Records forced march attempts and exhaustion gained",
+      "warnings": "Alerts GM when characters are approaching dangerous exhaustion levels",
+      "skillChecks": "Applies exhaustion penalties to all D20 Tests automatically"
+    },
+    "relatedSystems": [
+      "exhaustion-condition",
+      "constitution-saves",
+      "long-rest-recovery",
+      "travel-mode",
+      "environmental-effects"
+    ]
+  },
+  "notes": {
+    "riskVsReward": "Forced marches can save time but risk leaving the party weakened for encounters",
+    "partyDynamics": "Low-Constitution characters may force the party to stop or split up",
+    "strategicPlanning": "Should be planned carefully - exhaustion takes multiple long rests to recover",
+    "compounding": "Exhaustion from multiple days of forced march can accumulate to dangerous levels",
+    "alternatives": "Consider mounts, magical transportation, or accepting slower travel when possible"
+  },
+  "tacticalAdvice": {
+    "whenToUse": [
+      "When time is genuinely critical and worth the risk",
+      "When the party has high Constitution scores",
+      "For short-term emergencies (1-2 extra hours)",
+      "When approaching safe rest locations"
+    ],
+    "whenToAvoid": [
+      "When expecting combat encounters soon",
+      "When multiple party members have low Constitution",
+      "For extended periods (more than 2-3 extra hours)",
+      "When already carrying exhaustion levels",
+      "In extremely difficult terrain or environmental conditions"
+    ]
+  }
+}

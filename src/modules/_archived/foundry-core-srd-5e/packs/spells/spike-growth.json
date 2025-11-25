@@ -1,0 +1,148 @@
+{
+  "name": "Spike Growth",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/spike-growth.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 2</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 150 feet</p>\n<p><strong>Components:</strong> V, S, M (seven thorns)</p>\n<p><strong>Duration:</strong> Concentration, up to 10 minutes</p>\n\nThe ground in a 20-foot-radius Sphere [Area of Effect]|XPHB|Sphere centered on a point within range sprouts hard spikes and thorns. The area becomes Difficult Terrain|XPHB for the duration. When a creature moves into or within the area, it takes 2d4 Piercing damage for every 5 feet it travels. The transformation of the ground is camouflaged to look natural. Any creature that can't see the area when the spell is cast must take a Search|XPHB action and succeed on a Wisdom (Perception|XPHB or Survival|XPHB) check against your spell save DC to recognize the terrain as hazardous before entering it.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 150,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "other",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "seven thorns",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 319,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Spike Growth",
+        "source": "XPHB",
+        "page": 319,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 2,
+        "school": "T",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 150
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "seven thorns"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 10
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "The ground in a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point within range sprouts hard spikes and thorns. The area becomes {@variantrule Difficult Terrain|XPHB} for the duration. When a creature moves into or within the area, it takes {@damage 2d4} Piercing damage for every 5 feet it travels.",
+          "The transformation of the ground is camouflaged to look natural. Any creature that can't see the area when the spell is cast must take a {@action Search|XPHB} action and succeed on a Wisdom ({@skill Perception|XPHB} or {@skill Survival|XPHB}) check against your spell save DC to recognize the terrain as hazardous before entering it."
+        ],
+        "damageInflict": [
+          "piercing"
+        ],
+        "abilityCheck": [
+          "wisdom"
+        ],
+        "miscTags": [
+          "DFT"
+        ],
+        "areaTags": [
+          "S"
+        ]
+      }
+    }
+  }
+}

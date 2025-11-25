@@ -1,0 +1,95 @@
+{
+  "name": "Glassblower's Tools",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/glassblowers-tools.png",
+  "system": {
+    "description": {
+      "value": "• Intelligence\n• Discern what a glass object held in the past 24 hours (DC 15)\n• Glass Bottle|XPHB, Magnifying Glass|XPHB, Spyglass|XPHB, Vial|XPHB",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 220,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 30,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 220,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Glassblower's Tools",
+        "source": "XPHB",
+        "page": 220,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "AT|XPHB",
+        "rarity": "none",
+        "weight": 5,
+        "value": 3000,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Intelligence"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Discern what a glass object held in the past 24 hours ({@dc 15})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Glass Bottle|XPHB}, {@item Magnifying Glass|XPHB}, {@item Spyglass|XPHB}, {@item Vial|XPHB}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

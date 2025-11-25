@@ -1,0 +1,69 @@
+{
+  "name": "Pole",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/pole.png",
+  "system": {
+    "description": {
+      "value": "A Pole is 10 feet long. You can use it to touch something up to 10 feet away. If you must make a Strength (Athletics|XPHB) check as part of a High or Long Jump|XPHB, you can use the Pole to vault, giving yourself Advantage|XPHB on the check.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 7,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.05,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Pole",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 7,
+        "value": 5,
+        "entries": [
+          "A Pole is 10 feet long. You can use it to touch something up to 10 feet away. If you must make a Strength ({@skill Athletics|XPHB}) check as part of a High or {@variantrule Long Jump|XPHB}, you can use the Pole to vault, giving yourself {@variantrule Advantage|XPHB} on the check."
+        ]
+      }
+    }
+  }
+}

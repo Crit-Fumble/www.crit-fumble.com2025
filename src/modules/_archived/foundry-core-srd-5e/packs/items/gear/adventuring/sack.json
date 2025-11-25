@@ -1,0 +1,74 @@
+{
+  "name": "Sack",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/sack.png",
+  "system": {
+    "description": {
+      "value": "A Sack holds up to 30 pounds within 1 cubic foot.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.01,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Sack",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 0.5,
+        "value": 1,
+        "entries": [
+          "A Sack holds up to 30 pounds within 1 cubic foot."
+        ],
+        "containerCapacity": {
+          "weight": [
+            30
+          ]
+        }
+      }
+    }
+  }
+}

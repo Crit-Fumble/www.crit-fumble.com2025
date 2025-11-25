@@ -1,0 +1,76 @@
+{
+  "name": "Ioun Stone, Sustenance",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ioun-stone-sustenance.png",
+  "system": {
+    "description": {
+      "value": "{#itemEntry Ioun Stone|XDMG} You don't need to eat or drink while this clear spindle orbits your head.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 273,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 273,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ioun Stone, Sustenance",
+        "source": "XDMG",
+        "page": 273,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "hasRefs": true,
+        "entries": [
+          "{#itemEntry Ioun Stone|XDMG}",
+          "You don't need to eat or drink while this clear spindle orbits your head."
+        ],
+        "lootTables": [
+          "Relics - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

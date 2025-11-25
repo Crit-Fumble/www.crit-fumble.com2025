@@ -1,0 +1,46 @@
+{
+  "id": "foundry-game-tictactoe",
+  "title": "Tic-Tac-Toe Game",
+  "description": "Play Tic-Tac-Toe on FoundryVTT using Core Concepts. A simple 2-player game demonstrating the Core Concepts abstraction layer.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Core Concepts Contributors"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.350"
+  },
+  "relationships": {
+    "requires": [
+      {
+        "id": "foundry-core-concepts",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.0"
+        },
+        "reason": "Uses Core Concepts abstraction layer"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/tictactoe.js"
+  ],
+  "styles": [
+    "styles/tictactoe.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE",
+  "readme": "README.md"
+}

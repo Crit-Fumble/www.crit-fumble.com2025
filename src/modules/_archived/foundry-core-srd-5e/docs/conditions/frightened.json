@@ -1,0 +1,15 @@
+{
+  "id": "condition-frightened",
+  "name": "Frightened",
+  "description": "A frightened creature has disadvantage on checks and attacks while the source of fear is visible and can't move closer to it.",
+  "effects": {
+    "description": "While you have the Frightened condition, you experience the following effects.",
+    "mechanicalEffects": [
+      "You have Disadvantage on ability checks and attack rolls while the source of fear is within line of sight",
+      "You can't willingly move closer to the source of fear"
+    ]
+  },
+  "duration": "varies",
+  "stackable": false,
+  "srdReference": "rulesglossary/rulesdefinitions/69-FrightenedCondition.md"
+}

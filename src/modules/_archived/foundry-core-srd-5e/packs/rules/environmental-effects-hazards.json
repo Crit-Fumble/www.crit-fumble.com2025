@@ -1,0 +1,26 @@
+{
+  "name": "Environmental Effects & Hazards",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/environment.svg",
+  "pages": [
+    {
+      "name": "Environmental Effects & Hazards",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Environmental Effects & Hazards</h2>\n\n<p><em>Natural and supernatural dangers in the world</em></p>\n\n<h3>Temperature Extremes</h3>\n\n<h4>Extreme Cold</h4>\n<p>When temperature drops below 0° Fahrenheit:</p>\n<ul>\n  <li>Every hour: DC 10 Constitution save</li>\n  <li><strong>Failure:</strong> Gain 1 Exhaustion level</li>\n  <li>Cold resistance or protective gear grants Advantage</li>\n</ul>\n\n<h4>Extreme Heat</h4>\n<p>When temperature exceeds 100° Fahrenheit:</p>\n<ul>\n  <li>Every hour without water: DC 5 Constitution save (DC increases by 1 each hour)</li>\n  <li><strong>Failure:</strong> Gain 1 Exhaustion level</li>\n  <li>Protective clothing or heat resistance grants Advantage</li>\n</ul>\n\n<h3>Wilderness Hazards</h3>\n\n<h4>Falling</h4>\n<ul>\n  <li>Take 1d6 bludgeoning damage per 10 feet fallen</li>\n  <li>Maximum 20d6 damage (200 feet)</li>\n  <li>Land Prone unless you avoid damage</li>\n  <li>Falling onto a creature: Both make DC 15 Dexterity save</li>\n</ul>\n\n<h4>Suffocation</h4>\n<ul>\n  <li>Can hold breath for 1 + Constitution modifier minutes (minimum 30 seconds)</li>\n  <li>When out of breath: Survive number of rounds equal to Constitution modifier (minimum 1)</li>\n  <li>After that: Drop to 0 HP and dying</li>\n</ul>\n\n<h4>Drowning</h4>\n<ul>\n  <li>Same rules as suffocation</li>\n  <li>Swimming in rough water may require Athletics checks</li>\n  <li>Exhaustion makes swimming difficult</li>\n</ul>\n\n<h4>Starvation & Dehydration</h4>\n<p><strong>Food:</strong></p>\n<ul>\n  <li>Need 1 pound of food per day</li>\n  <li>Can go without food for 3 + Constitution modifier days (minimum 1)</li>\n  <li>After that: Gain 1 Exhaustion per day</li>\n</ul>\n\n<p><strong>Water:</strong></p>\n<ul>\n  <li>Need 1 gallon of water per day (2 gallons in hot weather)</li>\n  <li>Half ration counts as half a day without water</li>\n  <li>After 1 day without water: Gain 1 Exhaustion</li>\n  <li>Exhaustion from dehydration can't be removed until you drink sufficient water</li>\n</ul>\n\n<h3>Weather Effects</h3>\n\n<h4>Heavy Precipitation</h4>\n<p>Rain or snow:</p>\n<ul>\n  <li>Lightly obscures area (Disadvantage on Perception)</li>\n  <li>Disadvantage on Wisdom (Perception) checks that rely on hearing</li>\n  <li>Extinguishes open flames</li>\n</ul>\n\n<h4>Strong Wind</h4>\n<ul>\n  <li>Disadvantage on ranged weapon attacks</li>\n  <li>Disadvantage on Perception checks that rely on hearing</li>\n  <li>Extinguishes open flames</li>\n  <li>Flying creatures must land or fall</li>\n  <li>Disperses fog and mist</li>\n</ul>\n\n<h4>Fog</h4>\n<ul>\n  <li>Heavily obscures area</li>\n  <li>Creatures are effectively Blinded</li>\n  <li>Disadvantage on Perception checks</li>\n</ul>\n\n<h3>Dangerous Terrain</h3>\n\n<h4>Difficult Terrain</h4>\n<p>Costs 2 feet of movement per 1 foot traveled:</p>\n<ul>\n  <li>Rubble and undergrowth</li>\n  <li>Steep stairs</li>\n  <li>Snow and ice</li>\n  <li>Shallow bogs</li>\n</ul>\n\n<h4>Slippery Ice</h4>\n<ul>\n  <li>Difficult terrain</li>\n  <li>Dexterity (Acrobatics) DC 10 check to avoid falling Prone</li>\n  <li>When running or charging: DC 10 Dexterity save or fall Prone</li>\n</ul>\n\n<h4>Thin Ice</h4>\n<ul>\n  <li>Weight of 300+ pounds breaks the ice</li>\n  <li>Creature falls through and is submerged</li>\n  <li>Must escape using Athletics (Swimming) or break through from below</li>\n</ul>\n\n<h4>Quicksand</h4>\n<ul>\n  <li>Deep quicksand: 1d6 × 5 feet deep</li>\n  <li>Creature that enters sinks 1d4 + 1 feet</li>\n  <li>Athletics or Acrobatics check to escape (DC 10 + feet sunk)</li>\n  <li>Sinking continues each round without successful check</li>\n</ul>\n\n<h3>Fire</h3>\n<ul>\n  <li>Catching fire: Take 1d10 fire damage</li>\n  <li>Each round: DC 10 Dexterity save or take 1d10 fire damage</li>\n  <li>Can use action to put out fire on self or adjacent creature</li>\n</ul>\n\n<h3>Poison and Disease</h3>\n<ul>\n  <li>Constitution saving throw to resist</li>\n  <li>Effects vary by poison/disease type</li>\n  <li>Some require multiple saves over time</li>\n  <li>Lesser Restoration can cure some diseases</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-environment",
+      "srd52": true
+    }
+  }
+}

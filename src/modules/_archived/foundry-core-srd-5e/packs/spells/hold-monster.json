@@ -1,0 +1,157 @@
+{
+  "name": "Hold Monster",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/hold-monster.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 5</strong> Enchantment</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 90 feet</p>\n<p><strong>Components:</strong> V, S, M (a straight piece of iron)</p>\n<p><strong>Duration:</strong> Concentration, up to 1 minute</p>\n\nChoose a creature that you can see within range. The target must succeed on a Wisdom saving throw or have the Paralyzed|XPHB condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.\n\n<p><strong>At Higher Levels:</strong> You can target one additional creature for each spell slot level above 5.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 90,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "wis",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 5,
+    "school": "enc",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "a straight piece of iron",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 285,
+      "school": "E",
+      "classes": [],
+      "_srdData": {
+        "name": "Hold Monster",
+        "source": "XPHB",
+        "page": 285,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 5,
+        "school": "E",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 90
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "a straight piece of iron"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or have the {@condition Paralyzed|XPHB} condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "You can target one additional creature for each spell slot level above 5."
+            ]
+          }
+        ],
+        "conditionInflict": [
+          "paralyzed"
+        ],
+        "savingThrow": [
+          "wisdom"
+        ],
+        "miscTags": [
+          "SCT",
+          "SGT"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

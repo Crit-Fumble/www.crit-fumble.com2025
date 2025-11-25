@@ -1,0 +1,62 @@
+{
+  "name": "Inn Stay - Aristocratic",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/lodging/inn-aristocratic.png",
+  "system": {
+    "description": {
+      "value": "<p>A night's stay in aristocratic lodging. The finest accommodations available with lavish furnishings, dedicated servants, and every luxury imaginable.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 4,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {
+      "value": "8",
+      "units": "hour"
+    },
+    "uses": {
+      "value": 1,
+      "max": "1",
+      "per": "day",
+      "recovery": ""
+    },
+    "consumableType": "service",
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "lodging",
+      "lodgingQuality": "aristocratic",
+      "_srdData": {
+        "name": "Inn Stay - Aristocratic",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "service",
+        "rarity": "uncommon",
+        "value": 4,
+        "valueCurrency": "gp"
+      }
+    }
+  }
+}

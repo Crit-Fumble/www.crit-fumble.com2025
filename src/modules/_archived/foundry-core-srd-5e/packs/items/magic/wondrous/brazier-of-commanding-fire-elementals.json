@@ -1,0 +1,73 @@
+{
+  "name": "Brazier of Commanding Fire Elementals",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/brazier-of-commanding-fire-elementals.png",
+  "system": {
+    "description": {
+      "value": "While you are within 5 feet of this brazier, you can take a Magic|XPHB action to summon a Fire Elemental|XMM. The elemental appears in an unoccupied space as close to the brazier as possible, understands your languages, obeys your commands, and takes its turn immediately after you on your Initiative|XPHB count. The elemental disappears after 1 hour, when it dies, or when you dismiss it as a Bonus Action|XPHB. The brazier can't be used this way again until the next dawn.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 241,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 241,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Brazier of Commanding Fire Elementals",
+        "source": "XDMG",
+        "page": 241,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "wondrous": true,
+        "entries": [
+          "While you are within 5 feet of this brazier, you can take a {@action Magic|XPHB} action to summon a {@creature Fire Elemental|XMM}. The elemental appears in an unoccupied space as close to the brazier as possible, understands your languages, obeys your commands, and takes its turn immediately after you on your {@variantrule Initiative|XPHB} count. The elemental disappears after 1 hour, when it dies, or when you dismiss it as a {@variantrule Bonus Action|XPHB}. The brazier can't be used this way again until the next dawn."
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG",
+          "Relics - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

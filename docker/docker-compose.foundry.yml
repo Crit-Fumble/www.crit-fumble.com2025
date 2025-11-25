@@ -1,0 +1,72 @@
+# FoundryVTT Docker Compose Configuration
+# For deploying Foundry VTT instances on DigitalOcean droplets
+#
+# Usage: docker-compose -f docker-compose.foundry.yml up -d
+#
+# Prerequisites:
+# - Vercel is hosting the main web app, database, and blob storage
+# - This only runs FoundryVTT and optional bridge server
+# - Droplet must have Docker and Docker Compose installed
+
+version: '3.9'
+
+services:
+  # FoundryVTT Instance
+  foundry:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.foundry
+    container_name: foundry-vtt
+    restart: unless-stopped
+    environment:
+      # Foundry Credentials
+      - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}
+      - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}
+      - FOUNDRY_ADMIN_KEY=${FOUNDRY_ADMIN_KEY}
+      - FOUNDRY_LICENSE_KEY=${FOUNDRY_LICENSE_KEY}
+
+      # Foundry Configuration
+      - FOUNDRY_HOSTNAME=0.0.0.0
+      - FOUNDRY_PORT=30000
+      - FOUNDRY_PROXY_SSL=${FOUNDRY_PROXY_SSL:-false}
+      - FOUNDRY_PROXY_PORT=${FOUNDRY_PROXY_PORT:-443}
+      - FOUNDRY_MINIFY_STATIC_FILES=true
+      - FOUNDRY_UPNP=false
+
+      # Optional: AWS/S3 Configuration for assets
+      - FOUNDRY_AWS_CONFIG=${FOUNDRY_AWS_CONFIG:-}
+
+    ports:
+      - "${FOUNDRY_PORT:-30000}:30000"
+
+    volumes:
+      # Persistent Foundry data
+      - foundry_data:/data
+
+      # Optional: Mount custom modules (read-only)
+      # Uncomment if deploying custom modules with the container
+      # - ../src/modules/foundry-core-concepts-api:/data/Data/modules/foundry-core-concepts-api:ro
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:30000/"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+
+volumes:
+  foundry_data:
+    driver: local
+
+networks:
+  default:
+    name: foundry-network

@@ -1,0 +1,84 @@
+{
+  "name": "Cloak of Invisibility",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/cloak-of-invisibility.png",
+  "system": {
+    "description": {
+      "value": "This cloak has 3 charges and regains 1d3 expended charges daily at dawn. While wearing the cloak, you can take a Magic|XPHB action to pull its hood over your head and expend 1 charge to give yourself the Invisible|XPHB condition for 1 hour. The effect ends early if you pull the hood down (no action required) or cease wearing the hood.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 244,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 244,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Cloak of Invisibility",
+        "source": "XDMG",
+        "page": 244,
+        "srd52": true,
+        "basicRules2024": true,
+        "otherSources": [
+          {
+            "source": "UtHftLH"
+          },
+          {
+            "source": "HBTD"
+          }
+        ],
+        "rarity": "legendary",
+        "reqAttune": true,
+        "wondrous": true,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d3}",
+        "charges": 3,
+        "entries": [
+          "This cloak has 3 charges and regains {@dice 1d3} expended charges daily at dawn. While wearing the cloak, you can take a {@action Magic|XPHB} action to pull its hood over your head and expend 1 charge to give yourself the {@condition Invisible|XPHB} condition for 1 hour. The effect ends early if you pull the hood down (no action required) or cease wearing the hood."
+        ],
+        "lootTables": [
+          "Arcana - Legendary|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

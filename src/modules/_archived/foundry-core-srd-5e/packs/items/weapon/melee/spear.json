@@ -1,0 +1,118 @@
+{
+  "name": "Spear",
+  "type": "weapon",
+  "img": "modules/foundry-core-srd-5e/assets/items/weapons/spear.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 215,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [
+        [
+          "1d6",
+          "piercing"
+        ]
+      ],
+      "versatile": "1d8"
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "base",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "thr",
+      "ver"
+    ],
+    "weaponType": "simple",
+    "proficient": 0,
+    "mastery": "sap"
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 215,
+      "itemType": "weapon",
+      "_srdData": {
+        "name": "Spear",
+        "source": "XPHB",
+        "page": 215,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "M|XPHB",
+        "rarity": "none",
+        "weight": 3,
+        "value": 100,
+        "weaponCategory": "simple",
+        "property": [
+          "T|XPHB",
+          "V|XPHB"
+        ],
+        "mastery": [
+          "Sap|XPHB"
+        ],
+        "range": "20/60",
+        "dmg1": "1d6",
+        "dmgType": "P",
+        "dmg2": "1d8",
+        "spear": true,
+        "weapon": true,
+        "hasFluffImages": true
+      }
+    }
+  }
+}

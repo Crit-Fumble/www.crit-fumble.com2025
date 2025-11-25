@@ -1,0 +1,101 @@
+{
+  "name": "Robe of Eyes",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/robe-of-eyes.png",
+  "system": {
+    "description": {
+      "value": "This robe is adorned with eyelike patterns. While you wear the robe, you gain the following benefits: • The robe gives you Advantage|XPHB on Wisdom (Perception|XPHB) checks that rely on sight.\n• You have Darkvision|XPHB and Truesight|XPHB, both with a range of 120 feet.\nA Light|XPHB spell cast on the robe or a Daylight|XPHB spell cast within 5 feet of the robe gives you the Blinded|XPHB condition for 1 minute. At the end of each of your turns, you make a Constitution saving throw (DC 11 for Light or DC 15 for Daylight), ending the condition on yourself on a success.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 297,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 297,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Robe of Eyes",
+        "source": "XDMG",
+        "page": 297,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "entries": [
+          "This robe is adorned with eyelike patterns. While you wear the robe, you gain the following benefits:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "All-Around Vision",
+                "entries": [
+                  "The robe gives you {@variantrule Advantage|XPHB} on Wisdom ({@skill Perception|XPHB}) checks that rely on sight."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Special Senses",
+                "entries": [
+                  "You have {@sense Darkvision|XPHB} and {@sense Truesight|XPHB}, both with a range of 120 feet."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Drawbacks",
+            "entries": [
+              "A {@spell Light|XPHB} spell cast on the robe or a {@spell Daylight|XPHB} spell cast within 5 feet of the robe gives you the {@condition Blinded|XPHB} condition for 1 minute. At the end of each of your turns, you make a Constitution saving throw ({@dc 11} for Light or {@dc 15} for Daylight), ending the condition on yourself on a success."
+            ]
+          }
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

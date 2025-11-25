@@ -1,0 +1,95 @@
+{
+  "name": "Herbalism Kit",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/herbalism-kit.png",
+  "system": {
+    "description": {
+      "value": "• Intelligence\n• Identify a plant (DC 10)\n• Antitoxin|XPHB, Candle|XPHB, Healer's Kit|XPHB, Potion of Healing|XDMG",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Herbalism Kit",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "T|XPHB",
+        "rarity": "none",
+        "weight": 3,
+        "value": 500,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Intelligence"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Identify a plant ({@dc 10})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Antitoxin|XPHB}, {@item Candle|XPHB}, {@item Healer's Kit|XPHB}, {@item Potion of Healing|XDMG}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "id": "hazard-traps-magical",
+  "name": "Magical Traps",
+  "description": "Traps that use magical energy, glyphs, or spells to harm or hinder intruders, often more versatile than mechanical traps",
+  "type": "trap",
+  "category": "magical",
+  "trigger": "Varies - pressure plates, proximity, improper action, spoken word, specific creature type",
+  "damage": {
+    "amount": "varies by trap and level",
+    "type": "typically fire, but can be any magical damage type",
+    "frequency": "varies - some reset, some are single-use"
+  },
+  "savingThrow": {
+    "ability": "typically DEX, but can be any ability",
+    "dc": "varies by trap and level (10-19)",
+    "onSuccess": "typically half damage",
+    "onFailure": "full damage"
+  },
+  "duration": "varies - instantaneous, resets, or ongoing effect",
+  "magicalTrapFeatures": {
+    "detection": "Can be detected with Detect Magic spell (shows school of magic)",
+    "components": "Often include magical glyphs or symbols",
+    "effects": "Can produce spell-like effects beyond simple damage",
+    "versatility": "Can target specific creature types or conditions",
+    "reset": "Many magical traps reset automatically"
+  },
+  "exampleTrap": {
+    "name": "Fire-Casting Statue",
+    "severity": "Deadly (Levels 1-4)",
+    "trigger": "Moving onto pressure plate or starting turn on it",
+    "damage": "11 (2d10) Fire, DEX DC 15 save for half",
+    "effect": "Resets at start of next turn - can trigger repeatedly",
+    "area": "15-foot Cone from statue",
+    "statue": "Can look like anything (dragon, wizard, etc.)",
+    "detection": [
+      "Detect Magic reveals Evocation aura around statue",
+      "DC 10 Wisdom (Perception) as Search action to spot tiny glyph on statue",
+      "DC 15 Intelligence (Arcana) as Study action to recognize glyph means 'fire'",
+      "DC 15 Wisdom (Perception) as Search action to detect pressure plate"
+    ],
+    "disarm": [
+      "Deface glyph on statue with sharp tool (action)",
+      "Wedge Iron Spike under pressure plate"
+    ],
+    "scaling": {
+      "levels5-10": "22 (4d10) damage, 30-foot Cone",
+      "levels11-16": "55 (10d10) damage, 60-foot Cone",
+      "levels17-20": "99 (18d10) damage, 120-foot Cone"
+    },
+    "srdLine": "449-466"
+  },
+  "commonMagicalTrapTypes": [
+    {
+      "type": "Glyph Traps",
+      "description": "Magical symbols that trigger spell effects",
+      "examples": ["Glyph of Warding", "Symbol spell"],
+      "detection": "Detect Magic, Arcana checks to identify"
+    },
+    {
+      "type": "Elemental Traps",
+      "description": "Release elemental energy (fire, lightning, cold, etc.)",
+      "examples": ["Fire-casting statue", "Lightning arc", "Freezing blast"],
+      "detection": "Detect Magic shows Evocation school"
+    },
+    {
+      "type": "Illusory Traps",
+      "description": "Create illusions to confuse or misdirect",
+      "examples": ["Phantasmal force", "Illusory floor over pit"],
+      "detection": "Detect Magic shows Illusion school, Investigation to disbelieve"
+    },
+    {
+      "type": "Enchantment Traps",
+      "description": "Affect minds of intruders",
+      "examples": ["Charm trap", "Fear effect", "Sleep trap"],
+      "detection": "Detect Magic shows Enchantment school"
+    },
+    {
+      "type": "Summoning Traps",
+      "description": "Summon creatures to attack intruders",
+      "examples": ["Guardian constructs", "Elemental guardians"],
+      "detection": "Detect Magic shows Conjuration school"
+    }
+  ],
+  "detection": {
+    "difficulty": "DC 10-15",
+    "method": [
+      "Detect Magic spell (reveals aura and school of magic)",
+      "Wisdom (Perception) for glyphs, statues, or unusual features",
+      "Intelligence (Arcana) to identify magical symbols and their meaning",
+      "Intelligence (Investigation) for pressure plates and mechanisms"
+    ]
+  },
+  "mitigation": [
+    "Cast Detect Magic to identify magical traps",
+    "Use Dispel Magic to disable magical effects (if applicable)",
+    "Have proficiency in Arcana to identify and understand glyphs",
+    "Deface or destroy magical components (glyphs, focus items)",
+    "Disable physical triggers (pressure plates)",
+    "Use Counterspell if trap casts a spell",
+    "Have Resistance or Immunity to expected damage type",
+    "Trigger trap from safe distance using objects or summons",
+    "Use Antimagic Field to suppress magical traps (extreme measure)"
+  ],
+  "designConsiderations": [
+    "Magical traps often more expensive to create than mechanical traps",
+    "Can be more versatile in targeting and effects",
+    "May require spellcaster to create originally",
+    "Often found in wizard towers, temples, and magical vaults",
+    "Can have ongoing effects (guardians, lasting enchantments)",
+    "Some deactivate when creator dies, others remain indefinitely",
+    "Can be keyed to allow specific creatures to pass safely"
+  ],
+  "creationNotes": {
+    "spells": [
+      "Glyph of Warding: Creates trap with spell effect",
+      "Symbol: Powerful trap affecting multiple creatures",
+      "Alarm: Simple detection trap",
+      "Magic Mouth: Can warn intruders or trigger other effects"
+    ],
+    "materials": "Often requires expensive material components",
+    "time": "Can take hours to days depending on complexity",
+    "permanence": "Some traps are permanent, others have duration"
+  },
+  "srdReference": {
+    "file": "dndsrd5.2_markdown/src/09_GameplayToolbox.md",
+    "section": "Traps - Fire-Casting Statue example",
+    "lines": "449-466",
+    "quote": "A Detect Magic spell reveals an aura of Evocation magic around the statue. As a Search action, a creature within 5 feet of the statue can examine it and make a DC 10 Wisdom (Perception) check, detecting a tiny glyph on the statue on a successful check."
+  },
+  "examples": [
+    "Statue breathing fire when pressure plate triggered",
+    "Glyph of Warding on door casting Fireball at intruders",
+    "Symbol spell causing Fear in unauthorized creatures",
+    "Illusory bridge over pit revealed by Investigation",
+    "Animated armor guardian awakening when treasure touched",
+    "Lightning bolt shooting from wall when wrong key used"
+  ],
+  "relatedConcepts": {
+    "damageTypes": ["fire", "lightning", "cold", "force", "psychic"],
+    "conditions": ["charmed", "frightened", "paralyzed", "stunned"],
+    "abilities": ["dexterity", "wisdom", "intelligence", "charisma"],
+    "skills": ["perception", "arcana", "investigation"],
+    "actions": ["search", "study", "action"],
+    "spells": ["detect-magic", "dispel-magic", "counterspell", "glyph-of-warding", "symbol"],
+    "magicSchools": ["evocation", "abjuration", "illusion", "enchantment", "conjuration"]
+  }
+}

@@ -1,0 +1,16 @@
+<div class="tictactoe-game">
+  <div class="tictactoe-status">{{status}}</div>
+
+  <div class="tictactoe-board">
+    {{#each tiles}}
+    <div class="tictactoe-tile {{#if this.value}}occupied {{this.value}}{{/if}}" data-index="{{this.index}}">
+      {{#if this.value}}{{this.value}}{{/if}}
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="tictactoe-controls">
+    <button class="tictactoe-new-game">{{localize "TICTACTOE.NewGame"}}</button>
+    <button class="tictactoe-reset-game">{{localize "TICTACTOE.ResetGame"}}</button>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+{
+  "name": "Ink",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ink.png",
+  "system": {
+    "description": {
+      "value": "Ink comes in a 1-ounce bottle, which provides enough ink to write about 500 pages.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 226,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 226,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ink",
+        "source": "XPHB",
+        "page": 226,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "value": 1000,
+        "entries": [
+          "Ink comes in a 1-ounce bottle, which provides enough ink to write about 500 pages."
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "name": "Confusion",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/confusion.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 4</strong> Enchantment</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 90 feet</p>\n<p><strong>Components:</strong> V, S, M (three nut shells)</p>\n<p><strong>Duration:</strong> Concentration, up to 1 minute</p>\n\nEach creature in a 10-foot-radius Sphere [Area of Effect]|XPHB|Sphere centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can't take Bonus Actions or Reactions and must roll 1d10 at the start of each of its turns to determine its behavior for that turn, consulting the table below. At the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.\n\n<p><strong>At Higher Levels:</strong> The Sphere [Area of Effect]|XPHB|Sphere's radius increases by 5 feet for each spell slot level above 4.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 90,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "wis",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 4,
+    "school": "enc",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "three nut shells",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 253,
+      "school": "E",
+      "classes": [],
+      "_srdData": {
+        "name": "Confusion",
+        "source": "XPHB",
+        "page": 253,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 4,
+        "school": "E",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 90
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "three nut shells"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "Each creature in a 10-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can't take Bonus Actions or Reactions and must roll {@dice 1d10} at the start of each of its turns to determine its behavior for that turn, consulting the table below.",
+          {
+            "type": "table",
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "1d10",
+              "Behavior for the Turn"
+            ],
+            "rows": [
+              [
+                "1",
+                "The target doesn't take an action, and it uses all its movement to move. Roll {@dice 1d4} for the direction: {@b 1}, north; {@b 2}, east; {@b 3}, south; or {@b 4}, west."
+              ],
+              [
+                "2-6",
+                "The target doesn't move or take actions."
+              ],
+              [
+                "7-8",
+                "The target doesn't move, and it takes the {@action Attack|XPHB} action to make one melee attack against a random creature within reach. If none are within reach, the target takes no action."
+              ],
+              [
+                "9-10",
+                "The target chooses its behavior."
+              ]
+            ]
+          },
+          "At the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The {@variantrule Sphere [Area of Effect]|XPHB|Sphere}'s radius increases by 5 feet for each spell slot level above 4."
+            ]
+          }
+        ],
+        "savingThrow": [
+          "wisdom"
+        ],
+        "miscTags": [
+          "RO"
+        ],
+        "areaTags": [
+          "S"
+        ]
+      }
+    }
+  }
+}

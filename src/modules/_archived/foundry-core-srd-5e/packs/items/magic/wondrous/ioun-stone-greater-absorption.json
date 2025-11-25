@@ -1,0 +1,76 @@
+{
+  "name": "Ioun Stone, Greater Absorption",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ioun-stone-greater-absorption.png",
+  "system": {
+    "description": {
+      "value": "{#itemEntry Ioun Stone|XDMG} While this marbled lavender and green ellipsoid orbits your head, you can take a Reaction|XPHB to cancel a spell of level 8 or lower cast by a creature you can see. A canceled spell has no effect, and any resources used to cast it are wasted. Once the stone has canceled 20 levels of spells, it burns out, turns dull gray, and loses its magic.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 273,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 273,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ioun Stone, Greater Absorption",
+        "source": "XDMG",
+        "page": 273,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "legendary",
+        "reqAttune": true,
+        "wondrous": true,
+        "hasRefs": true,
+        "entries": [
+          "{#itemEntry Ioun Stone|XDMG}",
+          "While this marbled lavender and green ellipsoid orbits your head, you can take a {@variantrule Reaction|XPHB} to cancel a spell of level 8 or lower cast by a creature you can see. A canceled spell has no effect, and any resources used to cast it are wasted. Once the stone has canceled 20 levels of spells, it burns out, turns dull gray, and loses its magic."
+        ],
+        "lootTables": [
+          "Arcana - Legendary|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

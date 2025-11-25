@@ -1,0 +1,38 @@
+{
+  "id": "foundry-core-concepts-api",
+  "title": "Core Concepts API",
+  "description": "RESTful API plugin for Core Concepts module. Provides authenticated access to sheets, attributes, types, cards, books, modes, systems, and all Core Concepts data for integration with external platforms.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Crit-Fumble",
+      "url": "https://www.crit-fumble.com"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11",
+    "maximum": "12"
+  },
+  "esmodules": [
+    "scripts/init.mjs"
+  ],
+  "styles": [
+    "styles/api-control.css"
+  ],
+  "relationships": {
+    "requires": [
+      {
+        "id": "foundry-core-concepts",
+        "type": "module",
+        "compatibility": {
+          "minimum": "0.1.0"
+        }
+      }
+    ]
+  },
+  "socket": true,
+  "url": "https://github.com/crit-fumble/foundry-core-concepts-api",
+  "manifest": "https://github.com/crit-fumble/foundry-core-concepts-api/releases/latest/download/module.json",
+  "download": "https://github.com/crit-fumble/foundry-core-concepts-api/releases/latest/download/foundry-core-concepts-api.zip"
+}

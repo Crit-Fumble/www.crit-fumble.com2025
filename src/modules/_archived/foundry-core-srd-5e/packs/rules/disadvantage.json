@@ -1,0 +1,39 @@
+{
+  "name": "Disadvantage",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/rules/disadvantage.svg",
+  "pages": [
+    {
+      "name": "Disadvantage",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Disadvantage</h2>\n\n<p><em>Source: XPHB, page 366</em></p>\n\nIf you have Disadvantage on a D20 Test|XPHB, roll two d20s and use the lower roll. A roll can't be affected by more than one Disadvantage, and Advantage|XPHB and Disadvantage on the same roll cancel each other."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "variant-rule",
+      "ruleType": "C",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 366,
+      "_srdData": {
+        "name": "Disadvantage",
+        "source": "XPHB",
+        "page": 366,
+        "srd52": true,
+        "basicRules2024": true,
+        "ruleType": "C",
+        "entries": [
+          "If you have Disadvantage on a {@variantrule D20 Test|XPHB}, roll two d20s and use the lower roll. A roll can't be affected by more than one Disadvantage, and {@variantrule Advantage|XPHB} and Disadvantage on the same roll cancel each other."
+        ]
+      }
+    }
+  }
+}

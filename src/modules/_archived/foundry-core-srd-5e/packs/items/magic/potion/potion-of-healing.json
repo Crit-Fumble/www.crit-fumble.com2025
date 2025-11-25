@@ -1,0 +1,83 @@
+{
+  "name": "Potion of Healing",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/potion-of-healing.png",
+  "system": {
+    "description": {
+      "value": "This potion is a magic item. As a Bonus Action|XPHB, you can drink it or administer it to another creature within 5 feet of yourself. The creature that drinks the magical red fluid in this vial regains 2d4 + 2 Hit Points|XPHB. The potion's red liquid glimmers when agitated.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 288,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 50,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 288,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Potion of Healing",
+        "source": "XDMG",
+        "page": 288,
+        "srd52": true,
+        "basicRules2024": true,
+        "otherSources": [
+          {
+            "source": "XPHB",
+            "page": 228
+          }
+        ],
+        "type": "P|XPHB",
+        "rarity": "common",
+        "weight": 0.5,
+        "value": 5000,
+        "entries": [
+          "This potion is a magic item. As a {@variantrule Bonus Action|XPHB}, you can drink it or administer it to another creature within 5 feet of yourself. The creature that drinks the magical red fluid in this vial regains {@dice 2d4 + 2} {@variantrule Hit Points|XPHB}. The potion's red liquid glimmers when agitated."
+        ],
+        "lootTables": [
+          "Implements - Common|XDMG",
+          "Relics - Common|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Ioun Stone, Fortitude",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ioun-stone-fortitude.png",
+  "system": {
+    "description": {
+      "value": "{#itemEntry Ioun Stone|XDMG} Your Constitution increases by 2, to a maximum of 20, while this pink rhomboid orbits your head.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 273,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 273,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Ioun Stone, Fortitude",
+        "source": "XDMG",
+        "page": 273,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "very rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "ability": {
+          "con": 2
+        },
+        "hasRefs": true,
+        "entries": [
+          "{#itemEntry Ioun Stone|XDMG}",
+          "Your Constitution increases by 2, to a maximum of 20, while this pink rhomboid orbits your head."
+        ],
+        "lootTables": [
+          "Arcana - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "condition-stunned",
+  "name": "Stunned",
+  "description": "A stunned creature is incapacitated, automatically fails Strength and Dexterity saves, and grants advantage on attacks.",
+  "effects": {
+    "description": "While you have the Stunned condition, you experience the following effects.",
+    "mechanicalEffects": [
+      "You have the Incapacitated condition",
+      "You automatically fail Strength and Dexterity saving throws",
+      "Attack rolls against you have Advantage"
+    ]
+  },
+  "duration": "varies",
+  "stackable": false,
+  "srdReference": "rulesglossary/rulesdefinitions/138-StunnedCondition.md"
+}

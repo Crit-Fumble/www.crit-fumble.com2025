@@ -1,0 +1,66 @@
+{
+  "name": "Sled",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/sled.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 300,
+      "units": "lb"
+    },
+    "price": {
+      "value": 20,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Sled",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "VEH|XPHB",
+        "rarity": "none",
+        "weight": 300,
+        "value": 2000
+      }
+    }
+  }
+}

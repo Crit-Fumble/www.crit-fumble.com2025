@@ -1,0 +1,79 @@
+{
+  "name": "Stone of Good Luck",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/stone-of-good-luck.png",
+  "system": {
+    "description": {
+      "value": "While this polished agate is on your person, you gain a +1 bonus to ability checks and saving throws.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 312,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 312,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Stone of Good Luck",
+        "alias": [
+          "Luckstone"
+        ],
+        "source": "XDMG",
+        "page": 312,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "uncommon",
+        "reqAttune": true,
+        "wondrous": true,
+        "bonusSavingThrow": "+1",
+        "bonusAbilityCheck": "+1",
+        "entries": [
+          "While this polished agate is on your person, you gain a +1 bonus to ability checks and saving throws."
+        ],
+        "lootTables": [
+          "Implements - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

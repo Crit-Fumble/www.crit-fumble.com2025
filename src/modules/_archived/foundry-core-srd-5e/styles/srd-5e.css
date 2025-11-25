@@ -1,0 +1,28 @@
+/**
+ * Foundry Core SRD 5e - Styles
+ */
+
+/* SRD System Styles */
+.srd-5e-system {
+  /* Base styles for SRD systems */
+}
+
+/* Resting indicators */
+.rest-indicator {
+  /* Short/Long rest UI */
+}
+
+/* Exhaustion levels */
+.exhaustion-level {
+  /* Exhaustion level indicators */
+}
+
+/* Conditions */
+.condition-badge {
+  /* Condition status badges */
+}
+
+/* Spell slots */
+.spell-slot-tracker {
+  /* Spell slot UI */
+}

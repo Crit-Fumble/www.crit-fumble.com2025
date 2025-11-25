@@ -1,0 +1,26 @@
+{
+  "name": "Equipment & Items",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/equipment.svg",
+  "pages": [
+    {
+      "name": "Equipment & Items",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Equipment & Items</h2>\n\n<p><em>System for managing, equipping, and using items</em></p>\n\n<h3>Weapon Properties</h3>\n<table>\n  <tr><th>Property</th><th>Description</th></tr>\n  <tr><td>Ammunition</td><td>Can attack only if you have ammunition</td></tr>\n  <tr><td>Finesse</td><td>Use STR or DEX for attack/damage</td></tr>\n  <tr><td>Heavy</td><td>Small creatures have Disadvantage</td></tr>\n  <tr><td>Light</td><td>Suitable for two-weapon fighting</td></tr>\n  <tr><td>Loading</td><td>Fire only one piece of ammunition per action</td></tr>\n  <tr><td>Range</td><td>Normal/long range in feet</td></tr>\n  <tr><td>Reach</td><td>Adds 5 feet to reach</td></tr>\n  <tr><td>Thrown</td><td>Can be thrown for ranged attack</td></tr>\n  <tr><td>Two-Handed</td><td>Requires two hands to use</td></tr>\n  <tr><td>Versatile</td><td>Can use with one or two hands (different damage)</td></tr>\n</table>\n\n<h3>Weapon Mastery</h3>\n<table>\n  <tr><th>Mastery</th><th>Benefit</th></tr>\n  <tr><td>Cleave</td><td>Hit another creature within 5 ft on hit</td></tr>\n  <tr><td>Graze</td><td>Deal damage equal to ability modifier on miss</td></tr>\n  <tr><td>Nick</td><td>Make extra attack as part of Attack action</td></tr>\n  <tr><td>Push</td><td>Push target 10 feet away on hit</td></tr>\n  <tr><td>Sap</td><td>Give target Disadvantage on next attack</td></tr>\n  <tr><td>Slow</td><td>Reduce target's Speed by 10 feet</td></tr>\n  <tr><td>Topple</td><td>Knock target Prone on failed save</td></tr>\n  <tr><td>Vex</td><td>Gain Advantage on next attack vs target</td></tr>\n</table>\n\n<h3>Armor Class</h3>\n<p><strong>Unarmored:</strong> 10 + DEX</p>\n<p><strong>Light:</strong> Armor AC + DEX</p>\n<p><strong>Medium:</strong> Armor AC + DEX (max +2)</p>\n<p><strong>Heavy:</strong> Armor AC only</p>\n<p><strong>Shield:</strong> +2 AC</p>\n\n<h3>Attunement</h3>\n<ul>\n  <li>Maximum 3 attuned items</li>\n  <li>Requires Short Rest to attune</li>\n  <li>Item must be within 100 feet</li>\n</ul>\n\n<h3>Carrying Capacity</h3>\n<p><strong>Capacity:</strong> STR × 15 pounds</p>\n<p><strong>Encumbered:</strong> Weight > 5 × STR (Speed -10)</p>\n<p><strong>Heavily Encumbered:</strong> Weight > 10 × STR (Speed -20, Disadvantage)</p>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-equipment",
+      "srd52": true
+    }
+  }
+}

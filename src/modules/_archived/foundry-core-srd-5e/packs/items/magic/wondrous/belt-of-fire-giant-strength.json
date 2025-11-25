@@ -1,0 +1,79 @@
+{
+  "name": "Belt of Fire Giant Strength",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/belt-of-fire-giant-strength.png",
+  "system": {
+    "description": {
+      "value": "While wearing this belt, your Strength score changes to 25. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 236,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 236,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Belt of Fire Giant Strength",
+        "source": "XDMG",
+        "page": 236,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "very rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "ability": {
+          "static": {
+            "str": 25
+          }
+        },
+        "entries": [
+          "While wearing this belt, your Strength score changes to 25. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
+        ],
+        "lootTables": [
+          "Armaments - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

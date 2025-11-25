@@ -1,0 +1,96 @@
+{
+  "name": "Padded Armor",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/armor/padded-armor.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 219,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 8,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "",
+      "cost": null,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 11,
+      "type": "light",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 219,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Padded Armor",
+        "source": "XPHB",
+        "page": 219,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "LA|XPHB",
+        "rarity": "none",
+        "weight": 8,
+        "value": 500,
+        "ac": 11,
+        "armor": true,
+        "stealth": true,
+        "hasFluffImages": true
+      }
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "name": "Mason's Tools",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/masons-tools.png",
+  "system": {
+    "description": {
+      "value": "• Strength\n• Chisel a symbol or hole in stone (DC 10)\n• Block and Tackle|XPHB",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 8,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Mason's Tools",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "AT|XPHB",
+        "rarity": "none",
+        "weight": 8,
+        "value": 1000,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Strength"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Chisel a symbol or hole in stone ({@dc 10})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Block and Tackle|XPHB}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

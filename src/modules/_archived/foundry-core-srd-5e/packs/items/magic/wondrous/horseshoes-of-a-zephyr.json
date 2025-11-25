@@ -1,0 +1,73 @@
+{
+  "name": "Horseshoes of a Zephyr",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/horseshoes-of-a-zephyr.png",
+  "system": {
+    "description": {
+      "value": "These horseshoes come in a set of four. As a Magic|XPHB action, you can touch one of the horseshoes to the hoof of a horse or similar creature, whereupon the horseshoe affixes itself to the hoof. Removing a horseshoe also takes a Magic|XPHB action. While all four shoes are affixed to the hooves of a horse or similar creature, they allow the creature to move normally while floating 4 inches above a surface. This effect means the creature can cross or stand above nonsolid or unstable surfaces, such as water or lava. The creature leaves no tracks and ignores Difficult Terrain|XPHB. In addition, the creature can travel for up to 12 hours a day without gaining Exhaustion|XPHB levels from extended travel.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 270,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 270,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Horseshoes of a Zephyr",
+        "source": "XDMG",
+        "page": 270,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "very rare",
+        "wondrous": true,
+        "entries": [
+          "These horseshoes come in a set of four. As a {@action Magic|XPHB} action, you can touch one of the horseshoes to the hoof of a horse or similar creature, whereupon the horseshoe affixes itself to the hoof. Removing a horseshoe also takes a {@action Magic|XPHB} action.",
+          "While all four shoes are affixed to the hooves of a horse or similar creature, they allow the creature to move normally while floating 4 inches above a surface. This effect means the creature can cross or stand above nonsolid or unstable surfaces, such as water or lava. The creature leaves no tracks and ignores {@variantrule Difficult Terrain|XPHB}. In addition, the creature can travel for up to 12 hours a day without gaining {@condition Exhaustion|XPHB} levels from extended travel."
+        ],
+        "lootTables": [
+          "Arcana - Very Rare|XDMG",
+          "Implements - Very Rare|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

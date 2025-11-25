@@ -1,0 +1,72 @@
+{
+  "name": "Emblem",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/emblem.png",
+  "system": {
+    "description": {
+      "value": "For an Emblem to be an effective Holy Symbol, it must be borne on fabric (such as a tabard or banner) or a Shield|XPHB.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 226,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 226,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Emblem",
+        "group": [
+          "Holy Symbol"
+        ],
+        "source": "XPHB",
+        "page": 226,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "SCF|XPHB",
+        "scfType": "holy",
+        "rarity": "none",
+        "value": 500,
+        "entries": [
+          "For an Emblem to be an effective Holy Symbol, it must be borne on fabric (such as a tabard or banner) or a {@item Shield|XPHB}."
+        ]
+      }
+    }
+  }
+}

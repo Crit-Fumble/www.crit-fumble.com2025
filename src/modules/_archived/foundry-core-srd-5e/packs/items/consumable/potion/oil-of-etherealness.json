@@ -1,0 +1,78 @@
+{
+  "name": "Oil of Etherealness",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/oil-of-etherealness.png",
+  "system": {
+    "description": {
+      "value": "One vial of this oil can cover one Medium or smaller creature, along with the equipment it's wearing and carrying (one additional vial is required for each size category above Medium). Applying the oil takes 10 minutes. The affected creature then gains the effect of the Etherealness|XPHB spell for 1 hour. Beads of this cloudy, gray oil form on the outside of its container and quickly evaporate.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 282,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 282,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Oil of Etherealness",
+        "source": "XDMG",
+        "page": 282,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "P|XPHB",
+        "rarity": "rare",
+        "weight": 0.5,
+        "entries": [
+          "One vial of this oil can cover one Medium or smaller creature, along with the equipment it's wearing and carrying (one additional vial is required for each size category above Medium). Applying the oil takes 10 minutes. The affected creature then gains the effect of the {@spell Etherealness|XPHB} spell for 1 hour.",
+          "Beads of this cloudy, gray oil form on the outside of its container and quickly evaporate."
+        ],
+        "attachedSpells": [
+          "etherealness|xphb"
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

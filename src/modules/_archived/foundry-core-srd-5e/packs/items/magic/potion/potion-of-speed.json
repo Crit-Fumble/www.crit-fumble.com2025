@@ -1,0 +1,79 @@
+{
+  "name": "Potion of Speed",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/potion-of-speed.png",
+  "system": {
+    "description": {
+      "value": "When you drink this potion, you gain the effect of the Haste|XPHB spell for 1 minute (no Concentration|XPHB required) without suffering the wave of lethargy that typically occurs when the effect ends. This potion's yellow fluid is streaked with black and swirls on its own.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 289,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 289,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Potion of Speed",
+        "source": "XDMG",
+        "page": 289,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "P|XPHB",
+        "rarity": "very rare",
+        "weight": 0.5,
+        "entries": [
+          "When you drink this potion, you gain the effect of the {@spell Haste|XPHB} spell for 1 minute (no {@status Concentration|XPHB} required) without suffering the wave of lethargy that typically occurs when the effect ends.",
+          "This potion's yellow fluid is streaked with black and swirls on its own."
+        ],
+        "attachedSpells": [
+          "haste|xphb"
+        ],
+        "lootTables": [
+          "Arcana - Very Rare|XDMG",
+          "Implements - Very Rare|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "name": "Druidcraft",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/druidcraft.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 0</strong> Transmutation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 30 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nWhispering to the spirits of nature, you create one of the following effects within range. You create a Tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round.You instantly make a flower blossom, a seed pod open, or a leaf bud bloom.You create a harmless sensory effect, such as falling leaves, spectral dancing fairies, a gentle breeze, the sound of an animal, or the faint odor of skunk. The effect must fit in a 5-foot Cube [Area of Effect]|XPHB|Cube.You light or snuff out a candle, a torch, or a campfire.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 0,
+    "school": "trs",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 266,
+      "school": "T",
+      "classes": [],
+      "_srdData": {
+        "name": "Druidcraft",
+        "source": "XPHB",
+        "page": 266,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 0,
+        "school": "T",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 30
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "Whispering to the spirits of nature, you create one of the following effects within range.",
+          {
+            "type": "entries",
+            "name": "Weather Sensor",
+            "entries": [
+              "You create a Tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Bloom",
+            "entries": [
+              "You instantly make a flower blossom, a seed pod open, or a leaf bud bloom."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Sensory Effect",
+            "entries": [
+              "You create a harmless sensory effect, such as falling leaves, spectral dancing fairies, a gentle breeze, the sound of an animal, or the faint odor of skunk. The effect must fit in a 5-foot {@variantrule Cube [Area of Effect]|XPHB|Cube}."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Fire Play",
+            "entries": [
+              "You light or snuff out a candle, a torch, or a campfire."
+            ]
+          }
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

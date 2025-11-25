@@ -1,0 +1,74 @@
+{
+  "name": "Rod of Rulership",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/rod-of-rulership.png",
+  "system": {
+    "description": {
+      "value": "You can take a Magic|XPHB action to present the rod and command obedience from each creature of your choice that you can see within 120 feet of yourself. Each target must succeed on a DC 15 Wisdom saving throw or have the Charmed|XPHB condition for 8 hours. While Charmed|XPHB in this way, the creature regards you as its trusted leader. If harmed by you or your allies or commanded to do something contrary to its nature, a target ceases to be Charmed|XPHB in this way. Once used, this property can't be used again until the next dawn.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 301,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 301,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Rod of Rulership",
+        "source": "XDMG",
+        "page": 301,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "RD|XDMG",
+        "rarity": "rare",
+        "reqAttune": true,
+        "weight": 2,
+        "entries": [
+          "You can take a {@action Magic|XPHB} action to present the rod and command obedience from each creature of your choice that you can see within 120 feet of yourself. Each target must succeed on a {@dc 15} Wisdom saving throw or have the {@condition Charmed|XPHB} condition for 8 hours. While {@condition Charmed|XPHB} in this way, the creature regards you as its trusted leader. If harmed by you or your allies or commanded to do something contrary to its nature, a target ceases to be {@condition Charmed|XPHB} in this way. Once used, this property can't be used again until the next dawn."
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

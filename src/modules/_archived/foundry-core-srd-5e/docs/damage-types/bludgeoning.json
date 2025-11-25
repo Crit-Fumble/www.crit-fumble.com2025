@@ -1,0 +1,55 @@
+{
+  "id": "damage-bludgeoning",
+  "name": "Bludgeoning",
+  "description": "Damage from blunt force trauma caused by clubs, hammers, falling, constriction, and other crushing impacts.",
+  "category": "physical",
+  "characteristics": {
+    "sourceExamples": [
+      "Blunt objects",
+      "Constriction",
+      "Falling",
+      "Clubs and maces",
+      "Hammers and mauls",
+      "Fists and unarmed strikes",
+      "Crushing traps"
+    ],
+    "resistanceCommon": [
+      "Skeletons",
+      "Some constructs",
+      "Creatures with thick hides or shells"
+    ],
+    "immunityCommon": [
+      "Incorporeal creatures (without magical weapons)",
+      "Some oozes",
+      "Specific magical creatures"
+    ],
+    "vulnerabilityCommon": [
+      "Very rare in base rules",
+      "Some crystalline or brittle creatures"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Effective against objects and structures (smashing)",
+      "Often deals automatic damage from falling (1d6 per 10 feet)",
+      "Common damage type for unarmed strikes",
+      "Many improvised weapons deal bludgeoning damage",
+      "Resistance to nonmagical bludgeoning is common among certain creatures"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Club weapon",
+    "Mace weapon",
+    "Maul weapon",
+    "Warhammer weapon",
+    "Quarterstaff weapon",
+    "Greatclub weapon",
+    "Unarmed strike",
+    "Falling damage",
+    "Spiritual Weapon (spell)",
+    "Constrictor snake attack"
+  ]
+}

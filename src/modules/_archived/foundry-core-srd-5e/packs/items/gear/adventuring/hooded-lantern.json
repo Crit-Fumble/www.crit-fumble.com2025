@@ -1,0 +1,78 @@
+{
+  "name": "Hooded Lantern",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/hooded-lantern.png",
+  "system": {
+    "description": {
+      "value": "A Hooded Lantern burns Oil as fuel to cast Bright Light|XPHB in a 30-foot radius and Dim Light|XPHB for an additional 30 feet. As a Bonus Action|XPHB, you can lower the hood, reducing the light to Dim Light|XPHB in a 5-foot radius, or raise it again.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 226,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 226,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Hooded Lantern",
+        "source": "XPHB",
+        "page": 226,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 2,
+        "value": 500,
+        "entries": [
+          "A Hooded Lantern burns Oil as fuel to cast {@variantrule Bright Light|XPHB} in a 30-foot radius and {@variantrule Dim Light|XPHB} for an additional 30 feet. As a {@variantrule Bonus Action|XPHB}, you can lower the hood, reducing the light to {@variantrule Dim Light|XPHB} in a 5-foot radius, or raise it again."
+        ],
+        "light": [
+          {
+            "bright": 30,
+            "dim": 60
+          },
+          {
+            "dim": 5
+          }
+        ]
+      }
+    }
+  }
+}

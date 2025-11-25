@@ -1,0 +1,89 @@
+{
+  "name": "Sending Stones",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/sending-stones.png",
+  "system": {
+    "description": {
+      "value": "Sending Stones come in pairs, with each stone carved to match the other so the pairing is easily recognized. While you touch one stone, you can cast Sending|XPHB from it. The target is the bearer of the other stone. If no creature bears the other stone, you know that fact as soon as you use the stone, and you don't cast the spell. Once Sending is cast using either stone, the stones can't be used again until the next dawn. If one of the stones in a pair is destroyed, the other one becomes nonmagical.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 303,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 303,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Sending Stones",
+        "source": "XDMG",
+        "page": 303,
+        "srd52": true,
+        "basicRules2024": true,
+        "otherSources": [
+          {
+            "source": "ScoEE"
+          }
+        ],
+        "rarity": "uncommon",
+        "wondrous": true,
+        "entries": [
+          "Sending Stones come in pairs, with each stone carved to match the other so the pairing is easily recognized. While you touch one stone, you can cast {@spell Sending|XPHB} from it. The target is the bearer of the other stone. If no creature bears the other stone, you know that fact as soon as you use the stone, and you don't cast the spell.",
+          "Once Sending is cast using either stone, the stones can't be used again until the next dawn. If one of the stones in a pair is destroyed, the other one becomes nonmagical."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "attachedSpells": {
+          "daily": {
+            "1e": [
+              "sending|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Uncommon|XDMG",
+          "Relics - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

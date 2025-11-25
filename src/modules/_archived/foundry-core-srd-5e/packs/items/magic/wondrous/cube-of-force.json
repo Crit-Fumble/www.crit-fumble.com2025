@@ -1,0 +1,134 @@
+{
+  "name": "Cube of Force",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/cube-of-force.png",
+  "system": {
+    "description": {
+      "value": "This cube is about an inch across. Each face has a distinct marking on it. You can press one of those faces, expend the number of charges required for it, and thereby cast the spell associated with it (save DC 17), as shown in the Cube of Force Faces table. The cube starts with 10 charges, and it regains 1d6 expended charges daily at dawn.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 246,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 246,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Cube of Force",
+        "source": "XDMG",
+        "page": 246,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "recharge": "dawn",
+        "rechargeAmount": "{@dice 1d6}",
+        "charges": 10,
+        "entries": [
+          "This cube is about an inch across. Each face has a distinct marking on it. You can press one of those faces, expend the number of charges required for it, and thereby cast the spell associated with it (save {@dc 17}), as shown in the Cube of Force Faces table.",
+          "The cube starts with 10 charges, and it regains {@dice 1d6} expended charges daily at dawn.",
+          {
+            "type": "table",
+            "caption": "Cube of Force Faces",
+            "colStyles": [
+              "col-10",
+              "col-2 text-center"
+            ],
+            "colLabels": [
+              "Spell",
+              "Charge Cost"
+            ],
+            "rows": [
+              [
+                "{@spell Mage Armor|XPHB}",
+                "1"
+              ],
+              [
+                "{@spell Shield|XPHB}",
+                "1"
+              ],
+              [
+                "{@spell Leomund's Tiny Hut|XPHB}",
+                "3"
+              ],
+              [
+                "{@spell Mordenkainen's Private Sanctum|XPHB}",
+                "4"
+              ],
+              [
+                "{@spell Otiluke's Resilient Sphere|XPHB}",
+                "4"
+              ],
+              [
+                "{@spell Wall of Force|XPHB}",
+                "5"
+              ]
+            ]
+          }
+        ],
+        "attachedSpells": {
+          "charges": {
+            "1": [
+              "mage armor|xphb",
+              "shield|xphb"
+            ],
+            "3": [
+              "leomund's tiny hut|xphb"
+            ],
+            "4": [
+              "mordenkainen's private sanctum|xphb",
+              "otiluke's resilient sphere|xphb"
+            ],
+            "5": [
+              "wall of force|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

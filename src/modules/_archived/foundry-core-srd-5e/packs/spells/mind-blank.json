@@ -1,0 +1,141 @@
+{
+  "name": "Mind Blank",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/mind-blank.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 8</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> 24 hours</p>\n\nUntil the spell ends, one willing creature you touch has Immunity|XPHB to Psychic damage and the Charmed|XPHB condition. The target is also unaffected by anything that would sense its emotions or alignment, read its thoughts, or magically detect its location, and no spell—not even Wish|XPHB—can gather information about the target, observe it remotely, or control its mind.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 24,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 8,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 298,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Mind Blank",
+        "source": "XPHB",
+        "page": 298,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 8,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 24
+            }
+          }
+        ],
+        "entries": [
+          "Until the spell ends, one willing creature you touch has {@variantrule Immunity|XPHB} to Psychic damage and the {@condition Charmed|XPHB} condition. The target is also unaffected by anything that would sense its emotions or alignment, read its thoughts, or magically detect its location, and no spell—not even {@spell Wish|XPHB}—can gather information about the target, observe it remotely, or control its mind."
+        ],
+        "damageImmune": [
+          "psychic"
+        ],
+        "conditionImmune": [
+          "charmed"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

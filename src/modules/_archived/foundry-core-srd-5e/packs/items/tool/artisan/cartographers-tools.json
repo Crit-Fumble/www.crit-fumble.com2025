@@ -1,0 +1,95 @@
+{
+  "name": "Cartographer's Tools",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/cartographers-tools.png",
+  "system": {
+    "description": {
+      "value": "• Wisdom\n• Draft a map of a small area (DC 15)\n• Map|XPHB",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 220,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 6,
+      "units": "lb"
+    },
+    "price": {
+      "value": 15,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 220,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Cartographer's Tools",
+        "source": "XPHB",
+        "page": 220,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "AT|XPHB",
+        "rarity": "none",
+        "weight": 6,
+        "value": 1500,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Wisdom"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Draft a map of a small area ({@dc 15})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Map|XPHB}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

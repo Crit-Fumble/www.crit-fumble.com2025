@@ -1,0 +1,141 @@
+{
+  "name": "Beacon of Hope",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/beacon-of-hope.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 3</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 30 feet</p>\n<p><strong>Components:</strong> V, S</p>\n<p><strong>Duration:</strong> Concentration, up to 1 minute</p>\n\nChoose any number of creatures within range. For the duration, each target has Advantage|XPHB on Wisdom saving throws and Death Saving Throw|XPHB|Death Saving Throws and regains the maximum number of Hit Points|XPHB possible from any healing.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 3,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 245,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Beacon of Hope",
+        "source": "XPHB",
+        "page": 245,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 3,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 30
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "Choose any number of creatures within range. For the duration, each target has {@variantrule Advantage|XPHB} on Wisdom saving throws and {@variantrule Death Saving Throw|XPHB|Death Saving Throws} and regains the maximum number of {@variantrule Hit Points|XPHB} possible from any healing."
+        ],
+        "miscTags": [
+          "ADV",
+          "HL"
+        ],
+        "areaTags": [
+          "MT"
+        ]
+      }
+    }
+  }
+}

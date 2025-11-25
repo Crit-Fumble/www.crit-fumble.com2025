@@ -1,0 +1,153 @@
+{
+  "name": "Ice Storm",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/ice-storm.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 4</strong> Evocation</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> 300 feet</p>\n<p><strong>Components:</strong> V, S, M (a mitten)</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nHail falls in a 20-foot-radius, 40-foot-high Cylinder [Area of Effect]|XPHB|Cylinder centered on a point within range. Each creature in the Cylinder [Area of Effect]|XPHB|Cylinder makes a Dexterity saving throw. A creature takes 2d10 Bludgeoning damage and 4d6 Cold damage on a failed save or half as much damage on a successful one. Hailstones turn ground in the Cylinder [Area of Effect]|XPHB|Cylinder into Difficult Terrain|XPHB until the end of your next turn.\n\n<p><strong>At Higher Levels:</strong> The Bludgeoning damage increases by 2d8|4-9|1d10 for each spell slot level above 4.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": ""
+    },
+    "range": {
+      "value": 300,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "save",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "dex",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 4,
+    "school": "evo",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "a mitten",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "level",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 287,
+      "school": "V",
+      "classes": [],
+      "_srdData": {
+        "name": "Ice Storm",
+        "source": "XPHB",
+        "page": 287,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 4,
+        "school": "V",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "feet",
+            "amount": 300
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "a mitten"
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "Hail falls in a 20-foot-radius, 40-foot-high {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} centered on a point within range. Each creature in the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} makes a Dexterity saving throw. A creature takes {@damage 2d10} Bludgeoning damage and {@damage 4d6} Cold damage on a failed save or half as much damage on a successful one.",
+          "Hailstones turn ground in the {@variantrule Cylinder [Area of Effect]|XPHB|Cylinder} into {@variantrule Difficult Terrain|XPHB} until the end of your next turn."
+        ],
+        "entriesHigherLevel": [
+          {
+            "type": "entries",
+            "name": "Using a Higher-Level Spell Slot",
+            "entries": [
+              "The Bludgeoning damage increases by {@scaledamage 2d8|4-9|1d10} for each spell slot level above 4."
+            ]
+          }
+        ],
+        "damageInflict": [
+          "bludgeoning",
+          "cold"
+        ],
+        "savingThrow": [
+          "dexterity"
+        ],
+        "miscTags": [
+          "DFT"
+        ],
+        "areaTags": [
+          "Y"
+        ]
+      }
+    }
+  }
+}

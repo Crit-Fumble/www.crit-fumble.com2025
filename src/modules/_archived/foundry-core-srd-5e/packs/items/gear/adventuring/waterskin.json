@@ -1,0 +1,75 @@
+{
+  "name": "Waterskin",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/waterskin.png",
+  "system": {
+    "description": {
+      "value": "A Waterskin holds up to 4 pints. If you don't drink sufficient water, you risk dehydration.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 229,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0.2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 229,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Waterskin",
+        "source": "XPHB",
+        "page": 229,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 5,
+        "weightNote": "(full)",
+        "value": 20,
+        "entries": [
+          "A Waterskin holds up to 4 pints. If you don't drink sufficient water, you risk dehydration."
+        ],
+        "containerCapacity": {
+          "volume": [
+            0.08
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "condition-blinded",
+  "name": "Blinded",
+  "description": "A blinded creature can't see and automatically fails ability checks that require sight.",
+  "effects": {
+    "description": "While you have the Blinded condition, you experience the following effects.",
+    "mechanicalEffects": [
+      "You can't see and automatically fail any ability check that requires sight",
+      "Attack rolls against you have Advantage",
+      "Your attack rolls have Disadvantage"
+    ]
+  },
+  "duration": "varies",
+  "stackable": false,
+  "srdReference": "rulesglossary/rulesdefinitions/14-BlindedCondition.md"
+}

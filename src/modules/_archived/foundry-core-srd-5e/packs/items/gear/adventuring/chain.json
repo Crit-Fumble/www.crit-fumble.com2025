@@ -1,0 +1,69 @@
+{
+  "name": "Chain",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/chain.png",
+  "system": {
+    "description": {
+      "value": "As a Utilize|XPHB action, you can wrap a Chain around an unwilling creature within 5 feet of yourself that has the Grappled|XPHB, Incapacitated|XPHB, or Restrained|XPHB condition if you succeed on a DC 13 Strength (Athletics|XPHB) check. If the creature's legs are bound, the creature has the Restrained|XPHB condition until it escapes. Escaping the Chain requires the creature to make a successful DC 18 Dexterity (Acrobatics|XPHB) check as an action. Bursting the Chain requires a successful DC 20 Strength (Athletics|XPHB) check as an action.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 224,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 10,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 224,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Chain",
+        "source": "XPHB",
+        "page": 224,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 10,
+        "value": 500,
+        "entries": [
+          "As a {@action Utilize|XPHB} action, you can wrap a Chain around an unwilling creature within 5 feet of yourself that has the {@condition Grappled|XPHB}, {@condition Incapacitated|XPHB}, or {@condition Restrained|XPHB} condition if you succeed on a {@dc 13} Strength ({@skill Athletics|XPHB}) check. If the creature's legs are bound, the creature has the {@condition Restrained|XPHB} condition until it escapes. Escaping the Chain requires the creature to make a successful {@dc 18} Dexterity ({@skill Acrobatics|XPHB}) check as an action. Bursting the Chain requires a successful {@dc 20} Strength ({@skill Athletics|XPHB}) check as an action."
+        ]
+      }
+    }
+  }
+}

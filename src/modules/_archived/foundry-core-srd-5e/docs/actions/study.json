@@ -1,0 +1,51 @@
+{
+  "id": "action-study",
+  "name": "Study",
+  "description": "Make an Intelligence check to study your memory, a book, a clue, or another source of knowledge and recall important information",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must have at least one applicable skill (Arcana, History, Investigation, Nature, or Religion)",
+    "Must have access to something to study (memory, book, clue, etc.)"
+  ],
+  "effects": {
+    "description": "When you take the Study action, you make an Intelligence check to study your memory, a book, a clue, or another source of knowledge and call to mind an important piece of information about it.",
+    "mechanicalEffects": [
+      "Make an Intelligence check using an appropriate skill",
+      "Arcana: Recall lore about spells, magic items, eldritch symbols, magical traditions, planes of existence, and certain creatures (Aberrations, Constructs, Elementals, Fey, Monstrosities)",
+      "History: Recall information about historic events, people, ancient civilizations, wars, and certain creatures (Giants and Humanoids)",
+      "Investigation: Decipher traps, ciphers, riddles, and gadgetry",
+      "Nature: Recall knowledge about terrain, flora, weather, and certain creatures (Beasts, Dragons, Oozes, Plants)",
+      "Religion: Recall information about deities, religious hierarchies, rites, holy symbols, cults, and certain creatures (Celestials, Fiends, Undead)"
+    ]
+  },
+  "restrictions": [
+    "Must have something to study or knowledge to recall",
+    "GM determines which skill applies to the topic",
+    "Information gained depends on the check result and what knowledge exists",
+    "Cannot recall information you have no way of knowing"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:994-1009",
+  "examples": [
+    "A wizard uses Arcana to identify the properties of a magical rune",
+    "A scholar uses History to recall information about an ancient empire",
+    "A detective uses Investigation to decode a cipher left at a crime scene",
+    "A druid uses Nature to predict upcoming weather patterns",
+    "A cleric uses Religion to identify a deity's holy symbol"
+  ],
+  "relatedActions": [
+    "action-search",
+    "action-help"
+  ],
+  "additionalRules": {
+    "areasOfKnowledge": {
+      "arcana": "Spells, magic items, eldritch symbols, magical traditions, planes of existence, and certain creatures (Aberrations, Constructs, Elementals, Fey, and Monstrosities)",
+      "history": "Historic events and people, ancient civilizations, wars, and certain creatures (Giants and Humanoids)",
+      "investigation": "Traps, ciphers, riddles, and gadgetry",
+      "nature": "Terrain, flora, weather, and certain creatures (Beasts, Dragons, Oozes, and Plants)",
+      "religion": "Deities, religious hierarchies and rites, holy symbols, cults, and certain creatures (Celestials, Fiends, and Undead)"
+    },
+    "usingReferences": "If you have access to a relevant book, scroll, or other reference material, the GM might grant you Advantage on the check or provide additional information",
+    "expertise": "If you have Expertise in a relevant skill, your Proficiency Bonus is doubled for the check"
+  }
+}

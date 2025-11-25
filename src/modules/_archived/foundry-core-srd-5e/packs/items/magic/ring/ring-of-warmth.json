@@ -1,0 +1,77 @@
+{
+  "name": "Ring of Warmth",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ring-of-warmth.png",
+  "system": {
+    "description": {
+      "value": "If you take Cold damage while wearing this ring, the ring reduces the damage you take by 2d8. In addition, while wearing this ring, you and everything you wear and carry are unharmed by temperatures of 0 degrees Fahrenheit or lower.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 296,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 296,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Ring of Warmth",
+        "source": "XDMG",
+        "page": 296,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "RG|XDMG",
+        "resist": [
+          "cold"
+        ],
+        "rarity": "uncommon",
+        "reqAttune": true,
+        "entries": [
+          "If you take Cold damage while wearing this ring, the ring reduces the damage you take by {@dice 2d8}.",
+          "In addition, while wearing this ring, you and everything you wear and carry are unharmed by temperatures of 0 degrees Fahrenheit or lower."
+        ],
+        "lootTables": [
+          "Implements - Uncommon|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

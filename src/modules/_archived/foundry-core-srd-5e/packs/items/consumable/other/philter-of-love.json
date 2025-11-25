@@ -1,0 +1,75 @@
+{
+  "name": "Philter of Love",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/philter-of-love.png",
+  "system": {
+    "description": {
+      "value": "The next time you see a creature within 10 minutes after drinking this philter, you are charmed|XPHB by that creature and have the Charmed|XPHB condition for 1 hour. This rose-hued, effervescent liquid contains one easy-to-miss bubble shaped like a heart.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 285,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 285,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Philter of Love",
+        "source": "XDMG",
+        "page": 285,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "P|XPHB",
+        "rarity": "uncommon",
+        "weight": 0.5,
+        "entries": [
+          "The next time you see a creature within 10 minutes after drinking this philter, you are {@condition charmed|XPHB} by that creature and have the {@condition Charmed|XPHB} condition for 1 hour.",
+          "This rose-hued, effervescent liquid contains one easy-to-miss bubble shaped like a heart."
+        ],
+        "lootTables": [
+          "Arcana - Uncommon|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

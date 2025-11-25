@@ -1,0 +1,43 @@
+{
+  "id": "foundry-core-concepts",
+  "title": "Foundry Core Concepts",
+  "description": "System-agnostic TTRPG core concepts for Foundry VTT. Provides unified abstractions for sheets, attributes, types, dice, tables, books, cards, boards, tiles, voxels, rules, events, goals, sessions, modes, systems, creatures, locations, and objects.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Core Concepts Contributors"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11.315",
+    "maximum": "11"
+  },
+  "esmodules": [
+    "scripts/init.mjs"
+  ],
+  "styles": [
+    "styles/core-concepts.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "relationships": {
+    "systems": [],
+    "requires": []
+  },
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE",
+  "readme": "README.md",
+  "bugs": "",
+  "changelog": "CHANGELOG.md",
+  "flags": {
+    "allowBugReporter": true
+  }
+}

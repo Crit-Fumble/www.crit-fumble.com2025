@@ -1,0 +1,73 @@
+{
+  "name": "Vial",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/vial.png",
+  "system": {
+    "description": {
+      "value": "A Vial holds up to 4 ounces.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 229,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 229,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Vial",
+        "source": "XPHB",
+        "page": 229,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "value": 100,
+        "entries": [
+          "A Vial holds up to 4 ounces."
+        ],
+        "containerCapacity": {
+          "weight": [
+            0.25
+          ]
+        }
+      }
+    }
+  }
+}

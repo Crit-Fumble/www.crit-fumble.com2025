@@ -1,0 +1,26 @@
+{
+  "name": "Exploration Activities",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/exploration.svg",
+  "pages": [
+    {
+      "name": "Exploration Activities",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Exploration Activities</h2>\n\n<p><em>Activities while exploring dungeons, wilderness, and settlements</em></p>\n\n<h3>Common Exploration Activities</h3>\n<p>While traveling or exploring, characters can perform various activities. The party can have different members doing different activities.</p>\n\n<h4>Drawing a Map</h4>\n<p>Make an Intelligence (Investigation) or Wisdom (Survival) check to create an accurate map of the area.</p>\n<ul>\n  <li>Provides bonuses for future navigation</li>\n  <li>Can be shared with other parties</li>\n  <li>Requires cartographer's tools for best results</li>\n</ul>\n\n<h4>Foraging</h4>\n<p>Make a Wisdom (Survival) check to find food and water:</p>\n<ul>\n  <li><strong>DC 10:</strong> Find enough food and water for one person</li>\n  <li><strong>DC 15:</strong> Find enough for 2-5 people</li>\n  <li><strong>DC 20:</strong> Find enough for 6+ people</li>\n  <li>Abundant areas: Advantage on check</li>\n  <li>Barren areas: Disadvantage on check</li>\n</ul>\n\n<h4>Navigating</h4>\n<p>Make a Wisdom (Survival) check to avoid getting lost:</p>\n<ul>\n  <li>Required in wilderness without clear paths</li>\n  <li>DC varies by terrain and weather</li>\n  <li>One check per day of travel</li>\n  <li>Maps and navigation tools provide Advantage</li>\n</ul>\n\n<h4>Tracking</h4>\n<p>Make a Wisdom (Survival) check to follow tracks:</p>\n<ul>\n  <li>DC based on how long ago tracks were made</li>\n  <li>Fresh tracks (1 hour): DC 10</li>\n  <li>Recent tracks (1 day): DC 15</li>\n  <li>Old tracks (1 week): DC 20</li>\n  <li>Rain or heavy traffic: Increase DC by 5</li>\n</ul>\n\n<h4>Keeping Watch</h4>\n<p>Make a Wisdom (Perception) check to notice threats:</p>\n<ul>\n  <li>Passive Perception for routine watch</li>\n  <li>Active check if specifically searching</li>\n  <li>Disadvantage if distracted or doing another activity</li>\n</ul>\n\n<h4>Sneaking</h4>\n<p>Group Dexterity (Stealth) check to move quietly:</p>\n<ul>\n  <li>All party members make checks</li>\n  <li>Success if more than half succeed</li>\n  <li>Slow travel pace required</li>\n  <li>Heavy armor imposes Disadvantage</li>\n</ul>\n\n<h3>Splitting the Party</h3>\n<p>Party members can split up to perform different activities:</p>\n<ul>\n  <li>One character navigates</li>\n  <li>One or two keep watch (front/rear)</li>\n  <li>One draws a map</li>\n  <li>Others forage or track</li>\n</ul>\n\n<h3>Vision and Light</h3>\n<p>Exploration is affected by lighting conditions:</p>\n<ul>\n  <li><strong>Bright Light:</strong> Normal Perception</li>\n  <li><strong>Dim Light:</strong> Disadvantage on Perception (sight)</li>\n  <li><strong>Darkness:</strong> Blinded (unless special vision)</li>\n  <li><strong>Light sources:</strong> Torches (20 ft bright, 20 ft dim), lanterns (30/30 ft), candles (5 ft bright)</li>\n</ul>\n\n<h3>Resting During Exploration</h3>\n<ul>\n  <li><strong>Short Rest:</strong> 1 hour of rest, can spend Hit Dice</li>\n  <li><strong>Long Rest:</strong> 8 hours, regain HP and spell slots</li>\n  <li>Interruptions can prevent rest benefits</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-exploration",
+      "srd52": true
+    }
+  }
+}

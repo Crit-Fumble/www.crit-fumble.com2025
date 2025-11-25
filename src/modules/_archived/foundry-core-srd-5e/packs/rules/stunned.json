@@ -1,0 +1,70 @@
+{
+  "name": "Stunned",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/conditions/stunned.svg",
+  "pages": [
+    {
+      "name": "Stunned",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Stunned</h2>\n\n<p><em>Source: XPHB, page 376</em></p>\n\nWhile you have the Stunned condition, you experience the following effects. You have the Incapacitated|XPHB condition.You automatically fail Strength and Dexterity Saving Throw|XPHB|saving throws.Attack|XPHB rolls against you have Advantage|XPHB."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "condition",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 376,
+      "activeEffects": [
+        {
+          "key": "flags.dnd5e.stunned",
+          "mode": 5,
+          "value": "1"
+        }
+      ],
+      "_srdData": {
+        "name": "Stunned",
+        "source": "XPHB",
+        "page": 376,
+        "srd52": true,
+        "basicRules2024": true,
+        "entries": [
+          "While you have the Stunned condition, you experience the following effects.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Incapacitated",
+                "entries": [
+                  "You have the {@condition Incapacitated|XPHB} condition."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Saving Throws Affected",
+                "entries": [
+                  "You automatically fail Strength and Dexterity {@variantrule Saving Throw|XPHB|saving throws}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Attacks Affected",
+                "entries": [
+                  "{@action Attack|XPHB} rolls against you have {@variantrule Advantage|XPHB}."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

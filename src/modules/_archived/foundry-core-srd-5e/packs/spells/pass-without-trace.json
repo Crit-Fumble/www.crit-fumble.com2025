@@ -1,0 +1,138 @@
+{
+  "name": "Pass without Trace",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/pass-without-trace.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 2</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> emanation</p>\n<p><strong>Components:</strong> V, S, M (ashes from burned mistletoe)</p>\n<p><strong>Duration:</strong> Concentration, up to 1 hour</p>\n\nYou radiate a concealing aura in a 30-foot Emanation [Area of Effect]|XPHB|Emanation for the duration. While in the aura, you and each creature you choose have a +10 bonus to Dexterity (Stealth|XPHB) checks and leave no tracks.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 1,
+      "units": "hour"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 2,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "ashes from burned mistletoe",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 303,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Pass without Trace",
+        "source": "XPHB",
+        "page": 303,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 2,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "emanation",
+          "distance": {
+            "type": "feet",
+            "amount": 30
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": "ashes from burned mistletoe"
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "hour",
+              "amount": 1
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "You radiate a concealing aura in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} for the duration. While in the aura, you and each creature you choose have a +10 bonus to Dexterity ({@skill Stealth|XPHB}) checks and leave no tracks."
+        ],
+        "areaTags": [
+          "MT"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "Yew Wand",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/yew-wand.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 225,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 225,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Yew Wand",
+        "group": [
+          "Druidic Focus"
+        ],
+        "source": "XPHB",
+        "page": 225,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "SCF|XPHB",
+        "scfType": "druid",
+        "rarity": "none",
+        "weight": 1,
+        "value": 1000
+      }
+    }
+  }
+}

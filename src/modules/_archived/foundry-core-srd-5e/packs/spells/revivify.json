@@ -1,0 +1,139 @@
+{
+  "name": "Revivify",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/revivify.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 3</strong> Necromancy</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> undefined touch</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nYou touch a creature that has died within the last minute. That creature revives with 1 Hit Points|XPHB|Hit Point. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "creature"
+    },
+    "range": {
+      "value": null,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 3,
+    "school": "nec",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 312,
+      "school": "N",
+      "classes": [],
+      "_srdData": {
+        "name": "Revivify",
+        "source": "XPHB",
+        "page": 312,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 3,
+        "school": "N",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "point",
+          "distance": {
+            "type": "touch"
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "a diamond worth 300+ GP, which the spell consumes",
+            "cost": 30000,
+            "consume": true
+          }
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "You touch a creature that has died within the last minute. That creature revives with 1 {@variantrule Hit Points|XPHB|Hit Point}. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts."
+        ],
+        "miscTags": [
+          "HL"
+        ],
+        "areaTags": [
+          "ST"
+        ]
+      }
+    }
+  }
+}

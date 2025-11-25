@@ -1,0 +1,81 @@
+{
+  "name": "Potion of Flying",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/potion-of-flying.png",
+  "system": {
+    "description": {
+      "value": "When you drink this potion, you gain a Fly Speed|XPHB equal to your Speed|XPHB for 1 hour and can hover. If you're in the air when the potion wears off, you fall unless you have some other means of staying aloft. This potion's clear liquid floats at the top of its container and has cloudy white impurities drifting in it.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 287,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 287,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Potion of Flying",
+        "source": "XDMG",
+        "page": 287,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "P|XPHB",
+        "rarity": "very rare",
+        "weight": 0.5,
+        "modifySpeed": {
+          "equal": {
+            "fly": "walk"
+          }
+        },
+        "entries": [
+          "When you drink this potion, you gain a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB} for 1 hour and can hover. If you're in the air when the potion wears off, you fall unless you have some other means of staying aloft.",
+          "This potion's clear liquid floats at the top of its container and has cloudy white impurities drifting in it."
+        ],
+        "lootTables": [
+          "Arcana - Very Rare|XDMG",
+          "Implements - Very Rare|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

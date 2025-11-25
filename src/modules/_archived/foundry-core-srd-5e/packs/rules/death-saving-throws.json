@@ -1,0 +1,26 @@
+{
+  "name": "Death Saving Throws",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/death-saves.svg",
+  "pages": [
+    {
+      "name": "Death Saving Throws",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Death Saving Throws</h2>\n\n<p><em>Determining life or death at 0 hit points</em></p>\n\n<h3>Falling Unconscious</h3>\n<p>When you drop to 0 hit points, you either die outright or fall unconscious.</p>\n\n<h3>Death Saves</h3>\n<p>At the start of each of your turns while at 0 hit points, you make a special saving throw called a death saving throw:</p>\n\n<ul>\n  <li><strong>DC:</strong> 10 (no ability modifier)</li>\n  <li><strong>Success:</strong> Mark one success (need 3 to stabilize)</li>\n  <li><strong>Failure:</strong> Mark one failure (3 failures means death)</li>\n  <li><strong>Natural 20:</strong> Regain 1 hit point</li>\n  <li><strong>Natural 1:</strong> Counts as two failures</li>\n</ul>\n\n<h3>Stabilizing</h3>\n<p>After three successful saves, you become stable:</p>\n<ul>\n  <li>You don't make more death saves</li>\n  <li>You remain unconscious at 0 HP</li>\n  <li>Regain 1 HP after 1d4 hours</li>\n</ul>\n\n<p>Alternatively, an ally can stabilize you with a DC 10 Wisdom (Medicine) check.</p>\n\n<h3>Taking Damage at 0 HP</h3>\n<ul>\n  <li><strong>Regular damage:</strong> Counts as one death save failure</li>\n  <li><strong>Critical hit:</strong> Counts as two death save failures</li>\n  <li><strong>Massive damage:</strong> If damage equals or exceeds your HP maximum, you die instantly</li>\n</ul>\n\n<h3>Instant Death</h3>\n<p>Massive damage can kill you instantly. When damage reduces you to 0 HP and damage remains, you die if the remaining damage equals or exceeds your HP maximum.</p>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-death-saves",
+      "srd52": true
+    }
+  }
+}

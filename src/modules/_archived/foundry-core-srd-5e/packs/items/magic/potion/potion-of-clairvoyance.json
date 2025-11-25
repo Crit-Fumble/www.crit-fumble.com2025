@@ -1,0 +1,78 @@
+{
+  "name": "Potion of Clairvoyance",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/potions/potion-of-clairvoyance.png",
+  "system": {
+    "description": {
+      "value": "When you drink this potion, you gain the effect of the Clairvoyance|XPHB spell (no Concentration|XPHB required). An eyeball bobs in this potion's yellowish liquid but vanishes when the potion is opened.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 287,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 287,
+      "itemType": "consumable",
+      "_srdData": {
+        "name": "Potion of Clairvoyance",
+        "source": "XDMG",
+        "page": 287,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "P|XPHB",
+        "rarity": "rare",
+        "weight": 0.5,
+        "entries": [
+          "When you drink this potion, you gain the effect of the {@spell Clairvoyance|XPHB} spell (no {@status Concentration|XPHB} required).",
+          "An eyeball bobs in this potion's yellowish liquid but vanishes when the potion is opened."
+        ],
+        "attachedSpells": [
+          "clairvoyance|xphb"
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

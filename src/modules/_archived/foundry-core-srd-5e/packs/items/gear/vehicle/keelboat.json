@@ -1,0 +1,75 @@
+{
+  "name": "Keelboat",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/keelboat.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 3000,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Keelboat",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "SHP|XPHB",
+        "rarity": "none",
+        "value": 300000,
+        "crew": 1,
+        "vehAc": 15,
+        "vehHp": 100,
+        "vehDmgThresh": 10,
+        "vehSpeed": 1,
+        "capPassenger": 6,
+        "capCargo": 0.5,
+        "seeAlsoVehicle": [
+          "Keelboat"
+        ]
+      }
+    }
+  }
+}

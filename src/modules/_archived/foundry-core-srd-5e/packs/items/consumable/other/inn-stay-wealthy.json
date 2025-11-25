@@ -1,0 +1,62 @@
+{
+  "name": "Inn Stay - Wealthy",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/lodging/inn-wealthy.png",
+  "system": {
+    "description": {
+      "value": "<p>A night's stay in wealthy lodging. A luxurious suite with fine furnishings, excellent service, and premium amenities.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {
+      "value": "8",
+      "units": "hour"
+    },
+    "uses": {
+      "value": 1,
+      "max": "1",
+      "per": "day",
+      "recovery": ""
+    },
+    "consumableType": "service",
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "lodging",
+      "lodgingQuality": "wealthy",
+      "_srdData": {
+        "name": "Inn Stay - Wealthy",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "service",
+        "rarity": "none",
+        "value": 2,
+        "valueCurrency": "gp"
+      }
+    }
+  }
+}

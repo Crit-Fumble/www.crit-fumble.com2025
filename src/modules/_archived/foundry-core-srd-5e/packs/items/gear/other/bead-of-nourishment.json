@@ -1,0 +1,76 @@
+{
+  "name": "Bead of Nourishment",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/bead-of-nourishment.png",
+  "system": {
+    "description": {
+      "value": "This flavorless, gelatinous bead dissolves on your tongue and provides as much nourishment as 1 day of Rations.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 235,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 235,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Bead of Nourishment",
+        "source": "XDMG",
+        "page": 235,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "common",
+        "wondrous": true,
+        "entries": [
+          "This flavorless, gelatinous bead dissolves on your tongue and provides as much nourishment as 1 day of Rations."
+        ],
+        "lootTables": [
+          "Arcana - Common|XDMG",
+          "Implements - Common|XDMG"
+        ],
+        "miscTags": [
+          "CF/W",
+          "CNS"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

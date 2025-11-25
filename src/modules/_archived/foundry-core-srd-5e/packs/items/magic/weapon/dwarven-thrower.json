@@ -1,0 +1,93 @@
+{
+  "name": "Dwarven Thrower",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/dwarven-thrower.png",
+  "system": {
+    "description": {
+      "value": "You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. It has {@itemProperty T|XPHB|Thrown} with a normal range of 20 feet and a long range of 60 feet. When you hit with a ranged attack using this weapon, it deals an extra 1d8 Force damage, or an extra 2d8 Force damage if the target is a Giant. Immediately after hitting or missing, the weapon flies back to your hand.\n\n<p><strong>Attunement:</strong> by a Dwarf or a Creature Attuned to a {@item Belt of Dwarvenkind|XDMG}</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 256,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": "+3",
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 256,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Dwarven Thrower",
+        "source": "XDMG",
+        "page": 256,
+        "srd52": true,
+        "basicRules2024": true,
+        "baseItem": "warhammer|xphb",
+        "type": "M|XPHB",
+        "rarity": "very rare",
+        "reqAttune": "by a Dwarf or a Creature Attuned to a {@item Belt of Dwarvenkind|XDMG}",
+        "reqAttuneTags": [
+          {
+            "race": "dwarf"
+          }
+        ],
+        "weight": 5,
+        "weaponCategory": "martial",
+        "property": [
+          "T|XPHB",
+          "V|XPHB"
+        ],
+        "mastery": [
+          "Push|XPHB"
+        ],
+        "range": "20/60",
+        "dmg1": "1d8",
+        "dmgType": "B",
+        "dmg2": "1d10",
+        "bonusWeapon": "+3",
+        "entries": [
+          "You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. It has {@itemProperty T|XPHB|Thrown} with a normal range of 20 feet and a long range of 60 feet. When you hit with a ranged attack using this weapon, it deals an extra {@damage 1d8} Force damage, or an extra {@damage 2d8} Force damage if the target is a Giant. Immediately after hitting or missing, the weapon flies back to your hand."
+        ],
+        "lootTables": [
+          "Armaments - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

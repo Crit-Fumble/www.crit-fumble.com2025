@@ -1,0 +1,106 @@
+{
+  "id": "hazard-poison-basic",
+  "name": "Poison (General)",
+  "description": "Poisons are insidious substances that deal damage or inflict conditions through contact, ingestion, inhalation, or injury",
+  "type": "poison",
+  "category": "general-overview",
+  "trigger": "Varies by poison type (contact, ingested, inhaled, or injury)",
+  "damage": {
+    "amount": "varies by specific poison",
+    "type": "poison",
+    "frequency": "varies"
+  },
+  "savingThrow": {
+    "ability": "CON",
+    "dc": "varies by poison",
+    "onSuccess": "typically half damage or no effect",
+    "onFailure": "full damage and/or conditions"
+  },
+  "duration": "varies by specific poison",
+  "poisonTypes": {
+    "contact": {
+      "description": "Contact poison can be smeared on an object and remains potent until it is touched or washed off",
+      "application": "A creature that touches contact poison with exposed skin suffers its effects",
+      "examples": ["Crawler Mucus", "Oil of Taggit"]
+    },
+    "ingested": {
+      "description": "A creature must swallow an entire dose of ingested poison to suffer its effects",
+      "application": "The dose can be delivered in food or a liquid. Partial dose may have reduced effect (GM discretion)",
+      "examples": ["Assassin's Blood", "Midnight Tears", "Truth Serum"]
+    },
+    "inhaled": {
+      "description": "Poisonous powders and gases take effect when inhaled",
+      "application": "Blowing powder or releasing gas subjects creatures in 5-foot Cube to effect. Cloud dissipates immediately. Holding breath is ineffective",
+      "note": "Affects nasal membranes, tear ducts, and other body parts",
+      "examples": ["Burnt Othur Fumes", "Essence of Ether", "Malice"]
+    },
+    "injury": {
+      "description": "Injury poison can be applied to weapons, ammunition, or similar objects",
+      "application": "Applied as Bonus Action. Remains potent until delivered through wound or washed off. Delivered through Piercing or Slashing damage",
+      "examples": ["Purple Worm Poison", "Serpent Venom", "Wyvern Poison"]
+    }
+  },
+  "effects": {
+    "immediate": [
+      "Varies by poison - may include damage, conditions, or both"
+    ],
+    "ongoing": [
+      "Some poisons have recurring effects that require repeated saves"
+    ],
+    "conditions": [
+      "poisoned",
+      "unconscious",
+      "paralyzed",
+      "blinded"
+    ]
+  },
+  "acquisition": {
+    "purchasing": "Laws may prohibit possession. May require criminal contacts or unscrupulous apothecary. Extensive inquiries and bribes may be necessary",
+    "harvesting": {
+      "requirements": "Venomous creature (dead or Incapacitated), Poisoner's Kit",
+      "time": "1d6 minutes",
+      "check": "DC 20 Intelligence (Nature)",
+      "success": "Harvest enough poison for single dose, no more can be harvested from that creature",
+      "failure": "Unable to extract poison",
+      "criticalFailure": "Fail by 5 or more: subjected to creature's poison"
+    }
+  },
+  "detection": {
+    "difficulty": "varies",
+    "method": "Typically requires Investigation, Medicine, or Nature checks; some poisons have telltale signs"
+  },
+  "mitigation": [
+    "Avoid contact with suspected poisons",
+    "Wear protective gear when handling poisons",
+    "Have Poisoner's Kit proficiency for safe handling",
+    "Use Protection from Poison spell",
+    "Have Resistance or Immunity to Poison damage",
+    "Use antidotes or healing magic (Lesser Restoration, Heal)",
+    "Some poisons have specific countermeasures"
+  ],
+  "srdReference": {
+    "file": "dndsrd5.2_markdown/src/09_GameplayToolbox.md",
+    "section": "Poison",
+    "lines": "275-382",
+    "quote": "Given their insidious and deadly nature, poisons are a favorite tool among assassins and evil creatures. Poisons come in the following four types: Contact, Ingested, Inhaled, Injury."
+  },
+  "examples": [
+    "Poisoned blade dealing injury poison on hit",
+    "Tainted wine containing ingested poison",
+    "Trapped chest handle coated with contact poison",
+    "Gas trap releasing inhaled poison"
+  ],
+  "relatedConcepts": {
+    "damageTypes": ["poison"],
+    "conditions": ["poisoned", "unconscious", "paralyzed", "blinded"],
+    "abilities": ["constitution", "intelligence"],
+    "skills": ["nature", "medicine", "investigation"],
+    "tools": ["poisoners-kit"],
+    "actions": ["bonus-action"]
+  },
+  "notes": [
+    "See specific poison files (poison-contact.json, poison-ingested.json, poison-inhaled.json, poison-injury.json) for detailed examples",
+    "Prices range from 150 GP to 2,000 GP depending on potency",
+    "All sample poisons require Constitution saving throws"
+  ]
+}

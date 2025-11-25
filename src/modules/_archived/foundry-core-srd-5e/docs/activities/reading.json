@@ -1,0 +1,64 @@
+{
+  "id": "activity-reading",
+  "name": "Reading",
+  "description": "Studying texts, scrolls, maps, or other written materials",
+  "intensity": "light",
+  "category": "mental",
+  "modes": ["downtime", "rest"],
+  "properties": {
+    "maxDurationDuringLongRest": 2,
+    "physicalDemand": "none",
+    "mentalDemand": "moderate",
+    "requiresConsciousness": true,
+    "compatiblePositions": ["sitting", "reclining"]
+  },
+  "prerequisites": [
+    "Light source (if needed)",
+    "Literacy in language",
+    "Readable material available"
+  ],
+  "srdReferences": [
+    {
+      "source": "rulesglossary/rulesdefinitions/96-LongRest.md",
+      "quote": "perform no more than 2 hours of light activity, such as reading, talking, eating, or standing watch",
+      "lineNumber": 3
+    },
+    {
+      "source": "spells/spelldescriptions/Wish.md",
+      "quote": "For each of those days that you spend resting and doing nothing more than light activity, your remaining recovery time decreases by 2 days",
+      "lineNumber": 29
+    }
+  ],
+  "effects": {
+    "interruptsLongRest": false,
+    "interruptsShortRest": false,
+    "grantsRestBenefits": false,
+    "enablesRecovery": false
+  },
+  "examples": [
+    "Reading spellbook to prepare new spells",
+    "Studying a regional map",
+    "Reviewing historical texts for lore",
+    "Reading religious scripture at a temple"
+  ],
+  "downtimeUses": [
+    {
+      "name": "Research",
+      "description": "Extended reading to discover information",
+      "typicalDuration": "1-7 days",
+      "skillsUsed": ["Investigation", "History", "Arcana", "Religion"]
+    },
+    {
+      "name": "Learning Spells",
+      "description": "Reading and transcribing spells into spellbook",
+      "typicalDuration": "2 hours per spell level",
+      "costPerLevel": "50 gp"
+    },
+    {
+      "name": "Language Study",
+      "description": "Learning to read/write a new language",
+      "typicalDuration": "250 days",
+      "skillsUsed": ["Intelligence"]
+    }
+  ]
+}

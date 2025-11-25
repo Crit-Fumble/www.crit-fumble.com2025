@@ -1,0 +1,117 @@
+{
+  "name": "Light Hammer",
+  "type": "weapon",
+  "img": "modules/foundry-core-srd-5e/assets/items/weapons/light-hammer.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 215,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {
+      "parts": [
+        [
+          "1d4",
+          "bludgeoning"
+        ]
+      ],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "armor": {
+      "value": 10,
+      "type": "base",
+      "dex": null
+    },
+    "hp": {
+      "value": 0,
+      "max": 0,
+      "dt": null,
+      "conditions": ""
+    },
+    "properties": [
+      "lgt",
+      "thr"
+    ],
+    "weaponType": "simple",
+    "proficient": 0,
+    "mastery": "nick"
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 215,
+      "itemType": "weapon",
+      "_srdData": {
+        "name": "Light Hammer",
+        "source": "XPHB",
+        "page": 215,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "type": "M|XPHB",
+        "rarity": "none",
+        "weight": 2,
+        "value": 200,
+        "weaponCategory": "simple",
+        "property": [
+          "L|XPHB",
+          "T|XPHB"
+        ],
+        "mastery": [
+          "Nick|XPHB"
+        ],
+        "range": "20/60",
+        "dmg1": "1d4",
+        "dmgType": "B",
+        "hammer": true,
+        "weapon": true,
+        "hasFluffImages": true
+      }
+    }
+  }
+}

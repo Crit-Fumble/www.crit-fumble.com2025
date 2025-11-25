@@ -1,0 +1,77 @@
+{
+  "name": "Crystal Ball of True Seeing",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/crystal-ball-of-true-seeing.png",
+  "system": {
+    "description": {
+      "value": "While touching this crystal orb, you can cast Scrying|XPHB (save DC 17) with it. In addition, you have Truesight|XPHB with a range of 120 feet centered on the spell's sensor.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 159,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 159,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Crystal Ball of True Seeing",
+        "source": "XDMG",
+        "page": 159,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "legendary",
+        "reqAttune": true,
+        "wondrous": true,
+        "weight": 3,
+        "entries": [
+          "While touching this crystal orb, you can cast {@spell Scrying|XPHB} (save {@dc 17}) with it. In addition, you have {@sense Truesight|XPHB} with a range of 120 feet centered on the spell's sensor."
+        ],
+        "attachedSpells": [
+          "scrying|xphb"
+        ],
+        "lootTables": [
+          "Arcana - Legendary|XDMG"
+        ],
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

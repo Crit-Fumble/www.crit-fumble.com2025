@@ -1,0 +1,63 @@
+{
+  "id": "damage-necrotic",
+  "name": "Necrotic",
+  "description": "Damage from life-draining energy that withers flesh, ages tissue, and saps vitality. Often associated with undead and dark magic.",
+  "category": "supernatural",
+  "characteristics": {
+    "sourceExamples": [
+      "Life-draining energy",
+      "Undead attacks",
+      "Necromancy spells",
+      "Death magic",
+      "Decay and withering",
+      "Soul-draining effects"
+    ],
+    "resistanceCommon": [
+      "Many undead creatures",
+      "Vampires",
+      "Liches",
+      "Wights",
+      "Wraiths",
+      "Death knights",
+      "Some fiends"
+    ],
+    "immunityCommon": [
+      "Most undead (skeletons, zombies, ghosts, etc.)",
+      "Vampires",
+      "Liches",
+      "Death knights",
+      "Wraiths",
+      "Spectres",
+      "Constructs (many types)"
+    ],
+    "vulnerabilityCommon": [
+      "Very rare",
+      "Some life-aligned creatures (DM discretion)"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": false,
+    "canCritical": true,
+    "specialRules": [
+      "Does not typically affect objects (targets living creatures)",
+      "May reduce hit point maximum (specific effects like Wraith touch)",
+      "Often prevents healing from certain sources",
+      "Associated with necromancy and undead",
+      "Some effects can only be healed by specific magic",
+      "Vampire bite reduces max HP until long rest",
+      "Most undead are immune to necrotic damage"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Inflict Wounds (spell)",
+    "Chill Touch (cantrip)",
+    "Blight (spell)",
+    "Vampiric Touch (spell)",
+    "Circle of Death (spell)",
+    "Finger of Death (spell)",
+    "Wraith life drain attack",
+    "Vampire bite",
+    "Harm (spell)"
+  ]
+}

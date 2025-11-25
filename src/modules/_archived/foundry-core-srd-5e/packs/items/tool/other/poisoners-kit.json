@@ -1,0 +1,95 @@
+{
+  "name": "Poisoner's Kit",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/poisoners-kit.png",
+  "system": {
+    "description": {
+      "value": "• Intelligence\n• Detect a poisoned object (DC 10)\n• Basic Poison|XPHB",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 50,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Poisoner's Kit",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "T|XPHB",
+        "rarity": "none",
+        "weight": 2,
+        "value": 5000,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Intelligence"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Detect a poisoned object ({@dc 10})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Basic Poison|XPHB}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

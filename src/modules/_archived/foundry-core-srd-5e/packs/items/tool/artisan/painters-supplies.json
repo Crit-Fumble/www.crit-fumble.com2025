@@ -1,0 +1,95 @@
+{
+  "name": "Painter's Supplies",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/painters-supplies.png",
+  "system": {
+    "description": {
+      "value": "• Wisdom\n• Paint a recognizable image of something you've seen (DC 10)\n• Druidic Focus|XPHB, Holy Symbol|XPHB",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Painter's Supplies",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "AT|XPHB",
+        "rarity": "none",
+        "weight": 5,
+        "value": 1000,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Wisdom"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Paint a recognizable image of something you've seen ({@dc 10})"
+                ]
+              },
+              {
+                "name": "Craft:",
+                "type": "item",
+                "entries": [
+                  "{@item Druidic Focus|XPHB}, {@item Holy Symbol|XPHB}"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

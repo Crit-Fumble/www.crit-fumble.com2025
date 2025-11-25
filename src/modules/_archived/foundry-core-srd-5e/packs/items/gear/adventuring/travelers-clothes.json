@@ -1,0 +1,69 @@
+{
+  "name": "Traveler's Clothes",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/travelers-clothes.png",
+  "system": {
+    "description": {
+      "value": "Traveler's Clothes are resilient garments designed for travel in various environments.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 225,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 4,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 225,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Traveler's Clothes",
+        "source": "XPHB",
+        "page": 225,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 4,
+        "value": 200,
+        "entries": [
+          "Traveler's Clothes are resilient garments designed for travel in various environments."
+        ]
+      }
+    }
+  }
+}

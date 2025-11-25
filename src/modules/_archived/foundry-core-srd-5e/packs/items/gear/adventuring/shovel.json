@@ -1,0 +1,69 @@
+{
+  "name": "Shovel",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/shovel.png",
+  "system": {
+    "description": {
+      "value": "Working for 1 hour, you can use a Shovel to dig a hole that is 5 feet on each side in soil or similar material.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Shovel",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 5,
+        "value": 200,
+        "entries": [
+          "Working for 1 hour, you can use a Shovel to dig a hole that is 5 feet on each side in soil or similar material."
+        ]
+      }
+    }
+  }
+}

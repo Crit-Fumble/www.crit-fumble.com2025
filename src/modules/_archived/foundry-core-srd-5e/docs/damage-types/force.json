@@ -1,0 +1,52 @@
+{
+  "id": "damage-force",
+  "name": "Force",
+  "description": "Damage from pure magical energy that bypasses most forms of protection and resistance. Force damage represents the raw power of magic itself.",
+  "category": "supernatural",
+  "characteristics": {
+    "sourceExamples": [
+      "Pure magical energy",
+      "Magical force effects",
+      "Telekinetic impacts",
+      "Magical barriers that deal damage",
+      "Arcane explosions"
+    ],
+    "resistanceCommon": [
+      "Extremely rare",
+      "Almost no creatures have force resistance",
+      "Helmed horrors (specific immunity)"
+    ],
+    "immunityCommon": [
+      "Extremely rare",
+      "Helmed horror (construct with force immunity)",
+      "Very few creatures or effects grant force immunity"
+    ],
+    "vulnerabilityCommon": [
+      "None in standard rules",
+      "No creatures have force vulnerability"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Bypasses most forms of damage resistance",
+      "Very few creatures resist or are immune to force damage",
+      "Often used for guaranteed damage effects",
+      "Magic Missile automatically hits and deals force damage",
+      "Cannot be easily blocked by physical barriers",
+      "One of the most reliable damage types in the game"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Magic Missile (spell)",
+    "Eldritch Blast (cantrip)",
+    "Spiritual Weapon (spell)",
+    "Wall of Force (spell, creates barrier but can trap)",
+    "Arcane Sword (spell)",
+    "Bigby's Hand (spell)",
+    "Disintegrate (spell)",
+    "Forcecage (spell, creates barrier)"
+  ]
+}

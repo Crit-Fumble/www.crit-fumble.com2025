@@ -1,0 +1,32 @@
+{
+  "name": "Exploration Mode",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/modes/exploration.svg",
+  "pages": [
+    {
+      "name": "Exploration Mode",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Exploration Mode</h2>\n\n<p><em>Systems and mechanics for investigating, searching, and discovering</em></p>\n\n<p>When characters are delving into dungeons, searching for clues, or investigating their surroundings, you're in <strong>Exploration Mode</strong>. Time is more flexible than combat but more structured than downtime.</p>\n\n<h3>Core Systems for Exploration</h3>\n\n<h4>Exploration Activities</h4>\n<p>The primary system for this mode:</p>\n<ul>\n  <li><strong>Drawing Maps:</strong> Tracking your route through complex areas</li>\n  <li><strong>Foraging:</strong> Finding food and water (Survival DC 15/20)</li>\n  <li><strong>Navigating:</strong> Finding your way (Survival DC varies)</li>\n  <li><strong>Tracking:</strong> Following creatures' trails (Survival DC 10-20)</li>\n  <li><strong>Keeping Watch:</strong> Staying alert for danger (Perception)</li>\n  <li><strong>Sneaking:</strong> Moving stealthily as a group (Stealth)</li>\n</ul>\n\n<h4>Skills & Ability Checks</h4>\n<p>Heavily used during exploration:</p>\n<ul>\n  <li><strong>Perception:</strong> Noticing details, spotting hidden things</li>\n  <li><strong>Investigation:</strong> Searching areas, finding clues</li>\n  <li><strong>Survival:</strong> Tracking, foraging, navigating wilderness</li>\n  <li><strong>Stealth:</strong> Sneaking past enemies or avoiding detection</li>\n</ul>\n\n<h4>Senses & Vision</h4>\n<p>Perception and detection:</p>\n<ul>\n  <li><strong>Darkvision:</strong> See in darkness (60 ft. typically)</li>\n  <li><strong>Blindsight:</strong> Perceive without sight</li>\n  <li><strong>Tremorsense:</strong> Detect vibrations through ground</li>\n  <li><strong>Truesight:</strong> See through illusions and invisibility</li>\n</ul>\n\n<h4>Environmental Effects & Hazards</h4>\n<p>Dangers of exploration:</p>\n<ul>\n  <li><strong>Falling:</strong> 1d6 per 10 feet fallen</li>\n  <li><strong>Suffocation:</strong> Minutes equal to 1 + CON mod (minimum 30 seconds)</li>\n  <li><strong>Wilderness Hazards:</strong> Quicksand, razorvine, slippery ice</li>\n  <li><strong>Temperature Extremes:</strong> Extreme cold/heat requires saves</li>\n</ul>\n\n<h3>Common Exploration Scenarios</h3>\n<ul>\n  <li><strong>Dungeon Delving:</strong> Searching rooms, avoiding traps, finding secret doors</li>\n  <li><strong>Wilderness Tracking:</strong> Following monsters or quarry through forests</li>\n  <li><strong>Urban Investigation:</strong> Gathering clues in a city</li>\n  <li><strong>Stealth Missions:</strong> Infiltrating enemy strongholds</li>\n</ul>\n\n<h3>Transitioning Out of Exploration Mode</h3>\n<p>Exploration mode typically transitions to:</p>\n<ul>\n  <li><strong>Combat Mode:</strong> When encountering hostile creatures</li>\n  <li><strong>Interaction Mode:</strong> When meeting NPCs or discovering important story elements</li>\n  <li><strong>Travel Mode:</strong> When leaving detailed exploration for overland journeys</li>\n  <li><strong>Downtime Mode:</strong> When resting or spending extended time in one place</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "game-mode",
+      "modeId": "exploration",
+      "srd52": true,
+      "relatedSystems": [
+        "exploration-activities",
+        "skills-ability-checks",
+        "senses-vision",
+        "environmental-effects"
+      ]
+    }
+  }
+}

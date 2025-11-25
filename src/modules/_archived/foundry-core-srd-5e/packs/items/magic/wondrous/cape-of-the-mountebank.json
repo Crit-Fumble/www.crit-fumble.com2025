@@ -1,0 +1,80 @@
+{
+  "name": "Cape of the Mountebank",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/cape-of-the-mountebank.png",
+  "system": {
+    "description": {
+      "value": "This cape smells faintly of brimstone. While wearing it, you can use it to cast Dimension Door|XPHB as a Magic|XPHB action. This property can't be used again until the next dawn. When you teleport with that spell, you leave behind a cloud of smoke. The space you left is Lightly Obscured|XPHB by that smoke until the end of your next turn.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 242,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 242,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Cape of the Mountebank",
+        "source": "XDMG",
+        "page": 242,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "wondrous": true,
+        "entries": [
+          "This cape smells faintly of brimstone. While wearing it, you can use it to cast {@spell Dimension Door|XPHB} as a {@action Magic|XPHB} action. This property can't be used again until the next dawn.",
+          "When you teleport with that spell, you leave behind a cloud of smoke. The space you left is {@variantrule Lightly Obscured|XPHB} by that smoke until the end of your next turn."
+        ],
+        "attachedSpells": {
+          "daily": {
+            "1": [
+              "dimension door|xphb"
+            ]
+          }
+        },
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

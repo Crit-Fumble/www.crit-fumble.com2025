@@ -1,0 +1,88 @@
+{
+  "name": "Thieves' Tools",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/thieves-tools.png",
+  "system": {
+    "description": {
+      "value": "• Dexterity\n• Pick a lock (DC 15), or disarm a trap (DC 15)",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 221,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 25,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 221,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Thieves' Tools",
+        "source": "XPHB",
+        "page": 221,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "T|XPHB",
+        "rarity": "none",
+        "weight": 1,
+        "value": 2500,
+        "entries": [
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Ability:",
+                "type": "item",
+                "entries": [
+                  "Dexterity"
+                ]
+              },
+              {
+                "name": "Utilize:",
+                "type": "item",
+                "entries": [
+                  "Pick a lock ({@dc 15}), or disarm a trap ({@dc 15})"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

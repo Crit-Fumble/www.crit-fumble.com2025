@@ -1,0 +1,50 @@
+{
+  "id": "action-ready",
+  "name": "Ready",
+  "description": "Prepare to take an action or move in response to a specific trigger that you define",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must define a perceivable trigger",
+    "Must choose an action to take or specify movement up to your Speed",
+    "For readying spells, must have the spell slot or resources available immediately"
+  ],
+  "effects": {
+    "description": "You take the Ready action to wait for a particular circumstance before you act. To do so, you take this action on your turn, which lets you act by taking a Reaction before the start of your next turn. First, you decide what perceivable circumstance will trigger your Reaction. Then, you choose the action you will take in response to that trigger, or you choose to move up to your Speed in response to it.",
+    "mechanicalEffects": [
+      "Define a perceivable trigger condition",
+      "Choose an action to take or movement up to your Speed",
+      "When the trigger occurs, you can take your Reaction to act",
+      "You can choose to ignore the trigger",
+      "Your Reaction occurs right after the trigger finishes",
+      "Readying a spell: cast it normally (expending resources) but hold the energy with Concentration"
+    ]
+  },
+  "restrictions": [
+    "Uses your Reaction when triggered",
+    "Can only ready one action or movement, not both",
+    "Trigger must be perceivable (something you can see, hear, or otherwise detect)",
+    "If readying a spell, it must have a casting time of an action",
+    "Readied spells require Concentration to hold until triggered",
+    "If Concentration is broken, the readied spell dissipates without taking effect",
+    "Readied spells expend resources immediately when cast, even if not triggered"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:833-842",
+  "examples": [
+    "\"If the cultist steps on the trapdoor, I'll pull the lever that opens it\"",
+    "\"If the zombie steps next to me, I move away\"",
+    "\"If the orc leader enters the room, I cast Fireball at the doorway\"",
+    "\"When my ally gets clear of the doorway, I shoot an arrow at the enemy behind the door\""
+  ],
+  "relatedActions": [
+    "action-attack",
+    "action-cast-spell"
+  ],
+  "additionalRules": {
+    "reactionTiming": "When the trigger occurs, you can either take your Reaction right after the trigger finishes or ignore the trigger.",
+    "readyingSpells": "When you Ready a spell, you cast it as normal (expending any resources used to cast it) but hold its energy, which you release with your Reaction when the trigger occurs. To be readied, a spell must have a casting time of an action, and holding on to the spell's magic requires Concentration, which you can maintain up to the start of your next turn. If your Concentration is broken, the spell dissipates without taking effect.",
+    "readyingMovement": "You can ready movement up to your Speed. When triggered, you move up to that distance as a Reaction.",
+    "readyingAttack": "You can ready an Attack action. When triggered, you make your attack as a Reaction.",
+    "lostIfNotTriggered": "If the trigger doesn't occur before the start of your next turn, you lose the readied action (though readied spells still expend their resources when initially cast)"
+  }
+}

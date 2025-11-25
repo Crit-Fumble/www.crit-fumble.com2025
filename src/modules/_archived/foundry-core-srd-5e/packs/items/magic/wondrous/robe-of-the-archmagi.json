@@ -1,0 +1,109 @@
+{
+  "name": "Robe of the Archmagi",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/robe-of-the-archmagi.png",
+  "system": {
+    "description": {
+      "value": "This elegant garment is made from exquisite cloth and adorned with runes. You gain these benefits while wearing the robe. If you aren't wearing armor, your base Armor Class|XPHB is 15 plus your Dexterity modifier.You have Advantage|XPHB on saving throws against spells and other magical effects.Your spell save DC and spell attack bonus each increase by 2.\n\n<p><strong>Attunement:</strong> by a sorcerer, warlock, or wizard</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 298,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": "+2",
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 298,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Robe of the Archmagi",
+        "source": "XDMG",
+        "page": 298,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "legendary",
+        "reqAttune": "by a sorcerer, warlock, or wizard",
+        "reqAttuneTags": [
+          {
+            "class": "sorcerer"
+          },
+          {
+            "class": "warlock"
+          },
+          {
+            "class": "wizard"
+          }
+        ],
+        "wondrous": true,
+        "bonusSpellAttack": "+2",
+        "bonusSpellSaveDc": "+2",
+        "entries": [
+          "This elegant garment is made from exquisite cloth and adorned with runes.",
+          "You gain these benefits while wearing the robe.",
+          {
+            "type": "entries",
+            "name": "Armor",
+            "entries": [
+              "If you aren't wearing armor, your base {@variantrule Armor Class|XPHB} is 15 plus your Dexterity modifier."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Magic Resistance",
+            "entries": [
+              "You have {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "War Mage",
+            "entries": [
+              "Your spell save DC and spell attack bonus each increase by 2."
+            ]
+          }
+        ],
+        "lootTables": [
+          "Arcana - Legendary|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

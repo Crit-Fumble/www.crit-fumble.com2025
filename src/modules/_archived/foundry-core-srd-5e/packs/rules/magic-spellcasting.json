@@ -1,0 +1,26 @@
+{
+  "name": "Magic & Spellcasting",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/magic.svg",
+  "pages": [
+    {
+      "name": "Magic & Spellcasting",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Magic & Spellcasting</h2>\n\n<p><em>Complete system for casting and managing spells</em></p>\n\n<h3>Spell Levels</h3>\n<p>Every spell has a level from 0 to 9:</p>\n<ul>\n  <li><strong>Cantrips (Level 0):</strong> Can be cast at will, no spell slot required</li>\n  <li><strong>Levels 1-9:</strong> Require expending a spell slot of the spell's level or higher</li>\n</ul>\n\n<h3>Spell Schools</h3>\n<table>\n  <tr><th>School</th><th>Focus</th></tr>\n  <tr><td>Abjuration</td><td>Protective magic, wards, barriers</td></tr>\n  <tr><td>Conjuration</td><td>Summoning creatures and objects</td></tr>\n  <tr><td>Divination</td><td>Revealing information, scrying</td></tr>\n  <tr><td>Enchantment</td><td>Influencing minds and emotions</td></tr>\n  <tr><td>Evocation</td><td>Elemental energy, damage</td></tr>\n  <tr><td>Illusion</td><td>Deception, false images</td></tr>\n  <tr><td>Necromancy</td><td>Life, death, undead</td></tr>\n  <tr><td>Transmutation</td><td>Altering physical properties</td></tr>\n</table>\n\n<h3>Spell Components</h3>\n<p><strong>V (Verbal):</strong> Spoken incantation required</p>\n<p><strong>S (Somatic):</strong> Hand gestures required (need one free hand)</p>\n<p><strong>M (Material):</strong> Physical components required. Listed materials can be replaced by a spellcasting focus unless they have a cost or are consumed.</p>\n\n<h3>Casting a Spell</h3>\n<ol>\n  <li><strong>Choose spell</strong> from your prepared/known spells</li>\n  <li><strong>Expend spell slot</strong> of appropriate level (or higher for upcasting)</li>\n  <li><strong>Declare target(s)</strong> within range</li>\n  <li><strong>Provide components</strong> (V, S, M as needed)</li>\n  <li><strong>Resolve effects</strong> (saving throws, attack rolls, damage)</li>\n</ol>\n\n<h3>Spell Slots</h3>\n<p>Spell slots represent your magical energy. Each slot has a level (1-9):</p>\n<ul>\n  <li>Casting a spell expends a slot of that spell's level or higher</li>\n  <li>Regain all expended slots on a Long Rest</li>\n  <li>Some classes regain slots on Short Rest</li>\n</ul>\n\n<h3>Upcasting</h3>\n<p>Casting a spell using a higher-level slot often increases its power (see spell's \"Using a Higher-Level Spell Slot\" section).</p>\n\n<h3>Spell Attack Rolls</h3>\n<p><strong>Formula:</strong> 1d20 + spellcasting ability modifier + proficiency bonus</p>\n<p>Compare to target's AC. Critical hits apply (natural 20).</p>\n\n<h3>Spell Save DC</h3>\n<p><strong>Formula:</strong> 8 + spellcasting ability modifier + proficiency bonus</p>\n<p>Targets make saving throws against this DC.</p>\n\n<h3>Spellcasting Ability</h3>\n<table>\n  <tr><th>Class</th><th>Ability</th></tr>\n  <tr><td>Bard, Paladin, Sorcerer, Warlock</td><td>Charisma</td></tr>\n  <tr><td>Cleric, Druid, Ranger</td><td>Wisdom</td></tr>\n  <tr><td>Wizard</td><td>Intelligence</td></tr>\n</table>\n\n<h3>Concentration</h3>\n<p>Some spells require concentration (see Concentration system):</p>\n<ul>\n  <li>Can only concentrate on one spell at a time</li>\n  <li>Lasts up to spell's duration</li>\n  <li>Ends if you cast another concentration spell</li>\n  <li>Must make Constitution save if damaged (DC 10 or half damage)</li>\n</ul>\n\n<h3>Ritual Casting</h3>\n<p>Spells with the \"ritual\" tag can be cast as rituals:</p>\n<ul>\n  <li>Takes 10 minutes longer to cast</li>\n  <li>Doesn't expend a spell slot</li>\n  <li>Must be prepared/known (class-dependent)</li>\n</ul>\n\n<h3>Spell Preparation</h3>\n<p><strong>Prepared Casters</strong> (Cleric, Druid, Paladin, Wizard):</p>\n<ul>\n  <li>After Long Rest, choose spells from class list</li>\n  <li>Number = spellcasting ability modifier + class level (minimum 1)</li>\n  <li>Can only cast prepared spells</li>\n</ul>\n\n<p><strong>Known Casters</strong> (Bard, Ranger, Sorcerer, Warlock):</p>\n<ul>\n  <li>Learn limited number of spells (see class table)</li>\n  <li>Can cast any known spell (no daily preparation)</li>\n  <li>Can swap one spell per level up</li>\n</ul>\n\n<h3>Cantrips</h3>\n<ul>\n  <li>Level 0 spells</li>\n  <li>Can be cast at will, unlimited times</li>\n  <li>Don't require spell slots</li>\n  <li>Scale in power at character levels 5, 11, and 17</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-magic",
+      "srd52": true
+    }
+  }
+}

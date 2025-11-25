@@ -1,0 +1,59 @@
+{
+  "name": "College of Lore",
+  "type": "subclass",
+  "img": "modules/foundry-core-srd-5e/assets/subclasses/bard-college-of-lore.png",
+  "system": {
+    "description": {
+      "value": "",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "identifier": "lore",
+    "classIdentifier": "bard",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "ability": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "className": "Bard",
+      "classSource": "XPHB",
+      "_srdData": {
+        "name": "College of Lore",
+        "shortName": "Lore",
+        "source": "XPHB",
+        "className": "Bard",
+        "classSource": "XPHB",
+        "page": 66,
+        "srd52": true,
+        "basicRules2024": true,
+        "edition": "one",
+        "additionalSpells": [
+          {
+            "prepared": {
+              "6": [
+                {
+                  "choose": "level=0;1;2;3|class=Cleric;Druid;Wizard"
+                },
+                {
+                  "choose": "level=0;1;2;3|class=Cleric;Druid;Wizard"
+                }
+              ]
+            }
+          }
+        ],
+        "subclassFeatures": [
+          "College of Lore|Bard|XPHB|Lore|XPHB|3",
+          "Magical Discoveries|Bard|XPHB|Lore|XPHB|6",
+          "Peerless Skill|Bard|XPHB|Lore|XPHB|14"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

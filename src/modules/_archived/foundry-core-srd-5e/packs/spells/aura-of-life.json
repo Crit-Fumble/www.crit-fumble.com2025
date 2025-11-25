@@ -1,0 +1,142 @@
+{
+  "name": "Aura of Life",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/aura-of-life.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 4</strong> Abjuration</p>\n<p><strong>Casting Time:</strong> 1 action</p>\n<p><strong>Range:</strong> emanation</p>\n<p><strong>Components:</strong> V</p>\n<p><strong>Duration:</strong> Concentration, up to 10 minutes</p>\n\nAn aura radiates from you in a 30-foot Emanation [Area of Effect]|XPHB|Emanation for the duration. While in the aura, you and your allies have Resistance|XPHB to Necrotic damage, and your Hit Points|XPHB|Hit Point maximums can't be reduced. If an ally with 0 Hit Points|XPHB starts its turn in the aura, that ally regains 1 Hit Points|XPHB|Hit Point.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "action",
+      "cost": 1,
+      "condition": ""
+    },
+    "duration": {
+      "value": 10,
+      "units": "minute"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "sphere"
+    },
+    "range": {
+      "value": 30,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 4,
+    "school": "abj",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": false,
+      "material": false,
+      "ritual": false,
+      "concentration": true
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 244,
+      "school": "A",
+      "classes": [],
+      "_srdData": {
+        "name": "Aura of Life",
+        "source": "XPHB",
+        "page": 244,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 4,
+        "school": "A",
+        "time": [
+          {
+            "number": 1,
+            "unit": "action"
+          }
+        ],
+        "range": {
+          "type": "emanation",
+          "distance": {
+            "type": "feet",
+            "amount": 30
+          }
+        },
+        "components": {
+          "v": true
+        },
+        "duration": [
+          {
+            "type": "timed",
+            "duration": {
+              "type": "minute",
+              "amount": 10
+            },
+            "concentration": true
+          }
+        ],
+        "entries": [
+          "An aura radiates from you in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} for the duration. While in the aura, you and your allies have {@variantrule Resistance|XPHB} to Necrotic damage, and your {@variantrule Hit Points|XPHB|Hit Point} maximums can't be reduced. If an ally with 0 {@variantrule Hit Points|XPHB} starts its turn in the aura, that ally regains 1 {@variantrule Hit Points|XPHB|Hit Point}."
+        ],
+        "damageResist": [
+          "necrotic"
+        ],
+        "miscTags": [
+          "HL"
+        ],
+        "areaTags": [
+          "S"
+        ]
+      }
+    }
+  }
+}

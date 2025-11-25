@@ -1,0 +1,86 @@
+{
+  "name": "Scimitar of Speed",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/scimitar-of-speed.png",
+  "system": {
+    "description": {
+      "value": "You gain a +2 bonus to attack rolls and damage rolls made with this magic weapon. In addition, you can make one attack with it as a Bonus Action|XPHB on each of your turns.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 302,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 3,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "very rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": "+2",
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 302,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Scimitar of Speed",
+        "source": "XDMG",
+        "page": 302,
+        "srd52": true,
+        "basicRules2024": true,
+        "baseItem": "scimitar|xphb",
+        "type": "M|XPHB",
+        "rarity": "very rare",
+        "reqAttune": true,
+        "weight": 3,
+        "weaponCategory": "martial",
+        "property": [
+          "F|XPHB",
+          "L|XPHB"
+        ],
+        "mastery": [
+          "Nick|XPHB"
+        ],
+        "dmg1": "1d6",
+        "dmgType": "S",
+        "bonusWeapon": "+2",
+        "entries": [
+          "You gain a +2 bonus to attack rolls and damage rolls made with this magic weapon. In addition, you can make one attack with it as a {@variantrule Bonus Action|XPHB} on each of your turns."
+        ],
+        "lootTables": [
+          "Armaments - Very Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

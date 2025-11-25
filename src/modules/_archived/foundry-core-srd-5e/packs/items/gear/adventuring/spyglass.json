@@ -1,0 +1,69 @@
+{
+  "name": "Spyglass",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/spyglass.png",
+  "system": {
+    "description": {
+      "value": "Objects viewed through a Spyglass are magnified to twice their size.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 229,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1000,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 229,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Spyglass",
+        "source": "XPHB",
+        "page": 229,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 1,
+        "value": 100000,
+        "entries": [
+          "Objects viewed through a Spyglass are magnified to twice their size."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "damage-acid",
+  "name": "Acid",
+  "description": "Damage from corrosive liquids, digestive enzymes, and caustic substances that eat away at flesh, metal, and other materials.",
+  "category": "elemental",
+  "characteristics": {
+    "sourceExamples": [
+      "Corrosive liquids",
+      "Digestive enzymes",
+      "Dragon breath (Black/Copper dragons)",
+      "Alchemical substances",
+      "Acid vials",
+      "Ooze attacks"
+    ],
+    "resistanceCommon": [
+      "Black dragons",
+      "Copper dragons",
+      "Oozes (various types)",
+      "Creatures with natural acid production"
+    ],
+    "immunityCommon": [
+      "Adult/Ancient black dragons",
+      "Adult/Ancient copper dragons",
+      "Black dragon wyrmlings",
+      "Some oozes and elementals"
+    ],
+    "vulnerabilityCommon": [
+      "Very rare",
+      "Some constructs or objects made of reactive materials"
+    ]
+  },
+  "mechanics": {
+    "affectsObjects": true,
+    "canCritical": true,
+    "specialRules": [
+      "Can damage objects and structures",
+      "May continue to deal damage over time (specific effects)",
+      "Can dissolve materials like metal and stone",
+      "Often used in traps and environmental hazards"
+    ]
+  },
+  "srdReference": "rulesglossary/rulesdefinitions/45-DamageTypes.md",
+  "examples": [
+    "Acid Arrow (spell)",
+    "Acid Splash (cantrip)",
+    "Chromatic Orb (spell, when choosing acid)",
+    "Black dragon breath weapon",
+    "Gelatinous cube attack",
+    "Acid vial (alchemical item)",
+    "Ochre jelly attack"
+  ]
+}

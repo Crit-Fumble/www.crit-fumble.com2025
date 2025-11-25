@@ -1,0 +1,20 @@
+# Local Docker overrides
+docker-compose.override.yml
+docker-compose.*.local.yml
+
+# Local environment files (use root .env instead)
+.env
+.env.local
+.env.*.local
+
+# Test outputs
+mcp-state/
+mcp-logs/
+
+# Backup files
+*.tar.gz
+*.backup
+
+# OS files
+.DS_Store
+Thumbs.db

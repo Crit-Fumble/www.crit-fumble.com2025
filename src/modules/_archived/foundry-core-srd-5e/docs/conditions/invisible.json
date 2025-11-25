@@ -1,0 +1,16 @@
+{
+  "id": "condition-invisible",
+  "name": "Invisible",
+  "description": "An invisible creature gains advantage on initiative, can't be targeted by sight-based effects, and has advantage on attacks.",
+  "effects": {
+    "description": "While you have the Invisible condition, you experience the following effects.",
+    "mechanicalEffects": [
+      "If you're Invisible when you roll Initiative, you have Advantage on the roll",
+      "You aren't affected by any effect that requires its target to be seen unless the effect's creator can somehow see you. Any equipment you are wearing or carrying is also concealed",
+      "Attack rolls against you have Disadvantage, and your attack rolls have Advantage. If a creature can somehow see you, you don't gain this benefit against that creature"
+    ]
+  },
+  "duration": "varies",
+  "stackable": false,
+  "srdReference": "rulesglossary/rulesdefinitions/90-InvisibleCondition.md"
+}

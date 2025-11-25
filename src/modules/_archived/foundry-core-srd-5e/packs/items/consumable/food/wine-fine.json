@@ -1,0 +1,62 @@
+{
+  "name": "Wine (bottle) - Fine",
+  "type": "consumable",
+  "img": "modules/foundry-core-srd-5e/assets/items/food/wine-fine.png",
+  "system": {
+    "description": {
+      "value": "<p>A bottle of fine wine from renowned vineyards. Aged to perfection with complex flavors.</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 230,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1.5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "identified": true,
+    "activation": {
+      "type": "action",
+      "cost": 1
+    },
+    "duration": {},
+    "uses": {
+      "value": 4,
+      "max": "4",
+      "per": "",
+      "recovery": ""
+    },
+    "consumableType": "drink",
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 230,
+      "itemType": "drink",
+      "drinkQuality": "fine",
+      "_srdData": {
+        "name": "Wine (bottle) - Fine",
+        "source": "XPHB",
+        "page": 230,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "drink",
+        "rarity": "uncommon",
+        "value": 10,
+        "valueCurrency": "gp"
+      }
+    }
+  }
+}

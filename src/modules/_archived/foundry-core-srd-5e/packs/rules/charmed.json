@@ -1,0 +1,57 @@
+{
+  "name": "Charmed",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/conditions/charmed.svg",
+  "pages": [
+    {
+      "name": "Charmed",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Charmed</h2>\n\n<p><em>Source: XPHB, page 361</em></p>\n\nWhile you have the Charmed condition, you experience the following effects. You can't attack the charmer or target the charmer with damaging abilities or Magical Effect|XPHB|magical effects.The charmer has Advantage|XPHB on any ability check to interact with you socially."
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "condition",
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 361,
+      "activeEffects": [],
+      "_srdData": {
+        "name": "Charmed",
+        "source": "XPHB",
+        "page": 361,
+        "srd52": true,
+        "basicRules2024": true,
+        "entries": [
+          "While you have the Charmed condition, you experience the following effects.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Can't Harm the Charmer",
+                "entries": [
+                  "You can't attack the charmer or target the charmer with damaging abilities or {@variantrule Magical Effect|XPHB|magical effects}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Social Advantage",
+                "entries": [
+                  "The charmer has {@variantrule Advantage|XPHB} on any ability check to interact with you socially."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

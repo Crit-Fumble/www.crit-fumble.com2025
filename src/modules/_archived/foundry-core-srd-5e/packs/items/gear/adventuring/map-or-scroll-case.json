@@ -1,0 +1,77 @@
+{
+  "name": "Map or Scroll Case",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/map-or-scroll-case.png",
+  "system": {
+    "description": {
+      "value": "A Map or Scroll Case|XPHB holds up to 10 sheets of paper or 5 sheets of parchment.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 224,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 224,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Map or Scroll Case",
+        "source": "XPHB",
+        "page": 224,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 1,
+        "value": 100,
+        "entries": [
+          "A {@item Map or Scroll Case|XPHB} holds up to 10 sheets of paper or 5 sheets of parchment."
+        ],
+        "containerCapacity": {
+          "item": [
+            {
+              "parchment|xphb": 5,
+              "paper|xphb": 10
+            }
+          ]
+        }
+      }
+    }
+  }
+}

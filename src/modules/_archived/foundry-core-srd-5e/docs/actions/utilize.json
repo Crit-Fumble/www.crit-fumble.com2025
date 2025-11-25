@@ -1,0 +1,47 @@
+{
+  "id": "action-utilize",
+  "name": "Utilize",
+  "description": "Use a nonmagical object that requires an action, such as opening a door, pulling a lever, or using an adventuring item",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must have a nonmagical object that requires an action to use",
+    "Must be able to physically interact with the object"
+  ],
+  "effects": {
+    "description": "You normally interact with an object while doing something else, such as when you draw a sword as part of the Attack action. When an object requires an action for its use, you take the Utilize action. This might involve opening a locked door, using a tool, administering a potion to an unconscious creature, or manipulating complex mechanisms.",
+    "mechanicalEffects": [
+      "Use one nonmagical object that requires an action",
+      "Manipulate an object or feature of the environment",
+      "May require an ability check if the task is difficult",
+      "Free object interactions (like drawing a weapon) don't require this action"
+    ]
+  },
+  "restrictions": [
+    "Only for nonmagical objects (magical items typically require the Magic action)",
+    "Limited to objects that require a full action to use",
+    "Some objects may require specific proficiencies or ability checks",
+    "In combat, you get one free object interaction per turn; additional interactions require this action"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:1114-1117",
+  "examples": [
+    "Opening a stuck or locked door",
+    "Pulling a lever to open a portcullis",
+    "Using Thieves' Tools to pick a lock",
+    "Administering a potion to an unconscious ally",
+    "Turning a crank to lower a drawbridge",
+    "Using a crowbar to pry open a chest",
+    "Operating a complex mechanism or device"
+  ],
+  "relatedActions": [
+    "action-help",
+    "action-attack"
+  ],
+  "additionalRules": {
+    "freeObjectInteraction": "You can interact with one object or feature of the environment for free during either your move or action. For example, you could open a door during your move or draw a sword during your action. If you want to interact with a second object, you need to take the Utilize action.",
+    "specialCareObjects": "Some magic items and other special objects always require an action to use, as stated in their descriptions. The GM might require you to use an action for any object interaction when it needs special care or when it presents an unusual obstacle.",
+    "abilityChecks": "Using certain objects might require ability checks. For example, using Thieves' Tools to pick a lock requires a Dexterity check, while forcing open a stuck door might require a Strength (Athletics) check.",
+    "administering": "You can use this action to administer a potion or other consumable to an unconscious or willing creature",
+    "toolProficiency": "If you're using a tool you're proficient with, you add your Proficiency Bonus to any ability check required"
+  }
+}

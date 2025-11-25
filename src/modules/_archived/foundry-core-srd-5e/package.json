@@ -1,0 +1,24 @@
+{
+  "name": "foundry-core-srd-5e",
+  "version": "0.1.0",
+  "description": "D&D 5e System Reference Document 5.2.1 implementation for Foundry VTT",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-compendia.mjs",
+    "clean": "node scripts/clean-packs.mjs",
+    "rebuild": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "foundry",
+    "foundryvtt",
+    "dnd5e",
+    "srd",
+    "ogl"
+  ],
+  "author": "Crit-Fumble",
+  "license": "OGL-1.0a",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crit-fumble/foundry-core-srd-5e"
+  }
+}

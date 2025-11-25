@@ -1,0 +1,70 @@
+{
+  "name": "Rope",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/rope.png",
+  "system": {
+    "description": {
+      "value": "As a Utilize|XPHB action, you can tie a knot with Rope if you succeed on a DC 10 Dexterity (Sleight of Hand|XPHB) check. The Rope can be burst with a successful DC 20 Strength (Athletics|XPHB) check. You can bind an unwilling creature with the Rope only if the creature has the Grappled|XPHB, Incapacitated|XPHB, or Restrained|XPHB condition. If the creature's legs are bound, the creature has the Restrained|XPHB condition until it escapes. Escaping the Rope requires the creature to make a successful DC 15 Dexterity (Acrobatics|XPHB) check as an action.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 228,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 228,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Rope",
+        "source": "XPHB",
+        "page": 228,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "weight": 5,
+        "value": 100,
+        "entries": [
+          "As a {@action Utilize|XPHB} action, you can tie a knot with Rope if you succeed on a {@dc 10} Dexterity ({@skill Sleight of Hand|XPHB}) check. The Rope can be burst with a successful {@dc 20} Strength ({@skill Athletics|XPHB}) check.",
+          "You can bind an unwilling creature with the Rope only if the creature has the {@condition Grappled|XPHB}, {@condition Incapacitated|XPHB}, or {@condition Restrained|XPHB} condition. If the creature's legs are bound, the creature has the {@condition Restrained|XPHB} condition until it escapes. Escaping the Rope requires the creature to make a successful {@dc 15} Dexterity ({@skill Acrobatics|XPHB}) check as an action."
+        ]
+      }
+    }
+  }
+}

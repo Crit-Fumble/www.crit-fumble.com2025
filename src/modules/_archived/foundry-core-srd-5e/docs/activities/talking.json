@@ -1,0 +1,80 @@
+{
+  "id": "activity-talking",
+  "name": "Talking",
+  "description": "Conversation, discussion, storytelling, prayer, or other verbal communication",
+  "intensity": "light",
+  "category": "social",
+  "modes": ["social", "downtime", "rest"],
+  "properties": {
+    "maxDurationDuringLongRest": 2,
+    "physicalDemand": "none",
+    "mentalDemand": "low",
+    "requiresConsciousness": true,
+    "compatiblePositions": ["standing", "sitting", "reclining"]
+  },
+  "prerequisites": [
+    "Shared language or communication method"
+  ],
+  "srdReferences": [
+    {
+      "source": "rulesglossary/rulesdefinitions/96-LongRest.md",
+      "quote": "perform no more than 2 hours of light activity, such as reading, talking, eating, or standing watch",
+      "lineNumber": 3
+    },
+    {
+      "source": "playingthegame/07-Combat.md",
+      "quote": "You can communicate however you are able—through brief utterances and gestures—as you take your turn. Doing so uses neither your action nor your move.",
+      "lineNumber": 37
+    },
+    {
+      "source": "playingthegame/07-Combat.md",
+      "quote": "Extended communication, such as a detailed explanation of something or an attempt to persuade a foe, requires an action.",
+      "lineNumber": 39
+    },
+    {
+      "source": "spells/spelldescriptions/Wish.md",
+      "quote": "For each of those days that you spend resting and doing nothing more than light activity, your remaining recovery time decreases by 2 days",
+      "lineNumber": 29
+    }
+  ],
+  "effects": {
+    "interruptsLongRest": false,
+    "interruptsShortRest": false,
+    "grantsRestBenefits": false,
+    "enablesRecovery": false
+  },
+  "examples": [
+    "Discussing tomorrow's plans around the campfire",
+    "Sharing stories during an evening at the inn",
+    "Prayer or meditation with verbal components",
+    "Teaching a companion a new language",
+    "Brief communication during combat turn"
+  ],
+  "downtimeUses": [
+    {
+      "name": "Carousing",
+      "description": "Building relationships and gathering information through social interaction",
+      "typicalDuration": "1 week",
+      "skillsUsed": ["Persuasion", "Performance", "Deception"],
+      "facilitiesUsed": ["entertainment", "food"]
+    },
+    {
+      "name": "Influencing NPCs",
+      "description": "Negotiating, persuading, or building rapport with important figures",
+      "typicalDuration": "Variable",
+      "skillsUsed": ["Persuasion", "Intimidation", "Deception", "Insight"]
+    },
+    {
+      "name": "Gathering Information",
+      "description": "Talking with locals to learn rumors and news",
+      "typicalDuration": "1-3 days",
+      "skillsUsed": ["Persuasion", "Investigation", "Insight"]
+    },
+    {
+      "name": "Teaching",
+      "description": "Instructing others in skills, languages, or knowledge",
+      "typicalDuration": "Variable (weeks to months)",
+      "skillsUsed": ["Variable based on subject"]
+    }
+  ]
+}

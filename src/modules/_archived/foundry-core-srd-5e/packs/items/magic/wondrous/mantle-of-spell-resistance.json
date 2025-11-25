@@ -1,0 +1,74 @@
+{
+  "name": "Mantle of Spell Resistance",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/mantle-of-spell-resistance.png",
+  "system": {
+    "description": {
+      "value": "You have Advantage|XPHB on saving throws against spells while you wear this cloak.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 276,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 276,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Mantle of Spell Resistance",
+        "source": "XDMG",
+        "page": 276,
+        "srd52": true,
+        "basicRules2024": true,
+        "rarity": "rare",
+        "reqAttune": true,
+        "wondrous": true,
+        "entries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws against spells while you wear this cloak."
+        ],
+        "lootTables": [
+          "Arcana - Rare|XDMG"
+        ],
+        "hasFluffImages": true,
+        "type": "WON|XDMG"
+      }
+    }
+  }
+}

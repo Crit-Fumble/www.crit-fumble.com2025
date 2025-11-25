@@ -1,0 +1,71 @@
+{
+  "name": "Antitoxin",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/antitoxin.png",
+  "system": {
+    "description": {
+      "value": "As a Bonus Action|XPHB, you can drink a vial of Antitoxin to gain Advantage|XPHB on saving throws to avoid or end the Poisoned|XPHB condition for 1 hour.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 222,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 50,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 222,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Antitoxin",
+        "source": "XPHB",
+        "page": 222,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "G|XPHB",
+        "rarity": "none",
+        "value": 5000,
+        "entries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can drink a vial of Antitoxin to gain {@variantrule Advantage|XPHB} on saving throws to avoid or end the {@condition Poisoned|XPHB} condition for 1 hour."
+        ],
+        "miscTags": [
+          "CNS"
+        ]
+      }
+    }
+  }
+}

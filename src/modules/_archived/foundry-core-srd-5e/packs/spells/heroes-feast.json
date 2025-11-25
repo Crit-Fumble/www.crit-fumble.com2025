@@ -1,0 +1,150 @@
+{
+  "name": "Heroes' Feast",
+  "type": "spell",
+  "img": "modules/foundry-core-srd-5e/assets/spells/heroes-feast.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Level 6</strong> Conjuration</p>\n<p><strong>Casting Time:</strong> 10 minutes</p>\n<p><strong>Range:</strong> cube</p>\n<p><strong>Components:</strong> V, S, M</p>\n<p><strong>Duration:</strong> Instantaneous</p>\n\nYou conjure a feast that appears on a surface in an unoccupied 10-foot Cube [Area of Effect]|XPHB|Cube next to you. The feast takes 1 hour to consume and disappears at the end of that time, and the beneficial effects don't set in until this hour is over. Up to twelve creatures can partake of the feast. A creature that partakes gains several benefits, which last for 24 hours. The creature has Resistance|XPHB to Poison damage, and it has Immunity|XPHB to the Frightened|XPHB and Poisoned|XPHB conditions. Its Hit Points|XPHB|Hit Point maximum also increases by 2d10, and it gains the same number of Hit Points|XPHB.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": "SRD 5.2.1",
+    "activation": {
+      "type": "minute",
+      "cost": 10,
+      "condition": ""
+    },
+    "duration": {
+      "value": null,
+      "units": "inst"
+    },
+    "target": {
+      "value": null,
+      "width": null,
+      "units": "",
+      "type": "cone"
+    },
+    "range": {
+      "value": 10,
+      "long": null,
+      "units": "ft"
+    },
+    "uses": {
+      "value": null,
+      "max": "",
+      "per": null,
+      "recovery": ""
+    },
+    "consume": {
+      "type": "",
+      "target": null,
+      "amount": null
+    },
+    "ability": "",
+    "actionType": "util",
+    "attackBonus": "",
+    "chatFlavor": "",
+    "critical": {
+      "threshold": null,
+      "damage": ""
+    },
+    "damage": {
+      "parts": [],
+      "versatile": ""
+    },
+    "formula": "",
+    "save": {
+      "ability": "",
+      "dc": null,
+      "scaling": "spell"
+    },
+    "level": 6,
+    "school": "con",
+    "components": {
+      "value": "",
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "ritual": false,
+      "concentration": false
+    },
+    "materials": {
+      "value": "",
+      "consumed": false,
+      "cost": 0,
+      "supply": 0
+    },
+    "preparation": {
+      "mode": "prepared",
+      "prepared": false
+    },
+    "scaling": {
+      "mode": "none",
+      "formula": ""
+    }
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 284,
+      "school": "C",
+      "classes": [],
+      "_srdData": {
+        "name": "Heroes' Feast",
+        "source": "XPHB",
+        "page": 284,
+        "srd52": true,
+        "basicRules2024": true,
+        "level": 6,
+        "school": "C",
+        "time": [
+          {
+            "number": 10,
+            "unit": "minute"
+          }
+        ],
+        "range": {
+          "type": "cube",
+          "distance": {
+            "type": "feet",
+            "amount": 10
+          }
+        },
+        "components": {
+          "v": true,
+          "s": true,
+          "m": {
+            "text": "a gem-encrusted bowl worth 1,000+ GP, which the spell consumes",
+            "cost": 100000,
+            "consume": true
+          }
+        },
+        "duration": [
+          {
+            "type": "instant"
+          }
+        ],
+        "entries": [
+          "You conjure a feast that appears on a surface in an unoccupied 10-foot {@variantrule Cube [Area of Effect]|XPHB|Cube} next to you. The feast takes 1 hour to consume and disappears at the end of that time, and the beneficial effects don't set in until this hour is over. Up to twelve creatures can partake of the feast.",
+          "A creature that partakes gains several benefits, which last for 24 hours. The creature has {@variantrule Resistance|XPHB} to Poison damage, and it has {@variantrule Immunity|XPHB} to the {@condition Frightened|XPHB} and {@condition Poisoned|XPHB} conditions. Its {@variantrule Hit Points|XPHB|Hit Point} maximum also increases by {@dice 2d10}, and it gains the same number of {@variantrule Hit Points|XPHB}."
+        ],
+        "damageImmune": [
+          "poison"
+        ],
+        "conditionImmune": [
+          "frightened",
+          "poisoned"
+        ],
+        "miscTags": [
+          "HL"
+        ],
+        "areaTags": [
+          "C",
+          "MT"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

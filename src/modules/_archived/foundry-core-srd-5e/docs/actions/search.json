@@ -1,0 +1,49 @@
+{
+  "id": "action-search",
+  "name": "Search",
+  "description": "Make a Wisdom check to discern something that isn't obvious, such as hidden objects, creatures, or other information",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must have at least one applicable skill (Insight, Medicine, Perception, or Survival)"
+  ],
+  "effects": {
+    "description": "When you take the Search action, you make a Wisdom check to discern something that isn't obvious. The GM determines which skill is applicable based on what you're trying to detect.",
+    "mechanicalEffects": [
+      "Make a Wisdom check using an appropriate skill",
+      "Insight: Discern a creature's state of mind",
+      "Medicine: Determine a creature's ailment or cause of death",
+      "Perception: Locate a concealed creature or object",
+      "Survival: Follow tracks or find food",
+      "The GM sets the DC based on the difficulty of finding what you seek"
+    ]
+  },
+  "restrictions": [
+    "Must describe where and how you are searching",
+    "Searching nowhere near a hidden object won't reveal it, regardless of check total",
+    "GM determines which skill applies to the search",
+    "Some things may be impossible to find without magic or special equipment"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:873-885",
+  "examples": [
+    "A rogue uses Perception to search a room for hidden traps",
+    "A ranger uses Survival to track bandits through the forest",
+    "A cleric uses Medicine to determine the cause of a mysterious death",
+    "A paladin uses Insight to determine if the merchant is lying about the artifact's origin"
+  ],
+  "relatedActions": [
+    "action-study",
+    "action-help"
+  ],
+  "additionalRules": {
+    "searchSkills": {
+      "insight": "Use to discern a creature's state of mind, intentions, or truthfulness",
+      "medicine": "Use to diagnose an illness or determine what killed a recently deceased creature",
+      "perception": "Use to notice concealed creatures, hidden objects, or other details in your environment",
+      "survival": "Use to track creatures, forage for food, or identify natural hazards"
+    },
+    "passivePerception": "The GM may use your Passive Perception score (10 + Perception bonus) to determine if you notice things without actively searching",
+    "hiddenObjects": "If you describe your character searching nowhere near a hidden object, a Wisdom (Perception) check won't reveal the object, no matter the check's total",
+    "advantage": "The GM might grant Advantage if you describe a particularly clever search method or have appropriate tools"
+  }
+}

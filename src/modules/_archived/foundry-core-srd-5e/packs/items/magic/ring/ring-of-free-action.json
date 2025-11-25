@@ -1,0 +1,76 @@
+{
+  "name": "Ring of Free Action",
+  "type": "equipment",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/ring-of-free-action.png",
+  "system": {
+    "description": {
+      "value": "While you wear this ring, Difficult Terrain|XPHB doesn't cost you extra movement. In addition, magic can neither reduce any of your Speeds nor cause you to have the Paralyzed|XPHB or Restrained|XPHB condition.\n\n<p><strong>Attunement:</strong> true</p>",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XDMG",
+      "page": 293,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": [],
+    "attunement": 1
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XDMG",
+      "srd52": true,
+      "page": 293,
+      "itemType": "equipment",
+      "_srdData": {
+        "name": "Ring of Free Action",
+        "source": "XDMG",
+        "page": 293,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "RG|XDMG",
+        "rarity": "rare",
+        "reqAttune": true,
+        "entries": [
+          "While you wear this ring, {@variantrule Difficult Terrain|XPHB} doesn't cost you extra movement. In addition, magic can neither reduce any of your Speeds nor cause you to have the {@condition Paralyzed|XPHB} or {@condition Restrained|XPHB} condition."
+        ],
+        "optionalfeatures": [
+          "replicate magic item|tce"
+        ],
+        "lootTables": [
+          "Implements - Rare|XDMG"
+        ],
+        "hasFluffImages": true
+      }
+    }
+  }
+}

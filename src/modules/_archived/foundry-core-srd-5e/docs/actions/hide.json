@@ -1,0 +1,48 @@
+{
+  "id": "action-hide",
+  "name": "Hide",
+  "description": "Attempt to conceal yourself by making a Dexterity (Stealth) check, gaining the Invisible condition if successful",
+  "type": "action",
+  "availability": "any",
+  "requirements": [
+    "Must be Heavily Obscured or behind Three-Quarters Cover or Total Cover",
+    "Must be out of any enemy's line of sight",
+    "If you can see a creature, you can discern whether it can see you"
+  ],
+  "effects": {
+    "description": "With the Hide action, you try to hide yourself. To do so, you must succeed on a DC 15 Dexterity (Stealth) check while you're Heavily Obscured or behind Three-Quarters Cover or Total Cover, and you must be out of any enemy's line of sight. On a successful check, you have the Invisible condition while hidden.",
+    "mechanicalEffects": [
+      "Make a DC 15 Dexterity (Stealth) check",
+      "On success, you gain the Invisible condition",
+      "Your check total becomes the DC for creatures to find you with a Wisdom (Perception) check",
+      "You have Advantage on Initiative rolls if hidden when combat starts",
+      "Attack rolls against you have Disadvantage, and your attack rolls have Advantage",
+      "You aren't affected by effects that require the target to be seen"
+    ]
+  },
+  "restrictions": [
+    "Must be Heavily Obscured or behind sufficient cover (Three-Quarters or Total)",
+    "Must be out of line of sight of all enemies",
+    "Cannot hide from a creature that can see you",
+    "Hiding ends immediately if you: make a sound louder than a whisper, an enemy finds you, you make an attack roll, or you cast a spell with a Verbal component",
+    "If you attack while hidden, you reveal your location whether the attack hits or misses"
+  ],
+  "srdReference": "dndsrd5.2_markdown/src/08_RulesGlossary.md:555-562",
+  "examples": [
+    "A rogue hides behind a large pillar in a dimly lit room",
+    "A ranger conceals themselves in dense forest undergrowth",
+    "A character uses magical darkness to hide from pursuing guards",
+    "An assassin hides in shadows before striking at their target"
+  ],
+  "relatedActions": [
+    "action-search",
+    "action-attack"
+  ],
+  "additionalRules": {
+    "invisibleCondition": "While you have the Invisible condition: you have Advantage on Initiative if Invisible when rolling; you aren't affected by effects requiring target to be seen; attack rolls against you have Disadvantage; your attack rolls have Advantage (but you don't gain this benefit against creatures that can somehow see you)",
+    "beingFound": "Make note of your Stealth check's total, which is the DC for a creature to find you with a Wisdom (Perception) check.",
+    "stoppingHiding": "You stop being hidden immediately after any of the following occurs: you make a sound louder than a whisper, an enemy finds you, you make an attack roll, or you cast a spell with a Verbal component.",
+    "bonusAction": "Some class features (like Rogue's Cunning Action) allow you to Hide as a Bonus Action",
+    "revealingLocation": "When you make an attack roll while hidden, you give away your location when the attack hits or misses"
+  }
+}

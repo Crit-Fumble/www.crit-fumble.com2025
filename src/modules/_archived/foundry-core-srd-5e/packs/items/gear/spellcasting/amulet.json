@@ -1,0 +1,73 @@
+{
+  "name": "Amulet",
+  "type": "loot",
+  "img": "modules/foundry-core-srd-5e/assets/items/gear/amulet.png",
+  "system": {
+    "description": {
+      "value": "For an Amulet to be an effective Holy Symbol, it must be worn or held.",
+      "chat": "",
+      "unidentified": ""
+    },
+    "source": {
+      "custom": "",
+      "book": "XPHB",
+      "page": 226,
+      "license": "OGL 1.0a"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 5,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "identified": true,
+    "activation": {},
+    "duration": {},
+    "cover": null,
+    "target": {},
+    "range": {},
+    "uses": {},
+    "consume": {},
+    "ability": null,
+    "actionType": null,
+    "attackBonus": null,
+    "chatFlavor": "",
+    "critical": null,
+    "damage": {},
+    "formula": "",
+    "save": {},
+    "armor": {},
+    "hp": {},
+    "properties": []
+  },
+  "flags": {
+    "foundry-core-srd-5e": {
+      "srdSource": "XPHB",
+      "srd52": true,
+      "page": 226,
+      "itemType": "loot",
+      "_srdData": {
+        "name": "Amulet",
+        "group": [
+          "Holy Symbol"
+        ],
+        "source": "XPHB",
+        "page": 226,
+        "srd52": true,
+        "basicRules2024": true,
+        "type": "SCF|XPHB",
+        "scfType": "holy",
+        "rarity": "none",
+        "weight": 1,
+        "value": 500,
+        "entries": [
+          "For an Amulet to be an effective Holy Symbol, it must be worn or held."
+        ]
+      }
+    }
+  }
+}

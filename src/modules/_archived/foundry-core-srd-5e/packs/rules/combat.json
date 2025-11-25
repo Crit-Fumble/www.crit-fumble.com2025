@@ -1,0 +1,26 @@
+{
+  "name": "Combat",
+  "type": "base",
+  "img": "modules/foundry-core-srd-5e/assets/systems/combat.svg",
+  "pages": [
+    {
+      "name": "Combat",
+      "type": "text",
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "text": {
+        "format": 1,
+        "content": "<h2>Combat</h2>\n\n<p><em>Turn-based tactical combat system</em></p>\n\n<h3>Combat Structure</h3>\n\n<h4>Initiative</h4>\n<p>Determines turn order in combat:</p>\n<ul>\n  <li>Roll 1d20 + Dexterity modifier</li>\n  <li>Order from highest to lowest</li>\n  <li>Ties: Higher Dexterity wins, then coin flip</li>\n  <li>Initiative order stays same for entire combat</li>\n</ul>\n\n<h4>Rounds and Turns</h4>\n<ul>\n  <li><strong>Round:</strong> 6 seconds of game time</li>\n  <li><strong>Turn:</strong> Each creature gets one turn per round</li>\n  <li>On your turn: Move + Action + Bonus Action (if available)</li>\n  <li>Between turns: Can use Reaction</li>\n</ul>\n\n<h3>Your Turn</h3>\n<p>On your turn, you can:</p>\n<ul>\n  <li><strong>Move</strong> up to your Speed</li>\n  <li><strong>Take one Action</strong> (Attack, Dash, Disengage, Dodge, Help, Hide, Ready, Search, Utilize, Magic)</li>\n  <li><strong>Take one Bonus Action</strong> (if you have an ability that grants it)</li>\n  <li><strong>Interact with one object</strong> for free (draw weapon, open door, etc.)</li>\n  <li><strong>Communicate</strong> briefly</li>\n</ul>\n\n<h3>Movement in Combat</h3>\n<ul>\n  <li>Can split movement before, during, and after actions</li>\n  <li>Moving through hostile creature space requires check</li>\n  <li>Moving out of reach provokes Opportunity Attack</li>\n  <li>Difficult terrain costs extra movement</li>\n  <li>Standing from Prone costs half your Speed</li>\n</ul>\n\n<h3>Attacks</h3>\n\n<h4>Attack Rolls</h4>\n<p><strong>Formula:</strong> 1d20 + ability modifier + proficiency bonus (if proficient)</p>\n<ul>\n  <li>Compare to target's AC</li>\n  <li>Equal or higher = hit</li>\n  <li>Natural 20 = Critical Hit (double damage dice)</li>\n  <li>Natural 1 = automatic miss</li>\n</ul>\n\n<h4>Melee Attacks</h4>\n<ul>\n  <li>Range: 5 feet (or weapon's Reach)</li>\n  <li>Use Strength (or Dexterity for Finesse weapons)</li>\n  <li>Disadvantage if enemy within 5 feet of you uses ranged weapon</li>\n</ul>\n\n<h4>Ranged Attacks</h4>\n<ul>\n  <li>Range: Normal/Long (e.g., 80/320 ft)</li>\n  <li>Use Dexterity (or Strength for thrown weapons)</li>\n  <li>Disadvantage at long range</li>\n  <li>Disadvantage if enemy within 5 feet</li>\n</ul>\n\n<h4>Spell Attacks</h4>\n<ul>\n  <li><strong>Melee Spell Attack:</strong> 1d20 + spellcasting modifier + proficiency</li>\n  <li><strong>Ranged Spell Attack:</strong> Same, but ranged</li>\n  <li>Spell Save DC: 8 + spellcasting modifier + proficiency</li>\n</ul>\n\n<h3>Damage</h3>\n<ul>\n  <li>Roll damage dice when you hit</li>\n  <li>Add ability modifier to damage (usually same as attack)</li>\n  <li>Critical hits: Roll damage dice twice</li>\n  <li>Resistance: Take half damage</li>\n  <li>Vulnerability: Take double damage</li>\n  <li>Immunity: Take no damage</li>\n</ul>\n\n<h3>Cover</h3>\n<table>\n  <tr><th>Cover Type</th><th>AC Bonus</th><th>DEX Save Bonus</th></tr>\n  <tr><td>Half Cover</td><td>+2</td><td>+2</td></tr>\n  <tr><td>Three-Quarters Cover</td><td>+5</td><td>+5</td></tr>\n  <tr><td>Total Cover</td><td>Can't be targeted</td><td>Can't be targeted</td></tr>\n</table>\n\n<h3>Conditions in Combat</h3>\n<p>Common combat conditions:</p>\n<ul>\n  <li><strong>Prone:</strong> Disadvantage on attacks; melee attacks against you have Advantage</li>\n  <li><strong>Grappled:</strong> Speed = 0</li>\n  <li><strong>Restrained:</strong> Speed = 0, attacks have Disadvantage, attacks against you have Advantage</li>\n  <li><strong>Invisible:</strong> Attack rolls have Advantage, attacks against you have Disadvantage</li>\n  <li><strong>Blinded:</strong> Can't see, fail sight checks, attacks have Disadvantage, attacks against you have Advantage</li>\n</ul>\n\n<h3>Ending Combat</h3>\n<p>Combat ends when:</p>\n<ul>\n  <li>All enemies defeated, dead, or fled</li>\n  <li>Party surrenders or flees</li>\n  <li>Peaceful resolution reached</li>\n</ul>"
+      }
+    }
+  ],
+  "flags": {
+    "foundry-core-srd-5e": {
+      "type": "system",
+      "systemId": "srd-combat",
+      "srd52": true
+    }
+  }
+}

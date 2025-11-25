@@ -1,22 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Redirect apex domain to www
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'crit-fumble.com',
-          },
-        ],
-        destination: 'https://www.crit-fumble.com/:path*',
-        permanent: true,
-      },
-    ]
-  },
-
   // Security headers
   async headers() {
     return [

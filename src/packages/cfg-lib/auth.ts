@@ -8,17 +8,9 @@ import Resend from "next-auth/providers/resend"
 import { prisma } from "./db"
 import { CustomPrismaAdapter } from "./prisma-adapter"
 
-// Security: Validate auth secret is set in production runtime
-// Note: AUTH_SECRET or NEXTAUTH_SECRET can be used (AUTH_SECRET is preferred by NextAuth v5)
-// Skip validation during build phase (SKIP_ENV_VALIDATION=1 is set in vercel.json)
-// or when not in production runtime
-if (process.env.NODE_ENV === 'production' && !process.env.SKIP_ENV_VALIDATION) {
-  const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET
-  if (!authSecret) {
-    console.warn('Warning: No auth secret found. AUTH_SECRET or NEXTAUTH_SECRET should be set in production')
-    // Don't throw during module evaluation - let NextAuth handle it at runtime
-  }
-}
+// Note: AUTH_SECRET or NEXTAUTH_SECRET validation is handled by NextAuth at runtime
+// We don't validate during module evaluation to avoid build-time errors
+// NextAuth will throw appropriate errors if the secret is missing when auth is actually used
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,

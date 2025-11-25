@@ -110,7 +110,7 @@ export default async function AssetsPage() {
                     className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled
                   >
-                    Select Files (Coming Soon)
+                    Select Files (Not Available)
                   </button>
                   <p className="text-xs text-gray-500 dark:text-gray-500 mt-4">
                     Supported: Images (PNG, JPG, WebP), Audio (MP3, OGG, WAV), Video (MP4, WebM)
@@ -145,7 +145,7 @@ export default async function AssetsPage() {
                       />
                     </svg>
                     <p className="text-gray-500 dark:text-gray-400 text-sm">
-                      No assets uploaded yet. File upload functionality coming soon!
+                      No assets uploaded yet.
                     </p>
                   </div>
                 ) : (

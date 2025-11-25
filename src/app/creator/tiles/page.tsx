@@ -67,32 +67,16 @@ export default async function TilesPage() {
               </div>
             </div>
 
-            {/* Coming Soon */}
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg p-12 text-center">
               <svg className="w-24 h-24 mx-auto text-gray-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
               </svg>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Tile Management Coming Soon
+                Tile Management
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-                This interface will allow you to create and manage RPG tiles with multi-scale/multi-resolution support. Define tiles once, use everywhere.
+                This feature is not yet available.
               </p>
-              <div className="text-left max-w-2xl mx-auto bg-gray-100 dark:bg-slate-800 rounded-lg p-6">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Planned Features:</h3>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                  <li>✓ Create tiles with name, category, and tags</li>
-                  <li>✓ Upload assets for all 8 scales (Arena → Realm)</li>
-                  <li>✓ Support 4 resolutions (Low, Medium, High, Print)</li>
-                  <li>✓ Organize by category (Terrain, Structure, Decoration, Hazard, Effect, Overlay)</li>
-                  <li>✓ Grid type selection (Square, Hex, Voxel)</li>
-                  <li>✓ RPG system tagging (D&D 5e, Cypher, etc.)</li>
-                  <li>✓ Audio assets for ambient sounds</li>
-                  <li>✓ Animation frame support</li>
-                  <li>✓ Tile variants</li>
-                  <li>✓ Coverage visualization (see which scale/resolution combinations are populated)</li>
-                </ul>
-              </div>
               <div className="mt-6">
                 <Link
                   href="/creator"

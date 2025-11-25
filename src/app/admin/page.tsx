@@ -143,49 +143,6 @@ export default async function AdminDashboardPage() {
     </section>
   )
 
-  // Multiverse Tab Content (stub)
-  const multiverseContent = (
-    <section data-testid="multiverse-section">
-      <div className="bg-white dark:bg-slate-900 rounded-lg px-8 py-12 sm:py-16">
-        <div className="text-center">
-          <svg
-            className="w-20 h-20 mx-auto mb-6 text-crit-purple-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h3 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 dark:text-white mb-4">
-            Multiverse Management
-          </h3>
-          <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-8">
-            Manage multiverse of worlds, locations, and interconnected universes. Coming soon!
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4">
-              <div className="text-lg font-semibold text-gray-900 dark:text-white">World Management</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Create and manage connected worlds</div>
-            </div>
-            <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4">
-              <div className="text-lg font-semibold text-gray-900 dark:text-white">Location Trees</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Build hierarchical location structures</div>
-            </div>
-            <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4">
-              <div className="text-lg font-semibold text-gray-900 dark:text-white">Analytics</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Track world usage and player activity</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-
   return (
     <>
       <Header critCoinBalance={critCoinBalance} />
@@ -217,7 +174,6 @@ export default async function AdminDashboardPage() {
             {/* Tabbed Dashboard */}
             <AdminDashboardTabs
               discordContent={discordContent}
-              multiverseContent={multiverseContent}
             />
           </div>
         </div>

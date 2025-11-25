@@ -182,10 +182,10 @@ export default async function RoleManagementPage() {
             {/* Future Enhancement Notice */}
             <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
-                Coming Soon: Interactive Role Management
+                Interactive Role Management
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                Role granting and revocation UI will be added in a future update. For now, roles can be managed via the database or API.
+                This feature is not yet available. For now, roles can be managed via the database or API.
               </p>
             </div>
           </div>

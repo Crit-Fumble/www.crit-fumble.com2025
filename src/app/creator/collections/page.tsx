@@ -67,37 +67,16 @@ export default async function CollectionsPage() {
               </div>
             </div>
 
-            {/* Coming Soon */}
             <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg p-12 text-center">
               <svg className="w-24 h-24 mx-auto text-gray-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Collection Management Coming Soon
+                Collection Management
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-                This interface will allow you to create and manage tile collections. Bundle related tiles together for distribution, marketplace listings, or campaign organization.
+                This feature is not yet available.
               </p>
-              <div className="text-left max-w-2xl mx-auto bg-gray-100 dark:bg-slate-800 rounded-lg p-6">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Planned Features:</h3>
-                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                  <li>✓ Create collections with name and description</li>
-                  <li>✓ Add/remove tiles from collections</li>
-                  <li>✓ Set collection thumbnail (preview image)</li>
-                  <li>✓ Organize by category (Terrain, Dungeon, Urban, etc.)</li>
-                  <li>✓ Tag collections for searching</li>
-                  <li>✓ RPG system tagging (D&D 5e, Cypher, system-agnostic)</li>
-                  <li>✓ View collection completeness (which tiles have all scales/resolutions)</li>
-                  <li>✓ Export collection metadata (JSON)</li>
-                  <li>✓ Import/duplicate collections</li>
-                  <li>✓ Collection versioning (track updates)</li>
-                  <li>✓ Share collections with other creators</li>
-                  <li>✓ Publish to marketplace (future)</li>
-                  <li>✓ License selection (CC, OGL, proprietary)</li>
-                  <li>✓ Pricing options (free, premium, pay-what-you-want)</li>
-                  <li>✓ Download statistics and user reviews</li>
-                </ul>
-              </div>
               <div className="mt-6">
                 <Link
                   href="/creator"

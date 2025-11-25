@@ -80,7 +80,7 @@ test.describe('Dashboard - Different User Roles', () => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
     // Create test user with specific role
-    const response = await page.request.post(`${baseURL}/api/test-auth`, {
+    const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
         role: 'player',
         username: 'test_player',
@@ -97,7 +97,7 @@ test.describe('Dashboard - Different User Roles', () => {
     console.log(`✅ Created test player: ${testUser.username}`);
 
     // Cleanup
-    await page.request.delete(`${baseURL}/api/test-auth`, {
+    await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
       data: { userId: testUser.userId },
     });
   });
@@ -106,7 +106,7 @@ test.describe('Dashboard - Different User Roles', () => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
     // Create test admin user
-    const response = await page.request.post(`${baseURL}/api/test-auth`, {
+    const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
         role: 'admin',
         username: 'test_admin',
@@ -122,7 +122,7 @@ test.describe('Dashboard - Different User Roles', () => {
     console.log(`✅ Created test admin: ${testUser.username}`);
 
     // Cleanup
-    await page.request.delete(`${baseURL}/api/test-auth`, {
+    await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
       data: { userId: testUser.userId },
     });
   });

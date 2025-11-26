@@ -1,22 +1,70 @@
 /**
  * Asset Mirroring API
  * Handles copying assets from Foundry to Vercel Blob storage
+ *
+ * SECURITY: Requires authentication, rate limited, world ownership verified
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import prismaMain from '@/packages/cfg-lib/db-main';
+import { auth } from '@/lib/auth';
+import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 // import { put } from '@vercel/blob';  // Uncomment when ready for Phase 3
 
 const prisma = prismaMain;
+
+/**
+ * Verify user has access to a world (owner or player)
+ */
+async function verifyWorldAccess(userId: string, worldId: string): Promise<boolean> {
+  const world = await prisma.rpgWorld.findFirst({
+    where: {
+      id: worldId,
+      deletedAt: null,
+      OR: [
+        { ownerId: userId },
+        { campaigns: { some: { players: { some: { playerId: userId, deletedAt: null } } } } }
+      ]
+    }
+  });
+  return !!world;
+}
 
 /**
  * POST /api/foundry/assets/mirror
  * Mirror an asset from Foundry to Vercel Blob
  *
  * Phase 3 Implementation - Currently stubbed
+ * SECURITY: Requires authentication, rate limited
  */
 export async function POST(request: NextRequest) {
   try {
+    // RATE LIMITING
+    const ip = getIpAddress(request);
+    const rateLimitResult = await checkRateLimit(
+      apiRateLimiter,
+      getClientIdentifier(undefined, ip)
+    );
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': rateLimitResult.retryAfter.toString() }
+        }
+      );
+    }
+
+    // AUTHENTICATION
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { assetId, assetIds, worldId, minUsage = 10 } = body;
 
@@ -36,6 +84,14 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // AUTHORIZATION: Verify user has access to the asset's world
+      if (asset.worldId && !(await verifyWorldAccess(session.user.id, asset.worldId))) {
+        return NextResponse.json(
+          { error: 'Forbidden - no access to this world' },
+          { status: 403 }
+        );
+      }
+
       return NextResponse.json({
         success: true,
         message: 'Asset mirroring not yet implemented (Phase 3)',
@@ -49,7 +105,22 @@ export async function POST(request: NextRequest) {
     }
 
     if (assetIds && Array.isArray(assetIds)) {
-      // Mirror multiple specific assets
+      // Mirror multiple specific assets - requires worldId for authorization
+      if (!worldId) {
+        return NextResponse.json(
+          { error: 'worldId required for batch mirroring' },
+          { status: 400 }
+        );
+      }
+
+      // AUTHORIZATION: Verify user has access to the world
+      if (!(await verifyWorldAccess(session.user.id, worldId))) {
+        return NextResponse.json(
+          { error: 'Forbidden - no access to this world' },
+          { status: 403 }
+        );
+      }
+
       return NextResponse.json({
         success: true,
         message: 'Batch mirroring not yet implemented (Phase 3)',
@@ -58,6 +129,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (worldId) {
+      // AUTHORIZATION: Verify user has access to the world
+      if (!(await verifyWorldAccess(session.user.id, worldId))) {
+        return NextResponse.json(
+          { error: 'Forbidden - no access to this world' },
+          { status: 403 }
+        );
+      }
+
       // Mirror popular assets for a world
       const popularAssets = await prisma.rpgAsset.findMany({
         where: {
@@ -97,9 +176,37 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/foundry/assets/mirror
  * Get mirroring status for world
+ *
+ * SECURITY: Requires authentication, rate limited, world access verified
  */
 export async function GET(request: NextRequest) {
   try {
+    // RATE LIMITING
+    const ip = getIpAddress(request);
+    const rateLimitResult = await checkRateLimit(
+      apiRateLimiter,
+      getClientIdentifier(undefined, ip)
+    );
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': rateLimitResult.retryAfter.toString() }
+        }
+      );
+    }
+
+    // AUTHENTICATION
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const worldId = searchParams.get('worldId');
 
@@ -107,6 +214,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         { error: 'worldId required' },
         { status: 400 }
+      );
+    }
+
+    // AUTHORIZATION: Verify user has access to the world
+    if (!(await verifyWorldAccess(session.user.id, worldId))) {
+      return NextResponse.json(
+        { error: 'Forbidden - no access to this world' },
+        { status: 403 }
       );
     }
 

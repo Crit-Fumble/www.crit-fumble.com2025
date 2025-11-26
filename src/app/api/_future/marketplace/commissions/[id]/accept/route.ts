@@ -1,24 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
+import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 
 /**
  * POST /api/marketplace/commissions/:id/accept
  * Accept a proposal and move funds to escrow
  * Handles both Crit-Coins (5:4 ratio) and Story Credits (1:1)
+ *
+ * SECURITY: Requires authentication, rate limited
  */
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // RATE LIMITING: Check before authentication to prevent brute force
+    const ip = getIpAddress(request);
+    const rateLimitResult = await checkRateLimit(
+      apiRateLimiter,
+      getClientIdentifier(undefined, ip)
+    );
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: { 'Retry-After': rateLimitResult.retryAfter.toString() }
+        }
+      );
+    }
+
+    // AUTHENTICATION: Require logged-in user
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Use authenticated user ID - never trust client-provided userId
+    const userId = session.user.id;
+
     const body = await request.json();
-    const { proposalId, userId } = body;
+    const { proposalId } = body;
     const commissionId = params.id;
 
     // Validate required fields
-    if (!proposalId || !userId) {
+    if (!proposalId) {
       return NextResponse.json(
-        { error: 'Missing required fields: proposalId, userId' },
+        { error: 'Missing required field: proposalId' },
         { status: 400 }
       );
     }

@@ -9,6 +9,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { WorldAnvilPlaywrightClient } from '@/packages/worldanvil/client/WorldAnvilPlaywrightClient';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
+import { encryptApiKey } from '@/lib/foundry-api';
 
 export async function POST(request: NextRequest) {
   try {
@@ -103,13 +104,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Update user with World Anvil information
-    // Note: In production, you should encrypt the token before storing
+    // SECURITY: Encrypt token before storage using AES-256
+    const encryptedToken = encryptApiKey(userToken);
     const updatedUser = await prisma.critUser.update({
       where: { id: session.user.id },
       data: {
         worldAnvilId: worldAnvilUser.id,
         worldAnvilUsername: worldAnvilUser.username,
-        worldAnvilToken: userToken, // TODO: Encrypt this in production
+        worldAnvilToken: encryptedToken,
       },
       select: {
         id: true,

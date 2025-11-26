@@ -7,7 +7,7 @@ Crit-Fumble uses a hybrid database architecture to optimize for cost and scalabi
 | Database | Purpose | Provider | Cost |
 |----------|---------|----------|------|
 | **Website DB** | Auth, payments, platform | Neon Free Tier | $0/mo |
-| **RPG DB** | Worlds, creatures, sessions | DO Managed Postgres | $15/mo |
+| **Core Concepts DB** | Worlds, creatures, sessions | DO Managed Postgres | $15/mo |
 | **Core Concepts API** | RPG data access layer | DO App Platform | $5-12/mo |
 | **Staging** | Dev/preview environment | DO Droplet + Docker | $6/mo |
 
@@ -36,7 +36,7 @@ Crit-Fumble uses a hybrid database architecture to optimize for cost and scalabi
 │  │ Coins  │             ▼                                                   │
 │  │ Payments│  ┌────────────────────┐     ┌─────────────────────┐           │
 │  └────────┘  │ DO Managed Postgres │     │ Foundry Droplets    │           │
-│              │ cf-rpg-prod         │◄────│ (VPC Internal)      │           │
+│              │ core-concepts-prod  │◄────│ (VPC Internal)      │           │
 │              │                     │     └─────────────────────┘           │
 │              │ Worlds, Creatures   │                                       │
 │              │ Sessions, History   │                                       │
@@ -148,17 +148,17 @@ const player = await ensureRpgPlayer(userId, 'Display Name');
 
 ## DigitalOcean Setup
 
-### 1. Managed Postgres (Production RPG DB)
+### 1. Managed Postgres (Production Core Concepts DB)
 
 1. Go to DigitalOcean → Databases → Create
 2. **Engine**: PostgreSQL 16
-3. **Name**: `cf-rpg-prod`
+3. **Name**: `core-concepts-prod`
 4. **Plan**: Basic ($15/mo) - 1 vCPU, 1GB RAM, 10GB storage
 5. **Region**: Same as App Platform
 6. **VPC**: Select or create VPC for internal access
-7. **Database name**: `rpg`
+7. **Database name**: `core_concepts`
 
-Copy the connection string for `CORE_CONCEPTS_API_URL`.
+Copy the connection string for the API's `DATABASE_URL`.
 
 ### 2. App Platform (Production API)
 
@@ -177,7 +177,7 @@ Copy the connection string for `CORE_CONCEPTS_API_URL`.
 
 1. Go to DigitalOcean → Droplets → Create
 2. **Image**: Docker from Marketplace
-3. **Name**: `cf-staging`
+3. **Name**: `core-concepts-staging`
 4. **Plan**: Basic ($6/mo) - 1 vCPU, 1GB RAM
 5. **Region**: Same VPC
 6. SSH in and:

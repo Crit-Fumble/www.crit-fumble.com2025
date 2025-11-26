@@ -8,18 +8,18 @@ services:
   # PostgreSQL for local development
   postgres:
     image: postgres:16-alpine
-    container_name: rpg-postgres-dev
+    container_name: core-concepts-postgres-dev
     restart: unless-stopped
     environment:
-      POSTGRES_DB: rpg
-      POSTGRES_USER: rpg_user
+      POSTGRES_DB: core_concepts
+      POSTGRES_USER: core_concepts_user
       POSTGRES_PASSWORD: devpassword
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"  # Use 5433 to avoid conflicts with other Postgres instances
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U rpg_user -d rpg"]
+      test: ["CMD-SHELL", "pg_isready -U core_concepts_user -d core_concepts"]
       interval: 10s
       timeout: 5s
       retries: 5

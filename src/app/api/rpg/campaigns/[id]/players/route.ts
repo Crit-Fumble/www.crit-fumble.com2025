@@ -39,10 +39,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
+
     // Verify user has access to this campaign
     const campaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
@@ -58,7 +60,7 @@ export async function GET(
 
     const players = await prismaMain.rpgCampaignPlayer.findMany({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         deletedAt: null,
       },
       include: {
@@ -125,6 +127,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { playerId, role = 'player', characterId, notes } = body;
 
@@ -138,13 +141,13 @@ export async function POST(
     // Verify campaign exists and user has permission to add players
     const campaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
           { players: { some: { playerId: session.user.id, role: 'gm', status: 'active', deletedAt: null } } },
           // Allow self-join for open campaigns
-          { isOpen: true, id: params.id },
+          { isOpen: true, id },
         ],
       },
     });
@@ -159,7 +162,7 @@ export async function POST(
     // Only GMs/owners can add other players or assign GM role
     const isOwnerOrGM = campaign.ownerId === session.user.id || await prismaMain.rpgCampaignPlayer.findFirst({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         playerId: session.user.id,
         role: 'gm',
         status: 'active',
@@ -177,7 +180,7 @@ export async function POST(
     // Check if player is already in campaign
     const existingPlayer = await prismaMain.rpgCampaignPlayer.findFirst({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         playerId,
         deletedAt: null,
       },
@@ -193,7 +196,7 @@ export async function POST(
     // Add player to campaign
     const campaignPlayer = await prismaMain.rpgCampaignPlayer.create({
       data: {
-        campaignId: params.id,
+        campaignId: id,
         playerId,
         role,
         characterId,

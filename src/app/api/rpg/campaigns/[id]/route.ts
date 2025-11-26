@@ -39,9 +39,11 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
+
     const campaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
@@ -175,6 +177,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const {
       name,
@@ -192,7 +195,7 @@ export async function PATCH(
     // Verify user is owner or GM
     const existingCampaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
@@ -251,7 +254,7 @@ export async function PATCH(
     if (metadata !== undefined) updateData.metadata = metadata;
 
     const campaign = await prismaMain.rpgCampaign.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         owner: {
@@ -318,10 +321,12 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
+
     // Verify user is owner
     const existingCampaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         ownerId: session.user.id,
         deletedAt: null,
       },
@@ -336,7 +341,7 @@ export async function DELETE(
 
     // Soft delete the campaign
     await prismaMain.rpgCampaign.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         deletedAt: new Date(),
         status: 'abandoned',

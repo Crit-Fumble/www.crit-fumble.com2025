@@ -62,6 +62,7 @@
     "@anthropic-ai/sdk": "^0.70.1",
     "@auth/express": "^0.12.1",
     "@auth/prisma-adapter": "^2.7.2",
+    "@discord/embedded-app-sdk": "^2.4.0",
     "@hookform/resolvers": "^3.9.1",
     "@playwright/test": "^1.56.1",
     "@prisma/client": "^5.22.0",

@@ -2,6 +2,7 @@
 
 A Tabletop Role-Playing Game Can be broken down into some basic concepts. These will be included in the "foundry-core-concepts" plugin to make FoundryVTT more adaptable to playing on the CFG platform, as well as baked into our data schemas.
 
+- tabletop (surface where all gameplay takes place, may be virtual, physical or anywhere in between)
 - sheets/hands (in most games, for tracking resources, keeping score, and storing info from "cards", "books", and other sources)
 - attributes (things to track, such as name or experience points)
 - types (things like class, creature type, or other complex items; may be filled by a "card")
@@ -15,6 +16,8 @@ A Tabletop Role-Playing Game Can be broken down into some basic concepts. These 
 - tiles (a single space on the board, usually square, hex, block, etc; a "tile" depends on the scale and dimensions of the board/map)
 - voxels (volumetric zones representing abstract distance rather than precise position; used for positioning tokens/creatures on boards; voxel size matches tile scale but supports narrative-first movement systems; enables theater-of-the-mind gameplay with optional visual aids)
 - sessions (entire game or portion of full game)
+- campaigns (keeps track of multiple sessions if needed for longer games and ongoing ttrpg campaigns)
+- events (usually several, knight takes rook)
 - sepctators (people watching the game ut not actively playing)
 - players (defined by the game system, everyone playing the game, including the GM)
 - teams (defined by the game system, such as an adventureing party or team of collaborating GMs)
@@ -35,7 +38,6 @@ core card & sheet concepts
 - creatures (including player characters)
 - locations (at least one, can be as small as a single pixel/voxel)
 - objects (things which are not creatures which exist within the worldspace; usually at least one)
-- events (usually several, knight takes rook)
 - activites (things players can do to trigger events through modes, like moving a chess piece in a game of chess; downtime flag means it can be triggered asyncronously, outside of the FoundryVTT platform via the "Core Concepts" API schema)
 - goals (take the opponent's king, save the princess, etc)
 
@@ -43,7 +45,7 @@ core card & sheet concepts
 
 API Support
 -----------
-- "downtime" activites and modes for interacting with game systems without being logged into the FoundryVTT instance
+- "downtime" activites and modes for interacting with game subsystems without being logged into the FoundryVTT instance
 
 
 

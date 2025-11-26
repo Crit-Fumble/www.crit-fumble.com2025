@@ -280,6 +280,9 @@ model RpgPlayer {
   // RPG ownership relations
   ownedCampaigns RpgCampaign[]
 
+  // Campaign memberships (campaigns this player has joined)
+  campaignMemberships CampaignMember[]
+
   // Player Characters (creatures controlled by this player)
   controlledCharacters RpgCreature[]
 
@@ -1079,6 +1082,10 @@ model RpgAsset {
   worldId String?   @map("world_id")
   world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
 
+  // Campaign context (optional - asset belongs to a specific campaign)
+  campaignId String?      @map("campaign_id")
+  campaign   RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
   // Visibility (within world/campaign)
   isPublic Boolean @default(false) @map("is_public") // Visible to all players in world?
 
@@ -1098,6 +1105,7 @@ model RpgAsset {
 
   @@index([uploadedBy])
   @@index([worldId])
+  @@index([campaignId])
   @@index([assetType])
   @@index([category])
   @@index([isPublic])
@@ -2092,7 +2100,9 @@ model RpgCampaign {
   totalPlaytimeMins Int @default(0) @map("total_playtime_mins")
 
   // Relations
-  sessions RpgSession[] // Game sessions in this campaign
+  sessions RpgSession[]       // Game sessions in this campaign
+  members  CampaignMember[]   // Players in this campaign
+  assets   RpgAsset[]         // Assets for this campaign
 
   @@index([systemName])
   @@index([ownerId])
@@ -2100,6 +2110,41 @@ model RpgCampaign {
   @@index([status])
   @@index([deletedAt])
   @@map("rpg_campaigns")
+}
+
+// CampaignMember - Players who are members of a campaign
+model CampaignMember {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Campaign and Player link
+  campaignId String      @map("campaign_id")
+  campaign   RpgCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  playerId String    @map("player_id")
+  player   RpgPlayer @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  // Membership role in the campaign
+  role String @default("player") @db.VarChar(20) // 'player', 'gm', 'spectator', 'co-gm'
+
+  // Membership status
+  status String @default("active") @db.VarChar(20) // 'pending', 'active', 'inactive', 'banned'
+
+  // Invite tracking
+  invitedBy String?   @map("invited_by")
+  joinedAt  DateTime? @map("joined_at")
+
+  // Player preferences for this campaign
+  nickname String? @db.VarChar(100) // Display name override for this campaign
+  settings Json    @default("{}") @db.JsonB // Campaign-specific settings
+
+  @@unique([campaignId, playerId])
+  @@index([campaignId])
+  @@index([playerId])
+  @@index([role])
+  @@index([status])
+  @@map("campaign_members")
 }
 
 // RpgType - Entity type templates (classes, races, creature types, etc.)

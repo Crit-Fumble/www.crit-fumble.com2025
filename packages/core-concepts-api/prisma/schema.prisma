@@ -1,0 +1,610 @@
+// Core Concepts API - RPG Database Schema
+// This schema is for the standalone RPG API (DigitalOcean Managed Postgres)
+// User references are string IDs - resolved via website API when needed
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// RPG Player - Link between platform user and game identity
+// ============================================================================
+
+model RpgPlayer {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Platform user reference (resolved via website API)
+  userId String @unique @map("user_id")
+
+  // Player display name
+  displayName String? @map("display_name") @db.VarChar(100)
+
+  // Default VTT Role
+  defaultRole String @default("player") @map("default_role") // 'player' | 'gm' | 'spectator'
+
+  // Game preferences
+  gameSettings Json @default("{}") @map("game_settings") @db.JsonB
+
+  // Relations
+  ownedCampaigns       RpgCampaign[]
+  campaignMemberships  CampaignMember[]
+  controlledCharacters RpgCreature[]
+  uploadedAssets       RpgAsset[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("rpg_players")
+}
+
+// ============================================================================
+// Campaign & Session Management
+// ============================================================================
+
+model RpgCampaign {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Campaign info
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  systemName  String  @map("system_name") @db.VarChar(100)
+
+  // Owner (RpgPlayer reference)
+  ownerId String    @map("owner_id")
+  owner   RpgPlayer @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Status
+  status   String  @default("planning") @db.VarChar(20) // 'planning', 'active', 'paused', 'completed', 'archived'
+  isPublic Boolean @default(false) @map("is_public")
+
+  // Settings
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}")
+
+  // Relations
+  sessions   RpgSession[]
+  members    CampaignMember[]
+  worlds     RpgWorld[]
+  creatures  RpgCreature[]
+  assets     RpgAsset[]
+  expansions RpgExpansion[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([systemName])
+  @@index([deletedAt])
+  @@map("rpg_campaigns")
+}
+
+model CampaignMember {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Player reference
+  playerId String    @map("player_id")
+  player   RpgPlayer @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  // Campaign reference
+  campaignId String      @map("campaign_id")
+  campaign   RpgCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  // Role in campaign
+  role     String  @default("player") @db.VarChar(20) // 'player', 'gm', 'spectator'
+  isActive Boolean @default(true) @map("is_active")
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@unique([playerId, campaignId])
+  @@index([playerId])
+  @@index([campaignId])
+  @@map("campaign_members")
+}
+
+model RpgSession {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Session info
+  sessionNumber Int?     @map("session_number")
+  sessionTitle  String?  @map("session_title") @db.VarChar(500)
+  sessionDate   DateTime @map("session_date")
+
+  // Game system
+  systemName String @map("system_name") @db.VarChar(255)
+
+  // Campaign link
+  campaignId   String?      @map("campaign_id")
+  campaign     RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  campaignName String?      @map("campaign_name") @db.VarChar(255)
+
+  // World link
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Session content
+  sessionNotes String? @map("session_notes") @db.Text
+  playerNotes  String? @map("player_notes") @db.Text
+  summary      String? @db.Text
+  highlights   Json    @default("[]")
+
+  // Participants (JSON arrays of player IDs)
+  gmIds        Json @default("[]") @map("gm_ids")
+  playerIds    Json @default("[]") @map("player_ids")
+  characterIds Json @default("[]") @map("character_ids")
+
+  // Session stats
+  durationMinutes Int? @map("duration_minutes")
+  xpAwarded       Int? @map("xp_awarded")
+
+  // In-game time tracking
+  inGameTimeStart Json? @map("in_game_time_start")
+  inGameTimeEnd   Json? @map("in_game_time_end")
+
+  // Relations
+  history RpgHistory[]
+  boards  RpgBoard[]
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([sessionDate])
+  @@index([campaignId])
+  @@index([worldId])
+  @@index([systemName])
+  @@index([deletedAt])
+  @@map("rpg_sessions")
+}
+
+// ============================================================================
+// History & Timeline
+// ============================================================================
+
+model RpgHistory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Event info
+  eventType        String  @map("event_type") @db.VarChar(50)
+  eventTitle       String  @map("event_title") @db.VarChar(500)
+  eventDescription String? @map("event_description") @db.Text
+
+  // Significance (1-10)
+  significance Int @default(1)
+
+  // In-game timestamp
+  inGameTime Json? @map("in_game_time")
+
+  // Session reference
+  sessionId String?     @map("session_id")
+  session   RpgSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // World reference
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Location reference
+  locationId String?      @map("location_id")
+  location   RpgLocation? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+
+  // Participants
+  participantIds Json @default("[]") @map("participant_ids")
+  gmIds          Json @default("[]") @map("gm_ids")
+  characterIds   Json @default("[]") @map("character_ids")
+
+  // System metadata
+  systemName     String? @map("system_name") @db.VarChar(100)
+  characterLevel Int?    @map("character_level")
+
+  // Metadata
+  metadata Json @default("{}")
+
+  @@index([sessionId])
+  @@index([worldId])
+  @@index([eventType])
+  @@index([significance])
+  @@index([createdAt])
+  @@map("rpg_history")
+}
+
+// ============================================================================
+// World & Locations
+// ============================================================================
+
+model RpgWorld {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // World info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  systemName  String  @map("system_name") @db.VarChar(100)
+
+  // World scale
+  worldScale String @default("Realm") @map("world_scale") @db.VarChar(50)
+
+  // Owner (platform user ID - resolved via website API)
+  ownerId String @map("owner_id")
+
+  // Foundry VTT link
+  foundryWorldId String? @unique @map("foundry_world_id")
+
+  // World nesting
+  containerWorldId String?    @map("container_world_id")
+  containerWorld   RpgWorld?  @relation("WorldNesting", fields: [containerWorldId], references: [id], onDelete: SetNull)
+  containedWorlds  RpgWorld[] @relation("WorldNesting")
+
+  // Settings
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}") @db.JsonB
+  tags     Json @default("[]") @db.JsonB
+
+  // Relations
+  campaigns  RpgCampaign[]
+  sessions   RpgSession[]
+  creatures  RpgCreature[]
+  locations  RpgLocation[]
+  assets     RpgAsset[]
+  history    RpgHistory[]
+  activities RpgActivity[]
+
+  @@index([systemName])
+  @@index([ownerId])
+  @@index([worldScale])
+  @@index([containerWorldId])
+  @@index([foundryWorldId])
+  @@index([deletedAt])
+  @@map("rpg_worlds")
+}
+
+model RpgLocation {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Location info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+
+  // Location scale
+  locationScale String @map("location_scale") @db.VarChar(50)
+
+  // World reference
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Hierarchical nesting
+  parentLocationId String?       @map("parent_location_id")
+  parentLocation   RpgLocation?  @relation("LocationHierarchy", fields: [parentLocationId], references: [id], onDelete: SetNull)
+  childLocations   RpgLocation[] @relation("LocationHierarchy")
+
+  // Coordinates
+  coordinates Json? @db.JsonB
+
+  // Settings
+  settings Json @default("{}") @db.JsonB
+  metadata Json @default("{}")
+
+  // Relations
+  history    RpgHistory[]
+  activities RpgActivity[]
+
+  @@index([worldId])
+  @@index([parentLocationId])
+  @@index([locationScale])
+  @@index([deletedAt])
+  @@map("rpg_locations")
+}
+
+// ============================================================================
+// Creatures & Characters
+// ============================================================================
+
+model RpgCreature {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Basic info
+  name       String  @db.VarChar(100)
+  race       String? @db.VarChar(50)
+  class      String? @db.VarChar(50)
+  profession String? @db.VarChar(50)
+  level      Int     @default(0)
+  imageUrl   String? @map("image_url")
+
+  // World assignment
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  // Campaign assignment
+  campaignId String?      @map("campaign_id")
+  campaign   RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  // Player ownership (null for NPCs)
+  playerId String?    @map("player_id")
+  player   RpgPlayer? @relation(fields: [playerId], references: [id], onDelete: SetNull)
+
+  // Foundry VTT reference
+  foundryId String? @unique @map("foundry_id")
+
+  // Behavior axes (0-100)
+  lawfulness Int @default(50)
+  goodness   Int @default(50)
+  faith      Int @default(50)
+  courage    Int @default(50)
+
+  // Alignment
+  alignment String? @db.VarChar(20)
+
+  // Needs (0-100)
+  foodNeed       Int @default(85) @map("food_need")
+  waterNeed      Int @default(90) @map("water_need")
+  sleepNeed      Int @default(100) @map("sleep_need")
+  relaxationNeed Int @default(60) @map("relaxation_need")
+  adventureNeed  Int @default(100) @map("adventure_need")
+
+  // Need depletion rates
+  needDepletionRates Json @default("{}") @map("need_depletion_rates") @db.JsonB
+
+  // Profession data
+  professionData Json @default("{}") @map("profession_data") @db.JsonB
+  residence      Json @default("{}") @db.JsonB
+  inventory      Json @default("[]") @db.JsonB
+  routine        Json @default("[]") @db.JsonB
+  relationships  Json @default("[]") @db.JsonB
+
+  // Current state
+  currentActivity String?   @map("current_activity") @db.VarChar(100)
+  currentLocation String?   @map("current_location") @db.VarChar(100)
+  lastUpdate      DateTime? @map("last_update")
+
+  // Simulation zone
+  simulationZone String @default("inactive") @map("simulation_zone") @db.VarChar(20)
+
+  // Notes and tags
+  notes String[] @default([])
+  tags  Json     @default("[]") @db.JsonB
+
+  // Relations
+  activities RpgActivity[]
+
+  @@index([worldId])
+  @@index([campaignId])
+  @@index([playerId])
+  @@index([foundryId])
+  @@index([profession])
+  @@index([simulationZone])
+  @@index([deletedAt])
+  @@map("rpg_creatures")
+}
+
+// ============================================================================
+// Sheets & Boards
+// ============================================================================
+
+model RpgSheet {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Sheet info
+  name String @db.VarChar(200)
+  type String @db.VarChar(50) // 'character', 'hand', 'location', 'environment', 'creature'
+
+  // Creator (platform user ID)
+  createdBy String @map("created_by")
+
+  // World/Campaign context
+  worldId    String? @map("world_id")
+  campaignId String? @map("campaign_id")
+  systemId   String? @map("system_id")
+
+  // Sheet data
+  data     Json @default("{}") @db.JsonB
+  metadata Json @default("{}")
+
+  // Relations
+  boards RpgBoard[]
+
+  @@index([type])
+  @@index([createdBy])
+  @@index([worldId])
+  @@index([campaignId])
+  @@index([deletedAt])
+  @@map("rpg_sheets")
+}
+
+model RpgBoard {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Board info
+  name        String
+  description String? @db.Text
+
+  // Session link
+  sessionId String?     @map("session_id")
+  session   RpgSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  // Source sheet
+  sheetId String   @map("sheet_id")
+  sheet   RpgSheet @relation(fields: [sheetId], references: [id])
+
+  // Board dimensions
+  centerX Int @default(0) @map("center_x")
+  centerY Int @default(0) @map("center_y")
+  centerZ Int @default(0) @map("center_z")
+  sizeX   Int @default(50) @map("size_x")
+  sizeY   Int @default(50) @map("size_y")
+  sizeZ   Int @default(50) @map("size_z")
+
+  // Viewport state
+  viewportX    Float? @map("viewport_x")
+  viewportY    Float? @map("viewport_y")
+  viewportZoom Float? @default(1.0) @map("viewport_zoom")
+
+  // Game state
+  activeTokens Json    @default("[]") @map("active_tokens")
+  turnOrder    Json    @default("[]") @map("turn_order")
+  currentTurn  Int?    @map("current_turn")
+  currentRound Int?    @map("current_round")
+  inGameTime   Json?   @map("in_game_time")
+  activeMode   String  @default("play") @map("active_mode") @db.VarChar(50)
+  gridType     String  @default("square") @map("grid_type") @db.VarChar(20)
+
+  // Metadata
+  metadata Json @default("{}")
+  tags     Json @default("[]") @db.JsonB
+
+  @@index([sessionId])
+  @@index([sheetId])
+  @@index([activeMode])
+  @@map("rpg_boards")
+}
+
+// ============================================================================
+// Assets
+// ============================================================================
+
+model RpgAsset {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Asset info
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  assetType   String  @map("asset_type") @db.VarChar(50)
+
+  // File information
+  url      String @db.Text
+  mimeType String @map("mime_type") @db.VarChar(100)
+  fileSize BigInt @map("file_size")
+  filename String @db.VarChar(255)
+
+  // Dimensions
+  width    Int?
+  height   Int?
+  duration Int?
+
+  // Ownership
+  uploadedBy String?    @map("uploaded_by")
+  uploader   RpgPlayer? @relation(fields: [uploadedBy], references: [id], onDelete: SetNull)
+
+  // Context
+  worldId    String?      @map("world_id")
+  world      RpgWorld?    @relation(fields: [worldId], references: [id], onDelete: SetNull)
+  campaignId String?      @map("campaign_id")
+  campaign   RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  // Visibility
+  isPublic Boolean @default(false) @map("is_public")
+
+  // Categorization
+  category String?  @db.VarChar(50)
+  tags     String[] @default([])
+
+  // Usage
+  usageCount Int @default(0) @map("usage_count")
+
+  // Shortcode for lookup
+  shortcode String? @unique @db.VarChar(10)
+
+  // Metadata
+  metadata Json @default("{}") @db.JsonB
+
+  @@index([uploadedBy])
+  @@index([worldId])
+  @@index([campaignId])
+  @@index([assetType])
+  @@index([category])
+  @@index([isPublic])
+  @@index([shortcode])
+  @@index([deletedAt])
+  @@map("rpg_assets")
+}
+
+// ============================================================================
+// Expansions & Activities
+// ============================================================================
+
+model RpgExpansion {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Expansion info
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+
+  // Campaign link
+  campaignId String?      @map("campaign_id")
+  campaign   RpgCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  // Expansion data
+  data     Json @default("{}") @db.JsonB
+  metadata Json @default("{}")
+
+  @@index([campaignId])
+  @@index([deletedAt])
+  @@map("rpg_expansions")
+}
+
+model RpgActivity {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Activity info
+  activityType String @map("activity_type") @db.VarChar(50)
+  description  String @db.Text
+
+  // References
+  creatureId String?      @map("creature_id")
+  creature   RpgCreature? @relation(fields: [creatureId], references: [id], onDelete: Cascade)
+
+  worldId String?   @map("world_id")
+  world   RpgWorld? @relation(fields: [worldId], references: [id], onDelete: SetNull)
+
+  locationId String?      @map("location_id")
+  location   RpgLocation? @relation(fields: [locationId], references: [id], onDelete: SetNull)
+
+  // Timing
+  startTime DateTime? @map("start_time")
+  endTime   DateTime? @map("end_time")
+  duration  Int? // minutes
+
+  // Result
+  result   Json @default("{}") @db.JsonB
+  metadata Json @default("{}")
+
+  @@index([creatureId])
+  @@index([worldId])
+  @@index([locationId])
+  @@index([activityType])
+  @@index([createdAt])
+  @@map("rpg_activities")
+}

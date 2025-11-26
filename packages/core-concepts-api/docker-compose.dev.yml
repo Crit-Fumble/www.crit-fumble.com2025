@@ -1,0 +1,28 @@
+# Docker Compose for Local Development
+# Run: docker compose -f docker-compose.dev.yml up -d postgres
+# Then: npm run dev
+
+version: '3.8'
+
+services:
+  # PostgreSQL for local development
+  postgres:
+    image: postgres:16-alpine
+    container_name: rpg-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rpg
+      POSTGRES_USER: rpg_user
+      POSTGRES_PASSWORD: devpassword
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Use 5433 to avoid conflicts with other Postgres instances
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rpg_user -d rpg"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_dev_data:

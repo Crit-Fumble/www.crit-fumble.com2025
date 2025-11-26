@@ -33,7 +33,8 @@ fi
 if [ "$ENVIRONMENT" = "dev" ]; then
   ENV_FILE=".env"
 else
-  ENV_FILE=".env.${ENVIRONMENT}.local"
+  # Use .env.staging or .env.production (not .local versions)
+  ENV_FILE=".env.${ENVIRONMENT}"
 fi
 
 # Check if env file exists
@@ -46,8 +47,8 @@ echo "🔧 Running migrations for $ENVIRONMENT environment"
 echo "📁 Using: $ENV_FILE"
 echo ""
 
-# Load environment variables from file
-export $(cat "$ENV_FILE" | grep -v '^#' | xargs)
+# Load DATABASE_URL from env file (handles special characters properly)
+DATABASE_URL=$(grep "^DATABASE_URL=" "$ENV_FILE" | head -1 | cut -d'=' -f2-)
 
 # Check if DATABASE_URL is set
 if [ -z "$DATABASE_URL" ]; then
@@ -55,12 +56,21 @@ if [ -z "$DATABASE_URL" ]; then
   exit 1
 fi
 
-# For production, prefer DATABASE_URL_PUBLIC if available (allows running migrations locally)
-if [ "$ENVIRONMENT" = "production" ] && [ -n "$DATABASE_URL_PUBLIC" ]; then
-  echo "🌐 Using public database endpoint for local migration"
-  echo "⚠️  Note: Public endpoint is slower than VPC-internal connection"
-  export DATABASE_URL="$DATABASE_URL_PUBLIC"
+# For production, check for DATABASE_URL_UNPOOLED (Prisma migrations should use direct connection)
+if [ "$ENVIRONMENT" = "production" ] || [ "$ENVIRONMENT" = "staging" ]; then
+  DATABASE_URL_UNPOOLED=$(grep "^DATABASE_URL_UNPOOLED=" "$ENV_FILE" | head -1 | cut -d'=' -f2-)
+  if [ -n "$DATABASE_URL_UNPOOLED" ]; then
+    echo "🔗 Using unpooled connection for migrations (recommended for Prisma)"
+    DATABASE_URL="$DATABASE_URL_UNPOOLED"
+  fi
 fi
+
+export DATABASE_URL
+
+# Show which database we're connecting to (mask password)
+DB_HOST=$(echo "$DATABASE_URL" | sed -E 's/.*@([^/]+).*/\1/')
+echo "🎯 Target database: $DB_HOST"
+echo ""
 
 # Run migration based on environment
 if [ "$ENVIRONMENT" = "dev" ]; then

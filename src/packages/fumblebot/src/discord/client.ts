@@ -160,8 +160,14 @@ export class FumbleBotClient {
           .filter(cmd => !cmd.defaultMemberPermissions)
           .map(cmd => cmd.toJSON())
 
-        // Combine our commands with Entry Point commands
-        const allCommands = [...commands, ...entryPointCommands] as any
+        // Get command names from our commands
+        const commandNames = new Set(commands.map((cmd: any) => cmd.name))
+
+        // Filter out Entry Point commands that have the same name as our commands
+        const uniqueEntryPointCommands = entryPointCommands.filter((cmd: any) => !commandNames.has(cmd.name))
+
+        // Combine our commands with non-duplicate Entry Point commands
+        const allCommands = [...commands, ...uniqueEntryPointCommands] as any
 
         await guild.commands.set(allCommands)
         console.log(`[FumbleBot] Registered ${commands.length} commands to guild ${this.config.guildId}`)
@@ -175,8 +181,14 @@ export class FumbleBotClient {
               .map(cmd => cmd.toJSON())
           : []
 
-        // Combine our commands with Entry Point commands
-        const allCommands = [...commands, ...entryPointCommands] as any
+        // Get command names from our commands
+        const commandNames = new Set(commands.map((cmd: any) => cmd.name))
+
+        // Filter out Entry Point commands that have the same name as our commands
+        const uniqueEntryPointCommands = entryPointCommands.filter((cmd: any) => !commandNames.has(cmd.name))
+
+        // Combine our commands with non-duplicate Entry Point commands
+        const allCommands = [...commands, ...uniqueEntryPointCommands] as any
 
         await this.client.application?.commands.set(allCommands)
         console.log(`[FumbleBot] Registered ${commands.length} commands globally`)

@@ -1,66 +1,35 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { auth } from '@/lib/auth'
 
-// Pages that require authentication
-const protectedRoutes = [
-  '/dashboard',
-  '/account',
-  '/admin',
-  '/worlds',
-  '/universes',
-  '/vtt-platforms',
-  '/rpg-systems',
-  '/core-concepts',
-  '/characters',
-  '/campaigns',
-  // Add other protected routes here
-]
-
-// Pages that are public and don't require authentication
-const publicRoutes = [
-  '/',
-  '/login',
-  '/signup',
-  '/api',
-  '/_next',
-  '/img',
-  '/favicon.ico',
-]
-
+/**
+ * Proxy middleware
+ *
+ * Redirect all non-essential routes to homepage while site is placeholder.
+ * Auth.js handles /api/auth/* routes automatically.
+ */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip proxy for public routes
-  if (publicRoutes.some((route) => pathname.startsWith(route))) {
+  // Allow these paths through
+  const allowedPaths = [
+    '/',                    // Homepage
+    '/api',                 // API routes (including /api/auth/*)
+    '/discord',             // Discord Activity
+    '/terms-of-service',    // Legal
+    '/privacy-policy',      // Legal
+  ]
+
+  // Check if path is allowed
+  const isAllowed = allowedPaths.some((path) =>
+    pathname === path || pathname.startsWith(path + '/')
+  )
+
+  if (isAllowed) {
     return NextResponse.next()
   }
 
-  // Check if this is a protected route
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
-  )
-
-  if (isProtectedRoute) {
-    const session = await auth()
-
-    // Not logged in - redirect to login
-    if (!session?.user) {
-      const url = new URL('/login', request.url)
-      return NextResponse.redirect(url)
-    }
-
-    // Check profile completion from session (set during login)
-    // This avoids an extra DB query on every request
-    const profileCompleted = (session.user as any).profileCompleted
-
-    if (profileCompleted === false && pathname !== '/signup') {
-      const url = new URL('/signup', request.url)
-      return NextResponse.redirect(url)
-    }
-  }
-
-  return NextResponse.next()
+  // Redirect everything else to homepage
+  return NextResponse.redirect(new URL('/', request.url))
 }
 
 export const config = {
@@ -70,8 +39,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public files (public folder)
+     * - img (images)
      */
-    '/((?!_next/static|_next/image|favicon.ico|img|public).*)',
+    '/((?!_next/static|_next/image|favicon.ico|img).*)',
   ],
 }

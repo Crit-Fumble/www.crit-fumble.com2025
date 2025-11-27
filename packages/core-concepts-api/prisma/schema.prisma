@@ -253,8 +253,8 @@ model CritStoryCreditTransaction {
   source String @db.VarChar(100) // 'gm_session', 'content_approved', 'artwork_approved', 'asset_approved', etc
 
   // Optional references
-  sessionId String?      @map("session_id")
-  session   CritSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  critSessionId String?      @map("crit_session_id")
+  critSession   CritSession? @relation(fields: [critSessionId], references: [id], onDelete: SetNull)
 
   contentId String? @map("content_id") // Reference to approved content (future table)
 

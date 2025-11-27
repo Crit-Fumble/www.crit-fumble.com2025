@@ -45,15 +45,14 @@ export async function GET(request: NextRequest) {
       take: limit,
       skip: offset,
       include: {
-        session: {
+        critSession: {
           select: {
             id: true,
             sessionType: true,
             status: true,
             scheduledStartAt: true,
             actualStartAt: true,
-            actualEndAt: true,
-            sessionTitle: true
+            actualEndAt: true
           }
         }
       }
@@ -164,7 +163,7 @@ export async function POST(request: NextRequest) {
         balanceAfter: newBalance,
         description,
         source,
-        sessionId: critSessionId || null,
+        critSessionId: critSessionId || null,
         contentId: contentId || null,
         metadata: metadata || {}
       }

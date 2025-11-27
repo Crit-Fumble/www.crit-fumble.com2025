@@ -6,12 +6,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { isOwner } from '@/lib/admin'
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit'
 import Anthropic from '@anthropic-ai/sdk'
-
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 })
@@ -19,7 +19,6 @@ const anthropic = new Anthropic({
 /**
  * POST /api/ai/gm
  * Get GM assistance using Claude Sonnet for complex scenarios
- *
  * SECURITY: Owner-only access (prevents API cost abuse)
  * Rate limit: 100 requests/minute (inherited from apiRateLimiter)
  */
@@ -31,7 +30,6 @@ export async function POST(request: NextRequest) {
       apiRateLimiter,
       getClientIdentifier(undefined, ip)
     );
-
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Too many requests' },
@@ -41,7 +39,6 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-
     // AUTHENTICATION: Require logged-in user
     const session = await auth()
     if (!session?.user?.id) {
@@ -49,15 +46,14 @@ export async function POST(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only for staging (prevents cost abuse)
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required (AI features in beta)' },
         { status: 403 }
-      );
+      )
     }
 
     const body = await request.json()
@@ -69,20 +65,17 @@ export async function POST(request: NextRequest) {
       task = 'general', // 'general', 'npc', 'location', 'encounter', 'loot', 'plot'
       systemPrompt
     } = body
-
     if (!prompt) {
       return NextResponse.json(
         { error: 'Missing required field: prompt' },
         { status: 400 }
       )
     }
-
     // Build enhanced system message based on task type
     let enhancedSystemPrompt = systemPrompt || `You are an expert AI Game Master for the Crit-Fumble TTRPG platform.
 You help GMs create engaging content, populate game worlds, and manage complex scenarios.
 You understand D&D 5e and compatible systems deeply.
 Provide detailed, creative, and game-ready content.`
-
     // Add task-specific instructions
     switch (task) {
       case 'npc':
@@ -93,7 +86,7 @@ Provide detailed, creative, and game-ready content.`
 - Background and motivations
 - Stat block or reference to existing monsters
 - Potential plot hooks`
-        break
+        break;
       case 'location':
         enhancedSystemPrompt += `\n\nYou are generating location data. Include:
 - Name and description
@@ -102,7 +95,7 @@ Provide detailed, creative, and game-ready content.`
 - Secrets and hidden elements
 - Adventure hooks
 - Scale-appropriate details (refer to location scale if provided)`
-        break
+        break;
       case 'encounter':
         enhancedSystemPrompt += `\n\nYou are generating encounter data. Include:
 - Encounter setup and description
@@ -111,7 +104,7 @@ Provide detailed, creative, and game-ready content.`
 - Treasure/rewards
 - Potential complications
 - CR/difficulty rating`
-        break
+        break;
       case 'loot':
         enhancedSystemPrompt += `\n\nYou are generating loot and treasure. Include:
 - Items with descriptions
@@ -119,7 +112,7 @@ Provide detailed, creative, and game-ready content.`
 - Magical properties if applicable
 - History or backstory for unique items
 - Distribution across party members`
-        break
+        break;
       case 'plot':
         enhancedSystemPrompt += `\n\nYou are generating plot content. Include:
 - Story hooks and narrative threads
@@ -128,21 +121,20 @@ Provide detailed, creative, and game-ready content.`
 - Resolution paths
 - Pacing suggestions
 - Connections to existing world elements`
-        break
+        break;
     }
 
     // Fetch world/location context if provided
     let contextData = context || ''
-
     if (worldId) {
-      const world = await prisma.rpgWorld.findUnique({
+      const world = await prismaMain.rpgWorld.findUnique({
         where: { id: worldId },
         select: {
           name: true,
           description: true,
           systemName: true,
           worldScale: true,
-        }
+        },
       })
       if (world) {
         contextData += `\n\nWorld Context:\n- Name: ${world.name}\n- System: ${world.systemName}\n- Scale: ${world.worldScale}\n- Description: ${world.description || 'Not provided'}`
@@ -150,15 +142,15 @@ Provide detailed, creative, and game-ready content.`
     }
 
     if (locationId) {
-      const location = await prisma.rpgLocation.findUnique({
+      const location = await prismaMain.rpgLocation.findUnique({
         where: { id: locationId },
         select: {
           name: true,
-          title: true,
           description: true,
+          title: true,
           locationScale: true,
           locationType: true,
-        }
+        },
       })
       if (location) {
         contextData += `\n\nLocation Context:\n- Name: ${location.name}\n- Type: ${location.locationType}\n- Scale: ${location.locationScale}\n- Description: ${location.description || 'Not provided'}`
@@ -167,7 +159,6 @@ Provide detailed, creative, and game-ready content.`
 
     // Build messages array
     const messages: Anthropic.MessageParam[] = []
-
     if (contextData) {
       messages.push({
         role: 'user',
@@ -178,12 +169,10 @@ Provide detailed, creative, and game-ready content.`
         content: 'I understand the context and will incorporate it into my response.'
       })
     }
-
     messages.push({
       role: 'user',
       content: prompt
     })
-
     // Call Claude Sonnet (intelligent, balanced)
     const response = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
@@ -198,11 +187,10 @@ Provide detailed, creative, and game-ready content.`
     // AUDIT LOG: Track AI usage for cost monitoring
     console.log(
       `[OWNER_AI_GM] Owner ${session.user.id} used AI GM (task: ${task}). Tokens: ${response.usage?.input_tokens || 0} in, ${response.usage?.output_tokens || 0} out`
-    );
+    )
 
     return NextResponse.json({
       response: gmResponse,
-      model: 'claude-sonnet-4-20250514',
       task,
       usage: response.usage,
     })

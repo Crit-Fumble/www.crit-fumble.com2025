@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { isOwner } from '@/lib/admin';
@@ -7,7 +8,6 @@ import { isOwner } from '@/lib/admin';
 // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 //   apiVersion: '2023-10-16'
 // });
-
 /**
  * POST /api/crit/credits/cash-out
  * Cash out Story Credits via Stripe Connect (10% platform fee)
@@ -22,25 +22,20 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can cash out story credits
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
     }
-
     const body = await request.json();
     const { amount, stripeAccountId } = body;
-
     // SECURITY: Use authenticated user's ID, not client-provided
     const userId = session.user.id;
-
     // Validate required fields
     if (!amount || !stripeAccountId) {
       return NextResponse.json(
@@ -58,13 +53,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Get current Story Credits balance
-    const latestTransaction = await prisma.storyCreditTransaction.findFirst({
+    const latestTransaction = await prismaMain.critStoryCreditTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
     });
 
     const currentBalance = latestTransaction?.balanceAfter.toNumber() ?? 0;
-
     // Check sufficient balance
     if (currentBalance < amount) {
       return NextResponse.json(
@@ -76,13 +70,11 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Calculate payout
     const grossUsd = amount * 0.01; // 1 Story Credit = $0.01
     const platformFee = grossUsd * 0.10; // 10% fee
     const netPayout = grossUsd - platformFee;
     const newBalance = currentBalance - amount;
-
     // TODO: Uncomment when Stripe is configured
     // Create Stripe transfer
     // const transfer = await stripe.transfers.create({
@@ -97,12 +89,10 @@ export async function POST(request: NextRequest) {
     //     netPayout: netPayout.toFixed(2)
     //   }
     // });
-
     // For now, create a mock transfer ID
     const mockTransferId = `tr_mock_${Date.now()}`;
-
     // Create transaction
-    const transaction = await prisma.storyCreditTransaction.create({
+    const transaction = await prismaMain.critStoryCreditTransaction.create({
       data: {
         playerId: userId,
         transactionType: 'spent_payout',
@@ -125,7 +115,6 @@ export async function POST(request: NextRequest) {
     console.log(
       `[OWNER_CASHOUT] Owner ${userId} cashed out ${amount} story credits ($${netPayout.toFixed(2)} after fees)`
     );
-
     return NextResponse.json({
       success: true,
       storyCreditsDebited: amount,
@@ -150,8 +139,6 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/crit/credits/cash-out
  * Get cash-out history and status
- *
- * SECURITY: Owner-only access.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -162,10 +149,9 @@ export async function GET(request: NextRequest) {
     }
 
     // SECURITY: Only owners can view cash-out history
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
@@ -175,19 +161,16 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const requestedUserId = searchParams.get('userId');
-
     // Use requested userId or authenticated user's ID
     const userId = requestedUserId || session.user.id;
-
     // Get all cash-out transactions
-    const cashOuts = await prisma.storyCreditTransaction.findMany({
+    const cashOuts = await prismaMain.critStoryCreditTransaction.findMany({
       where: {
         playerId: userId,
         source: 'cash_out'
       },
       orderBy: { createdAt: 'desc' }
     });
-
     // Calculate totals
     const totalCreditsWithdrawn = cashOuts.reduce(
       (sum, tx) => sum + Math.abs(tx.amount.toNumber()),

@@ -39,10 +39,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
+
     // Verify user has access to this campaign
     const campaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
@@ -58,7 +60,7 @@ export async function GET(
 
     const worlds = await prismaMain.rpgCampaignWorld.findMany({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         deletedAt: null,
       },
       include: {
@@ -119,6 +121,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { worldId, notes } = body;
 
@@ -132,7 +135,7 @@ export async function POST(
     // Verify campaign exists and user is owner or GM
     const campaign = await prismaMain.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
@@ -170,7 +173,7 @@ export async function POST(
     // Check if world is already in campaign
     const existingWorld = await prismaMain.rpgCampaignWorld.findFirst({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         worldId,
         deletedAt: null,
       },
@@ -186,7 +189,7 @@ export async function POST(
     // Add world to campaign
     const campaignWorld = await prismaMain.rpgCampaignWorld.create({
       data: {
-        campaignId: params.id,
+        campaignId: id,
         worldId,
         addedBy: session.user.id,
         isActive: true,

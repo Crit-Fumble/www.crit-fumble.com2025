@@ -9,8 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/packages/cfg-lib/auth';
 import { isOwner } from '@/lib/admin';
-import prismaMain from '@/packages/cfg-lib/db-main';
-import { prisma } from '@/lib/db';
+import { prismaMain, prismaConcepts } from '@/lib/db';
 
 interface FoundryActivity {
   userId: string;
@@ -39,7 +38,7 @@ export async function GET(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
 

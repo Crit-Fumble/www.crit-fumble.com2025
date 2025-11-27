@@ -6,7 +6,7 @@ import { isOwner } from '@/lib/admin'
 // PATCH - Update a Foundry game system
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { systemId: string } }
+  { params }: { params: Promise<{ systemId: string }> }
 ) {
   try {
     const session = await auth()
@@ -22,7 +22,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Forbidden - Owner access required' }, { status: 403 })
     }
 
-    const { systemId } = params
+    const { systemId } = await params
     const body = await request.json()
     const { isEnabled, isCore, priority, notes, refreshManifest } = body
 
@@ -106,7 +106,7 @@ export async function PATCH(
 // DELETE - Soft delete a Foundry game system
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { systemId: string } }
+  { params }: { params: Promise<{ systemId: string }> }
 ) {
   try {
     const session = await auth()
@@ -122,7 +122,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden - Owner access required' }, { status: 403 })
     }
 
-    const { systemId } = params
+    const { systemId } = await params
 
     const system = await prisma.foundryGameSystem.findUnique({
       where: { systemId },

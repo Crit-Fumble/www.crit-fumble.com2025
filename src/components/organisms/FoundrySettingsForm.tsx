@@ -93,14 +93,48 @@ export function FoundrySettingsForm({
         </p>
       </div>
 
-      {/* Modules */}
+      {/* Auto-included Module Notice */}
+      <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <h4 className="text-sm font-semibold text-purple-900 dark:text-purple-300 mb-2">
+          Auto-Included Module
+        </h4>
+        <p className="text-xs text-purple-800 dark:text-purple-400 mb-3">
+          The Core Concepts module is automatically included for all game systems:
+        </p>
+        <div className="flex items-start gap-3 bg-white/50 dark:bg-slate-800/50 rounded-lg p-3">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-sm text-purple-700 dark:text-purple-300">crit-fumble-core-concepts</span>
+              <span className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs rounded">
+                Open Source
+              </span>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+              System-agnostic TTRPG framework with optional API integration.
+              Attribute mappings are fetched from your configured API on load.
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-purple-600 dark:text-purple-400 mt-3">
+          <a
+            href="https://github.com/Crit-Fumble/foundry-core-concepts"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
+            MIT + CC BY 4.0 License
+          </a>
+        </p>
+      </div>
+
+      {/* Additional Modules */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Foundry VTT Modules (Load Order)
+          Additional Foundry VTT Modules (Load Order)
         </label>
         <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-          Modules will be loaded in the order shown below when spinning up a Foundry VTT instance for
-          this system.
+          These modules will be loaded after the Core Concepts module when spinning up a
+          Foundry VTT instance for this system.
         </p>
 
         {/* Module List */}

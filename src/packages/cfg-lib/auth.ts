@@ -37,7 +37,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
+      // SECURITY: allowDangerousEmailAccountLinking removed
+      // Previously set to true, which allowed account takeover attacks
+      // Now requires explicit account linking through profile settings
+      // allowDangerousEmailAccountLinking: false, // This is the default, explicitly documented
       profile(profile) {
         return {
           id: profile.id,

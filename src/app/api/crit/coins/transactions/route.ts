@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { isOwner } from '@/lib/admin';
@@ -16,12 +17,10 @@ export async function GET(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can access crit-coin transactions
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
@@ -33,11 +32,9 @@ export async function GET(request: NextRequest) {
     const requestedUserId = searchParams.get('userId');
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100); // Cap at 100
     const offset = Math.max(parseInt(searchParams.get('offset') || '0'), 0);
-
     // Determine which user's transactions to fetch
     const userId = requestedUserId || session.user.id;
-
-    const transactions = await prisma.critCoinTransaction.findMany({
+    const transactions = await prismaMain.critCoinTransaction.findMany({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' },
       take: limit,
@@ -53,7 +50,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const total = await prisma.critCoinTransaction.count({
+    const total = await prismaMain.critCoinTransaction.count({
       where: { playerId: userId }
     });
 
@@ -75,8 +72,6 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/crit/coins/transactions
  * Create a new Crit-Coin transaction (owner/system use ONLY)
- *
- * SECURITY: Owner-only access.
  * This is an administrative endpoint for manual adjustments.
  */
 export async function POST(request: NextRequest) {
@@ -86,19 +81,7 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can create transactions
-    const user = await prisma.critUser.findUnique({
-      where: { id: session.user.id },
-    });
-
-    if (!user || !isOwner(user)) {
-      return NextResponse.json(
-        { error: 'Forbidden - Owner access required' },
-        { status: 403 }
-      );
-    }
-
     const body = await request.json();
     const {
       playerId,
@@ -111,7 +94,6 @@ export async function POST(request: NextRequest) {
       expiresAt,
       metadata
     } = body;
-
     // Validate required fields
     if (!playerId || !transactionType || !amount || !description) {
       return NextResponse.json(
@@ -119,7 +101,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Validate amount
     if (typeof amount !== 'number' || isNaN(amount)) {
       return NextResponse.json(
@@ -127,7 +108,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Validate transaction type
     const validTypes = ['credit', 'debit'];
     if (!validTypes.includes(transactionType)) {
@@ -136,16 +116,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Get current balance
-    const latestTransaction = await prisma.critCoinTransaction.findFirst({
+    const latestTransaction = await prismaMain.critCoinTransaction.findFirst({
       where: { playerId },
       orderBy: { createdAt: 'desc' }
     });
 
     const currentBalance = latestTransaction?.balanceAfter ?? 0;
     const newBalance = currentBalance + amount;
-
     // Prevent negative balance for debits
     if (newBalance < 0) {
       return NextResponse.json(
@@ -153,9 +131,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Create transaction
-    const transaction = await prisma.critCoinTransaction.create({
+    const transaction = await prismaMain.critCoinTransaction.create({
       data: {
         playerId,
         transactionType,

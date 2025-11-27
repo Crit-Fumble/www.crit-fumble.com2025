@@ -35,7 +35,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
   const [systemName, setSystemName] = useState('')
   const [systemTitle, setSystemTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [isCore, setIsCore] = useState(false)
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -56,7 +55,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
           name: systemName.trim(),
           title: systemTitle.trim(),
           description: description.trim() || null,
-          isCore,
           notes: notes.trim() || null,
         }),
       })
@@ -72,7 +70,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
       setSystemName('')
       setSystemTitle('')
       setDescription('')
-      setIsCore(false)
       setNotes('')
       setShowAddForm(false)
       router.refresh()
@@ -89,26 +86,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isEnabled: !currentState }),
-      })
-
-      if (!response.ok) throw new Error('Failed to update system')
-
-      const { system } = await response.json()
-      setSystems((prev) =>
-        prev.map((s) => (s.systemId === systemId ? system : s))
-      )
-      router.refresh()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update system')
-    }
-  }
-
-  const handleToggleCore = async (systemId: string, currentState: boolean) => {
-    try {
-      const response = await fetch(`/api/admin/rpg-systems/${systemId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isCore: !currentState }),
       })
 
       if (!response.ok) throw new Error('Failed to update system')
@@ -260,19 +237,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
               />
             </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="isCore"
-                checked={isCore}
-                onChange={(e) => setIsCore(e.target.checked)}
-                className="rounded border-gray-300 dark:border-gray-600"
-              />
-              <label htmlFor="isCore" className="text-sm text-gray-700 dark:text-gray-300">
-                Mark as Core System (officially supported)
-              </label>
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Notes (optional)
@@ -329,11 +293,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                           {system.title}
                         </h3>
-                        {system.isCore && (
-                          <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-semibold rounded">
-                            Core
-                          </span>
-                        )}
                         {!system.isEnabled && (
                           <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs font-semibold rounded">
                             Disabled
@@ -380,17 +339,6 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
                       }`}
                     >
                       {system.isEnabled ? 'Enabled' : 'Disabled'}
-                    </button>
-
-                    <button
-                      onClick={() => handleToggleCore(system.systemId, system.isCore)}
-                      className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
-                        system.isCore
-                          ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 hover:bg-purple-200 dark:hover:bg-purple-800'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-                      }`}
-                    >
-                      {system.isCore ? 'Core System' : 'Not Core'}
                     </button>
 
                     <button

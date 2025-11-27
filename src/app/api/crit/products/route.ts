@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { prisma } from '@/lib/db';
 
 /**
@@ -9,8 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const productType = searchParams.get('productType') || 'crit_coins';
-
-    const products = await prisma.critProduct.findMany({
+    const products = await prismaMain.critProduct.findMany({
       where: {
         productType,
         isActive: true,
@@ -34,7 +34,6 @@ export async function GET(request: NextRequest) {
         stripePriceId: true
       }
     });
-
     // Calculate bonus percentage for each product
     const productsWithBonus = products.map((product) => {
       if (product.critCoinAmount && product.priceUsd) {
@@ -42,7 +41,6 @@ export async function GET(request: NextRequest) {
         const expectedCoins = Number(product.priceUsd) * baseRate;
         const bonusCoins = product.critCoinAmount - expectedCoins;
         const bonusPercentage = (bonusCoins / expectedCoins) * 100;
-
         return {
           ...product,
           bonusCoins: bonusCoins > 0 ? bonusCoins : 0,
@@ -57,7 +55,7 @@ export async function GET(request: NextRequest) {
       products: productsWithBonus,
       baseRate: 1000, // 1,000 Crit-Coins = $1.00
       message: 'Buy more, get bonus coins!'
-    });
+    })
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
@@ -89,7 +87,6 @@ export async function POST(request: NextRequest) {
       stripePriceId,
       displayOrder
     } = body;
-
     // Validate required fields
     if (!sku || !name || !title || !productType || !priceUsd || !critCoinAmount) {
       return NextResponse.json(
@@ -97,9 +94,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Check for duplicate SKU
-    const existing = await prisma.critProduct.findUnique({
+    const existing = await prismaMain.critProduct.findUnique({
       where: { sku }
     });
 
@@ -109,14 +105,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const product = await prisma.critProduct.create({
+    const product = await prismaMain.critProduct.create({
       data: {
         sku,
         name,
         title,
         description: description || null,
-        productType,
         priceUsd,
         critCoinAmount,
         isFeatured: isFeatured || false,

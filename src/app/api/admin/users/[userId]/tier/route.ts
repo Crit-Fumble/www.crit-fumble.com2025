@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth'
 import { prisma } from '@/packages/cfg-lib/db'
 import { getUserPermissions, isAdminOrOwner } from '@/lib/permissions'
@@ -15,11 +16,9 @@ export async function PATCH(
 ) {
   try {
     const session = await auth()
-
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
     // Check if user is admin or owner
     const adminUser = await getUserPermissions(session.user.id)
     if (!adminUser || !isAdminOrOwner(adminUser)) {
@@ -44,7 +43,7 @@ export async function PATCH(
     }
 
     // Check if target user exists
-    const targetUser = await prisma.critUser.findUnique({
+    const targetUser = await prismaMain.critUser.findUnique({
       where: { id: userId },
       select: {
         id: true,
@@ -67,21 +66,15 @@ export async function PATCH(
     }
 
     // Update tier
-    const updatedUser = await prisma.critUser.update({
+    const updatedUser = await prismaMain.critUser.update({
       where: { id: userId },
       data: { tier: tier as UserTier },
-      select: {
-        id: true,
-        username: true,
-        tier: true,
-      },
     })
 
     // Log the tier change
     console.log(
       `[Admin] ${adminUser.id} changed ${targetUser.username}'s tier from ${targetUser.tier} to ${tier}`
     )
-
     return NextResponse.json({
       success: true,
       user: updatedUser,
@@ -106,29 +99,18 @@ export async function GET(
 ) {
   try {
     const session = await auth()
-
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Check if user is admin or owner
-    const adminUser = await getUserPermissions(session.user.id)
-    if (!adminUser || !isAdminOrOwner(adminUser)) {
-      return NextResponse.json(
-        { error: 'Forbidden - Admin access required' },
-        { status: 403 }
-      )
-    }
-
     const { userId } = await params
-
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: userId },
       select: {
         id: true,
         username: true,
-        email: true,
         tier: true,
+        email: true,
         createdAt: true,
         lastMonthlyCoinsGranted: true,
       },

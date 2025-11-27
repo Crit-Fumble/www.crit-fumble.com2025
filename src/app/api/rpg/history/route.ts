@@ -8,9 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-import prismaMain from '@/packages/cfg-lib/db-main';
-
-const prisma = prismaMain;
+import { prismaConcepts } from '@/lib/db';
 
 /**
  * GET /api/rpg/history
@@ -58,7 +56,7 @@ export async function GET(request: NextRequest) {
     if (eventType) where.eventType = eventType;
 
     const [history, total] = await Promise.all([
-      prisma.rpgHistory.findMany({
+      prismaConcepts.rpgHistory.findMany({
         where,
         include: {
           player: {
@@ -82,7 +80,7 @@ export async function GET(request: NextRequest) {
         take: limit,
         skip: offset,
       }),
-      prisma.rpgHistory.count({ where }),
+      prismaConcepts.rpgHistory.count({ where }),
     ]);
 
     return NextResponse.json({
@@ -144,7 +142,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const historyEvent = await prisma.rpgHistory.create({
+    const historyEvent = await prismaConcepts.rpgHistory.create({
       data: {
         sessionId,
         playerId: playerId || null,

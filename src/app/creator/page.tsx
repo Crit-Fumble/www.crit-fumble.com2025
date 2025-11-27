@@ -69,34 +69,9 @@ export default async function CreatorPage() {
 
             {/* Creator Tools Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* RPG Tiles */}
-              <Link
-                href="/creator/tiles"
-                className="bg-white dark:bg-slate-900 rounded-lg p-6 hover:bg-white dark:hover:bg-slate-900 transition-all hover:shadow-lg"
-                data-testid="creator-tiles-card"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 bg-crit-purple-600 rounded-lg flex items-center justify-center">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">RPG Tiles</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Multi-scale terrain & structures</p>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Define tiles with all scales and resolutions. Terrain, structures, decorations, hazards, and effects.
-                </p>
-                <div className="mt-4 text-sm text-crit-purple-600 dark:text-crit-purple-400 font-medium">
-                  Manage Tiles →
-                </div>
-              </Link>
-
               {/* RPG Assets */}
               <Link
-                href="/creator/assets"
+                href="/assets"
                 className="bg-white dark:bg-slate-900 rounded-lg p-6 hover:bg-white dark:hover:bg-slate-900 transition-all hover:shadow-lg"
                 data-testid="creator-assets-card"
               >
@@ -107,22 +82,45 @@ export default async function CreatorPage() {
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">RPG Assets</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Images, audio, video files</p>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">My Assets</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Images & documents</p>
                   </div>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Upload and manage media files. Images, audio, video, and other assets for your tiles and campaigns.
+                  Upload and manage images and documents. Assets are automatically optimized for VTT use.
                 </p>
                 <div className="mt-4 text-sm text-green-600 dark:text-green-400 font-medium">
                   Manage Assets →
                 </div>
               </Link>
 
-              {/* Tile Collections */}
-              <Link
-                href="/creator/collections"
-                className="bg-white dark:bg-slate-900 rounded-lg p-6 hover:bg-white dark:hover:bg-slate-900 transition-all hover:shadow-lg"
+              {/* RPG Tiles - Coming Soon */}
+              <div
+                className="bg-white dark:bg-slate-900 rounded-lg p-6 opacity-60"
+                data-testid="creator-tiles-card"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-crit-purple-600 rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">RPG Tiles</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Coming soon</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  Define tiles with multiple scales and resolutions. Terrain, structures, decorations, and effects.
+                </p>
+                <div className="mt-4 text-sm text-gray-400 font-medium">
+                  Coming Soon
+                </div>
+              </div>
+
+              {/* Tile Collections - Coming Soon */}
+              <div
+                className="bg-white dark:bg-slate-900 rounded-lg p-6 opacity-60"
                 data-testid="creator-collections-card"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -133,16 +131,16 @@ export default async function CreatorPage() {
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Tile Collections</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Organized tile packs</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Coming soon</p>
                   </div>
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Group related tiles into collections. 5e Terrain Pack, Dungeon Floors, etc.
+                  Group tiles into themed collections for easy organization and sharing.
                 </p>
-                <div className="mt-4 text-sm text-blue-600 dark:text-blue-400 font-medium">
-                  Manage Collections →
+                <div className="mt-4 text-sm text-gray-400 font-medium">
+                  Coming Soon
                 </div>
-              </Link>
+              </div>
             </div>
 
             {/* Quick Stats */}

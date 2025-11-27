@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { isOwner } from '@/lib/admin';
@@ -38,12 +39,10 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can convert story credits
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
@@ -53,10 +52,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { amount } = body;
-
     // SECURITY: Use authenticated user's ID, not client-provided
     const userId = session.user.id;
-
     // Validate required fields
     if (!amount) {
       return NextResponse.json(
@@ -64,7 +61,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Validate minimum amount
     if (amount < 1) {
       return NextResponse.json(
@@ -72,15 +68,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Get current Story Credits balance
-    const latestStoryCredit = await prisma.storyCreditTransaction.findFirst({
+    const latestStoryCredit = await prismaMain.critStoryCreditTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
     });
 
     const currentStoryCredits = latestStoryCredit?.balanceAfter.toNumber() ?? 0;
-
     // Check sufficient balance
     if (currentStoryCredits < amount) {
       return NextResponse.json(
@@ -92,27 +86,23 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Get current Crit-Coins balance
-    const latestCritCoin = await prisma.critCoinTransaction.findFirst({
+    const latestCritCoin = await prismaMain.critCoinTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
     });
 
     const currentCritCoins = latestCritCoin?.balanceAfter ?? 0;
-
     // Find applicable conversion tier (with bonus!)
     const tier = getConversionTier(amount);
     const critCoinsToCredit = tier.coins;
     const bonusCoins = tier.bonus;
-
     const newStoryCredits = currentStoryCredits - amount;
     const newCritCoins = currentCritCoins + critCoinsToCredit;
-
     // Create transactions in a transaction (atomic)
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prismaMain.$transaction(async (tx) => {
       // Debit Story Credits
-      const storyCreditTx = await tx.storyCreditTransaction.create({
+      const storyCreditTx = await tx.critStoryCreditTransaction.create({
         data: {
           playerId: userId,
           transactionType: 'spent_conversion',
@@ -130,7 +120,6 @@ export async function POST(request: NextRequest) {
           }
         }
       });
-
       // Credit Crit-Coins
       const critCoinTx = await tx.critCoinTransaction.create({
         data: {
@@ -144,14 +133,12 @@ export async function POST(request: NextRequest) {
           metadata: {
             storyCreditsConverted: amount,
             bonusCoins: bonusCoins,
-            bonusPercent: tier.bonusPercent,
             storyCreditTransactionId: storyCreditTx.id
           }
         }
       });
-
       // Update Story Credit transaction with reference to Crit-Coin transaction
-      await tx.storyCreditTransaction.update({
+      await tx.critStoryCreditTransaction.update({
         where: { id: storyCreditTx.id },
         data: {
           critCoinTransactionId: critCoinTx.id
@@ -160,12 +147,10 @@ export async function POST(request: NextRequest) {
 
       return { storyCreditTx, critCoinTx };
     });
-
     // AUDIT LOG
     console.log(
       `[OWNER_CONVERT] Owner ${userId} converted ${amount} story credits → ${critCoinsToCredit} crit-coins (bonus: ${bonusCoins})`
     );
-
     return NextResponse.json({
       success: true,
       storyCreditsDebited: amount,

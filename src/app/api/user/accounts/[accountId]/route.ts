@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prismaMain } from '@/lib/db'
 
 /**
  * DELETE /api/user/accounts/[accountId]
@@ -23,7 +23,7 @@ export async function DELETE(
     const { accountId } = await params
 
     // Check how many accounts the user has
-    const accountCount = await prisma.account.count({
+    const accountCount = await prismaMain.account.count({
       where: { userId: session.user.id },
     })
 
@@ -36,7 +36,7 @@ export async function DELETE(
     }
 
     // Verify the account belongs to the user
-    const account = await prisma.account.findFirst({
+    const account = await prismaMain.account.findFirst({
       where: {
         id: accountId,
         userId: session.user.id,
@@ -51,12 +51,12 @@ export async function DELETE(
     }
 
     // Delete the account
-    await prisma.account.delete({
+    await prismaMain.account.delete({
       where: { id: accountId },
     })
 
     // If this was the primary account, clear it
-    await prisma.critUser.updateMany({
+    await prismaMain.critUser.updateMany({
       where: {
         id: session.user.id,
         primaryAccountId: accountId,
@@ -98,7 +98,7 @@ export async function PATCH(
     const body = await req.json()
 
     // Verify the account belongs to the user
-    const account = await prisma.account.findFirst({
+    const account = await prismaMain.account.findFirst({
       where: {
         id: accountId,
         userId: session.user.id,
@@ -118,7 +118,7 @@ export async function PATCH(
       updateData.displayName = body.displayName
     }
 
-    const updatedAccount = await prisma.account.update({
+    const updatedAccount = await prismaMain.account.update({
       where: { id: accountId },
       data: updateData,
     })

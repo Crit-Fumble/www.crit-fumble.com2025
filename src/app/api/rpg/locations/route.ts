@@ -6,11 +6,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import prismaMain from '@/packages/cfg-lib/db-main';
-import { auth } from '@/packages/cfg-lib/auth';
+import { prismaConcepts } from '@/lib/db';
+import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-
-const prisma = prismaMain;
 
 /**
  * GET /api/rpg/locations
@@ -52,7 +50,7 @@ export async function GET(request: NextRequest) {
     // Currently using LocationSheet - may need additional location metadata
     // Support hierarchical locations (continent > kingdom > city > building > room)
 
-    const locationSheets = await prisma.locationSheet.findMany({
+    const locationSheets = await prismaConcepts.locationSheet.findMany({
       where: locationType ? { type: locationType } : undefined,
       include: {
         _count: {

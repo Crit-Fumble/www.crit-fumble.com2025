@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { prismaMain } from '@/lib/db'
 import { isOwner } from '@/lib/admin'
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit'
 
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Non-owners can only see published pages
-    const user = session?.user ? await prisma.critUser.findUnique({
+    const user = session?.user ? await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     }) : null
 
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
       where.isPublished = published === 'true'
     }
 
-    const pages = await prisma.coreConceptWiki.findMany({
+    const pages = await prismaMain.coreConceptWiki.findMany({
       where,
       include: {
         author: {
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     })
 
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if slug already exists
-    const existing = await prisma.coreConceptWiki.findUnique({
+    const existing = await prismaMain.coreConceptWiki.findUnique({
       where: { slug },
     })
 
@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create wiki page and initial revision in a transaction
-    const page = await prisma.$transaction(async (tx) => {
+    const page = await prismaMain.$transaction(async (tx) => {
       const newPage = await tx.coreConceptWiki.create({
         data: {
           slug,

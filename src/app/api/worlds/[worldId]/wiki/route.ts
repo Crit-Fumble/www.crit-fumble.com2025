@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 
 /**
@@ -74,7 +74,7 @@ export async function GET(
     // Authenticated: can see published pages if in campaign
     // Owner: can see all pages
 
-    const world = await prisma.rpgWorld.findUnique({
+    const world = await prismaMain.rpgWorld.findUnique({
       where: { id: worldId },
       select: { ownerId: true }
     });
@@ -99,7 +99,7 @@ export async function GET(
     }
 
     // Fetch wiki pages
-    const pages = await prisma.rpgWorldWiki.findMany({
+    const pages = await prismaMain.rpgWorldWiki.findMany({
       where,
       select: {
         id: true,
@@ -212,7 +212,7 @@ export async function POST(
     }
 
     // AUTHORIZATION: Check world ownership
-    const world = await prisma.rpgWorld.findUnique({
+    const world = await prismaMain.rpgWorld.findUnique({
       where: { id: worldId },
       select: { ownerId: true }
     });
@@ -232,7 +232,7 @@ export async function POST(
     }
 
     // Check if slug already exists in this world
-    const existing = await prisma.rpgWorldWiki.findUnique({
+    const existing = await prismaMain.rpgWorldWiki.findUnique({
       where: {
         worldId_slug: {
           worldId,
@@ -249,7 +249,7 @@ export async function POST(
     }
 
     // Create wiki page
-    const wikiPage = await prisma.rpgWorldWiki.create({
+    const wikiPage = await prismaMain.rpgWorldWiki.create({
       data: {
         worldId,
         slug: body.slug,
@@ -279,7 +279,7 @@ export async function POST(
     });
 
     // Create initial revision
-    await prisma.rpgWorldWikiRevision.create({
+    await prismaMain.rpgWorldWikiRevision.create({
       data: {
         wikiPageId: wikiPage.id,
         versionNumber: 1,

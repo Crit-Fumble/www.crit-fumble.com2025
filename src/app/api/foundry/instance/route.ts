@@ -5,12 +5,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/packages/cfg-lib/auth';
 import { isOwner } from '@/lib/admin';
 import { prisma } from '@/lib/db';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-
 const execAsync = promisify(exec);
 
 // Check if we're in a Docker environment
@@ -19,7 +19,6 @@ const isDocker = process.env.DOCKER_ENV === 'true';
 // Track last activity time
 let lastActivityTime: number | null = null;
 let shutdownTimer: NodeJS.Timeout | null = null;
-
 const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 
 /**
@@ -27,12 +26,10 @@ const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
  */
 function updateActivity() {
   lastActivityTime = Date.now();
-
   // Clear existing timer
   if (shutdownTimer) {
     clearTimeout(shutdownTimer);
   }
-
   // Set new shutdown timer
   shutdownTimer = setTimeout(async () => {
     const timeSinceActivity = Date.now() - (lastActivityTime || 0);
@@ -98,13 +95,13 @@ async function getFoundryStats(): Promise<any> {
     }
     return null;
   } catch (error) {
+    console.error('Error getting Foundry stats:', error);
     return null;
   }
 }
 
 /**
  * GET /api/foundry/instance - Get Foundry instance status
- *
  * SECURITY: Owner-only access
  */
 export async function GET(request: NextRequest) {
@@ -116,10 +113,9 @@ export async function GET(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only (prevents unauthorized instance access)
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
@@ -129,12 +125,10 @@ export async function GET(request: NextRequest) {
 
     const isRunning = await isFoundryRunning();
     const stats = isRunning ? await getFoundryStats() : null;
-
     const timeSinceActivity = lastActivityTime ? Date.now() - lastActivityTime : null;
     const minutesUntilShutdown = timeSinceActivity
       ? Math.max(0, Math.ceil((IDLE_TIMEOUT_MS - timeSinceActivity) / 60000))
       : null;
-
     return NextResponse.json({
       isRunning,
       lastActivityTime,
@@ -155,7 +149,6 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/foundry/instance - Start or stop Foundry instance
- *
  * SECURITY: Owner-only access (prevents unauthorized container/droplet management)
  */
 export async function POST(request: NextRequest) {
@@ -167,17 +160,16 @@ export async function POST(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only (prevents unauthorized instance management)
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
     }
-
+    // AUTHORIZATION: Owner-only (prevents unauthorized instance management)
     const body = await request.json();
     const { action } = body; // 'start' or 'stop'
 
@@ -189,7 +181,6 @@ export async function POST(request: NextRequest) {
     }
 
     const isRunning = await isFoundryRunning();
-
     if (action === 'start') {
       if (isRunning) {
         // Already running, just update activity
@@ -205,10 +196,8 @@ export async function POST(request: NextRequest) {
       // Start Foundry
       await startFoundryContainer();
       updateActivity();
-
       // Wait a moment for container to start
       await new Promise(resolve => setTimeout(resolve, 2000));
-
       return NextResponse.json({
         success: true,
         message: 'Foundry instance started',
@@ -226,7 +215,6 @@ export async function POST(request: NextRequest) {
           isRunning: false,
         });
       }
-
       // Stop Foundry
       await stopFoundryContainer();
       lastActivityTime = null;
@@ -253,8 +241,6 @@ export async function POST(request: NextRequest) {
 
 /**
  * PATCH /api/foundry/instance - Update activity (keep-alive)
- *
- * SECURITY: Owner-only access
  */
 export async function PATCH(request: NextRequest) {
   try {
@@ -265,10 +251,9 @@ export async function PATCH(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
@@ -277,28 +262,21 @@ export async function PATCH(request: NextRequest) {
     }
 
     const isRunning = await isFoundryRunning();
-
+    // AUTHORIZATION: Owner-only
     if (!isRunning) {
       return NextResponse.json({
         success: false,
         message: 'Foundry is not running',
-        isRunning: false,
+        isRunning: false
       });
     }
 
     updateActivity();
 
-    const timeSinceActivity = lastActivityTime ? Date.now() - lastActivityTime : null;
-    const minutesUntilShutdown = timeSinceActivity
-      ? Math.max(0, Math.ceil((IDLE_TIMEOUT_MS - timeSinceActivity) / 60000))
-      : null;
-
     return NextResponse.json({
       success: true,
       message: 'Activity updated',
       isRunning: true,
-      lastActivityTime,
-      minutesUntilShutdown,
     });
   } catch (error: any) {
     console.error('Error updating Foundry activity:', error);

@@ -5,8 +5,12 @@
  * Extends JournalEntry with additional functionality for structured content.
  */
 
+import { InputValidator, PermissionGuard } from './validators.mjs';
+
 const MODULE_ID = 'foundry-core-concepts';
 
+// TODO: Consider using JournalEntryPage subtypes for better structure
+// TODO: Add visual book editor with ApplicationV2
 export class BooksManager {
   constructor() {
     this.books = new Map();
@@ -65,6 +69,12 @@ export class BooksManager {
    * Create a new book
    */
   async createBook(name, options = {}) {
+    // Security: Permission check
+    PermissionGuard.requireGM('create books');
+
+    // Security: Input validation
+    InputValidator.validateEntityName(name, 'Book');
+
     const journalData = {
       name: name,
       flags: {

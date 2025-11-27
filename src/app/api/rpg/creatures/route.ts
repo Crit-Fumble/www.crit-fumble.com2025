@@ -9,9 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-import prismaMain from '@/packages/cfg-lib/db-main';
-
-const prisma = prismaMain;
+import { prismaConcepts } from '@/lib/db';
 
 /**
  * GET /api/rpg/creatures
@@ -70,7 +68,7 @@ export async function GET(request: NextRequest) {
       where.foundryId = foundryId;
     }
 
-    const creatures = await prisma.rpgCreature.findMany({
+    const creatures = await prismaConcepts.rpgCreature.findMany({
       where,
       take: limit,
       skip: offset,
@@ -83,7 +81,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const total = await prisma.rpgCreature.count({ where });
+    const total = await prismaConcepts.rpgCreature.count({ where });
 
     return NextResponse.json({
       creatures,
@@ -162,13 +160,13 @@ export async function POST(request: NextRequest) {
     // Check if creature with same foundryId already exists (upsert behavior)
     let creature;
     if (foundryId) {
-      const existing = await prisma.rpgCreature.findFirst({
+      const existing = await prismaConcepts.rpgCreature.findFirst({
         where: { foundryId }
       });
 
       if (existing) {
         // Update existing creature
-        creature = await prisma.rpgCreature.update({
+        creature = await prismaConcepts.rpgCreature.update({
           where: { id: existing.id },
           data: {
             name,
@@ -195,7 +193,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new creature
-    creature = await prisma.rpgCreature.create({
+    creature = await prismaConcepts.rpgCreature.create({
       data: {
         foundryId,
         name,

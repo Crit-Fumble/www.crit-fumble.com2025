@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && npm run build:prisma:concepts && next build",
+    "build:prisma:concepts": "cd packages/core-concepts-api && npx prisma generate",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && npm run build:prisma:concepts",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -62,6 +63,7 @@
     "@anthropic-ai/sdk": "^0.70.1",
     "@auth/express": "^0.12.1",
     "@auth/prisma-adapter": "^2.7.2",
+    "@discord/embedded-app-sdk": "^2.4.0",
     "@hookform/resolvers": "^3.9.1",
     "@playwright/test": "^1.57.0",
     "@prisma/client": "^6.19.0",
@@ -84,6 +86,7 @@
     "commander": "^14.0.2",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "discord-interactions": "^4.4.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "ffmpeg-static": "^5.3.0",
@@ -137,7 +140,7 @@
     "vitest": "^4.0.13"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": "22.x",
     "npm": ">=10.0.0"
   }
 }

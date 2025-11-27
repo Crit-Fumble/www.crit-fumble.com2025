@@ -6,16 +6,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { isOwner } from '@/lib/admin'
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit'
 import OpenAI from 'openai'
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
 })
-
 // Define schemas for structured generation
 const schemas = {
   card: {
@@ -87,7 +86,7 @@ const schemas = {
   location: {
     name: 'generate_location',
     description: 'Generate a structured location',
-    parameters: {
+    input_schema: {
       type: 'object',
       properties: {
         name: { type: 'string', description: 'Location name' },
@@ -98,7 +97,6 @@ const schemas = {
           enum: ['Interaction', 'Arena', 'Building', 'Settlement', 'County', 'Province', 'Kingdom', 'Continent', 'Realm', 'Planet', 'Orbital Space', 'Star System'],
           description: 'Scale of the location'
         },
-        description: { type: 'string', description: 'Detailed description' },
         climate: { type: 'string', description: 'Climate conditions' },
         terrain: { type: 'string', description: 'Terrain type' },
         dangerLevel: { type: 'number', minimum: 1, maximum: 20, description: 'Danger level (1-20)' },
@@ -115,7 +113,6 @@ const schemas = {
 /**
  * POST /api/ai/generate
  * Generate structured game data using GPT with function calling
- *
  * SECURITY: Owner-only access (prevents API cost abuse)
  * Rate limit: 100 requests/minute (inherited from apiRateLimiter)
  */
@@ -127,7 +124,6 @@ export async function POST(request: NextRequest) {
       apiRateLimiter,
       getClientIdentifier(undefined, ip)
     );
-
     if (!rateLimitResult.success) {
       return NextResponse.json(
         { error: 'Too many requests' },
@@ -145,15 +141,14 @@ export async function POST(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only for staging (prevents cost abuse)
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required (AI features in beta)' },
         { status: 403 }
-      );
+      )
     }
 
     const body = await request.json()
@@ -163,7 +158,6 @@ export async function POST(request: NextRequest) {
       context,
       systemName = 'dnd5e',
     } = body
-
     if (!prompt) {
       return NextResponse.json(
         { error: 'Missing required field: prompt' },
@@ -179,7 +173,6 @@ export async function POST(request: NextRequest) {
     }
 
     const schema = schemas[type as keyof typeof schemas]
-
     // Build system message
     const systemMessage = `You are an expert TTRPG content generator for the Crit-Fumble platform.
 Generate high-quality, balanced, and creative ${type} data for ${systemName}.
@@ -189,7 +182,6 @@ Follow the schema precisely and ensure all generated content is:
 - Detailed but concise
 - Game-ready with proper mechanics
 ${context ? `\n\nAdditional Context: ${context}` : ''}`
-
     // Call GPT with function calling
     const response = await openai.chat.completions.create({
       model: 'gpt-4-turbo-preview',
@@ -206,9 +198,7 @@ ${context ? `\n\nAdditional Context: ${context}` : ''}`
       tool_choice: { type: 'function', function: { name: schema.name } },
       temperature: 0.8, // More creative for generation
     })
-
     const toolCall = response.choices[0]?.message?.tool_calls?.[0]
-
     if (!toolCall || !toolCall.function.arguments) {
       return NextResponse.json(
         { error: 'No structured data generated' },
@@ -221,12 +211,11 @@ ${context ? `\n\nAdditional Context: ${context}` : ''}`
     // AUDIT LOG: Track AI usage for cost monitoring
     console.log(
       `[OWNER_AI_GENERATE] Owner ${session.user.id} generated ${type}. Tokens: ${response.usage?.prompt_tokens || 0} in, ${response.usage?.completion_tokens || 0} out`
-    );
+    )
 
     return NextResponse.json({
       data: generatedData,
       type,
-      model: 'gpt-4-turbo-preview',
       usage: response.usage,
     })
   } catch (error) {

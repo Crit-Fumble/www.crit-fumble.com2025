@@ -1,3 +1,5 @@
+import 'server-only'
+
 /**
  * Main Website Database Client (Neon)
  *

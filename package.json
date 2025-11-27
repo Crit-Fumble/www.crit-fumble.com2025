@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && npm run build:prisma:concepts && next build",
-    "build:prisma:concepts": "cd packages/core-concepts-api && npx prisma generate",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate && npm run build:prisma:concepts",
+    "postinstall": "prisma generate",
     "type-check": "tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -57,11 +56,7 @@
     "dev:env:start": "bash scripts/dev/provision-dev-db.sh",
     "dev:env:stop": "bash scripts/dev/destroy-dev-db.sh",
     "dev:env:info": "bash scripts/dev/dev-db-info.sh",
-    "prepare": "husky",
-    "fumblebot": "cd src/packages/fumblebot && npm start",
-    "fumblebot:build": "cd src/packages/fumblebot && npm run build",
-    "fumblebot:dev": "cd src/packages/fumblebot && npm run dev",
-    "fumblebot:install": "cd src/packages/fumblebot && npm install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
@@ -112,6 +107,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.53.1",
+    "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",

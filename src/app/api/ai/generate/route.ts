@@ -69,10 +69,16 @@ const schemas = {
             cha: { type: 'number', description: 'Charisma' },
         background: { type: 'string', description: 'Background story' },
         motivations: { type: 'string', description: 'Goals and motivations' },
+      },
       required: ['name', 'creatureType', 'description']
+    },
+  },
   location: {
     name: 'generate_location',
     description: 'Generate a structured location',
+    input_schema: {
+      type: 'object',
+      properties: {
         name: { type: 'string', description: 'Location name' },
         title: { type: 'string', description: 'Formal title' },
         locationType: { type: 'string', enum: ['city', 'dungeon', 'wilderness', 'structure', 'plane', 'settlement', 'underground'], description: 'Type of location' },

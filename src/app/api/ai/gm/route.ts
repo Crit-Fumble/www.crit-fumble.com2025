@@ -15,10 +15,13 @@ import Anthropic from '@anthropic-ai/sdk'
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY || '',
 })
+
+/**
  * POST /api/ai/gm
  * Get GM assistance using Claude Sonnet for complex scenarios
  * SECURITY: Owner-only access (prevents API cost abuse)
  * Rate limit: 100 requests/minute (inherited from apiRateLimiter)
+ */
 export async function POST(request: NextRequest) {
   try {
     // RATE LIMITING: Apply before auth to prevent brute force

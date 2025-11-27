@@ -5,8 +5,12 @@
  * that can be applied to actors and items as templates.
  */
 
+import { InputValidator, PermissionGuard } from './validators.mjs';
+
 const MODULE_ID = 'foundry-core-concepts';
 
+// TODO: Migrate to Foundry V12+ DataModel schema for better type safety
+// TODO: Integrate with Active Effects system for type-based modifiers
 export class TypesRegistry {
   constructor() {
     this.types = new Map();
@@ -62,6 +66,14 @@ export class TypesRegistry {
    * Register a new type definition
    */
   async registerType(name, category, template, options = {}) {
+    // Security: Permission check
+    PermissionGuard.requireGM('create type definitions');
+
+    // Security: Input validation
+    InputValidator.validateEntityName(name, 'Type');
+    InputValidator.validateJSONObject(template);
+    InputValidator.validateJSONObject(options.properties);
+
     // Create a journal entry to store the type
     const journalData = {
       name: name,

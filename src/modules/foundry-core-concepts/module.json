@@ -1,8 +1,8 @@
 {
   "id": "foundry-core-concepts",
   "title": "Core Concepts",
-  "description": "System-agnostic TTRPG framework for Foundry VTT. Provides unified abstractions for attributes, types, dice, tables, books, cards, boards, tiles, rules, events, goals, sessions, modes, systems, creatures, locations, and objects. Includes optional API integration with configurable endpoint.",
-  "version": "0.2.0",
+  "description": "System-agnostic TTRPG framework for Foundry VTT. Provides unified abstractions for attributes, types, dice, tables, books, cards, boards, tiles, rules, events, goals, sessions, modes, systems, creatures, locations, and objects. Includes optional API integration with configurable endpoint. v0.3.0: CRITICAL SECURITY FIX - Replaced eval() with safe templates.",
+  "version": "0.3.0",
   "authors": [
     {
       "name": "Core Concepts Contributors",

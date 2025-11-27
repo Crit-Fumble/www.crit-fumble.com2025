@@ -20,12 +20,20 @@ export async function setViewAsRole(role: UserRole | null) {
   })
   if (!user || !isOwner(user)) {
     throw new Error('Only owners can use View As feature')
+  }
+
   // Update viewAsRole
   await prismaMain.critUser.update({
+    where: { id: session.user.id },
     data: { viewAsRole: role },
+  })
+
   // Revalidate all pages to reflect the change
   revalidatePath('/', 'layout')
 }
+
+/**
  * Clear the viewAsRole (return to normal view)
+ */
 export async function clearViewAsRole() {
   await setViewAsRole(null)

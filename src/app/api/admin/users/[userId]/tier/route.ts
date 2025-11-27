@@ -26,15 +26,22 @@ export async function PATCH(
         { error: 'Forbidden - Admin access required' },
         { status: 403 }
       )
+    }
+
     const { userId } = await params
     const body = await req.json()
     const { tier } = body
+
     if (!tier || typeof tier !== 'string') {
       return NextResponse.json({ error: 'Tier is required' }, { status: 400 })
+    }
+
     // Validate tier value
     const validTiers: UserTier[] = ['LEGACY', 'FREE', 'PRO', 'PLUS', 'MAX']
     if (!validTiers.includes(tier as UserTier)) {
       return NextResponse.json({ error: 'Invalid tier' }, { status: 400 })
+    }
+
     // Check if target user exists
     const targetUser = await prismaMain.critUser.findUnique({
       where: { id: userId },
@@ -45,14 +52,25 @@ export async function PATCH(
         isOwner: true,
       },
     })
+
     if (!targetUser) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     // Cannot modify owner's tier unless you are the owner
     if (targetUser.isOwner && !adminUser.isOwner) {
+      return NextResponse.json(
         { error: 'Cannot modify owner tier' },
+        { status: 403 }
+      )
+    }
+
     // Update tier
     const updatedUser = await prismaMain.critUser.update({
+      where: { id: userId },
       data: { tier: tier as UserTier },
+    })
+
     // Log the tier change
     console.log(
       `[Admin] ${adminUser.id} changed ${targetUser.username}'s tier from ${targetUser.tier} to ${tier}`

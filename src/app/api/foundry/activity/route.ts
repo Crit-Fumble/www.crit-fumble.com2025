@@ -9,7 +9,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/packages/cfg-lib/auth';
 import { isOwner } from '@/lib/admin';
-import prismaMain from '@/packages/cfg-lib/db-main';
 import { prismaMain, prismaConcepts } from '@/lib/db';
 
 interface FoundryActivity {

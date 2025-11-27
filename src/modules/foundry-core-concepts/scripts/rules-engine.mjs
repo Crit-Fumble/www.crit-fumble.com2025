@@ -3,7 +3,12 @@
  *
  * Implements a formal rules system with triggers, conditions, and effects.
  * Rules can be triggered by hooks and execute conditional logic.
+ *
+ * SECURITY: Uses safe templates instead of eval() to prevent code injection.
  */
+
+import { InputValidator, PermissionGuard } from './validators.mjs';
+import { ruleTemplates } from './rule-templates.mjs';
 
 const MODULE_ID = 'foundry-core-concepts';
 
@@ -66,6 +71,32 @@ export class RulesEngine {
    * Create a new rule
    */
   async createRule(name, trigger, condition, effect, options = {}) {
+    // Security: Permission check
+    PermissionGuard.requireGM('create rules');
+
+    // Security: Input validation
+    InputValidator.validateRuleName(name);
+    InputValidator.validateTrigger(trigger);
+
+    if (options.priority !== undefined) {
+      InputValidator.validatePriority(options.priority);
+    }
+
+    // Validate effect format (must be template-based)
+    if (typeof effect === 'string') {
+      throw new Error(
+        'String-based effects are no longer supported for security reasons. ' +
+        'Please use template-based effects. Available templates: ' +
+        ruleTemplates.getTemplateNames().join(', ')
+      );
+    }
+
+    if (!effect.template) {
+      throw new Error('Effect must specify a template name');
+    }
+
+    InputValidator.validateTemplate(effect.template, ruleTemplates.getTemplates());
+
     const journalData = {
       name: name,
       flags: {
@@ -80,7 +111,9 @@ export class RulesEngine {
             description: options.description || '',
             category: options.category || 'general',
             author: options.author || game.user.name,
-            tags: options.tags || []
+            tags: options.tags || [],
+            createdAt: new Date().toISOString(),
+            version: '0.3.0' // Security fix version
           }
         }
       }
@@ -160,7 +193,7 @@ export class RulesEngine {
   }
 
   /**
-   * Evaluate a rule
+   * Evaluate a rule (SECURITY FIXED: No more eval!)
    */
   async evaluateRule(rule, hookArgs) {
     if (game.settings.get(MODULE_ID, 'debugMode')) {
@@ -172,20 +205,32 @@ export class RulesEngine {
       game: game,
       args: hookArgs,
       rule: rule,
-      // Helper functions
+      // Helper functions for safe value resolution
       getActor: (id) => game.actors.get(id),
       getItem: (id) => game.items.get(id),
       getToken: (id) => canvas.tokens.get(id),
       roll: (formula) => new Roll(formula).evaluate({ async: true })
     };
 
-    // Evaluate condition
+    // Evaluate condition using safe template system
     let conditionResult = false;
     try {
-      const conditionFn = new Function(...Object.keys(context), `return (${rule.condition});`);
-      conditionResult = conditionFn(...Object.values(context));
+      // Legacy string conditions are no longer supported
+      if (typeof rule.condition === 'string') {
+        console.warn(
+          `Rule "${rule.name}" uses legacy string condition. ` +
+          `Please migrate to safe condition objects. Treating as always true.`
+        );
+        conditionResult = true; // Default to true for backwards compatibility
+      } else {
+        // Safe condition evaluation
+        conditionResult = ruleTemplates.evaluateCondition(rule.condition, context);
+      }
     } catch (error) {
       console.error(`Rules Engine | Error in condition for rule ${rule.name}:`, error);
+      if (game.settings.get(MODULE_ID, 'debugMode')) {
+        ui.notifications.error(`Rule "${rule.name}" condition failed: ${error.message}`);
+      }
       return;
     }
 
@@ -201,21 +246,49 @@ export class RulesEngine {
       console.log(`Rules Engine | Condition true, executing effect for rule: ${rule.name}`);
     }
 
-    // Execute effect
+    // Execute effect using safe templates
     try {
-      const effectFn = new Function(...Object.keys(context), rule.effect);
-      await effectFn(...Object.values(context));
+      // Legacy string effects are no longer supported
+      if (typeof rule.effect === 'string') {
+        ui.notifications.error(
+          `Rule "${rule.name}" uses legacy string effect which is not secure. ` +
+          `Please update the rule to use safe templates.`
+        );
+        console.error(
+          `SECURITY: Rule "${rule.name}" attempted to use string effect. ` +
+          `This is blocked for security. Please migrate to template-based effects.`
+        );
+        return;
+      }
+
+      // Execute safe template
+      await ruleTemplates.executeTemplate(
+        rule.effect.template,
+        rule.effect.params || {},
+        context
+      );
 
       if (game.settings.get(MODULE_ID, 'debugMode')) {
         console.log(`Rules Engine | Effect executed for rule: ${rule.name}`);
       }
+
+      // Trigger success hook for monitoring
+      Hooks.call('coreConcepts.ruleExecuted', rule, hookArgs);
+
     } catch (error) {
       console.error(`Rules Engine | Error in effect for rule ${rule.name}:`, error);
       if (game.settings.get(MODULE_ID, 'debugMode')) {
         ui.notifications.error(`Rule "${rule.name}" effect failed: ${error.message}`);
       }
+
+      // Trigger error hook for monitoring
+      Hooks.call('coreConcepts.ruleExecutionFailed', rule, error, hookArgs);
     }
   }
+
+  // TODO: Add migration utility to convert old string-based rules to template-based rules
+  // TODO: Integrate with ApplicationV2 for visual rule builder with template selection
+  // TODO: Add rule testing/preview feature before applying to production
 
   /**
    * Enable a rule
@@ -223,6 +296,9 @@ export class RulesEngine {
   async enableRule(ruleId) {
     const rule = this.rules.get(ruleId);
     if (!rule) return;
+
+    // Security: Permission check
+    PermissionGuard.requireRuleEdit(rule, 'enable this rule');
 
     rule.enabled = true;
     await rule.journal.setFlag(MODULE_ID, 'ruleEnabled', true);
@@ -240,6 +316,9 @@ export class RulesEngine {
     const rule = this.rules.get(ruleId);
     if (!rule) return;
 
+    // Security: Permission check
+    PermissionGuard.requireRuleEdit(rule, 'disable this rule');
+
     rule.enabled = false;
     await rule.journal.setFlag(MODULE_ID, 'ruleEnabled', false);
 
@@ -255,6 +334,9 @@ export class RulesEngine {
   async deleteRule(ruleId) {
     const rule = this.rules.get(ruleId);
     if (!rule) return;
+
+    // Security: Permission check - only GMs can delete
+    PermissionGuard.requireRuleDelete(rule);
 
     await rule.journal.delete();
     this.rules.delete(ruleId);

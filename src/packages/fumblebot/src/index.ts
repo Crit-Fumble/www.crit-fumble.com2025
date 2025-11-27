@@ -190,7 +190,14 @@ export class FumbleBot {
 export async function startBot(): Promise<FumbleBot> {
   const bot = new FumbleBot()
   await bot.initialize()
-  await bot.start()
+
+  // Check if activity server should be enabled
+  const activityEnabled = process.env.FUMBLEBOT_ACTIVITY_ENABLED === 'true'
+
+  await bot.start(3001, '0.0.0.0', {
+    startActivityServer: activityEnabled,
+  })
+
   return bot
 }
 

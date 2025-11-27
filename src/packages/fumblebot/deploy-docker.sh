@@ -24,6 +24,16 @@ npm run build
 echo -e "${GREEN}✅ Build complete${NC}"
 echo ""
 
+# Step 1.5: Run integration tests
+echo -e "${YELLOW}🧪 Running integration tests...${NC}"
+if npm run test:integration; then
+    echo -e "${GREEN}✅ Integration tests passed${NC}"
+else
+    echo -e "${RED}❌ Integration tests failed - aborting deployment${NC}"
+    exit 1
+fi
+echo ""
+
 # Step 2: Create deployment package
 echo -e "${YELLOW}📦 Creating deployment package...${NC}"
 tar -czf fumblebot-docker.tar.gz \
@@ -80,6 +90,17 @@ echo ""
 # Step 5: Health check
 echo -e "${YELLOW}🏥 Running health check...${NC}"
 ssh $DROPLET_USER@$DROPLET_IP "curl -s http://localhost:3001/api/health || echo 'Health check failed'"
+echo ""
+
+# Step 6: Post-deployment integration tests
+echo -e "${YELLOW}🧪 Running post-deployment integration tests...${NC}"
+export FUMBLEBOT_ADMIN_PORTAL_URL="https://fumblebot.crit-fumble.com"
+export FUMBLEBOT_ACTIVITY_PUBLIC_URL="https://1443525084256931880.discordsays.com"
+if npm run test:integration -- src/integration/admin-portal.integration.test.ts; then
+    echo -e "${GREEN}✅ Post-deployment tests passed${NC}"
+else
+    echo -e "${YELLOW}⚠️  Some post-deployment tests failed - please review${NC}"
+fi
 echo ""
 
 # Cleanup local package

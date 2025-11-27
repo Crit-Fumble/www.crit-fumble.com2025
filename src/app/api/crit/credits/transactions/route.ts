@@ -45,17 +45,15 @@ export async function GET(request: NextRequest) {
       take: limit,
       skip: offset,
       include: {
-        critSession: {
+        session: {
           select: {
-            rpgSessionId: true,
-            rpgSession: {
-              select: {
-                title: true,
-                scheduledStart: true,
-                actualStart: true,
-                actualEnd: true
-              }
-            }
+            id: true,
+            sessionType: true,
+            status: true,
+            scheduledStartAt: true,
+            actualStartAt: true,
+            actualEndAt: true,
+            sessionTitle: true
           }
         }
       }

@@ -4,7 +4,7 @@
 FROM felddy/foundryvtt:release
 
 # Metadata
-LABEL maintainer="Crit-Fumble <dev@crit-fumble.com>"
+LABEL maintainer="Crit-Fumble <crit.fumble.web@gmail.com>"
 LABEL description="Foundry VTT with Core Concepts modules"
 
 # Set environment variables

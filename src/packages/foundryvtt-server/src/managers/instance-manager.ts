@@ -48,13 +48,13 @@ export class InstanceManager {
   /**
    * Start a Foundry instance
    */
-  async startInstance(worldId: string, ownerId: string, environment: FoundryEnvironment, slot: number): Promise<ContainerConfig> {
+  async startInstance(worldId: string, ownerId: string, environment: FoundryEnvironment, slot: number, licenseKey: string): Promise<ContainerConfig> {
     const config = this.getContainerConfig(environment, slot);
 
     console.log(`[${environment.toUpperCase()}] Starting Foundry instance ${config.containerName} for world ${worldId}`);
 
     try {
-      await this.dockerManager.startContainer(config.containerName);
+      await this.dockerManager.startContainer(config.containerName, licenseKey);
       return config;
     } catch (error) {
       console.error(`Failed to start instance ${config.containerName}:`, error);

@@ -17,6 +17,7 @@ export interface StartContainerRequest {
   ownerId: string;
   slot: number;
   environment: FoundryEnvironment;
+  licenseKey: string; // Foundry VTT license key (provided by user)
 }
 
 export interface StartContainerResponse {

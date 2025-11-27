@@ -14,21 +14,72 @@ export class DockerManager {
   }
 
   /**
-   * Start a Docker container by name
+   * Start a Docker container by name with an optional license key
+   * If a license key is provided, the container will be recreated with the new environment variable
    */
-  async startContainer(containerName: string): Promise<void> {
+  async startContainer(containerName: string, licenseKey?: string): Promise<void> {
     try {
       const container = this.docker.getContainer(containerName);
 
-      // Check if container is already running
-      const info = await container.inspect();
-      if (info.State.Running) {
-        console.log(`Container ${containerName} is already running`);
-        return;
+      // Check if container exists
+      let info;
+      try {
+        info = await container.inspect();
+      } catch (error: any) {
+        if (error.statusCode === 404) {
+          throw new Error(`Container ${containerName} does not exist. Containers must be pre-created.`);
+        }
+        throw error;
       }
 
-      await container.start();
-      console.log(`Successfully started container: ${containerName}`);
+      // If a license key is provided, recreate the container with the new environment variable
+      if (licenseKey) {
+        const wasRunning = info.State.Running;
+
+        // Stop the container if it's running
+        if (wasRunning) {
+          await container.stop();
+        }
+
+        // Get current container configuration
+        const config = info.Config;
+        const hostConfig = info.HostConfig;
+
+        // Update environment variables with license key
+        const env = config.Env || [];
+        const updatedEnv = [
+          ...env.filter((e: string) => !e.startsWith('FOUNDRY_LICENSE_KEY=')),
+          `FOUNDRY_LICENSE_KEY=${licenseKey}`
+        ];
+
+        // Remove the old container
+        await container.remove();
+
+        // Create new container with updated environment
+        const newContainer = await this.docker.createContainer({
+          name: containerName,
+          Image: config.Image,
+          Env: updatedEnv,
+          HostConfig: hostConfig,
+          ExposedPorts: config.ExposedPorts,
+          Volumes: config.Volumes,
+          WorkingDir: config.WorkingDir,
+          Cmd: config.Cmd
+        });
+
+        // Start the new container
+        await newContainer.start();
+        console.log(`Successfully started container ${containerName} with new license key`);
+      } else {
+        // No license key provided, just start if not already running
+        if (info.State.Running) {
+          console.log(`Container ${containerName} is already running`);
+          return;
+        }
+
+        await container.start();
+        console.log(`Successfully started container: ${containerName}`);
+      }
     } catch (error) {
       console.error(`Failed to start container ${containerName}:`, error);
       throw new Error(`Failed to start container ${containerName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -120,7 +171,9 @@ export class DockerManager {
     for (const [key, bindings] of Object.entries(ports)) {
       if (bindings && bindings.length > 0) {
         const hostPort = bindings[0].HostPort;
-        return parseInt(hostPort, 10);
+        if (hostPort) {
+          return parseInt(hostPort, 10);
+        }
       }
     }
 

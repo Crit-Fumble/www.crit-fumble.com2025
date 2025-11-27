@@ -77,9 +77,11 @@ export const createMockPrisma = () => ({
 
 export const prismaMock = createMockPrisma();
 
-// Mock the db-main module
-vi.mock('@/packages/cfg-lib/db-main', () => ({
+// Mock the db module
+vi.mock('@/lib/db', () => ({
+  prisma: prismaMock,
   prismaMain: prismaMock,
+  prismaConcepts: prismaMock,
   default: prismaMock,
 }));
 

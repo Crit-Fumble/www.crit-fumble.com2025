@@ -135,6 +135,9 @@ export class FumbleBot {
 
     // Start Discord client
     await this.discordClient.start()
+
+    // After Discord client is ready, pass it to API server for admin checks
+    this.apiServer.setDiscordClient(this.discordClient)
   }
 
   /**

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
 
 /**
  * GET /api/user/profile
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const user = await prismaMain.critUser.findUnique({
+    const user = await prisma.critUser.findUnique({
       where: { id: session.user.id },
       select: {
         id: true,
@@ -117,7 +117,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     // Perform update
-    const user = await prismaMain.critUser.update({
+    const user = await prisma.critUser.update({
       where: { id: session.user.id },
       data: updateData,
       select: {

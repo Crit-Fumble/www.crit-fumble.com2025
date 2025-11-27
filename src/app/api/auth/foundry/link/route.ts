@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prismaMain } from '@/lib/db';
-import { auth } from '@/packages/cfg-lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
+import { auth } from '@/lib/auth'
 import crypto from 'crypto'
 
 /**

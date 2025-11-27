@@ -4,7 +4,7 @@
  * Functions for checking admin access based on Discord IDs and developer privileges
  */
 
-import { isDeveloper } from '@/packages/cfg-lib/developer-privileges'
+import { isDeveloper } from '@/lib/developer-privileges'
 import type { CritUser } from '@prisma/client'
 import { prisma } from '@/lib/db'
 

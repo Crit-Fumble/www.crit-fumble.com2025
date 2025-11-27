@@ -3,9 +3,7 @@
  * Handles shortcode generation and QR code overlay for printable assets
  */
 
-import prismaMain from '@/packages/cfg-lib/db-main';
-
-const prisma = prismaMain;
+import { prisma } from '@/lib/db';
 
 /**
  * Generate a unique shortcode for an asset

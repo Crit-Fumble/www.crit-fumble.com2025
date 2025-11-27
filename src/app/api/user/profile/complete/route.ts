@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
 
 /**
  * POST /api/user/profile/complete
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if username is already taken (excluding current user)
-    const existingUser = await prismaMain.critUser.findFirst({
+    const existingUser = await prisma.critUser.findFirst({
       where: {
         username,
         NOT: {
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     // Check if email is already taken (excluding current user)
     if (email) {
-      const existingEmail = await prismaMain.critUser.findFirst({
+      const existingEmail = await prisma.critUser.findFirst({
         where: {
           email,
           NOT: {
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Update user profile
-    const user = await prismaMain.critUser.update({
+    const user = await prisma.critUser.update({
       where: { id: session.user.id },
       data: {
         username,

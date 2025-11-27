@@ -1,4 +1,4 @@
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
 import { getMonthlyCoins } from './permissions'
 import type { UserTier } from '@prisma/client'
 

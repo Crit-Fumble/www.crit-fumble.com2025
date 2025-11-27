@@ -31,29 +31,45 @@ export async function POST(request: NextRequest) {
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
+    }
     const body = await request.json();
     const { amount, stripeAccountId } = body;
     // SECURITY: Use authenticated user's ID, not client-provided
     const userId = session.user.id;
     // Validate required fields
     if (!amount || !stripeAccountId) {
+      return NextResponse.json(
         { error: 'Missing required fields: amount, stripeAccountId' },
         { status: 400 }
+      );
+    }
+
     // Validate minimum amount
     if (amount < 1000) {
+      return NextResponse.json(
         { error: 'Minimum cash-out is 1,000 Story Credits ($10 USD)' },
+        { status: 400 }
+      );
+    }
+
     // Get current Story Credits balance
     const latestTransaction = await prismaMain.critStoryCreditTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
+    });
+
     const currentBalance = latestTransaction?.balanceAfter.toNumber() ?? 0;
     // Check sufficient balance
     if (currentBalance < amount) {
+      return NextResponse.json(
         {
           error: 'Insufficient Story Credits',
           currentBalance,
           requestedAmount: amount
         },
+        { status: 400 }
+      );
+    }
     // Calculate payout
     const grossUsd = amount * 0.01; // 1 Story Credit = $0.01
     const platformFee = grossUsd * 0.10; // 10% fee
@@ -93,6 +109,8 @@ export async function POST(request: NextRequest) {
           platformFeePercentage: 10
         }
       }
+    });
+
     // AUDIT LOG
     console.log(
       `[OWNER_CASHOUT] Owner ${userId} cashed out ${amount} story credits ($${netPayout.toFixed(2)} after fees)`
@@ -108,17 +126,39 @@ export async function POST(request: NextRequest) {
       transaction,
       stripeTransferId: mockTransferId,
       message: 'Cash-out initiated. Funds will be transferred to your Stripe account within 1-2 business days.'
+    });
   } catch (error) {
     console.error('Error cashing out Story Credits:', error);
     return NextResponse.json(
       { error: 'Failed to cash out Story Credits' },
       { status: 500 }
+    );
   }
 }
+
+/**
  * GET /api/crit/credits/cash-out
  * Get cash-out history and status
+ */
 export async function GET(request: NextRequest) {
+  try {
+    // SECURITY: Require authentication
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     // SECURITY: Only owners can view cash-out history
+    const user = await prismaMain.critUser.findUnique({
+      where: { id: session.user.id },
+    });
+    if (!user || !isOwner(user)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Owner access required' },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const requestedUserId = searchParams.get('userId');
     // Use requested userId or authenticated user's ID
@@ -126,20 +166,40 @@ export async function GET(request: NextRequest) {
     // Get all cash-out transactions
     const cashOuts = await prismaMain.critStoryCreditTransaction.findMany({
       where: {
+        playerId: userId,
         source: 'cash_out'
       },
+      orderBy: { createdAt: 'desc' }
+    });
     // Calculate totals
     const totalCreditsWithdrawn = cashOuts.reduce(
       (sum, tx) => sum + Math.abs(tx.amount.toNumber()),
       0
+    );
+
     const totalUsdWithdrawn = cashOuts.reduce(
       (sum, tx) => sum + ((tx.metadata as any)?.netPayout || 0),
+      0
+    );
+
     const totalPlatformFees = cashOuts.reduce(
       (sum, tx) => sum + ((tx.metadata as any)?.platformFee || 0),
+      0
+    );
+
+    return NextResponse.json({
       cashOuts,
       totals: {
         creditsWithdrawn: totalCreditsWithdrawn,
         usdWithdrawn: totalUsdWithdrawn,
         platformFees: totalPlatformFees
+      }
+    });
+  } catch (error) {
     console.error('Error fetching cash-out history:', error);
+    return NextResponse.json(
       { error: 'Failed to fetch cash-out history' },
+      { status: 500 }
+    );
+  }
+}

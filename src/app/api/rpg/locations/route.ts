@@ -7,10 +7,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaConcepts } from '@/lib/db';
-import { auth } from '@/packages/cfg-lib/auth';
+import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-
-const prisma = prismaMain;
 
 /**
  * GET /api/rpg/locations

@@ -7,15 +7,17 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaMain } from '@/lib/db';
-import prismaMain from '@/packages/cfg-lib/db-main';
 import { auth } from '@/packages/cfg-lib/auth';
 import { isOwner } from '@/lib/admin';
 import { prisma as critPrisma } from '@/lib/db';
 import { getWorldAssetStats } from '@/lib/asset-utils';
 const prisma = prismaMain;
+
+/**
  * GET /api/foundry/assets
  * List assets with optional filtering
  * SECURITY: Owner-only access
+ */
 export async function GET(request: NextRequest) {
   try {
     // AUTHENTICATION: Require logged-in user
@@ -32,6 +34,7 @@ export async function GET(request: NextRequest) {
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
+    }
     const { searchParams } = new URL(request.url);
     const worldId = searchParams.get('worldId');
     const assetType = searchParams.get('assetType');
@@ -44,20 +47,31 @@ export async function GET(request: NextRequest) {
     if (stats && worldId) {
       const assetStats = await getWorldAssetStats(worldId);
       return NextResponse.json({ stats: assetStats });
+    }
+
     // Build where clause
     const where: any = {};
     if (worldId) {
       where.worldId = worldId;
+    }
+
     if (assetType) {
       where.assetType = assetType;
+    }
+
     if (mirrored !== null) {
       where.metadata = {
         path: ['mirrored'],
         equals: mirrored === 'true'
       };
+    }
+
     if (minUsage) {
       where.usageCount = {
         gte: parseInt(minUsage)
+      };
+    }
+
     const assets = await prismaMain.rpgAsset.findMany({
       where,
       take: limit,
@@ -83,6 +97,8 @@ export async function GET(request: NextRequest) {
         createdAt: true,
         updatedAt: true
       }
+    });
+
     const total = await prismaMain.rpgAsset.count({ where });
     return NextResponse.json({
       assets,
@@ -91,6 +107,8 @@ export async function GET(request: NextRequest) {
         limit,
         offset,
         hasMore: offset + limit < total
+      }
+    });
   } catch (error) {
     console.error('Assets GET error:', error);
     return NextResponse.json(
@@ -99,14 +117,41 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+/**
  * DELETE /api/foundry/assets
  * Delete unused assets
+ */
 export async function DELETE(request: NextRequest) {
+  try {
+    // AUTHENTICATION: Require logged-in user
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // AUTHORIZATION: Owner-only
+    const user = await critPrisma.critUser.findUnique({
+      where: { id: session.user.id },
+    });
+    if (!user || !isOwner(user)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Owner access required' },
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const worldId = searchParams.get('worldId');
     const assetId = searchParams.get('assetId');
     const unused = searchParams.get('unused') === 'true';
+
     if (!worldId && !assetId) {
+      return NextResponse.json(
         { error: 'worldId or assetId required' },
         { status: 400 }
+      );
+    }
     let deleted;
     if (assetId) {
       // Delete specific asset
@@ -117,6 +162,9 @@ export async function DELETE(request: NextRequest) {
         success: true,
         deleted: 1,
         asset: deleted
+      });
+    }
+
     if (unused && worldId) {
       // Delete assets with usageCount = 0
       deleted = await prismaMain.rpgAsset.deleteMany({
@@ -124,8 +172,23 @@ export async function DELETE(request: NextRequest) {
           worldId,
           usageCount: 0
         }
+      });
+
+      return NextResponse.json({
+        success: true,
         deleted: deleted.count
+      });
+    }
+
+    return NextResponse.json(
       { error: 'No deletion criteria specified' },
       { status: 400 }
+    );
+  } catch (error) {
     console.error('Assets DELETE error:', error);
+    return NextResponse.json(
       { error: 'Failed to delete assets', details: String(error) },
+      { status: 500 }
+    );
+  }
+}

@@ -79,21 +79,53 @@ export async function PATCH(
       success: true,
       user: updatedUser,
       message: `Tier updated to ${tier}`,
+    })
   } catch (error) {
     console.error('Error updating user tier:', error)
     return NextResponse.json(
       { error: 'Failed to update user tier' },
       { status: 500 }
+    )
   }
 }
+
+/**
  * GET /api/admin/users/:userId/tier
  * Get a user's tier (admin only)
+ */
 export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { userId } = await params
     const user = await prismaMain.critUser.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true,
+        tier: true,
         email: true,
         createdAt: true,
         lastMonthlyCoinsGranted: true,
+      },
+    })
+
     if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     return NextResponse.json(user)
+  } catch (error) {
     console.error('Error fetching user tier:', error)
+    return NextResponse.json(
       { error: 'Failed to fetch user tier' },
+      { status: 500 }
+    )
+  }
+}

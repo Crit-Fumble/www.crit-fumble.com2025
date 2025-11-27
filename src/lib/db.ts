@@ -1,4 +1,5 @@
 /**
- * Re-export db from cfg-lib package for backward compatibility
+ * Re-export database clients from the db directory
+ * This file provides backward compatibility for imports from '@/lib/db'
  */
-export * from '../packages/cfg-lib/db';
+export * from './db/index';

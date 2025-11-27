@@ -43,19 +43,28 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     // AUTHORIZATION: Owner-only for staging (prevents cost abuse)
     const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
     if (!user || !isOwner(user)) {
+      return NextResponse.json(
         { error: 'Forbidden - Owner access required (AI features in beta)' },
         { status: 403 }
+      )
+    }
+
     const body = await request.json()
     const { prompt, context, systemPrompt } = body
     if (!prompt) {
+      return NextResponse.json(
         { error: 'Missing required field: prompt' },
         { status: 400 }
       )
+    }
+
     // Build system message
     const systemMessage = systemPrompt || `You are a helpful TTRPG rules assistant for the Crit-Fumble platform.
 Provide clear, concise answers about game rules, mechanics, and gameplay questions.
@@ -68,8 +77,11 @@ Be helpful but brief - users want quick answers.`
         role: 'user',
         content: `Context: ${context}`
       })
+      messages.push({
         role: 'assistant',
         content: 'I understand the context. How can I help?'
+      })
+    }
     messages.push({
       role: 'user',
       content: prompt
@@ -80,14 +92,20 @@ Be helpful but brief - users want quick answers.`
       max_tokens: 1024,
       system: systemMessage,
       messages,
+    })
+
     const textContent = response.content.find(c => c.type === 'text')
     const assistantResponse = textContent && 'text' in textContent ? textContent.text : ''
+
     // AUDIT LOG: Track AI usage for cost monitoring
     console.log(
       `[OWNER_AI_ASSIST] Owner ${session.user.id} used AI assist. Tokens: ${response.usage?.input_tokens || 0} in, ${response.usage?.output_tokens || 0} out`
+    )
+
     return NextResponse.json({
       response: assistantResponse,
       usage: response.usage,
+    })
   } catch (error) {
     console.error('AI Assist API error:', error)
     return NextResponse.json(

@@ -37,3 +37,4 @@ export async function setViewAsRole(role: UserRole | null) {
  */
 export async function clearViewAsRole() {
   await setViewAsRole(null)
+}

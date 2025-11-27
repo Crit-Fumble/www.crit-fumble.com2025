@@ -26,6 +26,8 @@ export async function GET(request: NextRequest) {
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
+    }
+
     const { searchParams } = new URL(request.url);
     const requestedUserId = searchParams.get('userId');
     // Use requested userId or authenticated user's ID
@@ -38,6 +40,8 @@ export async function GET(request: NextRequest) {
         balanceAfter: true,
         createdAt: true
       }
+    });
+
     const balance = latestTransaction?.balanceAfter.toNumber() ?? 0;
     const balanceUsd = (balance * 0.01).toFixed(2); // 1 Story Credit = $0.01
     const critCoinsEquivalent = balance * 10; // 1 Story Credit = 10 Crit-Coins
@@ -48,6 +52,7 @@ export async function GET(request: NextRequest) {
       canCashOut: balance >= 1000, // Minimum 1,000 credits
       canConvert: balance >= 100, // Minimum 100 credits to convert
       lastUpdated: latestTransaction?.createdAt ?? null
+    });
   } catch (error) {
     console.error('Error fetching Story Credits balance:', error);
     return NextResponse.json(

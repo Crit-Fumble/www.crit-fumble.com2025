@@ -11,6 +11,8 @@ import { prisma } from '@/lib/db';
 import { isOwner } from '@/lib/admin';
 const FOUNDRY_BRIDGE_URL = process.env.FOUNDRY_BRIDGE_URL || 'http://localhost:30000';
 const FOUNDRY_API_TOKEN = process.env.FOUNDRY_API_TOKEN;
+
+/**
  * POST /api/foundry/sync
  * Proxy sync requests to Foundry bridge with authentication
  *
@@ -20,6 +22,7 @@ const FOUNDRY_API_TOKEN = process.env.FOUNDRY_API_TOKEN;
  * - rpgWorldId: string
  * - entities: object (selected entities to sync)
  * - options: object (optional sync options)
+ */
 export async function POST(request: NextRequest) {
   try {
     // Require authentication
@@ -36,13 +39,18 @@ export async function POST(request: NextRequest) {
         { error: 'Forbidden - Owner access required for Foundry sync' },
         { status: 403 }
       );
+    }
     const { searchParams } = new URL(request.url);
     const mode = searchParams.get('mode') || 'import';
     const body = await request.json();
     const { rpgWorldId, entities, options } = body;
+
     if (!rpgWorldId) {
+      return NextResponse.json(
         { error: 'Missing required field: rpgWorldId' },
         { status: 400 }
+      );
+    }
     // Determine endpoint based on mode
     const endpoint = mode === 'import'
       ? `${FOUNDRY_BRIDGE_URL}/sync/import/world`
@@ -69,10 +77,16 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${FOUNDRY_API_TOKEN}`,
       },
       body: JSON.stringify(requestBody),
+    });
+
     if (!response.ok) {
       const errorText = await response.text();
+      return NextResponse.json(
         { error: `Foundry sync failed: ${response.statusText}`, details: errorText },
         { status: response.status }
+      );
+    }
+
     const result = await response.json();
     return NextResponse.json(result);
   } catch (error) {

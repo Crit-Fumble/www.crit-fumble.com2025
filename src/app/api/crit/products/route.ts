@@ -47,11 +47,15 @@ export async function GET(request: NextRequest) {
           bonusPercentage: bonusPercentage > 0 ? Math.round(bonusPercentage) : 0,
           effectiveRate: product.critCoinAmount / Number(product.priceUsd)
         };
+      }
       return product;
+    });
+
     return NextResponse.json({
       products: productsWithBonus,
       baseRate: 1000, // 1,000 Crit-Coins = $1.00
       message: 'Buy more, get bonus coins!'
+    })
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
@@ -60,9 +64,13 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+/**
  * POST /api/crit/products
  * Create a new Crit-Coin product package (admin only)
+ */
 export async function POST(request: NextRequest) {
+  try {
     const body = await request.json();
     const {
       sku,
@@ -89,8 +97,14 @@ export async function POST(request: NextRequest) {
     // Check for duplicate SKU
     const existing = await prismaMain.critProduct.findUnique({
       where: { sku }
+    });
+
     if (existing) {
+      return NextResponse.json(
         { error: 'Product with this SKU already exists' },
+        { status: 400 }
+      );
+    }
     const product = await prismaMain.critProduct.create({
       data: {
         sku,
@@ -105,7 +119,18 @@ export async function POST(request: NextRequest) {
         stripeProductId: stripeProductId || null,
         stripePriceId: stripePriceId || null,
         displayOrder: displayOrder || 0
+      }
+    });
+
+    return NextResponse.json({
       product,
       message: 'Product created successfully'
+    });
+  } catch (error) {
     console.error('Error creating product:', error);
+    return NextResponse.json(
       { error: 'Failed to create product' },
+      { status: 500 }
+    );
+  }
+}

@@ -26,6 +26,8 @@ export async function GET(request: NextRequest) {
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
+    }
+
     const { searchParams } = new URL(request.url);
     const requestedUserId = searchParams.get('userId');
     // Determine which user's balance to fetch
@@ -38,12 +40,15 @@ export async function GET(request: NextRequest) {
         balanceAfter: true,
         createdAt: true
       }
+    });
+
     const balance = latestTransaction?.balanceAfter ?? 0;
     const balanceUsd = (balance / 1000).toFixed(2);
     return NextResponse.json({
       balance,
       balanceUsd,
       lastUpdated: latestTransaction?.createdAt ?? null
+    });
   } catch (error) {
     console.error('Error fetching Crit-Coin balance:', error);
     return NextResponse.json(

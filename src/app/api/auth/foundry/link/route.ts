@@ -58,12 +58,27 @@ export async function POST(request: NextRequest) {
       },
     })
     if (!testResponse.ok) {
+      return NextResponse.json(
         { error: 'Failed to connect to Foundry VTT. Please check your API URL and key.' },
+        { status: 401 }
+      )
+    }
+
     const foundryData = await testResponse.json()
     // Fetch user info from Foundry
     const userResponse = await fetch(`${apiUrl}/api/user`, {
+      headers: {
+        'X-API-Key': apiKey,
+        'Authorization': `Bearer ${apiKey}`,
+      },
+    })
     if (!userResponse.ok) {
+      return NextResponse.json(
         { error: 'Failed to fetch user info from Foundry VTT' },
+        { status: 401 }
+      )
+    }
+
     const userData = await userResponse.json()
     // Encrypt API key before storing
     const encryptionSecret = process.env.API_KEY_ENCRYPTION_SECRET!
@@ -78,6 +93,9 @@ export async function POST(request: NextRequest) {
         foundryApiKey: encryptedKey,
         foundryUsername: userData.name,
         foundryUserId: userData.id,
+      },
+    })
+
     return NextResponse.json({
       success: true,
       username: userData.name,
@@ -109,6 +127,7 @@ export async function POST(request: NextRequest) {
             apiKey: 'your-api-key',
           },
         },
+      },
     },
     { status: 501 }
   )

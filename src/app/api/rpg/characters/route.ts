@@ -1,3 +1,8 @@
+/**
+ * RPG Characters API Route
+ * Manages player characters with GM approval system
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaConcepts } from '@/lib/db';
 import { auth } from '@/lib/auth';

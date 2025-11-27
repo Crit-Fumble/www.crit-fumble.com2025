@@ -13,15 +13,11 @@ RUN apk add --no-cache \
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY tsconfig.json ./
+# Copy all files
+COPY . .
 
 # Install dependencies
-RUN npm ci --only=production
-
-# Copy source code
-COPY . .
+RUN npm install --production
 
 # Generate Prisma Client
 RUN npx prisma generate --schema=prisma/schema.prisma

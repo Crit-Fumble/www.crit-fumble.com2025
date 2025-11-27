@@ -7,6 +7,7 @@
 import express, { Request, Response, NextFunction } from 'express'
 import session from 'express-session'
 import cookieParser from 'cookie-parser'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import { ExpressAuth } from '@auth/express'
 import Discord from '@auth/express/providers/discord'
 import { loadConfig } from '../config.js'
@@ -58,9 +59,15 @@ export class APIServer {
     })
 
     // Session configuration - shared with main site
+    const authSecret =
+      process.env.AUTH_SECRET ||
+      process.env.FUMBLEBOT_DISCORD_CLIENT_SECRET ||
+      process.env.NEXTAUTH_SECRET ||
+      'fumblebot-dev-secret'
+
     this.app.use(
       session({
-        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'fumblebot-dev-secret',
+        secret: authSecret,
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -74,7 +81,7 @@ export class APIServer {
 
     // Auth.js Express adapter
     this.app.use(
-      '/auth/*',
+      '/auth',
       ExpressAuth({
         providers: [
           Discord({
@@ -82,7 +89,7 @@ export class APIServer {
             clientSecret: process.env.FUMBLEBOT_DISCORD_CLIENT_SECRET || process.env.DISCORD_CLIENT_SECRET!,
           }),
         ],
-        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET!,
+        secret: authSecret,
         trustHost: true,
       })
     )
@@ -103,6 +110,9 @@ export class APIServer {
 
     // Stats endpoint
     this.app.get('/api/stats', this.handleStats.bind(this))
+
+    // Proxy Discord Activity routes to activity server (port 3000)
+    this.app.use('/discord/activity', this.proxyToActivityServer.bind(this))
 
     // Login page
     this.app.get('/login', this.handleLoginPage.bind(this))
@@ -171,6 +181,20 @@ export class APIServer {
    */
   setDiscordClient(client: FumbleBotClient): void {
     this.discordClient = client
+  }
+
+  /**
+   * Proxy requests to the activity server
+   */
+  private proxyToActivityServer(req: Request, res: Response, next: NextFunction): void {
+    const proxy = createProxyMiddleware({
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/discord/activity': '/discord/activity', // Keep the path as is
+      },
+    })
+    proxy(req, res, next)
   }
 
   // ===========================================

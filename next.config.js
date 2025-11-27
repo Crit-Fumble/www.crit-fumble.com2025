@@ -36,6 +36,20 @@ const nextConfig = {
   // Security headers
   async headers() {
     return [
+      // Allow Discord activity to be embedded in iframes
+      {
+        source: '/discord/activity',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'ALLOWALL',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://discord.com https://*.discord.com",
+          },
+        ],
+      },
       {
         source: '/:path*',
         headers: [

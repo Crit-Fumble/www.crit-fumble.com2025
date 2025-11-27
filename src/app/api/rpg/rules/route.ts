@@ -10,8 +10,6 @@ import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 import { prismaConcepts } from '@/lib/db';
 
-const prisma = prismaMain;
-
 /**
  * GET /api/rpg/rules
  * List all rules (stub implementation)

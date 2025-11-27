@@ -14,6 +14,7 @@ export async function proxy(request: NextRequest) {
   const allowedPaths = [
     '/',                    // Homepage
     '/api',                 // API routes (including /api/auth/*)
+    '/dashboard',           // Wiki editor (requires login)
     '/terms-of-service',    // Legal
     '/privacy-policy',      // Legal
   ]

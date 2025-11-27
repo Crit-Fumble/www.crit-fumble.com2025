@@ -36,7 +36,8 @@ const nextConfig = {
   // Security headers
   async headers() {
     return [
-      // Allow Discord activity to be embedded in iframes
+      // Allow ONLY the Discord activity page to be embedded in iframes
+      // This does NOT allow the rest of the site to be embedded
       {
         source: '/discord/activity',
         headers: [
@@ -50,6 +51,7 @@ const nextConfig = {
           },
         ],
       },
+      // All other routes have strict frame restrictions
       {
         source: '/:path*',
         headers: [

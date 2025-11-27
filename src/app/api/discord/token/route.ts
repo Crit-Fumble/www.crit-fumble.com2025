@@ -57,13 +57,40 @@ export async function POST(request: NextRequest) {
 
     const tokenData = await tokenResponse.json()
 
-    // Return only the access token to the client
+    // Fetch user information using the access token
+    const userResponse = await fetch('https://discord.com/api/users/@me', {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+      },
+    })
+
+    if (!userResponse.ok) {
+      const errorText = await userResponse.text()
+      console.error('Discord user fetch failed:', errorText)
+      return NextResponse.json(
+        { error: 'Failed to fetch user information' },
+        { status: userResponse.status }
+      )
+    }
+
+    const userData = await userResponse.json()
+
+    // Return access token and user information
     // We don't expose refresh tokens to the client for security
     return NextResponse.json({
       access_token: tokenData.access_token,
       token_type: tokenData.token_type,
       expires_in: tokenData.expires_in,
       scope: tokenData.scope,
+      user: {
+        id: userData.id,
+        username: userData.username,
+        discriminator: userData.discriminator,
+        avatar: userData.avatar,
+        global_name: userData.global_name,
+      },
+      expires: new Date(Date.now() + tokenData.expires_in * 1000).toISOString(),
+      scopes: tokenData.scope.split(' '),
     })
   } catch (error) {
     console.error('Discord token exchange error:', error)

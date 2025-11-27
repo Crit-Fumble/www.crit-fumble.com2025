@@ -4,10 +4,9 @@ import 'server-only'
  * Main Website Database Client (Neon)
  *
  * This client connects to the Crit-Fumble website database which contains:
- * - CritUser (website/platform users)
- * - Payment/coin transaction models
- * - Platform-specific features
- * - One-way reference to Core Concepts via coreConceptsPlayerId
+ * - User (auth.js users)
+ * - Account, Session, VerificationToken (auth.js)
+ * - WikiPage, WikiPageRevision (wiki system)
  */
 
 import { PrismaClient } from '@prisma/client'

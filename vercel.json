@@ -12,5 +12,17 @@
       "maxDuration": 30
     }
   },
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "http://104.236.255.79:3100/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "core.crit-fumble.com"
+        }
+      ]
+    }
+  ],
   "crons": []
 }

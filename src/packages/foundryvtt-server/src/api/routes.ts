@@ -13,7 +13,9 @@ import type {
   StopContainerResponse,
   StatusResponse,
   HealthResponse,
-  ErrorResponse
+  ErrorResponse,
+  CheckLicenseRequest,
+  CheckLicenseResponse
 } from '../types.js';
 
 const instanceManager = new InstanceManager();
@@ -44,10 +46,11 @@ export function createRouter(): Router {
         } as ErrorResponse);
       }
 
-      // Validate slot range
-      if (slot < 0 || slot > 2) {
+      // Validate slot range based on environment
+      const maxSlot = environment === 'staging' ? 0 : 1; // staging: 0 (1 instance), production: 0-1 (2 instances)
+      if (slot < 0 || slot > maxSlot) {
         return res.status(400).json({
-          error: 'Slot must be between 0 and 2'
+          error: `Slot must be between 0 and ${maxSlot} for ${environment} environment`
         } as ErrorResponse);
       }
 
@@ -219,6 +222,46 @@ export function createRouter(): Router {
       res.json({ logs, environment });
     } catch (error) {
       console.error(`[${environment?.toUpperCase()}] Failed to get logs:`, error);
+      res.status(500).json({
+        error: error instanceof Error ? error.message : 'Unknown error',
+        details: error
+      } as ErrorResponse);
+    }
+  });
+
+  /**
+   * POST /api/licenses/check
+   * Check if a license key is available (not currently in use)
+   */
+  router.post('/api/licenses/check', async (req: Request, res: Response) => {
+    const environment = req.environment;
+    if (!environment) {
+      return res.status(500).json({ error: 'Environment not set' } as ErrorResponse);
+    }
+
+    try {
+      const { licenseKey } = req.body as CheckLicenseRequest;
+
+      if (!licenseKey) {
+        return res.status(400).json({
+          error: 'Missing required field: licenseKey'
+        } as ErrorResponse);
+      }
+
+      console.log(`[${environment.toUpperCase()}] Checking license availability`);
+
+      const inUse = await instanceManager.isLicenseInUse(licenseKey, environment);
+
+      const response: CheckLicenseResponse = {
+        available: !inUse,
+        message: inUse
+          ? 'License key is currently in use by another instance'
+          : 'License key is available for use'
+      };
+
+      res.json(response);
+    } catch (error) {
+      console.error(`[${environment.toUpperCase()}] Failed to check license:`, error);
       res.status(500).json({
         error: error instanceof Error ? error.message : 'Unknown error',
         details: error

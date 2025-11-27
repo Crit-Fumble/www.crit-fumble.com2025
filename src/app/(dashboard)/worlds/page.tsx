@@ -99,11 +99,11 @@ export default async function WorldsPage() {
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">Active Worlds</div>
                   </div>
-                  <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4" data-testid="multiverse-worlds-stat">
+                  <div className="bg-gray-100 dark:bg-slate-800 rounded-lg p-4" data-testid="realm-worlds-stat">
                     <div className="text-2xl font-bold text-blue-400">
-                      {worlds.filter(w => w.worldAnvilWorldId === process.env.WORLD_ANVIL_MULTIVERSE_WORLD_ID).length}
+                      {worlds.filter(w => w.worldScale === 'Realm').length}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Multiverse Worlds</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Realm Scale</div>
                   </div>
                 </div>
 
@@ -114,7 +114,7 @@ export default async function WorldsPage() {
                       <tr className="border-b border-gray-200 dark:border-gray-700">
                         <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">Name</th>
                         <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">Owner</th>
-                        <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">World Anvil ID</th>
+                        <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">Scale</th>
                         <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">Created</th>
                         <th className="text-left py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold">Actions</th>
                       </tr>
@@ -130,14 +130,8 @@ export default async function WorldsPage() {
                           <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-xs">
                             {world.owner?.username || '—'}
                           </td>
-                          <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-xs font-mono">
-                            {world.worldAnvilWorldId ? (
-                              <span className={world.worldAnvilWorldId === process.env.WORLD_ANVIL_MULTIVERSE_WORLD_ID ? 'text-blue-400 font-semibold' : ''}>
-                                {world.worldAnvilWorldId}
-                              </span>
-                            ) : (
-                              '—'
-                            )}
+                          <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-xs">
+                            {world.worldScale || 'Realm'}
                           </td>
                           <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-xs">
                             {new Date(world.createdAt).toLocaleDateString()}

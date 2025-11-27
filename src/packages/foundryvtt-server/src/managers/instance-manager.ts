@@ -11,14 +11,20 @@ export class InstanceManager {
 
   // Port offset configuration
   private static readonly PORT_OFFSET = {
-    staging: 30000,    // Ports: 30000, 30001, 30002
-    production: 30100  // Ports: 30100, 30101, 30102
+    staging: 30000,    // Port: 30000 (1 instance)
+    production: 30100  // Ports: 30100, 30101 (2 instances)
   };
 
   // Container offset configuration
   private static readonly CONTAINER_OFFSET = {
-    staging: 0,    // Containers: foundry-staging-1, foundry-staging-2, foundry-staging-3
-    production: 3  // Containers: foundry-prod-1, foundry-prod-2, foundry-prod-3
+    staging: 0,    // Container: foundry-1 (1 instance)
+    production: 1  // Containers: foundry-2, foundry-3 (2 instances)
+  };
+
+  // Maximum concurrent instances per environment
+  private static readonly MAX_INSTANCES = {
+    staging: 1,
+    production: 2
   };
 
   constructor() {
@@ -29,8 +35,9 @@ export class InstanceManager {
    * Calculate container configuration for a given environment and slot
    */
   getContainerConfig(environment: FoundryEnvironment, slot: number): ContainerConfig {
-    if (slot < 0 || slot > 2) {
-      throw new Error('Slot must be between 0 and 2');
+    const maxSlot = InstanceManager.MAX_INSTANCES[environment] - 1;
+    if (slot < 0 || slot > maxSlot) {
+      throw new Error(`Slot must be between 0 and ${maxSlot} for ${environment} environment`);
     }
 
     const containerNum = InstanceManager.CONTAINER_OFFSET[environment] + slot + 1;
@@ -46,6 +53,44 @@ export class InstanceManager {
   }
 
   /**
+   * Check if a license key is currently in use by any running container
+   */
+  async isLicenseInUse(licenseKey: string, environment: FoundryEnvironment): Promise<boolean> {
+    try {
+      // Get all running containers for this environment
+      const running = await this.getInstanceStatus(environment);
+
+      // Check each running container for the license key
+      for (const container of running) {
+        if (container.status === 'running') {
+          try {
+            // Inspect the container to check environment variables
+            const info = await this.dockerManager.getContainerInfo(container.name);
+            const env = info?.Config?.Env || [];
+
+            // Check if this container is using the license key
+            const hasLicense = env.some((e: string) =>
+              e.startsWith('FOUNDRY_LICENSE_KEY=') && e === `FOUNDRY_LICENSE_KEY=${licenseKey}`
+            );
+
+            if (hasLicense) {
+              return true;
+            }
+          } catch (error) {
+            // If we can't inspect a container, skip it
+            console.error(`Failed to inspect container ${container.name}:`, error);
+          }
+        }
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Failed to check license usage:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Start a Foundry instance
    */
   async startInstance(worldId: string, ownerId: string, environment: FoundryEnvironment, slot: number, licenseKey: string): Promise<ContainerConfig> {
@@ -54,7 +99,7 @@ export class InstanceManager {
     console.log(`[${environment.toUpperCase()}] Starting Foundry instance ${config.containerName} for world ${worldId}`);
 
     try {
-      await this.dockerManager.startContainer(config.containerName, licenseKey);
+      await this.dockerManager.startContainer(config.containerName, licenseKey, config.port);
       return config;
     } catch (error) {
       console.error(`Failed to start instance ${config.containerName}:`, error);
@@ -83,8 +128,7 @@ export class InstanceManager {
    * Get status of all instances for an environment
    */
   async getInstanceStatus(environment: FoundryEnvironment) {
-    const pattern = environment === 'staging' ? 'foundry-staging' : 'foundry-prod';
-    const containers = await this.dockerManager.listContainers(pattern);
+    const containers = await this.dockerManager.listContainers('foundry-');
 
     // Filter to only containers that belong to this environment
     const filtered = containers.filter(container => {
@@ -111,7 +155,7 @@ export class InstanceManager {
 
     const containerNum = parseInt(match[1], 10);
     const minContainer = InstanceManager.CONTAINER_OFFSET[environment] + 1;
-    const maxContainer = InstanceManager.CONTAINER_OFFSET[environment] + 3;
+    const maxContainer = InstanceManager.CONTAINER_OFFSET[environment] + InstanceManager.MAX_INSTANCES[environment];
 
     if (containerNum < minContainer || containerNum > maxContainer) {
       throw new Error(

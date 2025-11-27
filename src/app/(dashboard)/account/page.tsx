@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { prismaMain } from '@/lib/db'
+import { prisma } from '@/lib/db'
 import { Header } from '@/components/organisms/Header'
 import { LinkedAccountsManager } from '@/components/organisms/LinkedAccountsManager'
 import { ProfileEditor } from '@/components/organisms/ProfileEditor'
@@ -10,7 +10,7 @@ import { getUserLinkedAccounts } from '@/lib/linked-accounts'
 import { isAdmin } from '@/lib/admin'
 
 async function getCritCoinBalance(playerId: string): Promise<number> {
-  const transactions = await prismaMain.critCoinTransaction.findMany({
+  const transactions = await prisma.critCoinTransaction.findMany({
     where: { playerId },
     select: {
       transactionType: true,
@@ -32,7 +32,7 @@ export default async function AccountPage() {
   }
 
   // Get user from database
-  const user = await prismaMain.critUser.findUnique({
+  const user = await prisma.critUser.findUnique({
     where: { id: session.user.id },
     select: {
       id: true,
@@ -43,7 +43,6 @@ export default async function AccountPage() {
       bio: true,
       primaryAccountId: true,
       isAdmin: true,
-      coreConceptsPlayerId: true,
     },
   })
 
@@ -63,19 +62,12 @@ export default async function AccountPage() {
   // Get Core Concepts player data (if linked)
   // TODO: Query Core Concepts database via API or direct connection
   // For now, show placeholder data
-  const coreConceptsPlayerData = user.coreConceptsPlayerId
-    ? {
-        playerId: user.coreConceptsPlayerId,
-        playerEmail: null, // TODO: Fetch from Core Concepts DB
-        playerDisplayName: null, // TODO: Fetch from Core Concepts DB
-        linkedAccounts: [], // TODO: Fetch from Core Concepts DB
-      }
-    : {
-        playerId: null,
-        playerEmail: null,
-        playerDisplayName: null,
-        linkedAccounts: [],
-      }
+  const coreConceptsPlayerData = {
+    playerId: null,
+    playerEmail: null,
+    playerDisplayName: null,
+    linkedAccounts: [],
+  }
 
   // Core Concepts Tab Content
   const coreConceptsContent = (

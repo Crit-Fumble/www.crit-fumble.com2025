@@ -2,6 +2,8 @@
 .data/
 data/
 
+foundry-server.tar.gz
+
 # Large asset directories
 public/donjon-examples/
 public/img/game/opengameart/

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { handleSignOut } from '@/app/actions/auth';
 import { setViewAsRole, clearViewAsRole } from '@/app/actions/roles';
-import type { UserTier } from '@prisma/client';
+import type { UserTier } from '@/types/user';
 import type { UserRole } from '@/lib/permissions';
 import { getRoleInfo } from '@/lib/permissions';
 import { useClickOutside } from '@/hooks';

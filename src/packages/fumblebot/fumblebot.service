@@ -1,0 +1,42 @@
+# Systemd Service File for FumbleBot
+# Location: /etc/systemd/system/fumblebot.service
+#
+# Installation:
+# 1. Copy this file to /etc/systemd/system/fumblebot.service
+# 2. Update paths and user as needed
+# 3. sudo systemctl daemon-reload
+# 4. sudo systemctl enable fumblebot
+# 5. sudo systemctl start fumblebot
+
+[Unit]
+Description=FumbleBot Discord Bot
+Documentation=https://github.com/yourusername/crit-fumble
+After=network.target
+
+[Service]
+Type=simple
+User=fumblebot
+WorkingDirectory=/home/fumblebot/crit-fumble/src/packages/fumblebot
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/fumblebot/crit-fumble/src/packages/fumblebot/logs/output.log
+StandardError=append:/home/fumblebot/crit-fumble/src/packages/fumblebot/logs/error.log
+
+# Environment variables (alternatively, use EnvironmentFile)
+EnvironmentFile=/home/fumblebot/crit-fumble/src/packages/fumblebot/.env.fumblebot
+Environment="NODE_ENV=production"
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/fumblebot/crit-fumble/src/packages/fumblebot/logs
+
+# Resource limits
+LimitNOFILE=4096
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

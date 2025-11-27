@@ -67,3 +67,13 @@ export interface ErrorResponse {
   error: string;
   details?: unknown;
 }
+
+export interface CheckLicenseRequest {
+  licenseKey: string;
+  environment: FoundryEnvironment;
+}
+
+export interface CheckLicenseResponse {
+  available: boolean;
+  message: string;
+}

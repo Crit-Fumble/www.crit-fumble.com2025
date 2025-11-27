@@ -52,6 +52,21 @@ export default async function OwnersPage() {
     ],
   })
 
+  // Get worlds for Core Concepts overview
+  const worlds = await prisma.rpgWorld.findMany({
+    where: {
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  })
+
   return (
     <PageLayout
       title="Owners Portal"
@@ -71,7 +86,7 @@ export default async function OwnersPage() {
       </div>
 
       {/* Tabbed Dashboard */}
-      <OwnerDashboardTabs gameSystems={gameSystems} />
+      <OwnerDashboardTabs gameSystems={gameSystems} worlds={worlds} />
 
       {/* Help Text */}
       <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">

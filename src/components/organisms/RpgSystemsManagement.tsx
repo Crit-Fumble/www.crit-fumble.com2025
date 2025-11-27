@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FoundrySettingsForm } from './FoundrySettingsForm'
+import { FumbleBotSettingsForm } from './FumbleBotSettingsForm'
 
 interface RpgSystem {
   id: string
@@ -40,6 +41,7 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
   const [error, setError] = useState<string | null>(null)
   const [expandedSystem, setExpandedSystem] = useState<string | null>(null)
   const [editingFoundrySettings, setEditingFoundrySettings] = useState<string | null>(null)
+  const [editingFumblebotSettings, setEditingFumblebotSettings] = useState<string | null>(null)
 
   const handleAddSystem = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -118,6 +120,28 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update Foundry settings')
+      throw err
+    }
+  }
+
+  const handleSaveFumblebotSettings = async (systemId: string, fumblebotSettings: any) => {
+    try {
+      const response = await fetch(`/api/admin/rpg-systems/${systemId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fumblebotSettings }),
+      })
+
+      if (!response.ok) throw new Error('Failed to update FumbleBot settings')
+
+      const { system } = await response.json()
+      setSystems((prev) =>
+        prev.map((s) => (s.systemId === systemId ? system : s))
+      )
+      setEditingFumblebotSettings(null)
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update FumbleBot settings')
       throw err
     }
   }
@@ -279,7 +303,9 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
         ) : (
           systems.map((system) => {
             const foundryData = system.platforms?.foundry
+            const fumblebotData = system.platforms?.fumblebot
             const isEditingFoundry = editingFoundrySettings === system.systemId
+            const isEditingFumblebot = editingFumblebotSettings === system.systemId
             return (
               <div
                 key={system.id}
@@ -301,6 +327,11 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
                         {foundryData && (
                           <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-semibold rounded">
                             Foundry
+                          </span>
+                        )}
+                        {fumblebotData?.enabled && (
+                          <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-semibold rounded">
+                            FumbleBot
                           </span>
                         )}
                       </div>
@@ -349,6 +380,13 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
                     </button>
 
                     <button
+                      onClick={() => setEditingFumblebotSettings(system.systemId)}
+                      className="px-3 py-1.5 text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800 font-medium transition-colors"
+                    >
+                      {fumblebotData ? 'Edit FumbleBot' : 'Configure FumbleBot'}
+                    </button>
+
+                    <button
                       onClick={() => handleDeleteSystem(system.systemId)}
                       className="px-3 py-1.5 text-sm bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 font-medium transition-colors"
                     >
@@ -372,8 +410,23 @@ export function RpgSystemsManagement({ initialSystems }: RpgSystemsManagementPro
                   </div>
                 )}
 
+                {/* FumbleBot Settings Editor */}
+                {isEditingFumblebot && (
+                  <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-slate-900">
+                    <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">
+                      FumbleBot Discord Settings
+                    </h4>
+                    <FumbleBotSettingsForm
+                      systemId={system.systemId}
+                      currentSettings={fumblebotData}
+                      onSave={(settings) => handleSaveFumblebotSettings(system.systemId, settings)}
+                      onCancel={() => setEditingFumblebotSettings(null)}
+                    />
+                  </div>
+                )}
+
                 {/* Expanded Details */}
-                {expandedSystem === system.id && !isEditingFoundry && (
+                {expandedSystem === system.id && !isEditingFoundry && !isEditingFumblebot && (
                   <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-slate-900 space-y-3">
                     {foundryData?.manifestUrl && (
                       <div>

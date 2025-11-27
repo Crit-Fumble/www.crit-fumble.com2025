@@ -14,10 +14,11 @@ export class DockerManager {
   }
 
   /**
-   * Start a Docker container by name with an optional license key
-   * If a license key is provided, the container will be recreated with the new environment variable
+   * Start a Docker container by name with a license key
+   * If the container doesn't exist, it will be created with the specified configuration
+   * If a license key is provided and container exists, it will be recreated with the new environment variable
    */
-  async startContainer(containerName: string, licenseKey?: string): Promise<void> {
+  async startContainer(containerName: string, licenseKey: string, port: number): Promise<void> {
     try {
       const container = this.docker.getContainer(containerName);
 
@@ -27,62 +28,158 @@ export class DockerManager {
         info = await container.inspect();
       } catch (error: any) {
         if (error.statusCode === 404) {
-          throw new Error(`Container ${containerName} does not exist. Containers must be pre-created.`);
+          // Container doesn't exist, create it
+          console.log(`Container ${containerName} does not exist. Creating new container...`);
+          await this.createContainer(containerName, licenseKey, port);
+          return;
         }
         throw error;
       }
 
-      // If a license key is provided, recreate the container with the new environment variable
-      if (licenseKey) {
-        const wasRunning = info.State.Running;
+      // Container exists - recreate it with the new license key
+      const wasRunning = info.State.Running;
 
-        // Stop the container if it's running
-        if (wasRunning) {
-          await container.stop();
-        }
-
-        // Get current container configuration
-        const config = info.Config;
-        const hostConfig = info.HostConfig;
-
-        // Update environment variables with license key
-        const env = config.Env || [];
-        const updatedEnv = [
-          ...env.filter((e: string) => !e.startsWith('FOUNDRY_LICENSE_KEY=')),
-          `FOUNDRY_LICENSE_KEY=${licenseKey}`
-        ];
-
-        // Remove the old container
-        await container.remove();
-
-        // Create new container with updated environment
-        const newContainer = await this.docker.createContainer({
-          name: containerName,
-          Image: config.Image,
-          Env: updatedEnv,
-          HostConfig: hostConfig,
-          ExposedPorts: config.ExposedPorts,
-          Volumes: config.Volumes,
-          WorkingDir: config.WorkingDir,
-          Cmd: config.Cmd
-        });
-
-        // Start the new container
-        await newContainer.start();
-        console.log(`Successfully started container ${containerName} with new license key`);
-      } else {
-        // No license key provided, just start if not already running
-        if (info.State.Running) {
-          console.log(`Container ${containerName} is already running`);
-          return;
-        }
-
-        await container.start();
-        console.log(`Successfully started container: ${containerName}`);
+      // Stop the container if it's running
+      if (wasRunning) {
+        await container.stop();
       }
+
+      // Get current container configuration
+      const config = info.Config;
+      const hostConfig = info.HostConfig;
+
+      // Update environment variables with license key
+      const env = config.Env || [];
+      const updatedEnv = [
+        ...env.filter((e: string) => !e.startsWith('FOUNDRY_LICENSE_KEY=')),
+        `FOUNDRY_LICENSE_KEY=${licenseKey}`
+      ];
+
+      // Remove the old container
+      await container.remove();
+
+      // Create new container with updated environment
+      const newContainer = await this.docker.createContainer({
+        name: containerName,
+        Image: config.Image,
+        Env: updatedEnv,
+        HostConfig: hostConfig,
+        ExposedPorts: config.ExposedPorts,
+        Volumes: config.Volumes,
+        WorkingDir: config.WorkingDir,
+        Cmd: config.Cmd
+      });
+
+      // Start the new container
+      await newContainer.start();
+      console.log(`Successfully started container ${containerName} with new license key`);
     } catch (error) {
       console.error(`Failed to start container ${containerName}:`, error);
       throw new Error(`Failed to start container ${containerName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  /**
+   * Create a new Foundry VTT container with the specified configuration
+   */
+  private async createContainer(containerName: string, licenseKey: string, port: number): Promise<void> {
+    try {
+      // Foundry VTT Docker image (using official Foundry VTT image)
+      const image = 'felddy/foundryvtt:release';
+
+      // Pull the image if it doesn't exist
+      console.log(`Pulling Foundry VTT image: ${image}`);
+      await this.pullImage(image);
+
+      // Create volume for Foundry data
+      const volumeName = `${containerName}-data`;
+      await this.createVolume(volumeName);
+
+      // Environment variables
+      const env = [
+        `FOUNDRY_LICENSE_KEY=${licenseKey}`,
+        'FOUNDRY_HOSTNAME=foundryvtt.crit-fumble.com',
+        'FOUNDRY_PROXY_SSL=true',
+        'FOUNDRY_MINIFY_STATIC_FILES=true',
+        'FOUNDRY_UPNP=false',
+        'CONTAINER_CACHE=/data/container_cache'
+      ];
+
+      // Create container
+      console.log(`Creating container ${containerName} on port ${port}`);
+      const container = await this.docker.createContainer({
+        name: containerName,
+        Image: image,
+        Env: env,
+        ExposedPorts: {
+          '30000/tcp': {}
+        },
+        HostConfig: {
+          PortBindings: {
+            '30000/tcp': [{ HostPort: port.toString() }]
+          },
+          Binds: [
+            `${volumeName}:/data`,
+            '/root/foundry-cache:/data/container_cache'
+          ],
+          RestartPolicy: {
+            Name: 'unless-stopped'
+          }
+        }
+      });
+
+      // Start the container
+      await container.start();
+      console.log(`Successfully created and started container ${containerName}`);
+    } catch (error) {
+      console.error(`Failed to create container ${containerName}:`, error);
+      throw new Error(`Failed to create container: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  /**
+   * Pull a Docker image
+   */
+  private async pullImage(image: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.docker.pull(image, (err: any, stream: any) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        this.docker.modem.followProgress(stream, (err: any) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+    });
+  }
+
+  /**
+   * Create a Docker volume
+   */
+  private async createVolume(volumeName: string): Promise<void> {
+    try {
+      // Check if volume already exists
+      const volumes = await this.docker.listVolumes();
+      const exists = volumes.Volumes?.some(v => v.Name === volumeName);
+
+      if (exists) {
+        console.log(`Volume ${volumeName} already exists`);
+        return;
+      }
+
+      await this.docker.createVolume({
+        Name: volumeName
+      });
+      console.log(`Created volume ${volumeName}`);
+    } catch (error) {
+      console.error(`Failed to create volume ${volumeName}:`, error);
+      throw error;
     }
   }
 
@@ -116,15 +213,34 @@ export class DockerManager {
       const container = this.docker.getContainer(containerName);
       const info = await container.inspect();
 
+      // Determine environment based on container number
+      // foundry-1 = staging (offset 0 + 1)
+      // foundry-2, foundry-3 = production (offset 1 + 1, offset 1 + 2)
+      const match = containerName.match(/^foundry-(\d+)$/);
+      const containerNum = match ? parseInt(match[1], 10) : 0;
+      const environment = containerNum === 1 ? 'staging' : 'production';
+
       return {
         name: info.Name.replace(/^\//, ''), // Remove leading slash
         status: info.State.Status,
-        environment: containerName.includes('staging') ? 'staging' : 'production',
+        environment,
         port: this.extractPort(info.NetworkSettings.Ports),
         uptime: info.State.Running ? this.calculateUptime(info.State.StartedAt) : undefined
       };
     } catch (error) {
       // Container not found or other error
+      return null;
+    }
+  }
+
+  /**
+   * Get detailed container information including environment variables
+   */
+  async getContainerInfo(containerName: string): Promise<Docker.ContainerInspectInfo | null> {
+    try {
+      const container = this.docker.getContainer(containerName);
+      return await container.inspect();
+    } catch (error) {
       return null;
     }
   }

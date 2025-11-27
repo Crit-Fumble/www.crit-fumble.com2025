@@ -24,7 +24,7 @@ export async function PATCH(
 
     const { systemId } = await params
     const body = await request.json()
-    const { isEnabled, isCore, priority, notes, foundrySettings } = body
+    const { isEnabled, isCore, priority, notes, foundrySettings, fumblebotSettings } = body
 
     const system = await prisma.rpgSystem.findUnique({
       where: { systemId },
@@ -112,6 +112,15 @@ export async function PATCH(
             modules: foundrySettings.modules || [],
           },
         }
+      }
+    }
+
+    // If fumblebotSettings is provided, update the platforms.fumblebot field
+    if (fumblebotSettings !== undefined) {
+      const currentPlatforms = (updateData.platforms as any) || (system.platforms as any) || {}
+      updateData.platforms = {
+        ...currentPlatforms,
+        fumblebot: fumblebotSettings,
       }
     }
 

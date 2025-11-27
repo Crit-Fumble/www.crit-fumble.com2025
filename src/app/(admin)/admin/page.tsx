@@ -8,7 +8,7 @@ import { AdminDashboardTabs } from '@/components/organisms/AdminDashboardTabs'
 import { DiscordManagement } from '@/components/organisms/DiscordManagement'
 
 async function getCritCoinBalance(playerId: string): Promise<number> {
-  const transactions = await prismaMain.critCoinTransaction.findMany({
+  const transactions = await prisma.critCoinTransaction.findMany({
     where: { playerId },
     select: {
       transactionType: true,
@@ -16,7 +16,7 @@ async function getCritCoinBalance(playerId: string): Promise<number> {
     },
   })
 
-  return transactions.reduce((balance: number, tx) => {
+  return transactions.reduce((balance: number, tx: { transactionType: string; amount: number }) => {
     return tx.transactionType === 'credit' ? balance + tx.amount : balance - tx.amount
   }, 0)
 }
@@ -30,7 +30,7 @@ export default async function AdminDashboardPage() {
   }
 
   // Get user from database
-  const user = await prismaMain.critUser.findUnique({
+  const user = await prisma.critUser.findUnique({
     where: { id: session.user.id },
   })
 

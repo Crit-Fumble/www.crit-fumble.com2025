@@ -17,6 +17,22 @@ const nextConfig = {
     ]
   },
 
+  // Proxy core.crit-fumble.com to Core Concepts API droplet
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'core.crit-fumble.com',
+          },
+        ],
+        destination: 'http://104.236.255.79:3100/:path*',
+      },
+    ]
+  },
+
   // Security headers
   async headers() {
     return [

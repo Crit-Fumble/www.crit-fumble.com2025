@@ -1,1 +1,0 @@
-TODO: put browser plugins here

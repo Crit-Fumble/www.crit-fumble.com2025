@@ -1,6 +1,27 @@
 'use client'
 
 import { useState } from 'react'
+import { RpgSystemsManagement } from './RpgSystemsManagement'
+
+interface RpgSystem {
+  id: string
+  systemId: string
+  name: string
+  title: string
+  description: string | null
+  version: string | null
+  author: string | null
+  publisher: string | null
+  license: string | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  platforms: any
+  isEnabled: boolean
+  isCore: boolean
+  priority: number
+  notes: string | null
+  createdAt: string | Date
+  updatedAt: string | Date
+}
 
 interface CoreConceptsUIProps {
   worlds: Array<{
@@ -8,6 +29,7 @@ interface CoreConceptsUIProps {
     name: string
     description: string | null
   }>
+  gameSystems: RpgSystem[]
 }
 
 type ScaleLevel =
@@ -51,8 +73,8 @@ type ScaleLevel =
   | 'Supercluster'
   | 'Universe'
 
-export function CoreConceptsUI({ worlds }: CoreConceptsUIProps) {
-  const [activeSection, setActiveSection] = useState<'overview' | 'locations'>('overview')
+export function CoreConceptsUI({ worlds, gameSystems }: CoreConceptsUIProps) {
+  const [activeSection, setActiveSection] = useState<'overview' | 'systems' | 'locations'>('overview')
 
   const scaleLevels: Array<{ value: ScaleLevel; description: string; icon: string; category: string; ratio: string }> = [
     // Micro Scales
@@ -114,6 +136,7 @@ export function CoreConceptsUI({ worlds }: CoreConceptsUIProps) {
         <div className="flex gap-2 flex-wrap">
           {[
             { id: 'overview', label: 'Overview', icon: '📊' },
+            { id: 'systems', label: 'RPG Systems', icon: '🎮' },
             { id: 'locations', label: 'Locations', icon: '📍' },
           ].map(section => (
             <button
@@ -192,6 +215,13 @@ export function CoreConceptsUI({ worlds }: CoreConceptsUIProps) {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* RPG Systems Section */}
+        {activeSection === 'systems' && (
+          <div>
+            <RpgSystemsManagement initialSystems={gameSystems} />
           </div>
         )}
 

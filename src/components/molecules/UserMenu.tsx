@@ -5,9 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { handleSignOut } from '@/app/actions/auth';
 import { setViewAsRole, clearViewAsRole } from '@/app/actions/roles';
-import type { UserTier } from '@prisma/client';
-import type { UserRole } from '@/lib/permissions';
-import { getRoleInfo } from '@/lib/permissions';
+import type { UserTier, UserRole } from '@/lib/permissions-client';
+import { getRoleInfo } from '@/lib/permissions-client';
 import { useClickOutside } from '@/hooks';
 
 const ALL_ROLES: UserRole[] = ['Player', 'GameMaster', 'Storyteller', 'Worldbuilder', 'Creator', 'Moderator', 'Admin'];

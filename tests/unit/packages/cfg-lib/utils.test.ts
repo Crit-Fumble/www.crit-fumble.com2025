@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { cn } from '@/packages/cfg-lib/utils';
+import { cn } from '@/lib/utils';
 
 describe('cn (className utility)', () => {
   it('should merge single className', () => {

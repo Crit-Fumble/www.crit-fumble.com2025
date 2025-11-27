@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server'
  * In Next.js 16, middleware has been moved to proxy files
  */
 export async function middleware(request: NextRequest) {
-  const { publicRateLimiter, getIpAddress, getClientIdentifier, checkRateLimit } = await import('@/packages/cfg-lib/rate-limit')
+  const { publicRateLimiter, getIpAddress, getClientIdentifier, checkRateLimit } = await import('@/lib/rate-limit')
 
   const ip = getIpAddress(request)
   const identifier = getClientIdentifier(undefined, ip)

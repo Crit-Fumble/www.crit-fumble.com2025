@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaMain } from '@/lib/db';
-import { auth } from '@/packages/cfg-lib/auth';
+import { auth } from '@/lib/auth';
 import { isOwner } from '@/lib/admin';
 import { prisma as critPrisma } from '@/lib/db';
 const prisma = prismaMain;

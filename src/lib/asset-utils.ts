@@ -3,10 +3,8 @@
  * Handles asset registration, detection, and metadata extraction
  */
 
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prisma } from '@/lib/db';
 import { generateShortcode, generateQRCodeDataUrl, calculateQRPosition, QRCodeOptions } from './qr-utils';
-
-const prisma = prismaMain;
 
 /**
  * Detect asset type from URL or mime type

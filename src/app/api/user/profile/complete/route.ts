@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
 
 /**
  * POST /api/user/profile/complete

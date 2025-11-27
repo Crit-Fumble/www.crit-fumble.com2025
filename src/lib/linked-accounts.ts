@@ -1,4 +1,4 @@
-import { prisma } from '@/packages/cfg-lib/db'
+import { prisma } from '@/lib/db'
 
 export interface LinkedAccountMetadata {
   // Discord

@@ -5,12 +5,14 @@ import jwt from 'jsonwebtoken';
 export interface AuthenticatedRequest extends Request {
   userId?: string;
   apiKeyId?: string;
-  source?: 'api_key' | 'jwt' | 'internal';
+  discordId?: string;
+  source?: 'api_key' | 'jwt' | 'internal' | 'discord';
 }
 
 /**
  * API Key authentication middleware
  * Supports:
+ * - X-Discord-ID header (for Discord bot integration - PREFERRED FOR INDEPENDENCE)
  * - X-API-Key header (for external clients)
  * - Authorization: Bearer <jwt> (for website backend)
  * - X-Internal-Secret header (for DO VPC internal calls)
@@ -20,6 +22,22 @@ export function apiKeyAuth(
   res: Response,
   next: NextFunction
 ): void {
+  // Check for Discord ID (from FumbleBot or other Discord integrations)
+  // This allows Core Concepts to work independently of the main website
+  const discordId = req.headers['x-discord-id'];
+  if (discordId && typeof discordId === 'string') {
+    // TODO: Validate Discord ID exists in CoreConcepts database
+    // For now, accept any Discord ID (validate format)
+    if (discordId.match(/^\d{17,19}$/)) {
+      req.source = 'discord';
+      req.discordId = discordId;
+      // TODO: Look up userId from discordId in database
+      // req.userId = await getUserByDiscordId(discordId);
+      next();
+      return;
+    }
+  }
+
   // Check for internal secret (Foundry instances in VPC)
   const internalSecret = req.headers['x-internal-secret'];
   if (internalSecret && internalSecret === process.env.INTERNAL_API_SECRET) {

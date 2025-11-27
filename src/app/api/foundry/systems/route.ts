@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/packages/cfg-lib/auth';
+import { auth } from '@/lib/auth';
 import { isOwner } from '@/lib/admin';
 import { prismaMain } from '@/lib/db';
 

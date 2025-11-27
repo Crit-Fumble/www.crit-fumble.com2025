@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 // import { put } from '@vercel/blob';  // Uncomment when ready for Phase 3

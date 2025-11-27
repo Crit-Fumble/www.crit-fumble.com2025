@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Session } from 'next-auth'
-import type { UserTier } from '@prisma/client'
+import type { UserTier } from '@/types/user'
 import { useTheme } from '@/hooks/useTheme'
 import { UserMenu } from '../molecules/UserMenu'
 

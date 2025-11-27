@@ -2,6 +2,8 @@
 .data/
 data/
 
+foundry-server.tar.gz
+
 # Large asset directories
 public/donjon-examples/
 public/img/game/opengameart/
@@ -126,3 +128,5 @@ src/platforms/worldographer/
 .env*.local
 
 .vercel
+
+.env*.local

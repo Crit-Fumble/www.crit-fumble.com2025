@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   getClientIdentifier,
   getIpAddress,
-} from '@/packages/cfg-lib/rate-limit';
+} from '@/lib/rate-limit';
 
 describe('rate-limit utilities', () => {
   describe('getClientIdentifier', () => {

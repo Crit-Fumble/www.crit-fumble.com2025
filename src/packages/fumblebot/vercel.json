@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "name": "fumblebot",
+  "alias": ["fumblebot.crit-fumble.com"],
+  "regions": ["iad1"],
+  "builds": [
+    {
+      "src": "dist/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/dist/index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "FUMBLEBOT_DISCORD_TOKEN": "@fumblebot-discord-token",
+    "FUMBLEBOT_DISCORD_CLIENT_ID": "@fumblebot-discord-client-id",
+    "FUMBLEBOT_DISCORD_CLIENT_SECRET": "@fumblebot-discord-client-secret",
+    "FUMBLEBOT_DISCORD_PUBLIC_KEY": "@fumblebot-discord-public-key",
+    "FUMBLEBOT_DISCORD_GUILD_ID": "@fumblebot-discord-guild-id",
+    "FUMBLEBOT_OPENAI_API_KEY": "@fumblebot-openai-api-key",
+    "FUMBLEBOT_ANTHROPIC_API_KEY": "@fumblebot-anthropic-api-key",
+    "FUMBLEBOT_DATABASE_URL": "@fumblebot-database-url"
+  }
+}

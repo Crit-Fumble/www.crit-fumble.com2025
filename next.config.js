@@ -28,7 +28,7 @@ const nextConfig = {
             value: 'core.crit-fumble.com',
           },
         ],
-        destination: 'http://104.236.255.79:37821/:path*',
+        destination: 'http://104.131.188.23:37821/:path*',
       },
     ]
   },

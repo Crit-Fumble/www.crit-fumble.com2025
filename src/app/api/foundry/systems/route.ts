@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/packages/cfg-lib/auth';
 import { isOwner } from '@/lib/admin';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 
 /**
  * Supported game systems for Crit-Fumble platform
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
 
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get installed systems from database (if tracked)
-    const foundryInstances = await prisma.foundryInstance.findMany({
+    const foundryInstances = await prismaMain.foundryInstance.findMany({
       where: {
         ownerId: user.id,
       },
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
     }
 
     // AUTHORIZATION: Owner-only
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
 

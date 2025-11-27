@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prismaMain } from '@/lib/db'
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit'
 
 /**
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Fetch all linked accounts for the user
-    const accounts = await prisma.account.findMany({
+    const accounts = await prismaMain.account.findMany({
       where: {
         userId: session.user.id,
       },
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     })
 
     // Get user's primary account preference
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
       select: { primaryAccountId: true },
     })

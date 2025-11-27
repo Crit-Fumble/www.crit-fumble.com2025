@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { prisma } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { isOwner } from '@/lib/admin';
@@ -16,21 +17,15 @@ const CONVERSION_TIERS = [
   { credits: 10, coins: 11, bonus: 1, bonusPercent: 10 },
   { credits: 1, coins: 1, bonus: 0, bonusPercent: 0 },
 ];
-
-/**
  * Find applicable tier for given Story Credits amount
- */
 function getConversionTier(amount: number) {
   return CONVERSION_TIERS.find((tier) => amount >= tier.credits) || CONVERSION_TIERS[CONVERSION_TIERS.length - 1];
 }
-
-/**
  * POST /api/crit/credits/convert
  * Convert Story Credits to Crit-Coins with bonus tiers (no fee!)
  * Same bonuses as purchasing: 0%, 10%, 12%, 14%, 16%, 18%, 20%
  *
  * SECURITY: Owner-only access.
- */
 export async function POST(request: NextRequest) {
   try {
     // SECURITY: Require authentication
@@ -38,81 +33,51 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can convert story credits
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
-    }
-
     const body = await request.json();
     const { amount } = body;
-
     // SECURITY: Use authenticated user's ID, not client-provided
     const userId = session.user.id;
-
     // Validate required fields
     if (!amount) {
-      return NextResponse.json(
         { error: 'Missing required field: amount' },
         { status: 400 }
-      );
-    }
-
     // Validate minimum amount
     if (amount < 1) {
-      return NextResponse.json(
         { error: 'Minimum conversion is 1 Story Credit' },
-        { status: 400 }
-      );
-    }
-
     // Get current Story Credits balance
-    const latestStoryCredit = await prisma.storyCreditTransaction.findFirst({
+    const latestStoryCredit = await prismaMain.critStoryCreditTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
-    });
-
     const currentStoryCredits = latestStoryCredit?.balanceAfter.toNumber() ?? 0;
-
     // Check sufficient balance
     if (currentStoryCredits < amount) {
-      return NextResponse.json(
         {
           error: 'Insufficient Story Credits',
           currentBalance: currentStoryCredits,
           requestedAmount: amount
         },
-        { status: 400 }
-      );
-    }
-
     // Get current Crit-Coins balance
-    const latestCritCoin = await prisma.critCoinTransaction.findFirst({
-      where: { playerId: userId },
-      orderBy: { createdAt: 'desc' }
-    });
-
+    const latestCritCoin = await prismaMain.critCoinTransaction.findFirst({
     const currentCritCoins = latestCritCoin?.balanceAfter ?? 0;
-
     // Find applicable conversion tier (with bonus!)
     const tier = getConversionTier(amount);
     const critCoinsToCredit = tier.coins;
     const bonusCoins = tier.bonus;
-
     const newStoryCredits = currentStoryCredits - amount;
     const newCritCoins = currentCritCoins + critCoinsToCredit;
-
     // Create transactions in a transaction (atomic)
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prismaMain.$transaction(async (tx) => {
       // Debit Story Credits
-      const storyCreditTx = await tx.storyCreditTransaction.create({
+      const storyCreditTx = await tx.critStoryCreditTransaction.create({
         data: {
           playerId: userId,
           transactionType: 'spent_conversion',
@@ -130,42 +95,24 @@ export async function POST(request: NextRequest) {
           }
         }
       });
-
       // Credit Crit-Coins
       const critCoinTx = await tx.critCoinTransaction.create({
-        data: {
-          playerId: userId,
           transactionType: 'credit',
           amount: critCoinsToCredit,
           balanceAfter: newCritCoins,
-          description: bonusCoins > 0
             ? `Converted from ${amount} Story Credits (+${bonusCoins} bonus)`
             : `Converted from ${amount} Story Credits`,
-          metadata: {
             storyCreditsConverted: amount,
-            bonusCoins: bonusCoins,
-            bonusPercent: tier.bonusPercent,
             storyCreditTransactionId: storyCreditTx.id
-          }
-        }
-      });
-
       // Update Story Credit transaction with reference to Crit-Coin transaction
-      await tx.storyCreditTransaction.update({
+      await tx.critStoryCreditTransaction.update({
         where: { id: storyCreditTx.id },
-        data: {
           critCoinTransactionId: critCoinTx.id
-        }
-      });
-
       return { storyCreditTx, critCoinTx };
-    });
-
     // AUDIT LOG
     console.log(
       `[OWNER_CONVERT] Owner ${userId} converted ${amount} story credits → ${critCoinsToCredit} crit-coins (bonus: ${bonusCoins})`
     );
-
     return NextResponse.json({
       success: true,
       storyCreditsDebited: amount,
@@ -184,12 +131,9 @@ export async function POST(request: NextRequest) {
         ? `Converted ${amount} Story Credits to ${critCoinsToCredit} Crit-Coins with +${bonusCoins} bonus (${tier.bonusPercent}%)!`
         : `Converted ${amount} Story Credits to ${critCoinsToCredit} Crit-Coins`,
       transactions: result
-    });
   } catch (error) {
     console.error('Error converting Story Credits:', error);
     return NextResponse.json(
       { error: 'Failed to convert Story Credits' },
       { status: 500 }
-    );
   }
-}

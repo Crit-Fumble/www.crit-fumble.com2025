@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { prismaConcepts } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { isWorldEditable } from '@/lib/worldEditLock';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check world ownership
-    const world = await prisma.rpgWorld.findUnique({
+    const world = await prismaConcepts.rpgWorld.findUnique({
       where: { id: worldId },
       select: { ownerId: true },
     });
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
     // Get all character sheets for this world (player's own characters only)
     // Characters are represented as RpgSheet with type 'character' or 'hand'
-    const characters = await prisma.rpgSheet.findMany({
+    const characters = await prismaConcepts.rpgSheet.findMany({
       where: {
         createdBy: userId,
         type: {
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check world exists
-    const world = await prisma.rpgWorld.findUnique({
+    const world = await prismaConcepts.rpgWorld.findUnique({
       where: { id: rpgWorldId },
       select: { id: true, ownerId: true },
     });
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
 
     // Create character sheet (RpgSheet with type 'character')
     // Store character-specific data in metadata field
-    const character = await prisma.rpgSheet.create({
+    const character = await prismaConcepts.rpgSheet.create({
       data: {
         createdBy: userId,
         name,

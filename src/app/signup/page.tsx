@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prismaMain } from '@/lib/db'
 import { SignUpForm } from '@/components/organisms/SignUpForm'
 import { getUserLinkedAccounts } from '@/lib/linked-accounts'
 
@@ -13,7 +13,7 @@ export default async function SignUpPage() {
   }
 
   // Get user from database
-  const user = await prisma.critUser.findUnique({
+  const user = await prismaMain.critUser.findUnique({
     where: { id: session.user.id },
     select: {
       id: true,

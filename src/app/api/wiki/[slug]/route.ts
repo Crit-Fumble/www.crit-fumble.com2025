@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { prismaMain } from '@/lib/db'
 import { isAdmin } from '@/lib/admin'
 
 /**
@@ -20,7 +20,7 @@ export async function GET(
     const session = await auth()
     const { slug } = await params
 
-    const page = await prisma.coreConceptWiki.findUnique({
+    const page = await prismaMain.coreConceptWiki.findUnique({
       where: { slug, deletedAt: null },
       include: {
         author: {
@@ -60,7 +60,7 @@ export async function GET(
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
-      const user = await prisma.critUser.findUnique({
+      const user = await prismaMain.critUser.findUnique({
         where: { id: session.user.id },
       })
 
@@ -94,7 +94,7 @@ export async function PATCH(
     }
 
     // Verify admin status
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     })
 
@@ -106,7 +106,7 @@ export async function PATCH(
     const body = await request.json()
 
     // Find the existing page
-    const existing = await prisma.coreConceptWiki.findUnique({
+    const existing = await prismaMain.coreConceptWiki.findUnique({
       where: { slug, deletedAt: null },
       include: {
         revisions: {
@@ -144,7 +144,7 @@ export async function PATCH(
       builderContent !== existing.builderContent
 
     // Update page and create revision in a transaction
-    const page = await prisma.$transaction(async (tx) => {
+    const page = await prismaMain.$transaction(async (tx) => {
       const updated = await tx.coreConceptWiki.update({
         where: { id: existing.id },
         data: {
@@ -227,7 +227,7 @@ export async function DELETE(
     }
 
     // Verify admin status
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     })
 
@@ -238,7 +238,7 @@ export async function DELETE(
     const { slug } = await params
 
     // Soft delete the page
-    const page = await prisma.coreConceptWiki.update({
+    const page = await prismaMain.coreConceptWiki.update({
       where: { slug },
       data: {
         deletedAt: new Date(),

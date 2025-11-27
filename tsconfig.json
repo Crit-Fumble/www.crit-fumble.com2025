@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@prisma/client-concepts": [
+        "./packages/core-concepts-api/node_modules/.prisma/client"
       ]
     },
     "forceConsistentCasingInFileNames": true
@@ -38,6 +41,10 @@
   ],
   "exclude": [
     "node_modules",
+    "packages/**",
+    "scripts/**",
+    "src/app/api/_future/**",
+    "src/packages/_archived/**",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",

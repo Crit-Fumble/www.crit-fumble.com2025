@@ -11,7 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySteamOpenIdResponse, getSteamPlayerSummary } from '@/lib/steam-openid'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { prismaMain } from '@/lib/db'
 
 /**
  * GET /api/auth/steam/callback
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
 
   // Link Steam account to user
   try {
-    await prisma.critUser.update({
+    await prismaMain.critUser.update({
       where: { id: session.user.id },
       data: {
         steamId: steamId,

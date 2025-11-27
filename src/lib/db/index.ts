@@ -7,10 +7,12 @@
  *
  * The databases are completely independent. The only connection is a one-way
  * reference from CritUser.coreConceptsPlayerId → RpgPlayer.id
+ *
+ * NOTE: Core Concepts is optional - the website will function even if it's unavailable.
  */
 
 export { prismaMain } from './main'
-export { prismaConcepts } from './core-concepts'
+export { prismaConcepts, coreConceptsAvailable, safeCoreConceptsQuery } from './core-concepts'
 
 // Legacy export for backward compatibility (points to main database)
 export { prismaMain as prisma } from './main'

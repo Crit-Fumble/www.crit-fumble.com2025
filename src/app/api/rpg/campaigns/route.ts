@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prismaConcepts } from '@/lib/db';
+import { prismaConcepts, coreConceptsAvailable } from '@/lib/db';
 
 /**
  * GET /api/rpg/campaigns
@@ -16,6 +16,18 @@ export async function GET(request: NextRequest) {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check if Core Concepts is available
+    if (!prismaConcepts || !coreConceptsAvailable) {
+      return NextResponse.json(
+        {
+          error: 'Core Concepts RPG features are temporarily unavailable',
+          campaigns: [],
+          total: 0
+        },
+        { status: 503 }
+      );
     }
 
     const { searchParams } = new URL(request.url);

@@ -1,27 +1,49 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
-// Validation schemas
+// Validation schemas matching the Prisma schema
 const createCreatureSchema = z.object({
-  name: z.string().min(1).max(255),
-  foundryId: z.string().optional(),
+  name: z.string().min(1).max(100),
+  race: z.string().max(50).optional(),
+  class: z.string().max(50).optional(),
+  profession: z.string().max(50).optional(),
+  level: z.number().default(0),
+  imageUrl: z.string().optional(),
   worldId: z.string().optional(),
   campaignId: z.string().optional(),
-  creatureType: z.string().optional(),
-  isPlayerCharacter: z.boolean().default(false),
-  currentHp: z.number().optional(),
-  maxHp: z.number().optional(),
-  level: z.number().optional(),
-  experience: z.number().optional(),
-  behaviorAxes: z.record(z.unknown()).optional(),
-  needs: z.record(z.unknown()).optional(),
-  professions: z.array(z.string()).optional(),
-  routines: z.record(z.unknown()).optional(),
-  metadata: z.record(z.unknown()).optional(),
+  playerId: z.string().optional(), // null for NPCs, set for player characters
+  foundryId: z.string().optional(),
+  // Behavior axes (0-100)
+  lawfulness: z.number().min(0).max(100).default(50),
+  goodness: z.number().min(0).max(100).default(50),
+  faith: z.number().min(0).max(100).default(50),
+  courage: z.number().min(0).max(100).default(50),
+  alignment: z.string().max(20).optional(),
+  // Needs (0-100)
+  foodNeed: z.number().min(0).max(100).default(85),
+  waterNeed: z.number().min(0).max(100).default(90),
+  sleepNeed: z.number().min(0).max(100).default(100),
+  relaxationNeed: z.number().min(0).max(100).default(60),
+  adventureNeed: z.number().min(0).max(100).default(100),
+  // JSON fields
+  needDepletionRates: z.record(z.unknown()).optional(),
+  professionData: z.record(z.unknown()).optional(),
+  residence: z.record(z.unknown()).optional(),
+  inventory: z.array(z.unknown()).optional(),
+  routine: z.array(z.unknown()).optional(),
+  relationships: z.array(z.unknown()).optional(),
+  // Current state
+  currentActivity: z.string().max(100).optional(),
+  currentLocation: z.string().max(100).optional(),
+  simulationZone: z.string().default('inactive'),
+  notes: z.array(z.string()).optional(),
+  tags: z.array(z.unknown()).optional(),
 });
 
 const updateCreatureSchema = createCreatureSchema.partial();
@@ -30,6 +52,7 @@ const querySchema = z.object({
   worldId: z.string().optional(),
   campaignId: z.string().optional(),
   foundryId: z.string().optional(),
+  playerId: z.string().optional(),
   isPlayerCharacter: z.string().transform(v => v === 'true').optional(),
   limit: z.string().transform(Number).default('50'),
   offset: z.string().transform(Number).default('0'),
@@ -40,11 +63,15 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgCreatureWhereInput = {};
     if (query.worldId) where.worldId = query.worldId;
     if (query.campaignId) where.campaignId = query.campaignId;
     if (query.foundryId) where.foundryId = query.foundryId;
-    if (query.isPlayerCharacter !== undefined) where.isPlayerCharacter = query.isPlayerCharacter;
+    if (query.playerId) where.playerId = query.playerId;
+    // isPlayerCharacter = has a playerId
+    if (query.isPlayerCharacter !== undefined) {
+      where.playerId = query.isPlayerCharacter ? { not: null } : null;
+    }
 
     const [creatures, total] = await Promise.all([
       prisma.rpgCreature.findMany({
@@ -55,6 +82,7 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
         include: {
           world: { select: { id: true, name: true } },
           campaign: { select: { id: true, name: true } },
+          player: { select: { id: true, displayName: true, userId: true } },
         },
       }),
       prisma.rpgCreature.count({ where }),
@@ -74,6 +102,8 @@ router.get('/:id', async (req, res, next) => {
       include: {
         world: true,
         campaign: true,
+        player: true,
+        activities: { take: 10, orderBy: { createdAt: 'desc' } },
       },
     });
 
@@ -96,20 +126,36 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
     const creature = await prisma.rpgCreature.create({
       data: {
         name: data.name,
-        foundryId: data.foundryId,
+        race: data.race,
+        class: data.class,
+        profession: data.profession,
+        level: data.level,
+        imageUrl: data.imageUrl,
         worldId: data.worldId,
         campaignId: data.campaignId,
-        creatureType: data.creatureType,
-        isPlayerCharacter: data.isPlayerCharacter,
-        currentHp: data.currentHp,
-        maxHp: data.maxHp,
-        level: data.level,
-        experience: data.experience,
-        behaviorAxes: data.behaviorAxes,
-        needs: data.needs,
-        professions: data.professions,
-        routines: data.routines,
-        metadata: data.metadata,
+        playerId: data.playerId,
+        foundryId: data.foundryId,
+        lawfulness: data.lawfulness,
+        goodness: data.goodness,
+        faith: data.faith,
+        courage: data.courage,
+        alignment: data.alignment,
+        foodNeed: data.foodNeed,
+        waterNeed: data.waterNeed,
+        sleepNeed: data.sleepNeed,
+        relaxationNeed: data.relaxationNeed,
+        adventureNeed: data.adventureNeed,
+        needDepletionRates: (data.needDepletionRates ?? {}) as Prisma.InputJsonValue,
+        professionData: (data.professionData ?? {}) as Prisma.InputJsonValue,
+        residence: (data.residence ?? {}) as Prisma.InputJsonValue,
+        inventory: (data.inventory ?? []) as Prisma.InputJsonValue,
+        routine: (data.routine ?? []) as Prisma.InputJsonValue,
+        relationships: (data.relationships ?? []) as Prisma.InputJsonValue,
+        currentActivity: data.currentActivity,
+        currentLocation: data.currentLocation,
+        simulationZone: data.simulationZone,
+        notes: data.notes ?? [],
+        tags: (data.tags ?? []) as Prisma.InputJsonValue,
       },
     });
 
@@ -129,40 +175,46 @@ router.post('/upsert', async (req: AuthenticatedRequest, res, next) => {
       return;
     }
 
+    const createData = {
+      name: data.name,
+      race: data.race,
+      class: data.class,
+      profession: data.profession,
+      level: data.level,
+      imageUrl: data.imageUrl,
+      worldId: data.worldId,
+      campaignId: data.campaignId,
+      playerId: data.playerId,
+      foundryId: data.foundryId,
+      lawfulness: data.lawfulness,
+      goodness: data.goodness,
+      faith: data.faith,
+      courage: data.courage,
+      alignment: data.alignment,
+      foodNeed: data.foodNeed,
+      waterNeed: data.waterNeed,
+      sleepNeed: data.sleepNeed,
+      relaxationNeed: data.relaxationNeed,
+      adventureNeed: data.adventureNeed,
+      needDepletionRates: (data.needDepletionRates ?? {}) as Prisma.InputJsonValue,
+      professionData: (data.professionData ?? {}) as Prisma.InputJsonValue,
+      residence: (data.residence ?? {}) as Prisma.InputJsonValue,
+      inventory: (data.inventory ?? []) as Prisma.InputJsonValue,
+      routine: (data.routine ?? []) as Prisma.InputJsonValue,
+      relationships: (data.relationships ?? []) as Prisma.InputJsonValue,
+      currentActivity: data.currentActivity,
+      currentLocation: data.currentLocation,
+      simulationZone: data.simulationZone,
+      notes: data.notes ?? [],
+      tags: (data.tags ?? []) as Prisma.InputJsonValue,
+    };
+
     const creature = await prisma.rpgCreature.upsert({
       where: { foundryId: data.foundryId },
-      create: {
-        name: data.name,
-        foundryId: data.foundryId,
-        worldId: data.worldId,
-        campaignId: data.campaignId,
-        creatureType: data.creatureType,
-        isPlayerCharacter: data.isPlayerCharacter,
-        currentHp: data.currentHp,
-        maxHp: data.maxHp,
-        level: data.level,
-        experience: data.experience,
-        behaviorAxes: data.behaviorAxes,
-        needs: data.needs,
-        professions: data.professions,
-        routines: data.routines,
-        metadata: data.metadata,
-      },
+      create: createData,
       update: {
-        name: data.name,
-        worldId: data.worldId,
-        campaignId: data.campaignId,
-        creatureType: data.creatureType,
-        isPlayerCharacter: data.isPlayerCharacter,
-        currentHp: data.currentHp,
-        maxHp: data.maxHp,
-        level: data.level,
-        experience: data.experience,
-        behaviorAxes: data.behaviorAxes,
-        needs: data.needs,
-        professions: data.professions,
-        routines: data.routines,
-        metadata: data.metadata,
+        ...createData,
+        foundryId: undefined, // Don't update foundryId
       },
     });
 
@@ -177,9 +229,50 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updateCreatureSchema.parse(req.body);
 
+    const updateData: Prisma.RpgCreatureUpdateInput = {
+      name: data.name,
+      race: data.race,
+      class: data.class,
+      profession: data.profession,
+      level: data.level,
+      imageUrl: data.imageUrl,
+      worldId: data.worldId,
+      campaignId: data.campaignId,
+      playerId: data.playerId,
+      foundryId: data.foundryId,
+      lawfulness: data.lawfulness,
+      goodness: data.goodness,
+      faith: data.faith,
+      courage: data.courage,
+      alignment: data.alignment,
+      foodNeed: data.foodNeed,
+      waterNeed: data.waterNeed,
+      sleepNeed: data.sleepNeed,
+      relaxationNeed: data.relaxationNeed,
+      adventureNeed: data.adventureNeed,
+      needDepletionRates: data.needDepletionRates ? (data.needDepletionRates as Prisma.InputJsonValue) : undefined,
+      professionData: data.professionData ? (data.professionData as Prisma.InputJsonValue) : undefined,
+      residence: data.residence ? (data.residence as Prisma.InputJsonValue) : undefined,
+      inventory: data.inventory ? (data.inventory as Prisma.InputJsonValue) : undefined,
+      routine: data.routine ? (data.routine as Prisma.InputJsonValue) : undefined,
+      relationships: data.relationships ? (data.relationships as Prisma.InputJsonValue) : undefined,
+      currentActivity: data.currentActivity,
+      currentLocation: data.currentLocation,
+      simulationZone: data.simulationZone,
+      notes: data.notes,
+      tags: data.tags ? (data.tags as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const creature = await prisma.rpgCreature.update({
       where: { id: req.params.id },
-      data,
+      data: updateData,
     });
 
     res.json(creature);

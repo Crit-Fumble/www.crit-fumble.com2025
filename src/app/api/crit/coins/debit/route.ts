@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prismaMain } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { isOwner } from '@/lib/admin';
@@ -17,65 +18,41 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
     // SECURITY: Only owners can debit crit-coins
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: session.user.id },
     });
-
     if (!user || !isOwner(user)) {
       return NextResponse.json(
         { error: 'Forbidden - Owner access required' },
         { status: 403 }
       );
-    }
-
     // SECURITY: Use authenticated user's ID, not client-provided
     const userId = session.user.id;
-
     const body = await request.json();
     const { amount, description, metadata } = body;
-
     // Validate amount
     if (!amount || typeof amount !== 'number' || amount <= 0) {
-      return NextResponse.json(
         { error: 'Invalid amount - must be a positive number' },
         { status: 400 }
-      );
-    }
-
     if (!description || typeof description !== 'string') {
-      return NextResponse.json(
         { error: 'Description is required' },
-        { status: 400 }
-      );
-    }
-
     // Get current balance
-    const latestTransaction = await prisma.critCoinTransaction.findFirst({
+    const latestTransaction = await prismaMain.critCoinTransaction.findFirst({
       where: { playerId: userId },
       orderBy: { createdAt: 'desc' }
-    });
-
     const currentBalance = latestTransaction?.balanceAfter ?? 0;
-
     // Check sufficient balance
     if (currentBalance < amount) {
-      return NextResponse.json(
         {
           error: 'Insufficient balance',
           currentBalance,
           requestedAmount: amount,
           shortfall: amount - currentBalance
         },
-        { status: 400 }
-      );
-    }
-
     const newBalance = currentBalance - amount;
-
     // Create debit transaction
-    const transaction = await prisma.critCoinTransaction.create({
+    const transaction = await prismaMain.critCoinTransaction.create({
       data: {
         playerId: userId,
         transactionType: 'debit',
@@ -84,25 +61,20 @@ export async function POST(request: NextRequest) {
         description,
         metadata: metadata || {}
       }
-    });
-
     // AUDIT LOG
     console.log(
       `[DEBIT] User ${userId} debited ${amount} coins. New balance: ${newBalance}. Reason: ${description}`
     );
-
     return NextResponse.json({
       success: true,
       transaction,
       previousBalance: currentBalance,
       newBalance,
       amountDebited: amount
-    });
   } catch (error) {
     console.error('Error debiting coins:', error);
     return NextResponse.json(
       { error: 'Failed to debit coins' },
       { status: 500 }
-    );
   }
 }

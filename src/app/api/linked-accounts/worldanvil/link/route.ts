@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 import { WorldAnvilPlaywrightClient } from '@/packages/worldanvil/client/WorldAnvilPlaywrightClient';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 import { encryptApiKey } from '@/lib/foundry-api';
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if this World Anvil account is already linked to another user
-    const existingLink = await prisma.critUser.findFirst({
+    const existingLink = await prismaMain.critUser.findFirst({
       where: {
         worldAnvilId: worldAnvilUser.id,
         id: { not: session.user.id }, // Not the current user
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     // Update user with World Anvil information
     // SECURITY: Encrypt token before storage using AES-256
     const encryptedToken = encryptApiKey(userToken);
-    const updatedUser = await prisma.critUser.update({
+    const updatedUser = await prismaMain.critUser.update({
       where: { id: session.user.id },
       data: {
         worldAnvilId: worldAnvilUser.id,

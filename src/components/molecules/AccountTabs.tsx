@@ -5,14 +5,16 @@ import { useState } from 'react'
 interface AccountTabsProps {
   linkedAccountsContent: React.ReactNode
   profileContent?: React.ReactNode
+  coreConceptsContent?: React.ReactNode
   isAdmin?: boolean
 }
 
-type TabId = 'player' | 'game-master' | 'creator' | 'cfg-account' | 'linked-accounts'
+type TabId = 'player' | 'game-master' | 'creator' | 'core-concepts' | 'cfg-account' | 'linked-accounts'
 
 export function AccountTabs({
   linkedAccountsContent,
   profileContent,
+  coreConceptsContent,
   isAdmin = false
 }: AccountTabsProps) {
   const [activeTab, setActiveTab] = useState<TabId>('player')
@@ -21,6 +23,7 @@ export function AccountTabs({
     { id: 'player' as TabId, label: 'Player', icon: '🎲', adminOnly: false },
     { id: 'game-master' as TabId, label: 'Game Master', icon: '🎭', adminOnly: true },
     { id: 'creator' as TabId, label: 'Creator', icon: '✨', adminOnly: true },
+    { id: 'core-concepts' as TabId, label: 'Core Concepts', icon: '🌐', adminOnly: false },
     { id: 'cfg-account' as TabId, label: 'CFG Account', icon: '⚙️', adminOnly: false },
     { id: 'linked-accounts' as TabId, label: 'Linked Accounts', icon: '🔗', adminOnly: false },
   ]
@@ -135,6 +138,35 @@ export function AccountTabs({
                 </p>
               </div>
             </div>
+          </div>
+        )}
+        {activeTab === 'core-concepts' && (
+          <div data-testid="tab-content-core-concepts">
+            {coreConceptsContent || (
+              <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg px-8 py-12 sm:py-16">
+                <div className="text-center">
+                  <svg
+                    className="w-20 h-20 mx-auto mb-6 text-crit-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <h3 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 dark:text-white mb-4">
+                    Core Concepts Identity
+                  </h3>
+                  <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+                    Your Core Concepts player identity will appear here once you start playing games or managing campaigns.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 'cfg-account' && (

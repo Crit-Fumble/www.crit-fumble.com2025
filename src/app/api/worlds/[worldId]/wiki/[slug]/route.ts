@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 
 /**
@@ -39,7 +39,7 @@ export async function GET(
     const { worldId, slug } = await params;
 
     // Find the wiki page
-    const wikiPage = await prisma.rpgWorldWiki.findUnique({
+    const wikiPage = await prismaMain.rpgWorldWiki.findUnique({
       where: {
         worldId_slug: {
           worldId,
@@ -193,7 +193,7 @@ export async function PATCH(
     const body = await request.json();
 
     // Find the wiki page with world owner info
-    const existingPage = await prisma.rpgWorldWiki.findUnique({
+    const existingPage = await prismaMain.rpgWorldWiki.findUnique({
       where: {
         worldId_slug: {
           worldId,
@@ -288,7 +288,7 @@ export async function PATCH(
     }
 
     // Update the wiki page
-    const wikiPage = await prisma.rpgWorldWiki.update({
+    const wikiPage = await prismaMain.rpgWorldWiki.update({
       where: {
         worldId_slug: {
           worldId,
@@ -318,7 +318,7 @@ export async function PATCH(
     if (body.content !== undefined || body.gmContent !== undefined || body.playerContent !== undefined) {
       const latestVersion = existingPage.revisions[0]?.versionNumber || 0;
 
-      await prisma.rpgWorldWikiRevision.create({
+      await prismaMain.rpgWorldWikiRevision.create({
         data: {
           wikiPageId: wikiPage.id,
           versionNumber: latestVersion + 1,
@@ -391,7 +391,7 @@ export async function DELETE(
     const { worldId, slug } = await params;
 
     // Find the wiki page with world owner info
-    const existingPage = await prisma.rpgWorldWiki.findUnique({
+    const existingPage = await prismaMain.rpgWorldWiki.findUnique({
       where: {
         worldId_slug: {
           worldId,
@@ -424,7 +424,7 @@ export async function DELETE(
     }
 
     // Soft delete the wiki page
-    await prisma.rpgWorldWiki.update({
+    await prismaMain.rpgWorldWiki.update({
       where: {
         worldId_slug: {
           worldId,

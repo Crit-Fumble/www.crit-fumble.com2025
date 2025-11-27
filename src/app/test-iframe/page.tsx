@@ -19,7 +19,7 @@ export default function TestIframePage() {
           </h2>
           <div className="border-4 border-purple-500/30 rounded-lg overflow-hidden">
             <iframe
-              src="/discord-activity"
+              src="/discord/activity"
               className="w-full h-[800px] border-0"
               title="Discord Activity Test"
               sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
@@ -34,7 +34,7 @@ export default function TestIframePage() {
           <div className="grid gap-2 text-sm">
             <div className="flex justify-between text-gray-300">
               <span className="font-medium">iframe Source:</span>
-              <code className="bg-slate-800 px-2 py-1 rounded">/discord-activity</code>
+              <code className="bg-slate-800 px-2 py-1 rounded">/discord/activity</code>
             </div>
             <div className="flex justify-between text-gray-300">
               <span className="font-medium">Sandbox Permissions:</span>

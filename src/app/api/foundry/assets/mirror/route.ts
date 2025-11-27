@@ -6,24 +6,22 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaConcepts } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 // import { put } from '@vercel/blob';  // Uncomment when ready for Phase 3
-
-const prisma = prismaMain;
 
 /**
  * Verify user has access to a world (owner or player)
  */
 async function verifyWorldAccess(userId: string, worldId: string): Promise<boolean> {
-  const world = await prisma.rpgWorld.findFirst({
+  const world = await prismaConcepts.rpgWorld.findFirst({
     where: {
       id: worldId,
       deletedAt: null,
       OR: [
         { ownerId: userId },
-        { campaigns: { some: { players: { some: { playerId: userId, deletedAt: null } } } } }
+        { campaigns: { some: { members: { some: { playerId: userId, deletedAt: null } } } } }
       ]
     }
   });

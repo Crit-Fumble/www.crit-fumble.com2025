@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaConcepts } from '@/lib/db';
 
 /**
  * GET /api/rpg/campaigns/:id/players
@@ -34,19 +34,21 @@ export async function GET(
       );
     }
 
+    const { id } = await params;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verify user has access to this campaign
-    const campaign = await prismaMain.rpgCampaign.findFirst({
+    const campaign = await prismaConcepts.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
-          { players: { some: { playerId: session.user.id, deletedAt: null } } },
+          { members: { some: { playerId: session.user.id, deletedAt: null } } },
           { isPublic: true },
         ],
       },
@@ -56,16 +58,16 @@ export async function GET(
       return NextResponse.json({ error: 'Campaign not found' }, { status: 404 });
     }
 
-    const players = await prismaMain.rpgCampaignPlayer.findMany({
+    const players = await prismaConcepts.campaignMember.findMany({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         deletedAt: null,
       },
       include: {
         player: {
           select: {
             id: true,
-            username: true,
+            displayName: true,
             email: true,
           },
         },
@@ -120,6 +122,8 @@ export async function POST(
       );
     }
 
+    const { id } = await params;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -136,15 +140,15 @@ export async function POST(
     }
 
     // Verify campaign exists and user has permission to add players
-    const campaign = await prismaMain.rpgCampaign.findFirst({
+    const campaign = await prismaConcepts.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id: id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
-          { players: { some: { playerId: session.user.id, role: 'gm', status: 'active', deletedAt: null } } },
+          { members: { some: { playerId: session.user.id, role: 'gm', status: 'active', deletedAt: null } } },
           // Allow self-join for open campaigns
-          { isOpen: true, id: params.id },
+          { isOpen: true, id: id },
         ],
       },
     });
@@ -157,9 +161,9 @@ export async function POST(
     }
 
     // Only GMs/owners can add other players or assign GM role
-    const isOwnerOrGM = campaign.ownerId === session.user.id || await prismaMain.rpgCampaignPlayer.findFirst({
+    const isOwnerOrGM = campaign.ownerId === session.user.id || await prismaConcepts.campaignMember.findFirst({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         playerId: session.user.id,
         role: 'gm',
         status: 'active',
@@ -175,9 +179,9 @@ export async function POST(
     }
 
     // Check if player is already in campaign
-    const existingPlayer = await prismaMain.rpgCampaignPlayer.findFirst({
+    const existingPlayer = await prismaConcepts.campaignMember.findFirst({
       where: {
-        campaignId: params.id,
+        campaignId: id,
         playerId,
         deletedAt: null,
       },
@@ -191,9 +195,9 @@ export async function POST(
     }
 
     // Add player to campaign
-    const campaignPlayer = await prismaMain.rpgCampaignPlayer.create({
+    const campaignPlayer = await prismaConcepts.campaignMember.create({
       data: {
-        campaignId: params.id,
+        campaignId: id,
         playerId,
         role,
         characterId,

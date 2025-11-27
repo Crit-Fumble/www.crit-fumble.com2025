@@ -1,27 +1,35 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
+// Significance is an integer 1-10 in the schema
 const createHistorySchema = z.object({
-  sessionId: z.string(),
+  eventType: z.string().max(50),
+  eventTitle: z.string().max(500),
+  eventDescription: z.string().optional(),
+  significance: z.number().min(1).max(10).default(1),
+  inGameTime: z.record(z.unknown()).optional(),
+  sessionId: z.string().optional(),
   worldId: z.string().optional(),
-  eventType: z.string(),
-  description: z.string(),
-  significance: z.enum(['trivial', 'minor', 'moderate', 'major', 'legendary']).default('minor'),
-  participants: z.array(z.string()).optional(),
-  location: z.string().optional(),
+  locationId: z.string().optional(),
+  participantIds: z.array(z.string()).default([]),
+  gmIds: z.array(z.string()).default([]),
+  characterIds: z.array(z.string()).default([]),
+  systemName: z.string().max(100).optional(),
+  characterLevel: z.number().optional(),
   metadata: z.record(z.unknown()).optional(),
-  timestamp: z.string().datetime().optional(),
 });
 
 const querySchema = z.object({
   sessionId: z.string().optional(),
   worldId: z.string().optional(),
   eventType: z.string().optional(),
-  significance: z.string().optional(),
+  significance: z.string().transform(Number).optional(),
   limit: z.string().transform(Number).default('100'),
   offset: z.string().transform(Number).default('0'),
 });
@@ -31,11 +39,11 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgHistoryWhereInput = {};
     if (query.sessionId) where.sessionId = query.sessionId;
     if (query.worldId) where.worldId = query.worldId;
     if (query.eventType) where.eventType = query.eventType;
-    if (query.significance) where.significance = query.significance;
+    if (query.significance) where.significance = { gte: query.significance };
 
     const [events, total] = await Promise.all([
       prisma.rpgHistory.findMany({
@@ -43,6 +51,11 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
         take: Math.min(query.limit, 500),
         skip: query.offset,
         orderBy: { createdAt: 'desc' },
+        include: {
+          session: { select: { id: true, sessionTitle: true, sessionNumber: true } },
+          world: { select: { id: true, name: true } },
+          location: { select: { id: true, name: true } },
+        },
       }),
       prisma.rpgHistory.count({ where }),
     ]);
@@ -58,6 +71,11 @@ router.get('/:id', async (req, res, next) => {
   try {
     const event = await prisma.rpgHistory.findUnique({
       where: { id: req.params.id },
+      include: {
+        session: true,
+        world: true,
+        location: true,
+      },
     });
 
     if (!event) {
@@ -78,15 +96,20 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
 
     const event = await prisma.rpgHistory.create({
       data: {
+        eventType: data.eventType,
+        eventTitle: data.eventTitle,
+        eventDescription: data.eventDescription,
+        significance: data.significance,
+        inGameTime: data.inGameTime as Prisma.InputJsonValue | undefined,
         sessionId: data.sessionId,
         worldId: data.worldId,
-        eventType: data.eventType,
-        description: data.description,
-        significance: data.significance,
-        participants: data.participants,
-        location: data.location,
-        metadata: data.metadata,
-        timestamp: data.timestamp ? new Date(data.timestamp) : new Date(),
+        locationId: data.locationId,
+        participantIds: data.participantIds as Prisma.InputJsonValue,
+        gmIds: data.gmIds as Prisma.InputJsonValue,
+        characterIds: data.characterIds as Prisma.InputJsonValue,
+        systemName: data.systemName,
+        characterLevel: data.characterLevel,
+        metadata: (data.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -104,15 +127,20 @@ router.post('/batch', async (req: AuthenticatedRequest, res, next) => {
 
     const events = await prisma.rpgHistory.createMany({
       data: data.map(event => ({
+        eventType: event.eventType,
+        eventTitle: event.eventTitle,
+        eventDescription: event.eventDescription,
+        significance: event.significance,
+        inGameTime: event.inGameTime as Prisma.InputJsonValue | undefined,
         sessionId: event.sessionId,
         worldId: event.worldId,
-        eventType: event.eventType,
-        description: event.description,
-        significance: event.significance,
-        participants: event.participants,
-        location: event.location,
-        metadata: event.metadata,
-        timestamp: event.timestamp ? new Date(event.timestamp) : new Date(),
+        locationId: event.locationId,
+        participantIds: event.participantIds as Prisma.InputJsonValue,
+        gmIds: event.gmIds as Prisma.InputJsonValue,
+        characterIds: event.characterIds as Prisma.InputJsonValue,
+        systemName: event.systemName,
+        characterLevel: event.characterLevel,
+        metadata: (event.metadata ?? {}) as Prisma.InputJsonValue,
       })),
     });
 

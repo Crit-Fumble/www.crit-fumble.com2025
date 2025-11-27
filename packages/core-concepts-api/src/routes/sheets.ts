@@ -1,13 +1,16 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
+// Matches RpgSheet schema
 const createSheetSchema = z.object({
-  name: z.string().min(1).max(255),
-  type: z.enum(['character', 'hand', 'location', 'creature', 'environment', 'item']),
+  name: z.string().min(1).max(200),
+  type: z.string().max(50), // 'character', 'hand', 'location', 'environment', 'creature'
   createdBy: z.string(),
   worldId: z.string().optional(),
   campaignId: z.string().optional(),
@@ -32,7 +35,7 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgSheetWhereInput = {};
     if (query.type) where.type = query.type;
     if (query.createdBy) where.createdBy = query.createdBy;
     if (query.worldId) where.worldId = query.worldId;
@@ -59,6 +62,9 @@ router.get('/:id', async (req, res, next) => {
   try {
     const sheet = await prisma.rpgSheet.findUnique({
       where: { id: req.params.id },
+      include: {
+        boards: true,
+      },
     });
 
     if (!sheet) {
@@ -85,8 +91,8 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
         worldId: data.worldId,
         campaignId: data.campaignId,
         systemId: data.systemId,
-        data: data.data,
-        metadata: data.metadata,
+        data: (data.data ?? {}) as Prisma.InputJsonValue,
+        metadata: (data.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -101,9 +107,26 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updateSheetSchema.parse(req.body);
 
+    const updateData: Prisma.RpgSheetUpdateInput = {
+      name: data.name,
+      type: data.type,
+      worldId: data.worldId,
+      campaignId: data.campaignId,
+      systemId: data.systemId,
+      data: data.data ? (data.data as Prisma.InputJsonValue) : undefined,
+      metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const sheet = await prisma.rpgSheet.update({
       where: { id: req.params.id },
-      data,
+      data: updateData,
     });
 
     res.json(sheet);

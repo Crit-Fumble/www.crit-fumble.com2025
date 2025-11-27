@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 import { getCategoryFromAssetType, ASSET_TYPE_CATEGORIES } from '@/lib/constants/asset-types';
 
 export async function GET(request: NextRequest) {
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total count
-    const total = await prisma.rpgAsset.count({ where });
+    const total = await prismaMain.rpgAsset.count({ where });
 
     // Build orderBy
     const orderBy: Record<string, string> = {};
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch assets with pagination
-    const assets = await prisma.rpgAsset.findMany({
+    const assets = await prismaMain.rpgAsset.findMany({
       where,
       orderBy,
       skip: (page - 1) * limit,
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get counts by category for filter badges
-    const categoryCounts = await prisma.rpgAsset.groupBy({
+    const categoryCounts = await prismaMain.rpgAsset.groupBy({
       by: ['assetType'],
       where: {
         uploadedBy: session.user.id,

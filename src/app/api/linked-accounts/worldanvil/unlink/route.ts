@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/db';
+import { prismaMain } from '@/lib/db';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Remove World Anvil information from user
-    await prisma.critUser.update({
+    await prismaMain.critUser.update({
       where: { id: session.user.id },
       data: {
         worldAnvilId: null,

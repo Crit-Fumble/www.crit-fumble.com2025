@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { apiRateLimiter, getClientIdentifier, getIpAddress, checkRateLimit } from '@/lib/rate-limit';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaConcepts } from '@/lib/db';
 
 /**
  * GET /api/rpg/campaigns/:id
@@ -17,6 +17,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     // RATE LIMITING: 200 requests/minute for reads
     const ip = getIpAddress(request);
     const rateLimitResult = await checkRateLimit(
@@ -39,13 +41,13 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const campaign = await prismaMain.rpgCampaign.findFirst({
+    const campaign = await prismaConcepts.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
-          { players: { some: { playerId: session.user.id, deletedAt: null } } },
+          { members: { some: { playerId: session.user.id } } },
           { isPublic: true }, // Allow viewing public campaigns
         ],
       },
@@ -53,11 +55,11 @@ export async function GET(
         owner: {
           select: {
             id: true,
-            username: true,
+            displayName: true,
             email: true,
           },
         },
-        primaryWorld: {
+        world: {
           select: {
             id: true,
             name: true,
@@ -66,22 +68,13 @@ export async function GET(
             ownerId: true,
           },
         },
-        players: {
-          where: { deletedAt: null },
+        members: {
           include: {
             player: {
               select: {
                 id: true,
-                username: true,
+                displayName: true,
                 email: true,
-              },
-            },
-            character: {
-              select: {
-                id: true,
-                name: true,
-                creatureType: true,
-                level: true,
               },
             },
           },
@@ -90,41 +83,22 @@ export async function GET(
             { joinedAt: 'asc' },
           ],
         },
-        worlds: {
-          where: { deletedAt: null },
-          include: {
-            world: {
-              select: {
-                id: true,
-                name: true,
-                description: true,
-                systemName: true,
-              },
-            },
-          },
-          orderBy: {
-            sessionCount: 'desc',
-          },
-        },
         sessions: {
-          where: { deletedAt: null },
           select: {
             id: true,
-            name: true,
-            status: true,
-            startedAt: true,
-            endedAt: true,
-            playtimeMins: true,
+            sessionTitle: true,
+            sessionDate: true,
+            systemName: true,
           },
           orderBy: {
-            startedAt: 'desc',
+            sessionDate: 'desc',
           },
           take: 10, // Latest 10 sessions
         },
         _count: {
           select: {
             sessions: true,
-            players: true,
+            members: true,
           },
         },
       },
@@ -170,6 +144,8 @@ export async function PATCH(
       );
     }
 
+    const { id } = await params;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -180,7 +156,7 @@ export async function PATCH(
       name,
       description,
       status,
-      primaryWorldId,
+      worldId,
       imageUrl,
       bannerUrl,
       isPublic,
@@ -190,13 +166,13 @@ export async function PATCH(
     } = body;
 
     // Verify user is owner or GM
-    const existingCampaign = await prismaMain.rpgCampaign.findFirst({
+    const existingCampaign = await prismaConcepts.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         deletedAt: null,
         OR: [
           { ownerId: session.user.id },
-          { players: { some: { playerId: session.user.id, role: 'gm', status: 'active', deletedAt: null } } },
+          { members: { some: { playerId: session.user.id, role: 'gm', status: 'active', deletedAt: null } } },
         ],
       },
     });
@@ -208,16 +184,12 @@ export async function PATCH(
       );
     }
 
-    // If changing primary world, verify access
-    if (primaryWorldId && primaryWorldId !== existingCampaign.primaryWorldId) {
-      const worldAccess = await prismaMain.rPGWorld.findFirst({
+    // If changing world, verify access
+    if (worldId && worldId !== existingCampaign.worldId) {
+      const worldAccess = await prismaConcepts.rpgWorld.findFirst({
         where: {
-          id: primaryWorldId,
-          OR: [
-            { ownerId: session.user.id },
-            { owners: { some: { ownerId: session.user.id, status: 'active', deletedAt: null } } },
-            { gameMasters: { some: { gmId: session.user.id, status: 'active', deletedAt: null } } },
-          ],
+          id: worldId,
+          ownerId: session.user.id,
         },
       });
 
@@ -242,7 +214,7 @@ export async function PATCH(
         updateData.completedAt = new Date();
       }
     }
-    if (primaryWorldId !== undefined) updateData.primaryWorldId = primaryWorldId;
+    if (worldId !== undefined) updateData.worldId = worldId;
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
     if (bannerUrl !== undefined) updateData.bannerUrl = bannerUrl;
     if (isPublic !== undefined) updateData.isPublic = isPublic;
@@ -250,18 +222,18 @@ export async function PATCH(
     if (settings !== undefined) updateData.settings = settings;
     if (metadata !== undefined) updateData.metadata = metadata;
 
-    const campaign = await prismaMain.rpgCampaign.update({
-      where: { id: params.id },
+    const campaign = await prismaConcepts.rpgCampaign.update({
+      where: { id },
       data: updateData,
       include: {
         owner: {
           select: {
             id: true,
-            username: true,
+            displayName: true,
             email: true,
           },
         },
-        primaryWorld: {
+        world: {
           select: {
             id: true,
             name: true,
@@ -271,7 +243,7 @@ export async function PATCH(
         _count: {
           select: {
             sessions: true,
-            players: true,
+            members: true,
           },
         },
       },
@@ -313,15 +285,17 @@ export async function DELETE(
       );
     }
 
+    const { id } = await params;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verify user is owner
-    const existingCampaign = await prismaMain.rpgCampaign.findFirst({
+    const existingCampaign = await prismaConcepts.rpgCampaign.findFirst({
       where: {
-        id: params.id,
+        id,
         ownerId: session.user.id,
         deletedAt: null,
       },
@@ -335,8 +309,8 @@ export async function DELETE(
     }
 
     // Soft delete the campaign
-    await prismaMain.rpgCampaign.update({
-      where: { id: params.id },
+    await prismaConcepts.rpgCampaign.update({
+      where: { id },
       data: {
         deletedAt: new Date(),
         status: 'abandoned',

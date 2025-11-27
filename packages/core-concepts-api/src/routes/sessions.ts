@@ -1,20 +1,32 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
+// Matches the RpgSession schema
 const createSessionSchema = z.object({
-  name: z.string().min(1).max(255),
-  worldId: z.string().optional(),
+  sessionNumber: z.number().optional(),
+  sessionTitle: z.string().max(500).optional(),
+  sessionDate: z.string().datetime(),
+  systemName: z.string().max(255),
   campaignId: z.string().optional(),
-  gameMode: z.string().optional(),
-  status: z.enum(['planning', 'active', 'paused', 'completed']).default('planning'),
-  startedAt: z.string().datetime().optional(),
-  endedAt: z.string().datetime().optional(),
-  inCombat: z.boolean().default(false),
-  combatRound: z.number().default(0),
+  campaignName: z.string().max(255).optional(),
+  worldId: z.string().optional(),
+  sessionNotes: z.string().optional(),
+  playerNotes: z.string().optional(),
+  summary: z.string().optional(),
+  highlights: z.array(z.unknown()).default([]),
+  gmIds: z.array(z.string()).default([]),
+  playerIds: z.array(z.string()).default([]),
+  characterIds: z.array(z.string()).default([]),
+  durationMinutes: z.number().optional(),
+  xpAwarded: z.number().optional(),
+  inGameTimeStart: z.record(z.unknown()).optional(),
+  inGameTimeEnd: z.record(z.unknown()).optional(),
   metadata: z.record(z.unknown()).optional(),
 });
 
@@ -23,7 +35,7 @@ const updateSessionSchema = createSessionSchema.partial();
 const querySchema = z.object({
   worldId: z.string().optional(),
   campaignId: z.string().optional(),
-  status: z.string().optional(),
+  systemName: z.string().optional(),
   limit: z.string().transform(Number).default('50'),
   offset: z.string().transform(Number).default('0'),
 });
@@ -33,17 +45,21 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgSessionWhereInput = {};
     if (query.worldId) where.worldId = query.worldId;
     if (query.campaignId) where.campaignId = query.campaignId;
-    if (query.status) where.status = query.status;
+    if (query.systemName) where.systemName = query.systemName;
 
     const [sessions, total] = await Promise.all([
       prisma.rpgSession.findMany({
         where,
         take: Math.min(query.limit, 100),
         skip: query.offset,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { sessionDate: 'desc' },
+        include: {
+          campaign: { select: { id: true, name: true } },
+          world: { select: { id: true, name: true } },
+        },
       }),
       prisma.rpgSession.count({ where }),
     ]);
@@ -63,6 +79,7 @@ router.get('/:id', async (req, res, next) => {
         world: true,
         campaign: true,
         history: { take: 20, orderBy: { createdAt: 'desc' } },
+        boards: true,
       },
     });
 
@@ -84,16 +101,25 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
 
     const session = await prisma.rpgSession.create({
       data: {
-        name: data.name,
-        worldId: data.worldId,
+        sessionNumber: data.sessionNumber,
+        sessionTitle: data.sessionTitle,
+        sessionDate: new Date(data.sessionDate),
+        systemName: data.systemName,
         campaignId: data.campaignId,
-        gameMode: data.gameMode,
-        status: data.status,
-        startedAt: data.startedAt ? new Date(data.startedAt) : undefined,
-        endedAt: data.endedAt ? new Date(data.endedAt) : undefined,
-        inCombat: data.inCombat,
-        combatRound: data.combatRound,
-        metadata: data.metadata,
+        campaignName: data.campaignName,
+        worldId: data.worldId,
+        sessionNotes: data.sessionNotes,
+        playerNotes: data.playerNotes,
+        summary: data.summary,
+        highlights: data.highlights as Prisma.InputJsonValue,
+        gmIds: data.gmIds as Prisma.InputJsonValue,
+        playerIds: data.playerIds as Prisma.InputJsonValue,
+        characterIds: data.characterIds as Prisma.InputJsonValue,
+        durationMinutes: data.durationMinutes,
+        xpAwarded: data.xpAwarded,
+        inGameTimeStart: data.inGameTimeStart as Prisma.InputJsonValue | undefined,
+        inGameTimeEnd: data.inGameTimeEnd as Prisma.InputJsonValue | undefined,
+        metadata: (data.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -108,13 +134,38 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updateSessionSchema.parse(req.body);
 
+    const updateData: Prisma.RpgSessionUpdateInput = {
+      sessionNumber: data.sessionNumber,
+      sessionTitle: data.sessionTitle,
+      sessionDate: data.sessionDate ? new Date(data.sessionDate) : undefined,
+      systemName: data.systemName,
+      campaignId: data.campaignId,
+      campaignName: data.campaignName,
+      worldId: data.worldId,
+      sessionNotes: data.sessionNotes,
+      playerNotes: data.playerNotes,
+      summary: data.summary,
+      highlights: data.highlights ? (data.highlights as Prisma.InputJsonValue) : undefined,
+      gmIds: data.gmIds ? (data.gmIds as Prisma.InputJsonValue) : undefined,
+      playerIds: data.playerIds ? (data.playerIds as Prisma.InputJsonValue) : undefined,
+      characterIds: data.characterIds ? (data.characterIds as Prisma.InputJsonValue) : undefined,
+      durationMinutes: data.durationMinutes,
+      xpAwarded: data.xpAwarded,
+      inGameTimeStart: data.inGameTimeStart ? (data.inGameTimeStart as Prisma.InputJsonValue) : undefined,
+      inGameTimeEnd: data.inGameTimeEnd ? (data.inGameTimeEnd as Prisma.InputJsonValue) : undefined,
+      metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const session = await prisma.rpgSession.update({
       where: { id: req.params.id },
-      data: {
-        ...data,
-        startedAt: data.startedAt ? new Date(data.startedAt) : undefined,
-        endedAt: data.endedAt ? new Date(data.endedAt) : undefined,
-      },
+      data: updateData,
     });
 
     res.json(session);

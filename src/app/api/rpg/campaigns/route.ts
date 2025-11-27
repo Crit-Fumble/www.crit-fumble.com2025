@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaConcepts } from '@/lib/db';
 
 /**
  * GET /api/rpg/campaigns
@@ -30,10 +30,7 @@ export async function GET(request: NextRequest) {
 
     // Filter by world if specified
     if (worldId) {
-      where.OR = [
-        { primaryWorldId: worldId },
-        { worlds: { some: { worldId } } },
-      ];
+      where.worldId = worldId;
     }
 
     // Filter by status
@@ -49,33 +46,33 @@ export async function GET(request: NextRequest) {
     // Filter by user membership (as owner, GM, or player)
     where.OR = [
       { ownerId: session.user.id },
-      { players: { some: { playerId: session.user.id, deletedAt: null } } },
+      { members: { some: { playerId: session.user.id, deletedAt: null } } },
     ];
 
-    const campaigns = await prismaMain.rpgCampaign.findMany({
+    const campaigns = await prismaConcepts.rpgCampaign.findMany({
       where,
       include: {
         owner: {
           select: {
             id: true,
-            username: true,
+            displayName: true,
             email: true,
           },
         },
-        primaryWorld: {
+        world: {
           select: {
             id: true,
             name: true,
             systemName: true,
           },
         },
-        players: {
+        members: {
           where: { deletedAt: null },
           include: {
             player: {
               select: {
                 id: true,
-                username: true,
+                displayName: true,
                 email: true,
               },
             },
@@ -88,22 +85,10 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        worlds: {
-          where: { deletedAt: null, isActive: true },
-          include: {
-            world: {
-              select: {
-                id: true,
-                name: true,
-                systemName: true,
-              },
-            },
-          },
-        },
         _count: {
           select: {
             sessions: true,
-            players: true,
+            members: true,
           },
         },
       },
@@ -140,7 +125,7 @@ export async function POST(request: NextRequest) {
       name,
       description,
       systemName,
-      primaryWorldId,
+      worldId,
       imageUrl,
       bannerUrl,
       isPublic = false,
@@ -156,16 +141,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If primaryWorldId is provided, verify the user owns or has GM permissions for that world
-    if (primaryWorldId) {
-      const worldAccess = await prismaMain.rPGWorld.findFirst({
+    // If worldId is provided, verify the user owns or has GM permissions for that world
+    if (worldId) {
+      const worldAccess = await prismaConcepts.rpgWorld.findFirst({
         where: {
-          id: primaryWorldId,
-          OR: [
-            { ownerId: session.user.id },
-            { owners: { some: { ownerId: session.user.id, status: 'active', deletedAt: null } } },
-            { gameMasters: { some: { gmId: session.user.id, status: 'active', deletedAt: null } } },
-          ],
+          id: worldId,
+          ownerId: session.user.id,
         },
       });
 
@@ -177,14 +158,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create campaign in a transaction with the creator as first GM
-    const campaign = await prismaMain.$transaction(async (tx) => {
+    // Create campaign in a transaction with the creator as first member
+    const campaign = await prismaConcepts.$transaction(async (tx) => {
       const newCampaign = await tx.rpgCampaign.create({
         data: {
           name,
           description,
           systemName,
-          primaryWorldId,
+          worldId,
           ownerId: session.user.id,
           imageUrl,
           bannerUrl,
@@ -198,11 +179,11 @@ export async function POST(request: NextRequest) {
           owner: {
             select: {
               id: true,
-              username: true,
+              displayName: true,
               email: true,
             },
           },
-          primaryWorld: {
+          world: {
             select: {
               id: true,
               name: true,
@@ -213,7 +194,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Add the creator as the primary GM
-      await tx.rpgCampaignPlayer.create({
+      await tx.campaignMember.create({
         data: {
           campaignId: newCampaign.id,
           playerId: session.user.id,

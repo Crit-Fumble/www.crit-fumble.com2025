@@ -1,5 +1,7 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
@@ -9,9 +11,10 @@ const createCampaignSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().optional(),
   ownerId: z.string(),
-  systemId: z.string().optional(),
+  systemName: z.string().max(100),
   status: z.enum(['planning', 'active', 'paused', 'completed', 'archived']).default('planning'),
   isPublic: z.boolean().default(false),
+  settings: z.record(z.unknown()).optional(),
   metadata: z.record(z.unknown()).optional(),
 });
 
@@ -30,7 +33,7 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgCampaignWhereInput = {};
     if (query.ownerId) where.ownerId = query.ownerId;
     if (query.status) where.status = query.status;
     if (query.isPublic !== undefined) where.isPublic = query.isPublic;
@@ -45,8 +48,8 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
           _count: {
             select: {
               sessions: true,
-              players: true,
-              worlds: true,
+              members: true,
+              assets: true,
             },
           },
         },
@@ -67,9 +70,10 @@ router.get('/:id', async (req, res, next) => {
       where: { id: req.params.id },
       include: {
         sessions: { take: 10, orderBy: { createdAt: 'desc' } },
-        players: true,
-        worlds: { take: 5 },
-        creatures: { where: { isPlayerCharacter: true } },
+        members: {
+          include: { player: true },
+        },
+        world: true,
       },
     });
 
@@ -94,10 +98,11 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
         name: data.name,
         description: data.description,
         ownerId: data.ownerId,
-        systemId: data.systemId,
+        systemName: data.systemName,
         status: data.status,
         isPublic: data.isPublic,
-        metadata: data.metadata,
+        settings: (data.settings ?? {}) as Prisma.InputJsonValue,
+        metadata: (data.metadata ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -112,9 +117,26 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updateCampaignSchema.parse(req.body);
 
+    const updateData: Prisma.RpgCampaignUpdateInput = {
+      name: data.name,
+      description: data.description,
+      systemName: data.systemName,
+      status: data.status,
+      isPublic: data.isPublic,
+      settings: data.settings ? (data.settings as Prisma.InputJsonValue) : undefined,
+      metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const campaign = await prisma.rpgCampaign.update({
       where: { id: req.params.id },
-      data,
+      data: updateData,
     });
 
     res.json(campaign);

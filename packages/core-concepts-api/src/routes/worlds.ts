@@ -1,26 +1,32 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
-// Validation schemas
+// Matches RpgWorld schema
 const createWorldSchema = z.object({
-  name: z.string().min(1).max(255),
+  name: z.string().min(1).max(200),
   description: z.string().optional(),
-  ownerId: z.string(),
-  isPublic: z.boolean().default(false),
-  worldType: z.string().optional(),
-  scaleTier: z.enum(['micro', 'small', 'medium', 'large', 'planetary', 'stellar', 'galactic']).optional(),
+  systemName: z.string().max(100),
+  worldScale: z.string().max(50).default('Realm'),
+  ownerId: z.string(), // Platform user ID
+  foundryWorldId: z.string().optional(),
+  containerWorldId: z.string().optional(),
+  settings: z.record(z.unknown()).optional(),
   metadata: z.record(z.unknown()).optional(),
+  tags: z.array(z.unknown()).optional(),
 });
 
 const updateWorldSchema = createWorldSchema.partial().omit({ ownerId: true });
 
 const querySchema = z.object({
   ownerId: z.string().optional(),
-  isPublic: z.string().transform(v => v === 'true').optional(),
+  systemName: z.string().optional(),
+  worldScale: z.string().optional(),
   limit: z.string().transform(Number).default('50'),
   offset: z.string().transform(Number).default('0'),
 });
@@ -30,9 +36,10 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgWorldWhereInput = {};
     if (query.ownerId) where.ownerId = query.ownerId;
-    if (query.isPublic !== undefined) where.isPublic = query.isPublic;
+    if (query.systemName) where.systemName = query.systemName;
+    if (query.worldScale) where.worldScale = query.worldScale;
 
     const [worlds, total] = await Promise.all([
       prisma.rpgWorld.findMany({
@@ -40,6 +47,16 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
         take: Math.min(query.limit, 100),
         skip: query.offset,
         orderBy: { updatedAt: 'desc' },
+        include: {
+          _count: {
+            select: {
+              creatures: true,
+              locations: true,
+              campaigns: true,
+              assets: true,
+            },
+          },
+        },
       }),
       prisma.rpgWorld.count({ where }),
     ]);
@@ -56,9 +73,11 @@ router.get('/:id', async (req, res, next) => {
     const world = await prisma.rpgWorld.findUnique({
       where: { id: req.params.id },
       include: {
-        creatures: { take: 10 },
-        locations: { take: 10 },
-        sessions: { take: 5 },
+        creatures: { take: 10, orderBy: { name: 'asc' } },
+        locations: { take: 10, orderBy: { name: 'asc' } },
+        campaigns: { take: 5 },
+        containedWorlds: { take: 10 },
+        containerWorld: true,
       },
     });
 
@@ -82,11 +101,14 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
       data: {
         name: data.name,
         description: data.description,
+        systemName: data.systemName,
+        worldScale: data.worldScale,
         ownerId: data.ownerId,
-        isPublic: data.isPublic,
-        worldType: data.worldType,
-        scaleTier: data.scaleTier,
-        metadata: data.metadata,
+        foundryWorldId: data.foundryWorldId,
+        containerWorldId: data.containerWorldId,
+        settings: (data.settings ?? {}) as Prisma.InputJsonValue,
+        metadata: (data.metadata ?? {}) as Prisma.InputJsonValue,
+        tags: (data.tags ?? []) as Prisma.InputJsonValue,
       },
     });
 
@@ -101,9 +123,28 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updateWorldSchema.parse(req.body);
 
+    const updateData: Prisma.RpgWorldUpdateInput = {
+      name: data.name,
+      description: data.description,
+      systemName: data.systemName,
+      worldScale: data.worldScale,
+      foundryWorldId: data.foundryWorldId,
+      containerWorldId: data.containerWorldId,
+      settings: data.settings ? (data.settings as Prisma.InputJsonValue) : undefined,
+      metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
+      tags: data.tags ? (data.tags as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const world = await prisma.rpgWorld.update({
       where: { id: req.params.id },
-      data,
+      data: updateData,
     });
 
     res.json(world);

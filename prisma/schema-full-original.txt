@@ -1,9 +1,8 @@
-// Core Concepts API - RPG/Game Data Schema
-// This schema defines all RPG-related models that live in the separate Core Concepts database
+// Prisma schema for Crit-Fumble TTRPG Platform
+// See docs/DATABASE_SCHEMA.md for complete schema documentation
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -12,44 +11,271 @@ datasource db {
 }
 
 // ============================================================================
-// Core Concepts Players - Independent User System
+// Authentication & User Management (Auth.js required tables)
 // ============================================================================
-// Core Concepts manages its own player/user system completely independently
-// External platforms can reference players via player ID
-// but Core Concepts does not reference external systems
 
-// RpgPlayer - Core Concepts player/user identity
-// This is the primary user record in Core Concepts
-// Authentication handled via Auth.js Account/Session tables below
+// User tier levels for feature access and monthly Crit-Coin allocations
+// Order matters: LEGACY (-1), FREE (0), PRO (1), PLUS (2), MAX (3)
+enum UserTier {
+  LEGACY // Admin-only tier for 5+ year members, grants 5 coins/month
+  FREE // Default tier - standard features, 0 coins/month
+  PRO // Paid tier - enhanced features (stubbed, TBD)
+  PLUS // Paid tier - advanced features (stubbed, TBD)
+  MAX // Paid tier - all features (stubbed, TBD)
+}
+
+// CritUser - Platform/website user (auth, profile, payments, platform features)
+// Crit tables can reference Rpg tables, but Rpg tables should not reference Crit tables
+// NOTE: OAuth accounts are stored in the Account model (NextAuth standard)
+// Multiple accounts from the same or different providers can be linked to one CritUser
+model CritUser {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // User info
+  username String  @unique
+  email    String? @unique
+
+  // Profile completion status
+  profileCompleted Boolean @default(false) @map("profile_completed")
+  avatarUrl        String? @map("avatar_url") // User's chosen avatar (can override provider avatars)
+  displayName      String? @map("display_name") // User's display name (defaults to username if not set)
+  bio              String? // Short user biography/description
+
+  // User roles (owners have all roles by default)
+  // Possible values: 'GameMaster', 'Storyteller', 'Worldbuilder', 'Creator', 'Moderator', 'Admin'
+  roles      Json    @default("[]") @db.JsonB
+  viewAsRole String? @map("view_as_role") // Owner-only: view site as different role for testing
+
+  // DEPRECATED: Provider-specific fields (kept for backward compatibility during migration)
+  // These will be removed after migrating data to Account.metadata
+  // To get linked accounts, use: user.accounts relation
+  discordId       String? @unique @map("discord_id")
+  discordUsername String? @map("discord_username")
+  discordAvatar   String? @map("discord_avatar")
+
+  githubId       String? @unique @map("github_id")
+  githubUsername String? @map("github_username")
+  githubAvatar   String? @map("github_avatar")
+
+  twitchId       String? @unique @map("twitch_id")
+  twitchUsername String? @map("twitch_username")
+  twitchAvatar   String? @map("twitch_avatar")
+
+  battlenetId        String? @unique @map("battlenet_id")
+  battlenetBattletag String? @map("battlenet_battletag")
+
+  steamId       String? @unique @map("steam_id")
+  steamUsername String? @map("steam_username")
+  steamAvatar   String? @map("steam_avatar")
+
+  fandomId       String? @unique @map("fandom_id")
+  fandomUsername String? @map("fandom_username")
+
+  // Foundry VTT API Integration (not OAuth-based)
+  foundryApiUrl   String? @map("foundry_api_url") // User's Foundry instance URL
+  foundryApiKey   String? @map("foundry_api_key") // Encrypted API key
+  foundryUsername String? @map("foundry_username")
+  foundryUserId   String? @map("foundry_user_id")
+
+  // World Anvil OAuth
+  worldAnvilId           String?   @unique @map("world_anvil_id")
+  worldAnvilUsername     String?   @map("world_anvil_username")
+  worldAnvilToken        String?   @map("world_anvil_token") // Encrypted
+  worldAnvilRefreshToken String?   @map("world_anvil_refresh_token") // Encrypted
+  worldAnvilTokenExpires DateTime? @map("world_anvil_token_expires")
+
+  // Primary account selection for display (optional)
+  // Points to an Account.id to use for username/avatar display
+  primaryAccountId String? @map("primary_account_id")
+
+  // Stripe
+  stripeCustomerId String? @unique @map("stripe_customer_id")
+
+  // User preferences
+  settings Json @default("{}") @db.JsonB
+
+  // Status
+  isActive    Boolean   @default(true) @map("is_active")
+  lastLoginAt DateTime? @map("last_login_at")
+
+  // Tier and role management
+  tier                    UserTier  @default(FREE) // Subscription/feature tier
+  isAdmin                 Boolean   @default(false) @map("is_admin") // Admin privileges (can manage users, content, etc.)
+  isOwner                 Boolean   @default(false) @map("is_owner") // Owner privileges (full platform control)
+  lastMonthlyCoinsGranted DateTime? @map("last_monthly_coins_granted") // Last time monthly tier coins were granted
+
+  // Developer privileges (local development only)
+  // When all three verified fields match DEV_ env vars, user gets admin privileges
+  verifiedPhone   String? @map("verified_phone")
+  verifiedEmail   String? @map("verified_email")
+  verifiedDiscord String? @map("verified_discord")
+
+  // Auth.js relations
+  accounts Account[]
+  sessions Session[]
+
+  // Platform sessions (immutable audit log)
+  sessionLogs CritSessionLog[]
+
+  // Platform relations (Crit tables)
+  coinTransactions        CritCoinTransaction[]
+  storyCreditTransactions CritStoryCreditTransaction[]
+  purchases               CritPurchase[]
+  virtualDesktopSessions  CritVirtualDesktopSession[]
+  apiKeys                 CritApiKey[]
+
+  // Multiverse/Universe/Space ownership (Crit expansion features)
+  ownedMultiverses   CritMultiverse[]
+  ownedUniverses     CritUniverse[]
+  ownedOrbitalSpaces CritOrbitalSpace[]
+
+  // RPG World ownership (worlds are owned at platform level)
+  ownedWorlds RpgWorld[]
+
+  // Asset ownership (marketplace assets)
+  ownedAssets CritAsset[]
+
+  // Link to game identity (1:1 relationship)
+  rpgPlayer RpgPlayer?
+
+  // Core Concepts Wiki (admin-authored documentation)
+  authoredWikiPages   CoreConceptWiki[]         @relation("AuthoredWikiPages")
+  lastEditedWikiPages CoreConceptWiki[]         @relation("WikiLastEditor")
+  wikiRevisions       CoreConceptWikiRevision[]
+
+  // World-specific Wiki (user-authored world documentation)
+  authoredWorldWikiPages   RpgWorldWiki[]         @relation("AuthoredWorldWikiPages")
+  lastEditedWorldWikiPages RpgWorldWiki[]         @relation("EditedWorldWikiPages")
+  worldWikiRevisions       RpgWorldWikiRevision[] @relation("WorldWikiEdits")
+
+  @@index([discordId])
+  @@index([githubId])
+  @@index([twitchId])
+  @@index([battlenetId])
+  @@index([steamId])
+  @@index([fandomId])
+  @@index([worldAnvilId])
+  @@index([stripeCustomerId])
+  @@index([deletedAt])
+  @@map("crit_users")
+}
+
+// ============================================================================
+// Core Concepts Wiki & Documentation
+// ============================================================================
+
+// CoreConceptWiki - Admin-editable wiki pages for game rules and Core Concepts
+// Public-facing with three audience versions: GM, Player, World Builder
+model CoreConceptWiki {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Page identification
+  slug      String  @unique @db.VarChar(200) // URL-friendly identifier
+  title     String  @db.VarChar(200)
+  category  String  @db.VarChar(100) // 'players', 'teams', 'roles', 'scales', 'rules', etc.
+  icon      String? @db.VarChar(50) // Emoji or icon identifier
+  sortOrder Int     @default(0) @map("sort_order") // For ordering pages in navigation
+
+  // Content for different audiences (Markdown format)
+  gmContent      String @map("gm_content") @db.Text // Full details for Game Masters
+  playerContent  String @map("player_content") @db.Text // Simplified for Players
+  builderContent String @map("builder_content") @db.Text // In-depth for World Builders
+
+  // SEO & meta
+  description String? @db.Text // Short description for meta tags
+  keywords    String? @db.Text // Comma-separated keywords
+
+  // Publishing
+  isPublished Boolean   @default(false) @map("is_published")
+  publishedAt DateTime? @map("published_at")
+
+  // Authorship
+  authorId String   @map("author_id")
+  author   CritUser @relation("AuthoredWikiPages", fields: [authorId], references: [id])
+
+  lastEditedById String?   @map("last_edited_by_id")
+  lastEditedBy   CritUser? @relation("WikiLastEditor", fields: [lastEditedById], references: [id])
+
+  // Versioning (for AI-assisted edits and rollback)
+  revisions CoreConceptWikiRevision[]
+
+  // AI generation metadata
+  aiAssisted       Boolean @default(false) @map("ai_assisted") // Was AI used to generate/edit content?
+  aiModel          String? @db.VarChar(100) // e.g., "claude-sonnet-4", "gpt-4"
+  aiPromptMetadata Json    @default("{}") @map("ai_prompt_metadata") @db.JsonB // Store prompt info for reference
+
+  @@index([slug])
+  @@index([category])
+  @@index([authorId])
+  @@index([isPublished])
+  @@index([deletedAt])
+  @@map("core_concept_wiki")
+}
+
+// CoreConceptWikiRevision - Version history for wiki pages
+// Allows rollback and tracking of AI-assisted edits
+model CoreConceptWikiRevision {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Link to parent wiki page
+  wikiPageId String          @map("wiki_page_id")
+  wikiPage   CoreConceptWiki @relation(fields: [wikiPageId], references: [id], onDelete: Cascade)
+
+  // Revision metadata
+  versionNumber Int    @map("version_number") // Incremental version counter
+  changeNote    String @default("") @db.Text // What changed in this revision
+
+  // Snapshot of content at this revision
+  gmContent      String @map("gm_content") @db.Text
+  playerContent  String @map("player_content") @db.Text
+  builderContent String @map("builder_content") @db.Text
+
+  // Editor info
+  editorId String   @map("editor_id")
+  editor   CritUser @relation(fields: [editorId], references: [id])
+
+  // AI metadata
+  aiAssisted       Boolean @default(false) @map("ai_assisted")
+  aiModel          String? @db.VarChar(100)
+  aiPromptMetadata Json    @default("{}") @map("ai_prompt_metadata") @db.JsonB
+
+  @@index([wikiPageId])
+  @@index([editorId])
+  @@index([createdAt])
+  @@map("core_concept_wiki_revisions")
+}
+
+// ============================================================================
+// Core Concepts (In-Game)
+// ============================================================================
+
+// RpgPlayer - In-game player identity (characters, campaigns, game actions)
+// RPG tables are platform-agnostic and do not reference Crit tables
 model RpgPlayer {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  // Player display name
-  displayName String @map("display_name") @db.VarChar(100)
+  // Link to platform user (1:1 relationship)
+  userId String   @unique @map("user_id")
+  user   CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Email (from primary linked account, nullable for privacy)
-  email String? @unique
-
-  // Player profile
-  avatarUrl String? @map("avatar_url") @db.Text
-  bio       String? @db.Text
+  // Player display name (can differ from CritUser username)
+  displayName String? @map("display_name") @db.VarChar(100)
 
   // Default VTT Role (for sessions/campaigns)
   defaultRole String @default("player") @map("default_role") // 'player' | 'gm' | 'spectator'
 
-  // Game preferences
+  // Game preferences (separate from platform settings)
   gameSettings Json @default("{}") @map("game_settings") @db.JsonB
-
-  // Status
-  isActive    Boolean   @default(true) @map("is_active")
-  lastLoginAt DateTime? @map("last_login_at")
-
-  // Auth.js relations (accounts linked to this player)
-  accounts Account[]
-  sessions Session[]
 
   // RPG ownership relations
   ownedCampaigns RpgCampaign[]
@@ -63,31 +289,18 @@ model RpgPlayer {
   // Uploaded assets (in-game assets)
   uploadedAssets RpgAsset[]
 
-  // World ownership
-  ownedWorlds RpgWorld[]
-
-  // World wiki authorship
-  authoredWorldWikiPages   RpgWorldWiki[]         @relation("AuthoredWorldWikiPages")
-  lastEditedWorldWikiPages RpgWorldWiki[]         @relation("EditedWorldWikiPages")
-  worldWikiRevisions       RpgWorldWikiRevision[] @relation("WorldWikiEdits")
-
-  @@index([email])
+  @@index([userId])
   @@index([deletedAt])
-  @@index([isActive])
   @@map("rpg_players")
 }
 
-// ============================================================================
-// Auth.js Tables - Authentication for Core Concepts
-// ============================================================================
-// These tables handle OAuth authentication for Core Concepts players
-// Accounts link to RpgPlayer (the Core Concepts user model)
-
-// Account - OAuth provider accounts linked to a Core Concepts player
-// Multiple accounts can be linked to one player (even from the same provider)
+// Auth.js required tables
+// Account - OAuth provider accounts linked to a CritUser
+// Multiple accounts can be linked to one user (even from the same provider)
+// This is the source of truth for linked accounts
 model Account {
   id                String  @id @default(uuid())
-  userId            String  @map("user_id") // Links to RpgPlayer.id
+  userId            String  @map("user_id")
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
@@ -113,30 +326,27 @@ model Account {
   // Display name override (optional, for user customization)
   displayName String? @map("display_name")
 
-  // Relation to Core Concepts player
-  player RpgPlayer @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
-  @@index([provider, userId])
+  @@index([provider, userId]) // For efficient queries like "get all Discord accounts for user"
   @@map("accounts")
 }
 
-// Session - Active authentication sessions for Core Concepts players
 model Session {
   id           String   @id @default(uuid())
   sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id") // Links to RpgPlayer.id
+  userId       String   @map("user_id")
   expires      DateTime
 
   // Activity tracking
   createdAt      DateTime @default(now()) @map("created_at")
   lastActivityAt DateTime @default(now()) @map("last_activity_at")
-  ipAddress      String?  @map("ip_address") @db.VarChar(45)
+  ipAddress      String?  @map("ip_address") @db.VarChar(45) // IPv6 max length
   userAgent      String?  @map("user_agent") @db.Text
 
-  // Relation to Core Concepts player
-  player RpgPlayer @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user CritUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([lastActivityAt])
@@ -189,6 +399,7 @@ model CritSessionLog {
   // Additional metadata
   metadata Json @default("{}")
 
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
 
   @@index([playerId])
   @@index([sessionToken])
@@ -227,6 +438,7 @@ model CritCoinTransaction {
   // Additional metadata
   metadata Json @default("{}")
 
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
 
   @@index([playerId])
   @@index([createdAt])
@@ -268,6 +480,7 @@ model CritStoryCreditTransaction {
   // Metadata for audit trail
   metadata Json @default("{}")
 
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Restrict)
 
   @@index([playerId])
   @@index([createdAt])
@@ -356,6 +569,7 @@ model CritPurchase {
 
   metadata Json @default("{}")
 
+  user    CritUser    @relation(fields: [playerId], references: [id], onDelete: Restrict)
   product CritProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
 
   @@index([playerId])
@@ -407,6 +621,7 @@ model CritVirtualDesktopSession {
 
   metadata Json @default("{}")
 
+  user    CritUser     @relation(fields: [playerId], references: [id], onDelete: Restrict)
   product CritProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
 
   @@index([playerId])
@@ -439,6 +654,7 @@ model CritApiKey {
   monthlyLimitUsd      Decimal? @map("monthly_limit_usd") @db.Decimal(10, 2)
   currentMonthUsageUsd Decimal  @default(0) @map("current_month_usage_usd") @db.Decimal(10, 2)
 
+  user CritUser @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
   @@unique([playerId, provider, keyName])
   @@index([playerId])
@@ -661,7 +877,7 @@ model RpgTimeline {
 
   // Universe reference
   universeId   String @map("universe_id")
-  universeCode String @map("universe_code") @db.VarChar(20) // e.g., 'PRIME', 'MIRROR', etc.
+  universeCode String @map("universe_code") @db.VarChar(20) // 'CFG-II', 'CFG-XIII', etc.
 
   // Timeline hierarchy
   isPrime          Boolean       @default(false) @map("is_prime") // Is this the canonical timeline?
@@ -802,6 +1018,7 @@ model CritAsset {
 
   // Ownership & Rights (STRICT - for marketplace)
   ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   // Marketplace settings
   isPublic      Boolean  @default(false) @map("is_public")
@@ -881,13 +1098,6 @@ model RpgAsset {
 
   // File-specific metadata (JSON for flexibility)
   metadata Json @default("{}") @db.JsonB
-
-  // Legal/Licensing
-  license        String  @default("CC-BY-4.0") @db.VarChar(100)
-  licenseUrl     String? @map("license_url") @db.Text
-  attribution    String? @db.Text
-  attributionUrl String? @map("attribution_url") @db.Text
-  copyright      String? @db.VarChar(255)
 
   // Shortcode for QR code generation and asset lookup
   // Format: 6-8 character alphanumeric (e.g., "A3F9K2")
@@ -1025,21 +1235,77 @@ model RpgTile {
   @@map("rpg_tiles")
 }
 
-// RpgBookAccess (track player/campaign access to premium books)
-// Campaign-wide: If ONE player in a campaign owns content, ALL players have access
-model RpgBookAccess {
+// RpgExpansion (premium content - official expansions/adventures)
+// Unlocked via: Physical UPC scan (1 month), D&D Beyond/VTT ownership (permanent)
+model RpgExpansion {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // Player and book
-  playerId String @map("player_id")
-  bookId   String @map("book_id")
+  // Expansion info
+  name        String  @unique @db.VarChar(100)
+  title       String
+  description String? @db.Text
+  version     String  @db.VarChar(20)
+
+  // Dataset type
+  type String @db.VarChar(50) // 'core' | 'expansion'
+
+  // Source information
+  sourceType String  @map("source_type") @db.VarChar(50) // 'srd', 'official', 'homebrew', 'third-party'
+  sourceUrl  String? @map("source_url") @db.Text
+
+  // Legal/licensing
+  license           String  @default("CC-BY-4.0") @db.VarChar(100)
+  licenseUrl        String? @map("license_url") @db.Text
+  provider          String? @db.VarChar(200)
+  attribution       String? @db.Text
+  compatibilityStmt String? @map("compatibility_stmt") @db.Text
+
+  // Premium content settings
+  isPremium Boolean @default(false) @map("is_premium")
+
+  // UPC/ISBN for physical book verification (grants permanent campaign-wide access)
+  upcCodes  String[] @default([]) @map("upc_codes")
+  isbnCodes String[] @default([]) @map("isbn_codes")
+
+  // External marketplace integration (permanent access via verified ownership)
+  dndBeyondId      String? @unique @map("dndbeyond_id")
+  roll20Id         String? @unique @map("roll20_id")
+  foundryVttId     String? @unique @map("foundry_vtt_id")
+  fantasyGroundsId String? @unique @map("fantasy_grounds_id")
+  dmsGuildId       String? @unique @map("dms_guild_id")
+  worldAnvilId     String? @unique @map("world_anvil_id")
+
+  // Dataset files
+  datasetPath String @map("dataset_path") @db.Text // Path to JSON files
+
+  // Metadata
+  isPublic Boolean @default(false) @map("is_public")
+  isActive Boolean @default(true) @map("is_active")
+  metadata Json    @default("{}")
+
+  @@index([type])
+  @@index([sourceType])
+  @@index([isPremium])
+  @@index([isPublic, isActive])
+  @@map("rpg_expansions")
+}
+
+// RpgExpansionAccess (track player/campaign access to premium expansions)
+// Campaign-wide: If ONE player in a campaign owns content, ALL players have access
+model RpgExpansionAccess {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Player and expansion
+  playerId    String @map("player_id")
+  expansionId String @map("expansion_id")
 
   // Access type (no crit-coin purchasing - only UPC or marketplace verification)
   accessType String @map("access_type") @db.VarChar(50)
   // 'upc_scan' - Physical book UPC verification
-  // 'isbn_scan' - ISBN verification
   // 'dndbeyond' - D&D Beyond ownership verified
   // 'roll20' - Roll20 marketplace purchase verified
   // 'foundry_vtt' - Foundry VTT module ownership verified
@@ -1052,18 +1318,17 @@ model RpgBookAccess {
   campaignId String? @map("campaign_id")
 
   // Verification details
-  verificationCode String? @map("verification_code") // UPC/ISBN code or external platform content ID
+  verificationCode String? @map("verification_code") // UPC code or external platform content ID
   platformUserId   String? @map("platform_user_id") // External platform user ID
 
   // Metadata
   metadata Json @default("{}")
 
-  @@unique([playerId, bookId])
+  @@unique([playerId, expansionId])
   @@index([playerId])
-  @@index([bookId])
+  @@index([expansionId])
   @@index([campaignId])
-  @@index([accessType])
-  @@map("rpg_book_access")
+  @@map("rpg_expansion_access")
 }
 
 // RpgSheet (universal container for tracking resources, game state, and entities)
@@ -1534,6 +1799,7 @@ model CritOrbitalSpace {
 
   // OWNERSHIP - Critical for access control
   ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   // Universe link (optional - space can exist independently or within a universe)
   universeId String?       @map("universe_id")
@@ -1569,6 +1835,7 @@ model CritUniverse {
 
   // OWNERSHIP - Critical for access control
   ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   // Multiverse link (optional - universe can exist independently or within a multiverse)
   multiverseId String?         @map("multiverse_id")
@@ -1606,6 +1873,7 @@ model CritMultiverse {
 
   // OWNERSHIP - Critical for access control
   ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   // Core universe designation
   coreUniverseId String?       @unique @map("core_universe_id")
@@ -1638,7 +1906,7 @@ model RpgWorld {
   systemName  String  @map("system_name") @db.VarChar(100) // 'dnd5e', 'pathfinder', etc.
 
   // World scale - defines the scope and size of the game world
-  // Based on VTT Image Scale Guidelines
+  // Based on VTT Image Scale Guidelines and CFG Expansions
   worldScale String @default("Realm") @map("world_scale") @db.VarChar(50)
   // Valid values: 'Adventure Location', 'Settlement', 'Region', 'Continent', 'Realm' (default), 'Planet', 'Orbital Space', 'Universe'
   // Adventure Location: Dungeon, building, small area (10ft grid)
@@ -1651,8 +1919,8 @@ model RpgWorld {
   // Universe: Multiple orbital spaces in one game system
 
   // OWNERSHIP - Critical for access control
-  ownerId String    @map("owner_id")
-  owner   RpgPlayer @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String   @map("owner_id")
+  owner   CritUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   // Container location (optional - for hierarchical organization)
   // Worlds can be contained within locations like Orbital Spaces, Star Systems, Galaxies, etc.
@@ -1733,11 +2001,11 @@ model RpgWorldWiki {
   publishedAt DateTime? @map("published_at")
 
   // Authorship
-  authorId String    @map("author_id")
-  author   RpgPlayer @relation("AuthoredWorldWikiPages", fields: [authorId], references: [id])
+  authorId String   @map("author_id")
+  author   CritUser @relation("AuthoredWorldWikiPages", fields: [authorId], references: [id])
 
-  lastEditedById String?    @map("last_edited_by_id")
-  lastEditedBy   RpgPlayer? @relation("EditedWorldWikiPages", fields: [lastEditedById], references: [id])
+  lastEditedById String?   @map("last_edited_by_id")
+  lastEditedBy   CritUser? @relation("EditedWorldWikiPages", fields: [lastEditedById], references: [id])
 
   // Metadata
   metadata Json @default("{}") @db.JsonB
@@ -1773,8 +2041,8 @@ model RpgWorldWikiRevision {
   playerContent String? @map("player_content") @db.Text
 
   // Editor info
-  editorId String    @map("editor_id")
-  editor   RpgPlayer @relation("WorldWikiEdits", fields: [editorId], references: [id])
+  editorId String   @map("editor_id")
+  editor   CritUser @relation("WorldWikiEdits", fields: [editorId], references: [id])
 
   // AI metadata
   aiAssisted       Boolean @default(false) @map("ai_assisted")
@@ -2506,35 +2774,6 @@ model RpgBook {
   isbn        String?   @db.VarChar(20)
   publishDate DateTime? @map("publish_date")
   edition     String?   @db.VarChar(50)
-  version     String?   @db.VarChar(20)
-
-  // Legal/Licensing
-  license           String  @default("CC-BY-4.0") @db.VarChar(100)
-  licenseUrl        String? @map("license_url") @db.Text
-  provider          String? @db.VarChar(200)
-  attribution       String? @db.Text
-  copyright         String? @db.VarChar(255)
-  compatibilityStmt String? @map("compatibility_stmt") @db.Text
-
-  // Source information
-  sourceType String? @map("source_type") @db.VarChar(50) // 'srd', 'official', 'homebrew', 'third-party'
-  sourceUrl  String? @map("source_url") @db.Text
-
-  // Expansion/Premium settings
-  isPremium Boolean @default(false) @map("is_premium")
-  upcCodes  String[] @default([]) @map("upc_codes")
-  isbnCodes String[] @default([]) @map("isbn_codes")
-
-  // External marketplace integration
-  dndBeyondId      String? @map("dndbeyond_id")
-  roll20Id         String? @map("roll20_id")
-  foundryVttId     String? @map("foundry_vtt_id")
-  fantasyGroundsId String? @map("fantasy_grounds_id")
-  dmsGuildId       String? @map("dms_guild_id")
-  worldAnvilId     String? @map("world_anvil_id")
-
-  // Dataset files (for expansions with data files)
-  datasetPath String? @map("dataset_path") @db.Text
 
   // Content references
   ruleIds   Json @default("[]") @map("rule_ids") @db.JsonB
@@ -2548,7 +2787,6 @@ model RpgBook {
 
   // Access control
   isPublic    Boolean @default(false) @map("is_public")
-  isActive    Boolean @default(true) @map("is_active")
   requiresSRD Boolean @default(false) @map("requires_srd") // System Reference Document
 
   // Metadata
@@ -2557,9 +2795,6 @@ model RpgBook {
   @@index([systemName])
   @@index([bookType])
   @@index([publisher])
-  @@index([sourceType])
-  @@index([isPremium])
-  @@index([isPublic, isActive])
   @@index([deletedAt])
   @@map("rpg_books")
 }
@@ -2632,4 +2867,3 @@ model RpgVoxel {
 //   END) as available_balance
 // FROM crit_coin_transactions
 // GROUP BY player_id;
-

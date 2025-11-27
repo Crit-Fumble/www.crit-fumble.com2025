@@ -8,7 +8,7 @@ import { AdminDashboardTabs } from '@/components/organisms/AdminDashboardTabs'
 import { DiscordManagement } from '@/components/organisms/DiscordManagement'
 
 async function getCritCoinBalance(playerId: string): Promise<number> {
-  const transactions = await prisma.critCoinTransaction.findMany({
+  const transactions = await prismaMain.critCoinTransaction.findMany({
     where: { playerId },
     select: {
       transactionType: true,
@@ -30,7 +30,7 @@ export default async function AdminDashboardPage() {
   }
 
   // Get user from database
-  const user = await prisma.critUser.findUnique({
+  const user = await prismaMain.critUser.findUnique({
     where: { id: session.user.id },
   })
 

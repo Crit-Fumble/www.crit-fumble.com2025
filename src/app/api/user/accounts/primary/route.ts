@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { prisma } from '@/packages/cfg-lib/db'
+import { prismaMain } from '@/lib/db'
 
 /**
  * POST /api/user/accounts/primary
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify the account belongs to the user
-    const account = await prisma.account.findFirst({
+    const account = await prismaMain.account.findFirst({
       where: {
         id: accountId,
         userId: session.user.id,
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Update the user's primary account
-    await prisma.critUser.update({
+    await prismaMain.critUser.update({
       where: { id: session.user.id },
       data: { primaryAccountId: accountId },
     })

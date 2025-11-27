@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { Header } from '@/components/organisms/Header'
-import { prisma } from '@/lib/prisma'
+import { prismaMain } from '@/lib/db'
 import { LinkedAccountsContent } from '@/components/organisms/LinkedAccountsContent'
 
 export default async function LinkedAccountsPage() {
@@ -13,7 +13,7 @@ export default async function LinkedAccountsPage() {
   }
 
   // Fetch user's linked account information
-  const user = await prisma.critUser.findUnique({
+  const user = await prismaMain.critUser.findUnique({
     where: { id: session.user.id },
     select: {
       discordId: true,

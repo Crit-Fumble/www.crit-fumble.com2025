@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import prismaMain from '@/packages/cfg-lib/db-main';
+import { prismaMain } from '@/lib/db';
 import crypto from 'crypto';
 
 // SECURITY: Completely disable in production

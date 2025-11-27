@@ -1,26 +1,24 @@
+
 import { Router } from 'express';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import prisma from '../services/db.js';
 import { AuthenticatedRequest } from '../middleware/auth.js';
 
 const router = Router();
 
+// Matches RpgPlayer schema - players are game identities linked to platform users
 const createPlayerSchema = z.object({
-  userId: z.string(),
-  campaignId: z.string(),
-  role: z.enum(['player', 'gm', 'spectator']).default('player'),
-  characterId: z.string().optional(),
-  isActive: z.boolean().default(true),
-  metadata: z.record(z.unknown()).optional(),
+  userId: z.string(), // Platform user reference
+  displayName: z.string().max(100).optional(),
+  defaultRole: z.enum(['player', 'gm', 'spectator']).default('player'),
+  gameSettings: z.record(z.unknown()).optional(),
 });
 
-const updatePlayerSchema = createPlayerSchema.partial().omit({ userId: true, campaignId: true });
+const updatePlayerSchema = createPlayerSchema.partial().omit({ userId: true });
 
 const querySchema = z.object({
   userId: z.string().optional(),
-  campaignId: z.string().optional(),
-  role: z.string().optional(),
-  isActive: z.string().transform(v => v === 'true').optional(),
   limit: z.string().transform(Number).default('50'),
   offset: z.string().transform(Number).default('0'),
 });
@@ -30,11 +28,8 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
   try {
     const query = querySchema.parse(req.query);
 
-    const where: Record<string, unknown> = {};
+    const where: Prisma.RpgPlayerWhereInput = {};
     if (query.userId) where.userId = query.userId;
-    if (query.campaignId) where.campaignId = query.campaignId;
-    if (query.role) where.role = query.role;
-    if (query.isActive !== undefined) where.isActive = query.isActive;
 
     const [players, total] = await Promise.all([
       prisma.rpgPlayer.findMany({
@@ -43,7 +38,13 @@ router.get('/', async (req: AuthenticatedRequest, res, next) => {
         skip: query.offset,
         orderBy: { createdAt: 'desc' },
         include: {
-          campaign: { select: { id: true, name: true } },
+          _count: {
+            select: {
+              ownedCampaigns: true,
+              campaignMemberships: true,
+              controlledCharacters: true,
+            },
+          },
         },
       }),
       prisma.rpgPlayer.count({ where }),
@@ -61,12 +62,42 @@ router.get('/:id', async (req, res, next) => {
     const player = await prisma.rpgPlayer.findUnique({
       where: { id: req.params.id },
       include: {
-        campaign: true,
+        ownedCampaigns: { take: 10 },
+        campaignMemberships: {
+          include: { campaign: true },
+          take: 10,
+        },
+        controlledCharacters: { take: 10 },
       },
     });
 
     if (!player) {
       res.status(404).json({ error: 'Player not found' });
+      return;
+    }
+
+    res.json(player);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/v1/players/by-user/:userId - Find player by platform user ID
+router.get('/by-user/:userId', async (req, res, next) => {
+  try {
+    const player = await prisma.rpgPlayer.findUnique({
+      where: { userId: req.params.userId },
+      include: {
+        ownedCampaigns: { take: 5 },
+        campaignMemberships: {
+          include: { campaign: true },
+          take: 5,
+        },
+      },
+    });
+
+    if (!player) {
+      res.status(404).json({ error: 'Player not found for user' });
       return;
     }
 
@@ -84,11 +115,9 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
     const player = await prisma.rpgPlayer.create({
       data: {
         userId: data.userId,
-        campaignId: data.campaignId,
-        role: data.role,
-        characterId: data.characterId,
-        isActive: data.isActive,
-        metadata: data.metadata,
+        displayName: data.displayName,
+        defaultRole: data.defaultRole,
+        gameSettings: (data.gameSettings ?? {}) as Prisma.InputJsonValue,
       },
     });
 
@@ -98,31 +127,23 @@ router.post('/', async (req: AuthenticatedRequest, res, next) => {
   }
 });
 
-// POST /api/v1/players/upsert - Upsert by userId + campaignId
+// POST /api/v1/players/upsert - Upsert by userId
 router.post('/upsert', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = createPlayerSchema.parse(req.body);
 
     const player = await prisma.rpgPlayer.upsert({
-      where: {
-        userId_campaignId: {
-          userId: data.userId,
-          campaignId: data.campaignId,
-        },
-      },
+      where: { userId: data.userId },
       create: {
         userId: data.userId,
-        campaignId: data.campaignId,
-        role: data.role,
-        characterId: data.characterId,
-        isActive: data.isActive,
-        metadata: data.metadata,
+        displayName: data.displayName,
+        defaultRole: data.defaultRole,
+        gameSettings: (data.gameSettings ?? {}) as Prisma.InputJsonValue,
       },
       update: {
-        role: data.role,
-        characterId: data.characterId,
-        isActive: data.isActive,
-        metadata: data.metadata,
+        displayName: data.displayName,
+        defaultRole: data.defaultRole,
+        gameSettings: data.gameSettings ? (data.gameSettings as Prisma.InputJsonValue) : undefined,
       },
     });
 
@@ -137,9 +158,22 @@ router.patch('/:id', async (req: AuthenticatedRequest, res, next) => {
   try {
     const data = updatePlayerSchema.parse(req.body);
 
+    const updateData: Prisma.RpgPlayerUpdateInput = {
+      displayName: data.displayName,
+      defaultRole: data.defaultRole,
+      gameSettings: data.gameSettings ? (data.gameSettings as Prisma.InputJsonValue) : undefined,
+    };
+
+    // Remove undefined values
+    Object.keys(updateData).forEach(key => {
+      if (updateData[key as keyof typeof updateData] === undefined) {
+        delete updateData[key as keyof typeof updateData];
+      }
+    });
+
     const player = await prisma.rpgPlayer.update({
       where: { id: req.params.id },
-      data,
+      data: updateData,
     });
 
     res.json(player);

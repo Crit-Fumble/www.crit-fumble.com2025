@@ -170,9 +170,10 @@ export class InstanceManager {
    */
   async findAvailableSlot(environment: FoundryEnvironment): Promise<number | null> {
     const runningInstances = await this.getInstanceStatus(environment);
+    const maxSlots = InstanceManager.MAX_INSTANCES[environment];
 
-    // Check each slot (0, 1, 2)
-    for (let slot = 0; slot < 3; slot++) {
+    // Check each slot
+    for (let slot = 0; slot < maxSlots; slot++) {
       const config = this.getContainerConfig(environment, slot);
       const isRunning = runningInstances.some(
         instance => instance.name === config.containerName && instance.status === 'running'

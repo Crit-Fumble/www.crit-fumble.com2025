@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { prismaMain } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { getUserPermissions, isAdminOrOwner } from '@/lib/permissions'
 import type { UserTier } from '@prisma/client'
@@ -42,7 +42,7 @@ export async function PATCH(
     }
 
     // Check if target user exists
-    const targetUser = await prisma.critUser.findUnique({
+    const targetUser = await prismaMain.critUser.findUnique({
       where: { id: userId },
       select: {
         id: true,
@@ -65,7 +65,7 @@ export async function PATCH(
     }
 
     // Update tier
-    const updatedUser = await prisma.critUser.update({
+    const updatedUser = await prismaMain.critUser.update({
       where: { id: userId },
       data: { tier: tier as UserTier },
     })
@@ -103,7 +103,7 @@ export async function GET(
     }
 
     const { userId } = await params
-    const user = await prisma.critUser.findUnique({
+    const user = await prismaMain.critUser.findUnique({
       where: { id: userId },
       select: {
         id: true,

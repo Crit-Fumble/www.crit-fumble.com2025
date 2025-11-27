@@ -1,7 +1,7 @@
 # FumbleBot Dockerfile
 # Production-ready image for DigitalOcean droplet deployment
 
-FROM node:20-alpine
+FROM node:22-alpine
 
 # Install system dependencies
 RUN apk add --no-cache \
@@ -41,10 +41,12 @@ USER fumblebot
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
+  CMD node -e "require('http').get('http://localhost:3001/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
-# Expose port
-EXPOSE 3000
+# Expose ports
+# 3001 - API server
+# 3000 - Activity server
+EXPOSE 3001 3000
 
 # Start bot
 CMD ["npm", "start"]

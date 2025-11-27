@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if username is already taken (excluding current user)
-    const existingUser = await prisma.critUser.findFirst({
+    const existingUser = await prismaMain.critUser.findFirst({
       where: {
         username,
         NOT: {
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     // Check if email is already taken (excluding current user)
     if (email) {
-      const existingEmail = await prisma.critUser.findFirst({
+      const existingEmail = await prismaMain.critUser.findFirst({
         where: {
           email,
           NOT: {
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Update user profile
-    const user = await prisma.critUser.update({
+    const user = await prismaMain.critUser.update({
       where: { id: session.user.id },
       data: {
         username,

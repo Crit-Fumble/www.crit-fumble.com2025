@@ -14,7 +14,6 @@ export async function proxy(request: NextRequest) {
   const allowedPaths = [
     '/',                    // Homepage
     '/api',                 // API routes (including /api/auth/*)
-    '/discord',             // Discord Activity
     '/terms-of-service',    // Legal
     '/privacy-policy',      // Legal
   ]

@@ -128,16 +128,20 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 /**
  * DELETE /api/wiki/[id]
- * Soft-delete a wiki page (owners only or bot with owner role)
+ * Soft-delete a wiki page
+ * - Owners can delete any page
+ * - Authors can delete their own pages
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    let userId: string
     let role: 'owner' | 'admin' | 'user'
 
     // Check bot auth first
     const botAuth = verifyBotAuth(request)
 
     if (botAuth) {
+      userId = await getBotServiceAccountId(botAuth.discordId)
       role = botAuth.role
     } else {
       const session = await auth()
@@ -147,13 +151,28 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
       const userRole = await getUserRole(session.user.id)
       role = userRole.role
-    }
-
-    if (!canDeleteWiki(role)) {
-      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
+      userId = session.user.id
     }
 
     const { id } = await params
+
+    // Get the page to check ownership
+    const page = await prisma.wikiPage.findUnique({
+      where: { id, deletedAt: null },
+      select: { authorId: true },
+    })
+
+    if (!page) {
+      return NextResponse.json({ error: 'Page not found' }, { status: 404 })
+    }
+
+    // Allow delete if: owner role OR author of the page
+    const isOwner = canDeleteWiki(role)
+    const isAuthor = page.authorId === userId
+
+    if (!isOwner && !isAuthor) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
+    }
 
     // Soft delete
     await prisma.wikiPage.update({

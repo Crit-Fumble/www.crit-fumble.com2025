@@ -19,6 +19,7 @@ interface WikiPage {
   content: string
   isPublished: boolean
   updatedAt: string
+  authorId: string
 }
 
 interface WikiDashboardProps {
@@ -41,9 +42,12 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg')
 
-  // Only owners can delete
-  const canDelete = role === 'owner'
+  // Owners can delete any page, authors can delete their own pages
+  const isOwner = role === 'owner'
+  const isAuthor = selectedPage?.authorId === user.id
+  const canDeleteSelected = isOwner || isAuthor
 
   // Fetch pages on mount
   useEffect(() => {
@@ -149,7 +153,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   }
 
   async function handleDelete() {
-    if (!selectedPage || !canDelete) return
+    if (!selectedPage || !canDeleteSelected) return
 
     const confirmed = confirm(`Are you sure you want to delete "${selectedPage.title}"? This action cannot be undone.`)
     if (!confirmed) return
@@ -313,7 +317,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                         Edit
                       </button>
                     )}
-                    {canDelete && (
+                    {canDeleteSelected && (
                       <button
                         onClick={handleDelete}
                         disabled={deleting}
@@ -322,7 +326,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                         {deleting ? 'Deleting...' : 'Delete'}
                       </button>
                     )}
-                    {!canEdit && !canDelete && (
+                    {!canEdit && !canDeleteSelected && (
                       <span className="text-sm text-gray-500">Read-only</span>
                     )}
                   </>
@@ -330,17 +334,53 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
               </div>
             </div>
 
+            {/* Editor mode toggle (only when editing) */}
+            {isEditing && (
+              <div className="px-6 py-2 border-b border-slate-800 flex items-center gap-2">
+                <span className="text-xs text-gray-400">Editor:</span>
+                <button
+                  onClick={() => setEditorMode('wysiwyg')}
+                  className={`px-2 py-1 text-xs rounded ${
+                    editorMode === 'wysiwyg'
+                      ? 'bg-crit-purple-600 text-white'
+                      : 'bg-slate-800 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  WYSIWYG
+                </button>
+                <button
+                  onClick={() => setEditorMode('markdown')}
+                  className={`px-2 py-1 text-xs rounded ${
+                    editorMode === 'markdown'
+                      ? 'bg-crit-purple-600 text-white'
+                      : 'bg-slate-800 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Markdown
+                </button>
+              </div>
+            )}
+
             {/* Content */}
             <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
               {isEditing ? (
-                <MDEditor
-                  value={editContent}
-                  onChange={(val) => setEditContent(val || '')}
-                  height="100%"
-                  preview="live"
-                  hideToolbar={false}
-                  enableScroll={true}
-                />
+                editorMode === 'wysiwyg' ? (
+                  <MDEditor
+                    value={editContent}
+                    onChange={(val) => setEditContent(val || '')}
+                    height="100%"
+                    preview="live"
+                    hideToolbar={false}
+                    enableScroll={true}
+                  />
+                ) : (
+                  <textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    className="w-full h-full bg-slate-900 text-gray-100 font-mono text-sm p-4 rounded border border-slate-700 resize-none focus:outline-none focus:border-crit-purple-500"
+                    placeholder="Write your markdown here..."
+                  />
+                )
               ) : (
                 <div className="prose prose-invert max-w-none">
                   <MDPreview source={selectedPage.content} />

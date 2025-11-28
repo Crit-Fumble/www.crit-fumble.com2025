@@ -9,5 +9,18 @@
       "maxDuration": 30
     }
   },
-  "crons": []
+  "crons": [],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "/storybook",
+      "has": [
+        {
+          "type": "host",
+          "value": "storybook.crit-fumble.com"
+        }
+      ],
+      "permanent": false
+    }
+  ]
 }

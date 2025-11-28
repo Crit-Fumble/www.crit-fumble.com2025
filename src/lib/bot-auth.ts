@@ -1,6 +1,7 @@
 import 'server-only'
 import { NextRequest } from 'next/server'
 import { isOwnerDiscordId, isAdminDiscordId, type UserRole } from './permissions'
+import { prisma } from './db'
 
 /**
  * Bot Authentication for FumbleBot
@@ -55,9 +56,29 @@ export function verifyBotAuth(request: NextRequest): { discordId: string; role: 
 }
 
 /**
- * Get a service account ID for bot-created content
- * Uses the bot's Discord ID prefixed to identify bot authorship
+ * Get or create a service account user for bot-created content
+ * Creates a user record if one doesn't exist for this bot
  */
-export function getBotServiceAccountId(discordId: string): string {
-  return `bot:${discordId}`
+export async function getBotServiceAccountId(discordId: string): Promise<string> {
+  // Use a deterministic ID based on the bot's Discord ID
+  // This ensures the same bot always gets the same user record
+  const botUserId = `bot-${discordId}`
+
+  // Check if the bot user already exists
+  let botUser = await prisma.user.findUnique({
+    where: { id: botUserId }
+  })
+
+  if (!botUser) {
+    // Create the bot user
+    botUser = await prisma.user.create({
+      data: {
+        id: botUserId,
+        name: 'FumbleBot',
+        email: `bot-${discordId}@fumblebot.local`,
+      }
+    })
+  }
+
+  return botUser.id
 }

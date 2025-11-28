@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     const botAuth = verifyBotAuth(request)
 
     if (botAuth) {
-      authorId = getBotServiceAccountId(botAuth.discordId)
+      authorId = await getBotServiceAccountId(botAuth.discordId)
       role = botAuth.role
     } else {
       const session = await auth()

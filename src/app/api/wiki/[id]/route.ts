@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const botAuth = verifyBotAuth(request)
 
     if (botAuth) {
-      editorId = getBotServiceAccountId(botAuth.discordId)
+      editorId = await getBotServiceAccountId(botAuth.discordId)
       role = botAuth.role
     } else {
       const session = await auth()

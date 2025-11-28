@@ -17,88 +17,33 @@ const nextConfig = {
     ]
   },
 
-  // Proxy core.crit-fumble.com to Core Concepts API droplet
-  async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'core.crit-fumble.com',
-          },
-        ],
-        destination: 'http://104.131.188.23:37821/:path*',
-      },
-    ]
-  },
-
   // Security headers
   async headers() {
-    // Common security headers (shared between standard and Discord Activity pages)
-    const commonHeaders = [
-      {
-        key: 'X-DNS-Prefetch-Control',
-        value: 'on'
-      },
-      {
-        key: 'Strict-Transport-Security',
-        value: 'max-age=63072000; includeSubDomains; preload'
-      },
-      {
-        key: 'X-Content-Type-Options',
-        value: 'nosniff'
-      },
-      {
-        key: 'X-XSS-Protection',
-        value: '1; mode=block'
-      },
-      {
-        key: 'Referrer-Policy',
-        value: 'strict-origin-when-cross-origin'
-      },
-    ]
-
     return [
-      // Discord Activity pages - allow embedding in Discord iframe
-      {
-        source: '/discord/:path*',
-        headers: [
-          ...commonHeaders,
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
-          },
-          {
-            // CSP for Discord Activity - allows Discord to embed this page
-            // Note: No X-Frame-Options here as it conflicts with frame-ancestors
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data:",
-              "connect-src 'self' https://discord.com https://*.discord.com https://api.anthropic.com https://api.openai.com",
-              "frame-src 'self'",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-              // Allow Discord to embed this page in an iframe
-              "frame-ancestors 'self' https://discord.com https://*.discord.com https://*.discordsays.com",
-              "upgrade-insecure-requests"
-            ].join('; ')
-          }
-        ],
-      },
-      // Standard pages - default security headers
       {
         source: '/:path*',
         headers: [
-          ...commonHeaders,
           {
-            // Note: X-Frame-Options removed - using frame-ancestors in CSP instead
-            // X-Frame-Options conflicts with frame-ancestors and doesn't support wildcards
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
           },
@@ -110,7 +55,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
               "img-src 'self' data: https: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://discord.com https://*.discord.com https://api.anthropic.com https://api.openai.com https://www.worldanvil.com",
+              "connect-src 'self' https://discord.com https://*.discord.com",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
@@ -126,10 +71,6 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'www.worldanvil.com',
-      },
       {
         protocol: 'https',
         hostname: 'cdn.discordapp.com',

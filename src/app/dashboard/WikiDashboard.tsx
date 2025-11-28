@@ -1,7 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import type { UserRole } from '@/lib/permissions'
+
+// Dynamic import for markdown editor (client-only)
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
+const MDPreview = dynamic(
+  () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
+  { ssr: false }
+)
 
 interface WikiPage {
   id: string
@@ -275,19 +283,19 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-auto p-6">
+            <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
               {isEditing ? (
-                <textarea
+                <MDEditor
                   value={editContent}
-                  onChange={e => setEditContent(e.target.value)}
-                  className="w-full h-full bg-slate-900 border border-slate-700 rounded p-4 text-gray-200 font-mono text-sm resize-none focus:outline-none focus:border-crit-purple-500"
-                  placeholder="Write your markdown content here..."
+                  onChange={(val) => setEditContent(val || '')}
+                  height="100%"
+                  preview="live"
+                  hideToolbar={false}
+                  enableScroll={true}
                 />
               ) : (
                 <div className="prose prose-invert max-w-none">
-                  <pre className="whitespace-pre-wrap text-gray-300 font-mono text-sm">
-                    {selectedPage.content}
-                  </pre>
+                  <MDPreview source={selectedPage.content} />
                 </div>
               )}
             </div>

@@ -449,7 +449,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
             {/* Content */}
             <div className="flex-1 flex overflow-hidden">
               {/* Editor/Preview */}
-              <div className={`flex-1 overflow-auto p-6 ${showAssistant ? 'border-r border-slate-800' : ''}`} data-color-mode="dark">
+              <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
                 {isEditing ? (
                   editorMode === 'wysiwyg' ? (
                     <MDEditor
@@ -474,110 +474,6 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                   </div>
                 )}
               </div>
-
-              {/* FumbleBot Assistant Panel */}
-              {showAssistant && (
-                <div className="w-80 flex flex-col bg-slate-900 border-l border-slate-800">
-                  {/* Assistant Header */}
-                  <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-crit-purple-600 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">F</span>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-white">FumbleBot</div>
-                        <div className="text-xs text-gray-500">Writing Assistant</div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setShowAssistant(false)}
-                      className="text-gray-500 hover:text-white"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Chat Messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                    {chatMessages.length === 0 && (
-                      <div className="text-center text-gray-500 mt-4">
-                        <p className="text-sm">Hi {user.name}!</p>
-                        <p className="text-xs mt-2">I&apos;m FumbleBot, your TTRPG assistant! Ask me about:</p>
-                        <ul className="text-xs mt-2 space-y-1 text-gray-600">
-                          <li>• Game rules and mechanics</li>
-                          <li>• Campaign ideas</li>
-                          <li>• Character building</li>
-                          <li>• Wiki content help</li>
-                        </ul>
-                      </div>
-                    )}
-
-                    {chatMessages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div
-                          className={`max-w-[90%] px-3 py-2 rounded-lg text-sm ${
-                            msg.role === 'user'
-                              ? 'bg-crit-purple-600 text-white'
-                              : 'bg-slate-800 text-gray-200'
-                          }`}
-                        >
-                          <p className="whitespace-pre-wrap">{msg.content}</p>
-                          {msg.role === 'assistant' && isEditing && (
-                            <button
-                              onClick={() => insertTextAtCursor(msg.content)}
-                              className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
-                            >
-                              + Insert into editor
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-
-                    {chatLoading && (
-                      <div className="flex justify-start">
-                        <div className="bg-slate-800 px-3 py-2 rounded-lg">
-                          <div className="flex gap-1">
-                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div ref={chatEndRef} />
-                  </div>
-
-                  {/* Chat Input */}
-                  <form onSubmit={sendChatMessage} className="p-3 border-t border-slate-800">
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={chatInput}
-                        onChange={(e) => setChatInput(e.target.value)}
-                        placeholder="Ask FumbleBot..."
-                        className="flex-1 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-crit-purple-500"
-                        disabled={chatLoading}
-                      />
-                      <button
-                        type="submit"
-                        disabled={!chatInput.trim() || chatLoading}
-                        className="px-3 py-2 bg-crit-purple-600 text-white rounded hover:bg-crit-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
             </div>
           </>
         ) : (
@@ -588,16 +484,108 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
       </div>
 
       {/* Floating FumbleBot toggle button */}
-      {!showAssistant && (
-        <button
-          onClick={() => setShowAssistant(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-crit-purple-600 hover:bg-crit-purple-500 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50"
-          aria-label="Open FumbleBot"
-        >
+      <button
+        onClick={() => setShowAssistant(!showAssistant)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-crit-purple-600 hover:bg-crit-purple-500 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50"
+        aria-label={showAssistant ? 'Close FumbleBot' : 'Open FumbleBot'}
+      >
+        {showAssistant ? (
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
-        </button>
+        )}
+      </button>
+
+      {/* Floating FumbleBot chat window */}
+      {showAssistant && (
+        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-slate-900 border border-slate-700 rounded-lg shadow-xl flex flex-col z-50">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-slate-700 flex items-center gap-3">
+            <div className="w-8 h-8 bg-crit-purple-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-sm font-bold">F</span>
+            </div>
+            <div>
+              <div className="text-white font-medium">FumbleBot</div>
+              <div className="text-xs text-gray-400">Your TTRPG Assistant</div>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {chatMessages.length === 0 && (
+              <div className="text-center text-gray-500 mt-8">
+                <p className="text-sm">Hey there, {user.name}!</p>
+                <p className="text-xs mt-2">Ask me anything about TTRPGs, rules, or your campaign.</p>
+              </div>
+            )}
+
+            {chatMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] px-3 py-2 rounded-lg ${
+                    msg.role === 'user'
+                      ? 'bg-crit-purple-600 text-white'
+                      : 'bg-slate-800 text-gray-200'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                  {msg.role === 'assistant' && isEditing && (
+                    <button
+                      onClick={() => insertTextAtCursor(msg.content)}
+                      className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
+                    >
+                      + Insert into editor
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {chatLoading && (
+              <div className="flex justify-start">
+                <div className="bg-slate-800 px-3 py-2 rounded-lg">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input */}
+          <form onSubmit={sendChatMessage} className="p-4 border-t border-slate-700">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Type a message..."
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-crit-purple-500"
+                disabled={chatLoading}
+              />
+              <button
+                type="submit"
+                disabled={!chatInput.trim() || chatLoading}
+                className="px-4 py-2 bg-crit-purple-600 text-white rounded-lg hover:bg-crit-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   )

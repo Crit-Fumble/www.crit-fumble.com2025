@@ -27,6 +27,8 @@ interface WikiPage {
   isPublished: boolean
   updatedAt: string
   authorId: string
+  author: { name: string | null } | null
+  lastEditor: { name: string | null } | null
 }
 
 interface WikiDashboardProps {
@@ -374,6 +376,12 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                   )}
                 </h1>
                 <div className="text-sm text-gray-500">/{selectedPage.slug}</div>
+                <div className="text-xs text-gray-600 mt-1">
+                  Created by {selectedPage.author?.name || 'Unknown'}
+                  {selectedPage.lastEditor?.name && selectedPage.lastEditor.name !== selectedPage.author?.name && (
+                    <> · Last edited by {selectedPage.lastEditor.name}</>
+                  )}
+                </div>
               </div>
               <div className="flex gap-2">
                 {isEditing ? (

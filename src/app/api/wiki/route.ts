@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
         isPublished: true,
         updatedAt: true,
         authorId: true,
+        author: { select: { name: true } },
+        lastEditor: { select: { name: true } },
       },
     })
 

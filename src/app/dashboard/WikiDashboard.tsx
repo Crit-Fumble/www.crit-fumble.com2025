@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import type { UserRole } from '@/lib/permissions'
 
@@ -10,6 +10,13 @@ const MDPreview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 )
+
+interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: Date
+}
 
 interface WikiPage {
   id: string
@@ -44,10 +51,88 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg')
 
+  // FumbleBot assistant state
+  const [showAssistant, setShowAssistant] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [chatInput, setChatInput] = useState('')
+  const [chatLoading, setChatLoading] = useState(false)
+  const [sessionId] = useState(() => crypto.randomUUID())
+  const chatEndRef = useRef<HTMLDivElement>(null)
+
   // Owners can delete any page, authors can delete their own pages
   const isOwner = role === 'owner'
   const isAuthor = selectedPage?.authorId === user.id
   const canDeleteSelected = isOwner || isAuthor
+
+  // Scroll chat to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [chatMessages])
+
+  async function sendChatMessage(e: React.FormEvent) {
+    e.preventDefault()
+    if (!chatInput.trim() || chatLoading) return
+
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: chatInput.trim(),
+      timestamp: new Date(),
+    }
+
+    setChatMessages((prev) => [...prev, userMessage])
+    setChatInput('')
+    setChatLoading(true)
+
+    try {
+      const response = await fetch('/api/fumblebot/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage.content,
+          sessionId,
+          context: selectedPage ? {
+            pageTitle: selectedPage.title,
+            pageContent: editContent || selectedPage.content,
+          } : undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
+
+      const data = await response.json()
+
+      const assistantMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: data.response || data.message || 'No response',
+        timestamp: new Date(),
+      }
+
+      setChatMessages((prev) => [...prev, assistantMessage])
+    } catch (error) {
+      console.error('Chat error:', error)
+      const errorMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: 'Sorry, FumbleBot is not available right now. The HTTP API may not be configured.',
+        timestamp: new Date(),
+      }
+      setChatMessages((prev) => [...prev, errorMessage])
+    } finally {
+      setChatLoading(false)
+    }
+  }
+
+  function insertTextAtCursor(text: string) {
+    if (editorMode === 'markdown') {
+      setEditContent((prev) => prev + '\n\n' + text)
+    } else {
+      setEditContent((prev) => prev + '\n\n' + text)
+    }
+  }
 
   // Fetch pages on mount
   useEffect(() => {
@@ -336,54 +421,176 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
             {/* Editor mode toggle (only when editing) */}
             {isEditing && (
-              <div className="px-6 py-2 border-b border-slate-800 flex items-center gap-2">
-                <span className="text-xs text-gray-400">Editor:</span>
+              <div className="px-6 py-2 border-b border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-400">Editor:</span>
+                  <button
+                    onClick={() => setEditorMode('wysiwyg')}
+                    className={`px-2 py-1 text-xs rounded ${
+                      editorMode === 'wysiwyg'
+                        ? 'bg-crit-purple-600 text-white'
+                        : 'bg-slate-800 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    WYSIWYG
+                  </button>
+                  <button
+                    onClick={() => setEditorMode('markdown')}
+                    className={`px-2 py-1 text-xs rounded ${
+                      editorMode === 'markdown'
+                        ? 'bg-crit-purple-600 text-white'
+                        : 'bg-slate-800 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    Markdown
+                  </button>
+                </div>
                 <button
-                  onClick={() => setEditorMode('wysiwyg')}
-                  className={`px-2 py-1 text-xs rounded ${
-                    editorMode === 'wysiwyg'
+                  onClick={() => setShowAssistant(!showAssistant)}
+                  className={`px-3 py-1 text-xs rounded flex items-center gap-1.5 ${
+                    showAssistant
                       ? 'bg-crit-purple-600 text-white'
                       : 'bg-slate-800 text-gray-400 hover:text-white'
                   }`}
                 >
-                  WYSIWYG
-                </button>
-                <button
-                  onClick={() => setEditorMode('markdown')}
-                  className={`px-2 py-1 text-xs rounded ${
-                    editorMode === 'markdown'
-                      ? 'bg-crit-purple-600 text-white'
-                      : 'bg-slate-800 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  Markdown
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  FumbleBot
                 </button>
               </div>
             )}
 
             {/* Content */}
-            <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
-              {isEditing ? (
-                editorMode === 'wysiwyg' ? (
-                  <MDEditor
-                    value={editContent}
-                    onChange={(val) => setEditContent(val || '')}
-                    height="100%"
-                    preview="live"
-                    hideToolbar={false}
-                    enableScroll={true}
-                  />
+            <div className="flex-1 flex overflow-hidden">
+              {/* Editor/Preview */}
+              <div className={`flex-1 overflow-auto p-6 ${showAssistant && isEditing ? 'border-r border-slate-800' : ''}`} data-color-mode="dark">
+                {isEditing ? (
+                  editorMode === 'wysiwyg' ? (
+                    <MDEditor
+                      value={editContent}
+                      onChange={(val) => setEditContent(val || '')}
+                      height="100%"
+                      preview="live"
+                      hideToolbar={false}
+                      enableScroll={true}
+                    />
+                  ) : (
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className="w-full h-full bg-slate-900 text-gray-100 font-mono text-sm p-4 rounded border border-slate-700 resize-none focus:outline-none focus:border-crit-purple-500"
+                      placeholder="Write your markdown here..."
+                    />
+                  )
                 ) : (
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className="w-full h-full bg-slate-900 text-gray-100 font-mono text-sm p-4 rounded border border-slate-700 resize-none focus:outline-none focus:border-crit-purple-500"
-                    placeholder="Write your markdown here..."
-                  />
-                )
-              ) : (
-                <div className="prose prose-invert max-w-none">
-                  <MDPreview source={selectedPage.content} />
+                  <div className="prose prose-invert max-w-none">
+                    <MDPreview source={selectedPage.content} />
+                  </div>
+                )}
+              </div>
+
+              {/* FumbleBot Assistant Panel */}
+              {showAssistant && isEditing && (
+                <div className="w-80 flex flex-col bg-slate-900">
+                  {/* Assistant Header */}
+                  <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-crit-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">F</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-white">FumbleBot</div>
+                        <div className="text-xs text-gray-500">Writing Assistant</div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowAssistant(false)}
+                      className="text-gray-500 hover:text-white"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Chat Messages */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {chatMessages.length === 0 && (
+                      <div className="text-center text-gray-500 mt-4">
+                        <p className="text-sm">Hi {user.name}!</p>
+                        <p className="text-xs mt-2">I can help you write and edit content. Try asking me to:</p>
+                        <ul className="text-xs mt-2 space-y-1 text-gray-600">
+                          <li>• Improve this paragraph</li>
+                          <li>• Add a section about...</li>
+                          <li>• Check for errors</li>
+                          <li>• Suggest a better title</li>
+                        </ul>
+                      </div>
+                    )}
+
+                    {chatMessages.map((msg) => (
+                      <div
+                        key={msg.id}
+                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      >
+                        <div
+                          className={`max-w-[90%] px-3 py-2 rounded-lg text-sm ${
+                            msg.role === 'user'
+                              ? 'bg-crit-purple-600 text-white'
+                              : 'bg-slate-800 text-gray-200'
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap">{msg.content}</p>
+                          {msg.role === 'assistant' && (
+                            <button
+                              onClick={() => insertTextAtCursor(msg.content)}
+                              className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
+                            >
+                              + Insert into editor
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+
+                    {chatLoading && (
+                      <div className="flex justify-start">
+                        <div className="bg-slate-800 px-3 py-2 rounded-lg">
+                          <div className="flex gap-1">
+                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                            <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div ref={chatEndRef} />
+                  </div>
+
+                  {/* Chat Input */}
+                  <form onSubmit={sendChatMessage} className="p-3 border-t border-slate-800">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        placeholder="Ask FumbleBot..."
+                        className="flex-1 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-crit-purple-500"
+                        disabled={chatLoading}
+                      />
+                      <button
+                        type="submit"
+                        disabled={!chatInput.trim() || chatLoading}
+                        className="px-3 py-2 bg-crit-purple-600 text-white rounded hover:bg-crit-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
                 </div>
               )}
             </div>

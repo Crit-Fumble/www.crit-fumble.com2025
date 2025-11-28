@@ -33,7 +33,6 @@ Simple combinations of atoms that function together as a unit. These components 
 
 **Current components:**
 - `AccountTabs` - Tab navigation for account pages
-- `FoundryInstanceControl` - Controls for Foundry VTT instances
 - `SubTabs` - Reusable sub-tab navigation component
 - `UserMenu` - User dropdown menu
 - `WorldAnvilLinkForm` - Form for linking World Anvil accounts
@@ -51,7 +50,6 @@ Complex UI sections composed of molecules and/or atoms. These are substantial co
 - `AdminDashboardTabs` - Main admin dashboard tab navigation
 - `CoreConceptsUI` - UI for managing core concepts
 - `DiscordManagement` - Discord server management interface
-- `FoundrySyncUI` - UI for Foundry VTT synchronization
 - `Header` - Main application header (server component)
 - `HeaderClient` - Client-side header logic
 - `LinkedAccountsContent` - Content for linked accounts page

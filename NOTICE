@@ -3,29 +3,10 @@ Copyright 2025 Crit-Fumble Contributors
 
 This product includes software developed at Crit-Fumble (https://crit-fumble.com).
 
-This software is licensed under the Apache License, Version 2.0 (the "License").
-You may obtain a copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
+Licensed under the Apache License, Version 2.0.
+See LICENSE file for details.
 
 ---
 
-Third-Party Attributions:
-
-D&D 5th Edition Systems Reference Document (SRD 5.1)
-Copyright Wizards of the Coast LLC
-
-This work includes material taken from the System Reference Document 5.1 ("SRD 5.1")
-by Wizards of the Coast LLC and available at:
-https://dnd.wizards.com/resources/systems-reference-document
-
-The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License
-available at https://creativecommons.org/licenses/by/4.0/legalcode.
-
----
-
-For a complete list of third-party dependencies and their licenses, see package.json.
-
-For questions about licensing:
-- Email: legal@crit-fumble.com
-- GitHub: https://github.com/your-org/crit-fumble
+Third-Party Dependencies:
+See package.json for a complete list of dependencies and their licenses.

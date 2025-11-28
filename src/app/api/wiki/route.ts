@@ -2,16 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getUserRole, canEditWiki } from '@/lib/permissions'
+import { verifyBotAuth, getBotServiceAccountId } from '@/lib/bot-auth'
 
 /**
  * GET /api/wiki
- * List all wiki pages (authenticated users only)
+ * List all wiki pages (authenticated users or bot)
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Check bot auth first
+    const botAuth = verifyBotAuth(request)
+
+    if (!botAuth) {
+      const session = await auth()
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
     }
 
     const pages = await prisma.wikiPage.findMany({
@@ -37,16 +43,30 @@ export async function GET() {
 
 /**
  * POST /api/wiki
- * Create a new wiki page (admins/owners only)
+ * Create a new wiki page (admins/owners or bot)
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    let authorId: string
+    let role: 'owner' | 'admin' | 'user'
+
+    // Check bot auth first
+    const botAuth = verifyBotAuth(request)
+
+    if (botAuth) {
+      authorId = getBotServiceAccountId(botAuth.discordId)
+      role = botAuth.role
+    } else {
+      const session = await auth()
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+
+      const userRole = await getUserRole(session.user.id)
+      role = userRole.role
+      authorId = session.user.id
     }
 
-    const { role } = await getUserRole(session.user.id)
     if (!canEditWiki(role)) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
@@ -70,8 +90,8 @@ export async function POST(request: NextRequest) {
         title,
         category,
         content: content || '',
-        authorId: session.user.id,
-        lastEditorId: session.user.id,
+        authorId,
+        lastEditorId: authorId,
       },
     })
 

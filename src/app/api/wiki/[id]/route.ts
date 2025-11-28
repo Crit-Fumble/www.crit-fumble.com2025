@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getUserRole, canEditWiki, canDeleteWiki } from '@/lib/permissions'
+import { verifyBotAuth, getBotServiceAccountId } from '@/lib/bot-auth'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -9,13 +10,18 @@ interface RouteParams {
 
 /**
  * GET /api/wiki/[id]
- * Get a single wiki page
+ * Get a single wiki page (authenticated users or bot)
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Check bot auth first
+    const botAuth = verifyBotAuth(request)
+
+    if (!botAuth) {
+      const session = await auth()
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
     }
 
     const { id } = await params
@@ -41,16 +47,30 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 /**
  * PATCH /api/wiki/[id]
- * Update a wiki page (admins/owners only)
+ * Update a wiki page (admins/owners or bot)
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    let editorId: string
+    let role: 'owner' | 'admin' | 'user'
+
+    // Check bot auth first
+    const botAuth = verifyBotAuth(request)
+
+    if (botAuth) {
+      editorId = getBotServiceAccountId(botAuth.discordId)
+      role = botAuth.role
+    } else {
+      const session = await auth()
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+
+      const userRole = await getUserRole(session.user.id)
+      role = userRole.role
+      editorId = session.user.id
     }
 
-    const { role } = await getUserRole(session.user.id)
     if (!canEditWiki(role)) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }
@@ -74,14 +94,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         pageId: id,
         title: currentPage.title,
         content: currentPage.content,
-        editorId: session.user.id,
+        editorId,
         changeNote: changeNote || null,
       },
     })
 
     // Update page
     const updateData: any = {
-      lastEditorId: session.user.id,
+      lastEditorId: editorId,
     }
 
     if (title !== undefined) updateData.title = title
@@ -108,16 +128,27 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 /**
  * DELETE /api/wiki/[id]
- * Soft-delete a wiki page (owners only)
+ * Soft-delete a wiki page (owners only or bot with owner role)
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    let role: 'owner' | 'admin' | 'user'
+
+    // Check bot auth first
+    const botAuth = verifyBotAuth(request)
+
+    if (botAuth) {
+      role = botAuth.role
+    } else {
+      const session = await auth()
+      if (!session?.user?.id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+
+      const userRole = await getUserRole(session.user.id)
+      role = userRole.role
     }
 
-    const { role } = await getUserRole(session.user.id)
     if (!canDeleteWiki(role)) {
       return NextResponse.json({ error: 'Permission denied' }, { status: 403 })
     }

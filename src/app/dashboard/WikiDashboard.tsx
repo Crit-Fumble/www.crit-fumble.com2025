@@ -421,42 +421,27 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
             {/* Editor mode toggle (only when editing) */}
             {isEditing && (
-              <div className="px-6 py-2 border-b border-slate-800 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">Editor:</span>
-                  <button
-                    onClick={() => setEditorMode('wysiwyg')}
-                    className={`px-2 py-1 text-xs rounded ${
-                      editorMode === 'wysiwyg'
-                        ? 'bg-crit-purple-600 text-white'
-                        : 'bg-slate-800 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    WYSIWYG
-                  </button>
-                  <button
-                    onClick={() => setEditorMode('markdown')}
-                    className={`px-2 py-1 text-xs rounded ${
-                      editorMode === 'markdown'
-                        ? 'bg-crit-purple-600 text-white'
-                        : 'bg-slate-800 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Markdown
-                  </button>
-                </div>
+              <div className="px-6 py-2 border-b border-slate-800 flex items-center gap-2">
+                <span className="text-xs text-gray-400">Editor:</span>
                 <button
-                  onClick={() => setShowAssistant(!showAssistant)}
-                  className={`px-3 py-1 text-xs rounded flex items-center gap-1.5 ${
-                    showAssistant
+                  onClick={() => setEditorMode('wysiwyg')}
+                  className={`px-2 py-1 text-xs rounded ${
+                    editorMode === 'wysiwyg'
                       ? 'bg-crit-purple-600 text-white'
                       : 'bg-slate-800 text-gray-400 hover:text-white'
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  FumbleBot
+                  WYSIWYG
+                </button>
+                <button
+                  onClick={() => setEditorMode('markdown')}
+                  className={`px-2 py-1 text-xs rounded ${
+                    editorMode === 'markdown'
+                      ? 'bg-crit-purple-600 text-white'
+                      : 'bg-slate-800 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Markdown
                 </button>
               </div>
             )}
@@ -464,7 +449,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
             {/* Content */}
             <div className="flex-1 flex overflow-hidden">
               {/* Editor/Preview */}
-              <div className={`flex-1 overflow-auto p-6 ${showAssistant && isEditing ? 'border-r border-slate-800' : ''}`} data-color-mode="dark">
+              <div className={`flex-1 overflow-auto p-6 ${showAssistant ? 'border-r border-slate-800' : ''}`} data-color-mode="dark">
                 {isEditing ? (
                   editorMode === 'wysiwyg' ? (
                     <MDEditor
@@ -491,8 +476,8 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
               </div>
 
               {/* FumbleBot Assistant Panel */}
-              {showAssistant && isEditing && (
-                <div className="w-80 flex flex-col bg-slate-900">
+              {showAssistant && (
+                <div className="w-80 flex flex-col bg-slate-900 border-l border-slate-800">
                   {/* Assistant Header */}
                   <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -519,12 +504,12 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                     {chatMessages.length === 0 && (
                       <div className="text-center text-gray-500 mt-4">
                         <p className="text-sm">Hi {user.name}!</p>
-                        <p className="text-xs mt-2">I can help you write and edit content. Try asking me to:</p>
+                        <p className="text-xs mt-2">I&apos;m FumbleBot, your TTRPG assistant! Ask me about:</p>
                         <ul className="text-xs mt-2 space-y-1 text-gray-600">
-                          <li>• Improve this paragraph</li>
-                          <li>• Add a section about...</li>
-                          <li>• Check for errors</li>
-                          <li>• Suggest a better title</li>
+                          <li>• Game rules and mechanics</li>
+                          <li>• Campaign ideas</li>
+                          <li>• Character building</li>
+                          <li>• Wiki content help</li>
                         </ul>
                       </div>
                     )}
@@ -542,7 +527,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                           }`}
                         >
                           <p className="whitespace-pre-wrap">{msg.content}</p>
-                          {msg.role === 'assistant' && (
+                          {msg.role === 'assistant' && isEditing && (
                             <button
                               onClick={() => insertTextAtCursor(msg.content)}
                               className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
@@ -601,6 +586,19 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
           </div>
         )}
       </div>
+
+      {/* Floating FumbleBot toggle button */}
+      {!showAssistant && (
+        <button
+          onClick={() => setShowAssistant(true)}
+          className="fixed bottom-6 right-6 w-14 h-14 bg-crit-purple-600 hover:bg-crit-purple-500 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50"
+          aria-label="Open FumbleBot"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

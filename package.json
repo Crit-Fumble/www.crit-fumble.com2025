@@ -58,7 +58,7 @@
     "dev:env:start": "bash scripts/dev/provision-dev-db.sh",
     "dev:env:stop": "bash scripts/dev/destroy-dev-db.sh",
     "dev:env:info": "bash scripts/dev/dev-db-info.sh",
-    "prepare": "husky",
+    "prepare": "node -e \"if (process.env.CI !== 'true' && process.env.VERCEL !== '1') { require('child_process').execSync('husky', {stdio: 'inherit'}) }\"",
     "security:scan": "bash scripts/scan-secrets.sh"
   },
   "dependencies": {

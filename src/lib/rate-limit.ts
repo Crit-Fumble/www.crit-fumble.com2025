@@ -42,6 +42,14 @@ export const publicRateLimiter = new RateLimiterMemory({
   blockDuration: 60, // Block for 1 minute if exceeded
 })
 
+// Chat rate limiting (moderate - allows conversation flow)
+export const chatRateLimiter = new RateLimiterMemory({
+  keyPrefix: "rl:chat",
+  points: 30, // Number of messages
+  duration: 60, // Per minute
+  blockDuration: 30, // Block for 30 seconds if exceeded
+})
+
 /**
  * Get client identifier from request
  * Prioritizes: User ID > IP address

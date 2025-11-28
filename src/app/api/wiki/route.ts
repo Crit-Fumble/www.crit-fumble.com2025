@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getUserRole, canEditWiki } from '@/lib/permissions'
 import { verifyBotAuth, getBotServiceAccountId } from '@/lib/bot-auth'
+import { apiRateLimiter, checkRateLimit, getClientIdentifier, getIpAddress } from '@/lib/rate-limit'
 
 /**
  * GET /api/wiki
@@ -48,6 +49,17 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit write operations
+    const ip = getIpAddress(request)
+    const identifier = getClientIdentifier(undefined, ip)
+    const rateLimitResult = await checkRateLimit(apiRateLimiter, identifier)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429, headers: { 'Retry-After': String(rateLimitResult.retryAfter) } }
+      )
+    }
+
     let authorId: string
     let role: 'owner' | 'admin' | 'user'
 

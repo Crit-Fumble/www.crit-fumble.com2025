@@ -39,7 +39,11 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [editTitle, setEditTitle] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Only owners can delete
+  const canDelete = role === 'owner'
 
   // Fetch pages on mount
   useEffect(() => {
@@ -142,6 +146,36 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     setIsEditing(false)
     setEditTitle('')
     setEditContent('')
+  }
+
+  async function handleDelete() {
+    if (!selectedPage || !canDelete) return
+
+    const confirmed = confirm(`Are you sure you want to delete "${selectedPage.title}"? This action cannot be undone.`)
+    if (!confirmed) return
+
+    setDeleting(true)
+    setMessage(null)
+
+    try {
+      const res = await fetch(`/api/wiki/${selectedPage.id}`, {
+        method: 'DELETE',
+      })
+
+      if (res.ok) {
+        setPages(pages.filter(p => p.id !== selectedPage.id))
+        setSelectedPage(null)
+        setIsEditing(false)
+        setMessage({ type: 'success', text: 'Page deleted successfully' })
+      } else {
+        const error = await res.json()
+        setMessage({ type: 'error', text: error.error || 'Failed to delete page' })
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Failed to delete page' })
+    } finally {
+      setDeleting(false)
+    }
   }
 
   return (
@@ -269,15 +303,29 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                       {saving ? 'Saving...' : 'Save'}
                     </button>
                   </>
-                ) : canEdit ? (
-                  <button
-                    onClick={startEditing}
-                    className="px-3 py-1.5 text-sm bg-slate-800 text-white rounded hover:bg-slate-700"
-                  >
-                    Edit
-                  </button>
                 ) : (
-                  <span className="text-sm text-gray-500">Read-only</span>
+                  <>
+                    {canEdit && (
+                      <button
+                        onClick={startEditing}
+                        className="px-3 py-1.5 text-sm bg-slate-800 text-white rounded hover:bg-slate-700"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={handleDelete}
+                        disabled={deleting}
+                        className="px-3 py-1.5 text-sm bg-red-700 text-white rounded hover:bg-red-600 disabled:opacity-50"
+                      >
+                        {deleting ? 'Deleting...' : 'Delete'}
+                      </button>
+                    )}
+                    {!canEdit && !canDelete && (
+                      <span className="text-sm text-gray-500">Read-only</span>
+                    )}
+                  </>
                 )}
               </div>
             </div>

@@ -10,17 +10,16 @@
     }
   },
   "crons": [],
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/storybook",
+      "destination": "/api/storybook-proxy/$1",
       "has": [
         {
           "type": "host",
           "value": "storybook.crit-fumble.com"
         }
-      ],
-      "permanent": false
+      ]
     }
   ]
 }

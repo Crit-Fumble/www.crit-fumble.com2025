@@ -116,7 +116,7 @@ const nextConfig = {
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self' https://*.crit-fumble.com",
+              "form-action 'self' https://www.crit-fumble.com https://*.crit-fumble.com",
               "frame-ancestors 'self'",
               "upgrade-insecure-requests"
             ].join('; ')

@@ -8,13 +8,14 @@ import type { Page, BrowserContext } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Test user types
+// Test user types - matches UserRole from permissions
 export type TestUser = {
   userId: string;
   username: string;
   email: string;
   sessionToken: string;
-  role: 'player' | 'admin' | 'moderator';
+  role: 'owner' | 'admin' | 'user';
+  discordId: string;
 };
 
 // Extend basic test with custom fixtures
@@ -42,14 +43,14 @@ export const test = base.extend<CustomFixtures>({
     await use(helper);
   },
 
-  // Test user - creates test auth session
+  // Test user - creates test auth session (regular user - read-only access)
   testUser: async ({ page }, use, testInfo) => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
     // Create test user via API
     const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
-        role: 'player',
+        role: 'user',
         username: `test_user_${Date.now()}`,
         email: `test-${Date.now()}@crit-fumble.test`,
       },
@@ -66,15 +67,15 @@ export const test = base.extend<CustomFixtures>({
 
     // Cleanup: Delete test user after test
     await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
-      data: { playerId: testUser.userId }, // userId maps to playerId in the API
+      data: { userId: testUser.userId },
     });
   },
 
-  // Admin test user - creates admin test auth session with developer privileges
+  // Admin test user - creates admin test auth session (edit access)
   adminTestUser: async ({ page }, use, testInfo) => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
-    // Create admin user via API (will have verification fields set to match DEV_ env vars)
+    // Create admin user via API (will have Discord ID from ADMIN_DISCORD_IDS env var)
     const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
       data: {
         role: 'admin',
@@ -94,7 +95,7 @@ export const test = base.extend<CustomFixtures>({
 
     // Cleanup: Delete admin user after test
     await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
-      data: { playerId: adminUser.userId },
+      data: { userId: adminUser.userId },
     });
   },
 

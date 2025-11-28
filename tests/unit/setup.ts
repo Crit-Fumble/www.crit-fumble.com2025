@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi, beforeEach } from 'vitest';
 
 // Mock Next.js server module
 vi.mock('next/server', () => ({
@@ -25,52 +25,54 @@ vi.mock('next/server', () => ({
   },
 }));
 
-// Create a mock Prisma client
+// Create a mock Prisma client for the simplified wiki schema
 export const createMockPrisma = () => ({
-  critUser: {
+  user: {
     findUnique: vi.fn(),
+    findFirst: vi.fn(),
     findMany: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
+    deleteMany: vi.fn(),
   },
-  rpgPlayer: {
+  account: {
     findUnique: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-  },
-  critCoinTransaction: {
     findFirst: vi.fn(),
     findMany: vi.fn(),
     create: vi.fn(),
-    aggregate: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    deleteMany: vi.fn(),
   },
-  storyCreditTransaction: {
+  session: {
+    findUnique: vi.fn(),
     findFirst: vi.fn(),
     findMany: vi.fn(),
     create: vi.fn(),
-    aggregate: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    deleteMany: vi.fn(),
   },
-  foundryWorldSnapshot: {
+  verificationToken: {
     findUnique: vi.fn(),
     findFirst: vi.fn(),
-    update: vi.fn(),
+    create: vi.fn(),
+    delete: vi.fn(),
   },
-  rpgCampaign: {
+  wikiPage: {
     findUnique: vi.fn(),
+    findFirst: vi.fn(),
     findMany: vi.fn(),
     create: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
   },
-  rpgWorld: {
+  wikiPageRevision: {
     findUnique: vi.fn(),
+    findFirst: vi.fn(),
     findMany: vi.fn(),
     create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
   },
   $transaction: vi.fn((callback) => callback(createMockPrisma())),
 });
@@ -80,8 +82,6 @@ export const prismaMock = createMockPrisma();
 // Mock the db module
 vi.mock('@/lib/db', () => ({
   prisma: prismaMock,
-  prismaMain: prismaMock,
-  prismaConcepts: prismaMock,
   default: prismaMock,
 }));
 

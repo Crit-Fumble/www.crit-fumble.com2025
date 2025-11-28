@@ -1,20 +1,8 @@
 /**
- * Component Library - Atomic Design Structure
+ * Component Library
  *
- * This component library follows the Atomic Design methodology:
- * - Atoms: Smallest reusable UI elements (buttons, inputs, labels, etc.)
- * - Molecules: Simple combinations of atoms (form fields, cards, etc.)
- * - Organisms: Complex UI sections (headers, forms, data tables, etc.)
- * - Templates: Page-level layouts
- *
- * Import components using the atomic structure:
- * import { SubTabs } from '@/components/molecules'
- * import { Header } from '@/components/organisms'
- * import { PageLayout } from '@/components/templates'
+ * Simple component structure for the wiki-only web application.
  */
 
-// Re-export all atomic levels
+// Re-export atoms
 export * from './atoms'
-export * from './molecules'
-export * from './organisms'
-export * from './templates'

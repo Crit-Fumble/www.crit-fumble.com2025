@@ -97,10 +97,8 @@ const nextConfig = {
         headers: [
           ...commonHeaders,
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
+            // Note: X-Frame-Options removed - using frame-ancestors in CSP instead
+            // X-Frame-Options conflicts with frame-ancestors and doesn't support wildcards
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
           },
@@ -117,7 +115,7 @@ const nextConfig = {
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self' https://www.crit-fumble.com https://*.crit-fumble.com",
-              "frame-ancestors 'self'",
+              "frame-ancestors 'self' https://*.discordsays.com",
               "upgrade-insecure-requests"
             ].join('; ')
           }

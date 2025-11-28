@@ -114,13 +114,13 @@ for file in $STAGED_FILES; do
         continue
     fi
 
-    # Skip .env.example files (these should have placeholder values)
-    if [[ "$file" == *.env.example* ]]; then
+    # Skip example files (these should have placeholder values, not real secrets)
+    if [[ "$file" == *.example* ]] || [[ "$file" == *.env.example* ]]; then
         continue
     fi
 
-    # CRITICAL: Block any .env files from being committed
-    if [[ "$file" == *.env* ]] && [[ "$file" != *.env.example* ]]; then
+    # CRITICAL: Block any .env files from being committed (except example files)
+    if [[ "$file" == *.env* ]] && [[ "$file" != *.example* ]] && [[ "$file" != *.env.example* ]]; then
         echo -e "${RED}❌ BLOCKED: Attempting to commit .env file: $file${NC}"
         echo -e "${RED}   .env files should NEVER be committed to git!${NC}"
         echo -e "${YELLOW}   Add '$file' to .gitignore${NC}"

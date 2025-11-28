@@ -73,7 +73,7 @@ const nextConfig = {
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self' https://www.crit-fumble.com https://*.crit-fumble.com",
+              "form-action 'self' https://www.crit-fumble.com https://*.crit-fumble.com https://discord.com https://*.discord.com",
               `frame-ancestors 'self' ${discordFrameAncestors}`,
               "upgrade-insecure-requests"
             ].join('; ')

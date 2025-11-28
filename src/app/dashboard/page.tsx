@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { getUserRole, canEditWiki } from '@/lib/permissions'
 import { WikiDashboard } from './WikiDashboard'
+import { FumbleBotChat } from '@/components/FumbleBotChat'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -25,6 +26,12 @@ export default async function DashboardPage() {
         }}
         role={role}
         canEdit={canEdit}
+      />
+      <FumbleBotChat
+        user={{
+          name: session.user.name ?? 'User',
+          image: session.user.image ?? null,
+        }}
       />
     </div>
   )

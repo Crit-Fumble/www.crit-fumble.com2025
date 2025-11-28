@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
         content: true,
         isPublished: true,
         updatedAt: true,
+        authorId: true,
       },
     })
 

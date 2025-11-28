@@ -125,8 +125,3 @@ src/platforms/worldographer/
 
 .vercel
 
-.env*.local
-
-.vercel
-
-.env*.local

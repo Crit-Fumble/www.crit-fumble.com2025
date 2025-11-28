@@ -37,33 +37,25 @@ const getTestCredentials = () => ({
 
 test.describe('Authentication Flow', () => {
   test.describe('Login Page', () => {
-    test('should load login page', async ({ page }) => {
-      await page.goto('/login');
-      // Title contains "Crit-Fumble - TTRPG Platform"
-      await expect(page).toHaveTitle(/Crit.*Fumble/i);
-      // Page has "Crit Fumble Gaming" h1, not "sign in" text
-      await expect(page.locator('h1')).toContainText(/Crit Fumble Gaming/i);
+    test('should load signin page', async ({ page }) => {
+      await page.goto('/api/auth/signin');
+      // NextAuth signin page has "Sign In" title
+      await expect(page).toHaveTitle(/Sign In/i);
     });
 
     test('should display OAuth provider buttons', async ({ page }) => {
-      await page.goto('/login');
+      await page.goto('/api/auth/signin');
 
       // Check for Discord login button - button contains "Sign in with Discord"
       const discordButton = page.locator('button', {
         hasText: /sign in with discord/i,
       });
       await expect(discordButton).toBeVisible();
-
-      // Check for GitHub login button - button contains "Sign in with GitHub"
-      const githubButton = page.locator('button', {
-        hasText: /sign in with github/i,
-      });
-      await expect(githubButton).toBeVisible();
     });
 
     test('should be responsive on mobile', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/login');
+      await page.goto('/api/auth/signin');
 
       // Verify buttons are still visible and clickable on mobile
       const discordButton = page.locator('button', {

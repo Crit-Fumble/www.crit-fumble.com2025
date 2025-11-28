@@ -1,8 +1,5 @@
 /**
  * NextAuth Configuration
- *
- * Auth is kept for FumbleBot and Discord Activity integration.
- * The website UI is a placeholder until March 2026.
  */
 
 import NextAuth from "next-auth"

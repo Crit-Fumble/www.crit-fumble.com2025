@@ -112,11 +112,11 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
               "img-src 'self' data: https: blob:",
               "font-src 'self' data:",
-              "connect-src 'self' https://api.anthropic.com https://api.openai.com https://www.worldanvil.com",
+              "connect-src 'self' https://discord.com https://*.discord.com https://api.anthropic.com https://api.openai.com https://www.worldanvil.com",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              "form-action 'self' https://discord.com https://*.discord.com",
               "frame-ancestors 'self'",
               "upgrade-insecure-requests"
             ].join('; ')

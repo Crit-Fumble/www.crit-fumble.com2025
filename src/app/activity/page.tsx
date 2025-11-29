@@ -1,11 +1,14 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
 import { auth } from '@/lib/auth'
-import { ActivityFeed } from './ActivityFeed'
+import { getUserRole, canViewWiki, hasEarlyAccess } from '@/lib/permissions'
+import { CampaignActivityFeed } from './CampaignActivityFeed'
 
 export const metadata: Metadata = {
   title: 'Activity | Crit Fumble Gaming',
-  description: 'Recent activity in the Crit Fumble Gaming community.',
+  description: 'Your campaigns, sessions, and characters across Discord servers.',
 }
 
 export default async function ActivityPage() {
@@ -16,44 +19,79 @@ export default async function ActivityPage() {
     redirect('/api/auth/signin?callbackUrl=/activity')
   }
 
+  // Get user's role - only admins and owners can view for now
+  const { role, discordId } = await getUserRole(session.user.id)
+
+  // Check early access - redirect to home if not authorized
+  const hasAccess = await hasEarlyAccess(discordId)
+  if (!hasAccess) {
+    redirect('/')
+  }
+
+  if (!canViewWiki(role)) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white mb-4">Access Restricted</h1>
+          <p className="text-gray-400 mb-6">This page is currently only available to admins and owners.</p>
+          <Link href="/dashboard" className="text-crit-purple-400 hover:text-crit-purple-300">
+            Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-slate-950">
       {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-crit-purple-400 hover:text-crit-purple-300 font-display font-bold text-xl">
-            Crit Fumble
-          </a>
-          <nav className="flex items-center gap-4">
-            <a href="/wiki" className="text-gray-400 hover:text-white text-sm">
-              Wiki
-            </a>
-            <a href="/dashboard" className="text-gray-400 hover:text-white text-sm">
+      <header className="border-b border-slate-800 bg-slate-900">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/" className="text-xl font-bold text-white hover:text-crit-purple-400 transition-colors">
+              Crit-Fumble
+            </Link>
+            <span className="text-gray-600">/</span>
+            <span className="text-gray-400">Activity</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard" className="text-sm text-gray-400 hover:text-white transition-colors">
               Dashboard
+            </Link>
+            <div className="flex items-center gap-2">
+              {session.user.image && (
+                <Image
+                  src={session.user.image}
+                  alt={session.user.name ?? 'User'}
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              )}
+              <span className="text-sm text-gray-300">{session.user.name}</span>
+              <span className="text-xs px-2 py-0.5 rounded bg-slate-800 text-gray-400 capitalize">
+                {role}
+              </span>
+            </div>
+            <a
+              href="/api/auth/signout"
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              Sign out
             </a>
-            <span className="text-white text-sm font-medium">Activity</span>
-          </nav>
+          </div>
         </div>
       </header>
 
-      {/* Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-display font-bold text-white mb-2">
-          Activity
-        </h1>
+      {/* Main content */}
+      <main className="max-w-5xl mx-auto px-6 py-12">
+        <h1 className="text-3xl font-bold text-white mb-2">Your Activity</h1>
         <p className="text-gray-400 mb-8">
-          Recent activity from the Crit Fumble community.
+          Campaigns, sessions, and characters across your Discord servers.
         </p>
 
-        <ActivityFeed userId={session.user.id} />
+        <CampaignActivityFeed />
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800 mt-16">
-        <div className="max-w-4xl mx-auto px-4 py-8 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Crit Fumble Gaming</p>
-        </div>
-      </footer>
     </div>
   )
 }

@@ -171,11 +171,11 @@ describe('Storybook Token', () => {
 
       const ownerToken = generateStorybookToken('user-1', 'owner')
       const adminToken = generateStorybookToken('user-2', 'admin')
-      const memberToken = generateStorybookToken('user-3', 'member')
+      const userToken = generateStorybookToken('user-3', 'user')
 
       expect(verifyStorybookToken(ownerToken)?.role).toBe('owner')
       expect(verifyStorybookToken(adminToken)?.role).toBe('admin')
-      expect(verifyStorybookToken(memberToken)?.role).toBe('member')
+      expect(verifyStorybookToken(userToken)?.role).toBe('user')
     })
 
     it('should reject token signed with different secret', async () => {
@@ -199,7 +199,7 @@ describe('Storybook Token', () => {
       const testCases = [
         { userId: 'simple-user', role: 'admin' },
         { userId: 'user-with-numbers-123', role: 'owner' },
-        { userId: 'email@example.com', role: 'member' },
+        { userId: 'email@example.com', role: 'user' },
         { userId: 'uuid-a1b2c3d4-e5f6', role: 'admin' },
       ]
 

@@ -66,7 +66,7 @@ function createCoreAuthConfig(config: CoreAuthConfig): NextAuthConfig {
           session.user.id = user.id
           // For Discord OAuth, the providerAccountId IS the Discord ID
           // Since we use profile.id as the user ID, user.id is the Discord ID
-          ;(session.user as Record<string, unknown>).discordId = user.id
+          ;(session.user as unknown as Record<string, unknown>).discordId = user.id
         }
         return session
       },

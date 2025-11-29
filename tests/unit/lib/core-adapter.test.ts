@@ -374,7 +374,7 @@ describe('CoreAdapter', () => {
       it('should update a session', async () => {
         const sessionData = {
           sessionToken: 'token-123',
-          expires: '2026-01-01T00:00:00.000Z', // JSON serialized
+          expires: '2026-01-01T00:00:00.000Z', // JSON serialized from API
         }
 
         mockFetch.mockResolvedValueOnce({
@@ -390,7 +390,11 @@ describe('CoreAdapter', () => {
             method: 'PATCH',
           })
         )
-        expect(result).toEqual(sessionData)
+        // The adapter parses expires string to Date object
+        expect(result).toEqual({
+          sessionToken: 'token-123',
+          expires: new Date('2026-01-01T00:00:00.000Z'),
+        })
       })
     })
 

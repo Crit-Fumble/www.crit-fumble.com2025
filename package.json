@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@crit-fumble/core": "^9.2.1",
-    "@crit-fumble/react": "^19.6.2",
+    "@crit-fumble/react": "^19.7.0",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",
     "isomorphic-dompurify": "^2.33.0",

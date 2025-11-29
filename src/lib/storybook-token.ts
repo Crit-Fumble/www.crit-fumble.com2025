@@ -11,6 +11,7 @@
  */
 
 import { createHmac } from 'crypto'
+import type { UserRole } from './permissions'
 
 const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000 // 24 hours
 const AUTH_SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || ''
@@ -37,7 +38,7 @@ export function generateStorybookToken(userId: string, role: string): string {
  * Verify a storybook access token
  * Returns the userId and role if valid, null if invalid or expired
  */
-export function verifyStorybookToken(token: string): { userId: string; role: string } | null {
+export function verifyStorybookToken(token: string): { userId: string; role: UserRole } | null {
   if (!AUTH_SECRET || !token) {
     return null
   }
@@ -78,6 +79,11 @@ export function verifyStorybookToken(token: string): { userId: string; role: str
     }
 
     if (!valid) {
+      return null
+    }
+
+    // Validate role is a valid UserRole
+    if (role !== 'owner' && role !== 'admin' && role !== 'user') {
       return null
     }
 

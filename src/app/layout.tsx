@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { StagingBanner } from "@crit-fumble/react";
+import { FloatingFumbleBot } from "@/components/FloatingFumbleBot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen antialiased`} suppressHydrationWarning>
         <StagingBanner environment={appEnv} />
         {children}
+        <FloatingFumbleBot />
       </body>
     </html>
   );

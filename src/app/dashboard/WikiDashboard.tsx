@@ -1,9 +1,18 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import DOMPurify from 'isomorphic-dompurify'
 import type { UserRole } from '@/lib/permissions'
+import {
+  DashboardSidebar,
+  PageListItem,
+  ContentToolbar,
+  EditorModeToggle,
+  Banner,
+  FumbleBotChat,
+} from '@crit-fumble/react/web'
+import type { EditorMode } from '@crit-fumble/react/web'
 
 // Dynamic import for markdown editor (client-only)
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
@@ -11,13 +20,6 @@ const MDPreview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 )
-
-interface ChatMessage {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-  timestamp: Date
-}
 
 interface WikiPage {
   id: string
@@ -75,15 +77,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg')
-
-  // FumbleBot assistant state
-  const [showAssistant, setShowAssistant] = useState(false)
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
-  const [chatInput, setChatInput] = useState('')
-  const [chatLoading, setChatLoading] = useState(false)
-  const [sessionId] = useState(() => crypto.randomUUID())
-  const chatEndRef = useRef<HTMLDivElement>(null)
+  const [editorMode, setEditorMode] = useState<EditorMode>('wysiwyg')
 
   // Owners can delete any page, authors can delete their own pages
   const isOwner = role === 'owner'
@@ -94,76 +88,6 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const sanitizedContent = useMemo(() => {
     return selectedPage?.content ? sanitizeContent(selectedPage.content) : ''
   }, [selectedPage?.content])
-
-  // Scroll chat to bottom
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [chatMessages])
-
-  async function sendChatMessage(e: React.FormEvent) {
-    e.preventDefault()
-    if (!chatInput.trim() || chatLoading) return
-
-    const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: chatInput.trim(),
-      timestamp: new Date(),
-    }
-
-    setChatMessages((prev) => [...prev, userMessage])
-    setChatInput('')
-    setChatLoading(true)
-
-    try {
-      const response = await fetch('/api/fumblebot/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMessage.content,
-          sessionId,
-          context: selectedPage ? {
-            pageTitle: selectedPage.title,
-            pageContent: editContent || selectedPage.content,
-          } : undefined,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to send message')
-      }
-
-      const data = await response.json()
-
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: data.response || data.message || 'No response',
-        timestamp: new Date(),
-      }
-
-      setChatMessages((prev) => [...prev, assistantMessage])
-    } catch (error) {
-      console.error('Chat error:', error)
-      const errorMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: 'Sorry, FumbleBot is not available right now. The HTTP API may not be configured.',
-        timestamp: new Date(),
-      }
-      setChatMessages((prev) => [...prev, errorMessage])
-    } finally {
-      setChatLoading(false)
-    }
-  }
-
-  function insertTextAtCursor(text: string) {
-    if (editorMode === 'markdown') {
-      setEditContent((prev) => prev + '\n\n' + text)
-    } else {
-      setEditContent((prev) => prev + '\n\n' + text)
-    }
-  }
 
   // Fetch pages on mount
   useEffect(() => {
@@ -298,26 +222,22 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     }
   }
 
+  // Build metadata string for toolbar
+  const metadataStr = selectedPage
+    ? `Created by ${selectedPage.author?.name || 'Unknown'}${
+        selectedPage.lastEditor?.name && selectedPage.lastEditor.name !== selectedPage.author?.name
+          ? ` · Last edited by ${selectedPage.lastEditor.name}`
+          : ''
+      }`
+    : undefined
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
-        {/* User info */}
-        <div className="p-4 border-b border-slate-800">
-          <div className="flex items-center gap-3">
-            {user.image && (
-              <img src={user.image} alt="" className="w-8 h-8 rounded-full" />
-            )}
-            <div>
-              <div className="text-sm font-medium text-white">{user.name}</div>
-              <div className="text-xs text-gray-400 capitalize">{role}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Page list */}
-        <div className="flex-1 overflow-auto p-2">
-          <div className="flex items-center justify-between px-2 py-1 mb-2">
+      <DashboardSidebar
+        user={{ name: user.name, image: user.image, role }}
+        header={
+          <div className="flex items-center justify-between px-2 py-1">
             <span className="text-xs font-semibold text-gray-400 uppercase">Pages</span>
             {canEdit && (
               <button
@@ -328,158 +248,80 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
               </button>
             )}
           </div>
-
-          {loading ? (
-            <div className="text-gray-500 text-sm px-2">Loading...</div>
-          ) : pages.length === 0 ? (
-            <div className="text-gray-500 text-sm px-2">No pages yet</div>
-          ) : (
-            <ul className="space-y-1">
-              {pages.map(page => (
-                <li key={page.id}>
-                  <button
-                    onClick={() => {
-                      setSelectedPage(page)
-                      setIsEditing(false)
-                    }}
-                    className={`w-full text-left px-2 py-1.5 rounded text-sm ${
-                      selectedPage?.id === page.id
-                        ? 'bg-crit-purple-600 text-white'
-                        : 'text-gray-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    <div className="truncate">{page.title}</div>
-                    <div className="text-xs text-gray-500">/{page.slug}</div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Sign out */}
-        <div className="p-4 border-t border-slate-800">
+        }
+        footer={
           <a
             href="/api/auth/signout"
             className="block text-sm text-gray-400 hover:text-white"
           >
             Sign out
           </a>
-        </div>
-      </div>
+        }
+      >
+        {loading ? (
+          <div className="text-gray-500 text-sm px-2">Loading...</div>
+        ) : pages.length === 0 ? (
+          <div className="text-gray-500 text-sm px-2">No pages yet</div>
+        ) : (
+          <ul className="space-y-1">
+            {pages.map(page => (
+              <li key={page.id}>
+                <PageListItem
+                  title={page.title}
+                  slug={page.slug}
+                  selected={selectedPage?.id === page.id}
+                  onClick={() => {
+                    setSelectedPage(page)
+                    setIsEditing(false)
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </DashboardSidebar>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col bg-slate-950">
         {/* Message banner */}
         {message && (
-          <div
-            className={`px-4 py-2 text-sm ${
-              message.type === 'success' ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'
-            }`}
+          <Banner
+            variant={message.type === 'success' ? 'success' : 'danger'}
+            onDismiss={() => setMessage(null)}
           >
             {message.text}
-            <button
-              onClick={() => setMessage(null)}
-              className="float-right text-current opacity-70 hover:opacity-100"
-            >
-              x
-            </button>
-          </div>
+          </Banner>
         )}
 
         {selectedPage ? (
           <>
             {/* Toolbar */}
-            <div className="flex items-center justify-between px-6 py-3 border-b border-slate-800">
-              <div>
-                <h1 className="text-lg font-semibold text-white">
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editTitle}
-                      onChange={e => setEditTitle(e.target.value)}
-                      className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-white"
-                    />
-                  ) : (
-                    selectedPage.title
-                  )}
-                </h1>
-                <div className="text-sm text-gray-500">/{selectedPage.slug}</div>
-                <div className="text-xs text-gray-600 mt-1">
-                  Created by {selectedPage.author?.name || 'Unknown'}
-                  {selectedPage.lastEditor?.name && selectedPage.lastEditor.name !== selectedPage.author?.name && (
-                    <> · Last edited by {selectedPage.lastEditor.name}</>
-                  )}
-                </div>
-              </div>
-              <div className="flex gap-2">
-                {isEditing ? (
-                  <>
-                    <button
-                      onClick={cancelEditing}
-                      className="px-3 py-1.5 text-sm text-gray-400 hover:text-white"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleSave}
-                      disabled={saving}
-                      className="px-3 py-1.5 text-sm bg-crit-purple-600 text-white rounded hover:bg-crit-purple-500 disabled:opacity-50"
-                    >
-                      {saving ? 'Saving...' : 'Save'}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {canEdit && (
-                      <button
-                        onClick={startEditing}
-                        className="px-3 py-1.5 text-sm bg-slate-800 text-white rounded hover:bg-slate-700"
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {canDeleteSelected && (
-                      <button
-                        onClick={handleDelete}
-                        disabled={deleting}
-                        className="px-3 py-1.5 text-sm bg-red-700 text-white rounded hover:bg-red-600 disabled:opacity-50"
-                      >
-                        {deleting ? 'Deleting...' : 'Delete'}
-                      </button>
-                    )}
-                    {!canEdit && !canDeleteSelected && (
-                      <span className="text-sm text-gray-500">Read-only</span>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
+            <ContentToolbar
+              title={selectedPage.title}
+              subtitle={`/${selectedPage.slug}`}
+              metadata={metadataStr}
+              isEditing={isEditing}
+              editTitle={editTitle}
+              onTitleChange={setEditTitle}
+              onSave={handleSave}
+              onCancel={cancelEditing}
+              onEdit={startEditing}
+              onDelete={handleDelete}
+              canEdit={canEdit}
+              canDelete={canDeleteSelected}
+              saving={saving}
+              deleting={deleting}
+            />
 
             {/* Editor mode toggle (only when editing) */}
             {isEditing && (
               <div className="px-6 py-2 border-b border-slate-800 flex items-center gap-2">
                 <span className="text-xs text-gray-400">Editor:</span>
-                <button
-                  onClick={() => setEditorMode('wysiwyg')}
-                  className={`px-2 py-1 text-xs rounded ${
-                    editorMode === 'wysiwyg'
-                      ? 'bg-crit-purple-600 text-white'
-                      : 'bg-slate-800 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  WYSIWYG
-                </button>
-                <button
-                  onClick={() => setEditorMode('markdown')}
-                  className={`px-2 py-1 text-xs rounded ${
-                    editorMode === 'markdown'
-                      ? 'bg-crit-purple-600 text-white'
-                      : 'bg-slate-800 text-gray-400 hover:text-white'
-                  }`}
-                >
-                  Markdown
-                </button>
+                <EditorModeToggle
+                  mode={editorMode}
+                  onChange={setEditorMode}
+                  modes={['wysiwyg', 'markdown']}
+                />
               </div>
             )}
 
@@ -520,110 +362,8 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
         )}
       </div>
 
-      {/* Floating FumbleBot toggle button */}
-      <button
-        onClick={() => setShowAssistant(!showAssistant)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-crit-purple-600 hover:bg-crit-purple-500 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50"
-        aria-label={showAssistant ? 'Close FumbleBot' : 'Open FumbleBot'}
-      >
-        {showAssistant ? (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        )}
-      </button>
-
-      {/* Floating FumbleBot chat window */}
-      {showAssistant && (
-        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-slate-900 border border-slate-700 rounded-lg shadow-xl flex flex-col z-50">
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-slate-700 flex items-center gap-3">
-            <div className="w-8 h-8 bg-crit-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-bold">F</span>
-            </div>
-            <div>
-              <div className="text-white font-medium">FumbleBot</div>
-              <div className="text-xs text-gray-400">Your TTRPG Assistant</div>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {chatMessages.length === 0 && (
-              <div className="text-center text-gray-500 mt-8">
-                <p className="text-sm">Hey there, {user.name}!</p>
-                <p className="text-xs mt-2">Ask me anything about TTRPGs, rules, or your campaign.</p>
-              </div>
-            )}
-
-            {chatMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] px-3 py-2 rounded-lg ${
-                    msg.role === 'user'
-                      ? 'bg-crit-purple-600 text-white'
-                      : 'bg-slate-800 text-gray-200'
-                  }`}
-                >
-                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                  {msg.role === 'assistant' && isEditing && (
-                    <button
-                      onClick={() => insertTextAtCursor(msg.content)}
-                      className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
-                    >
-                      + Insert into editor
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {chatLoading && (
-              <div className="flex justify-start">
-                <div className="bg-slate-800 px-3 py-2 rounded-lg">
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div ref={chatEndRef} />
-          </div>
-
-          {/* Input */}
-          <form onSubmit={sendChatMessage} className="p-4 border-t border-slate-700">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Type a message..."
-                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-crit-purple-500"
-                disabled={chatLoading}
-              />
-              <button
-                type="submit"
-                disabled={!chatInput.trim() || chatLoading}
-                className="px-4 py-2 bg-crit-purple-600 text-white rounded-lg hover:bg-crit-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+      {/* Floating FumbleBot */}
+      <FumbleBotChat user={user} apiEndpoint="/api/fumblebot/chat" />
     </div>
   )
 }

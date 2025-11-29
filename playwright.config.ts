@@ -110,13 +110,12 @@ export default defineConfig({
   ],
 
   // Run local dev server before starting tests
-  // Uncomment to auto-start server:
-  // webServer: {
-  //   command: 'npm run dev',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120000, // 2 minutes to start
-  // },
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000, // 2 minutes to start
+  },
 
   // Snapshot path template
   snapshotPathTemplate: 'tests/__screenshots__/{testFilePath}/{arg}{ext}',

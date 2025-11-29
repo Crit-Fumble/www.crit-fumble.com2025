@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { StagingBanner } from "@/components/atoms/StagingBanner";
+import { StagingBanner } from "@crit-fumble/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +15,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const appEnv = process.env.APP_ENV || process.env.NODE_ENV;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen antialiased`} suppressHydrationWarning>
-        <StagingBanner />
+        <StagingBanner environment={appEnv} />
         {children}
       </body>
     </html>

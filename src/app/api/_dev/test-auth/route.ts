@@ -21,6 +21,10 @@ import { randomUUID } from 'crypto'
 const CORE_API_URL = process.env.CORE_API_URL
 const CORE_API_SECRET = process.env.CORE_API_SECRET
 const TEST_AUTH_SECRET = process.env.TEST_AUTH_SECRET
+const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH === 'true'
+
+// In-memory store for mock users (local testing only)
+const mockUsers = new Map<string, { id: string; name: string; email: string; sessionToken: string; role: string; discordId: string }>()
 
 /**
  * Check if the environment allows test auth
@@ -120,6 +124,29 @@ export async function POST(request: NextRequest) {
       effectiveRole = 'admin'
     }
 
+    // Mock mode: store user in memory (no Core API needed)
+    if (USE_MOCK_AUTH) {
+      const mockUser = {
+        id: providerAccountId,
+        name: username || `test_user_${Date.now()}`,
+        email: email || `test-${Date.now()}@crit-fumble.test`,
+        sessionToken,
+        role: effectiveRole,
+        discordId: providerAccountId,
+      }
+      mockUsers.set(providerAccountId, mockUser)
+      mockUsers.set(sessionToken, mockUser) // Also index by session token
+
+      return NextResponse.json({
+        userId: mockUser.id,
+        username: mockUser.name,
+        email: mockUser.email,
+        sessionToken: mockUser.sessionToken,
+        role: mockUser.role,
+        discordId: mockUser.discordId,
+      })
+    }
+
     // Create user via Core API
     const user = await coreRequest<{ id: string; name: string; email: string }>('/user', {
       method: 'POST',
@@ -200,6 +227,16 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Missing userId or playerId' }, { status: 400 })
     }
 
+    // Mock mode: remove from in-memory store
+    if (USE_MOCK_AUTH) {
+      const user = mockUsers.get(targetUserId)
+      if (user) {
+        mockUsers.delete(targetUserId)
+        mockUsers.delete(user.sessionToken)
+      }
+      return NextResponse.json({ success: true })
+    }
+
     // Delete user via Core API (cascades to sessions and accounts)
     await coreRequest(`/user/${encodeURIComponent(targetUserId)}`, {
       method: 'DELETE',
@@ -210,4 +247,41 @@ export async function DELETE(request: NextRequest) {
     console.error('Error deleting test user:', error)
     return NextResponse.json({ error: 'Failed to delete test user' }, { status: 500 })
   }
+}
+
+/**
+ * GET /api/_dev/test-auth
+ * Get mock user by session token (for mock auth validation)
+ */
+export async function GET(request: NextRequest) {
+  const authCheck = isTestAuthAllowed(request)
+  if (!authCheck.allowed) {
+    return NextResponse.json(
+      { error: 'Not available', reason: authCheck.reason },
+      { status: 403 }
+    )
+  }
+
+  // Only available in mock mode
+  if (!USE_MOCK_AUTH) {
+    return NextResponse.json({ error: 'Mock mode not enabled' }, { status: 400 })
+  }
+
+  const sessionToken = request.nextUrl.searchParams.get('sessionToken')
+  if (!sessionToken) {
+    return NextResponse.json({ error: 'Missing sessionToken' }, { status: 400 })
+  }
+
+  const user = mockUsers.get(sessionToken)
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+  }
+
+  return NextResponse.json({
+    userId: user.id,
+    username: user.name,
+    email: user.email,
+    role: user.role,
+    discordId: user.discordId,
+  })
 }

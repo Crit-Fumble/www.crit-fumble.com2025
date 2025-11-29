@@ -15,7 +15,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
   test.afterEach(async ({ adminAuthenticatedPage }) => {
     // Cleanup: delete test page if created
     if (createdPageId) {
-      await adminAuthenticatedPage.request.delete(`/api/wiki/${createdPageId}`);
+      await adminAuthenticatedPage.request.delete(`/api/core/wiki/${createdPageId}`);
       createdPageId = null;
     }
   });
@@ -41,7 +41,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // Create a wiki page
-    const response = await page.request.post('/api/wiki', {
+    const response = await page.request.post('/api/core/wiki', {
       data: {
         slug: `test-page-${timestamp}`,
         title: `Test Page ${timestamp}`,
@@ -67,7 +67,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // First create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `test-read-${timestamp}`,
         title: `Test Read ${timestamp}`,
@@ -81,7 +81,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     createdPageId = created.id;
 
     // Now read the page
-    const readResponse = await page.request.get(`/api/wiki/${created.id}`);
+    const readResponse = await page.request.get(`/api/core/wiki/${created.id}`);
     expect(readResponse.status()).toBe(200);
 
     const readData = await readResponse.json();
@@ -95,7 +95,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // First create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `test-update-${timestamp}`,
         title: `Test Update ${timestamp}`,
@@ -109,7 +109,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     createdPageId = created.id;
 
     // Now update the page
-    const updateResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const updateResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         title: 'Updated Title',
         content: '# Updated Content\n\nThis has been updated.',
@@ -127,7 +127,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // First create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `test-delete-${timestamp}`,
         title: `Test Delete ${timestamp}`,
@@ -140,14 +140,14 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const created = await createResponse.json();
 
     // Delete the page
-    const deleteResponse = await page.request.delete(`/api/wiki/${created.id}`);
+    const deleteResponse = await page.request.delete(`/api/core/wiki/${created.id}`);
     expect(deleteResponse.status()).toBe(200);
 
     const deleteData = await deleteResponse.json();
     expect(deleteData.success).toBe(true);
 
     // Verify page is no longer accessible (soft deleted)
-    const getResponse = await page.request.get(`/api/wiki/${created.id}`);
+    const getResponse = await page.request.get(`/api/core/wiki/${created.id}`);
     expect(getResponse.status()).toBe(404);
 
     // No need to cleanup - already deleted
@@ -159,7 +159,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // First create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `test-list-${timestamp}`,
         title: `Test List ${timestamp}`,
@@ -173,7 +173,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     createdPageId = created.id;
 
     // Fetch the list
-    const listResponse = await page.request.get('/api/wiki');
+    const listResponse = await page.request.get('/api/core/wiki');
     expect(listResponse.status()).toBe(200);
 
     const listData = await listResponse.json();
@@ -190,7 +190,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const timestamp = Date.now();
 
     // Create first page
-    const response1 = await page.request.post('/api/wiki', {
+    const response1 = await page.request.post('/api/core/wiki', {
       data: {
         slug: `duplicate-test-${timestamp}`,
         title: 'First Page',
@@ -204,7 +204,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     createdPageId = created.id;
 
     // Try to create second page with same slug
-    const response2 = await page.request.post('/api/wiki', {
+    const response2 = await page.request.post('/api/core/wiki', {
       data: {
         slug: `duplicate-test-${timestamp}`,
         title: 'Second Page',
@@ -222,7 +222,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     const page = adminAuthenticatedPage;
 
     // Missing slug
-    const response1 = await page.request.post('/api/wiki', {
+    const response1 = await page.request.post('/api/core/wiki', {
       data: {
         title: 'Missing Slug',
         category: 'general',
@@ -234,7 +234,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     expect(error1.error).toBe('Missing required fields');
 
     // Missing title
-    const response2 = await page.request.post('/api/wiki', {
+    const response2 = await page.request.post('/api/core/wiki', {
       data: {
         slug: 'missing-title',
         category: 'general',
@@ -244,7 +244,7 @@ test.describe('Wiki - Admin CRUD Operations', () => {
     expect(response2.status()).toBe(400);
 
     // Missing category
-    const response3 = await page.request.post('/api/wiki', {
+    const response3 = await page.request.post('/api/core/wiki', {
       data: {
         slug: 'missing-category',
         title: 'Missing Category',

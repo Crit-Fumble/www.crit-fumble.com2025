@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
+import DOMPurify from 'isomorphic-dompurify'
 import type { UserRole } from '@/lib/permissions'
 
 // Dynamic import for markdown editor (client-only)
@@ -41,6 +42,29 @@ interface WikiDashboardProps {
   canEdit: boolean
 }
 
+/**
+ * Sanitize markdown/HTML content to prevent XSS attacks
+ */
+function sanitizeContent(content: string): string {
+  return DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: [
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'p', 'br', 'hr',
+      'ul', 'ol', 'li',
+      'blockquote', 'pre', 'code',
+      'strong', 'em', 'b', 'i', 'u', 's', 'del',
+      'a', 'img',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
+      'div', 'span',
+    ],
+    ALLOWED_ATTR: [
+      'href', 'src', 'alt', 'title', 'class', 'id',
+      'target', 'rel',
+    ],
+    ALLOW_DATA_ATTR: false,
+  })
+}
+
 export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [pages, setPages] = useState<WikiPage[]>([])
   const [selectedPage, setSelectedPage] = useState<WikiPage | null>(null)
@@ -65,6 +89,11 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const isOwner = role === 'owner'
   const isAuthor = selectedPage?.authorId === user.id
   const canDeleteSelected = isOwner || isAuthor
+
+  // Sanitize markdown content to prevent XSS
+  const sanitizedContent = useMemo(() => {
+    return selectedPage?.content ? sanitizeContent(selectedPage.content) : ''
+  }, [selectedPage?.content])
 
   // Scroll chat to bottom
   useEffect(() => {
@@ -143,7 +172,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
   async function fetchPages() {
     try {
-      const res = await fetch('/api/wiki')
+      const res = await fetch('/api/core/wiki')
       if (res.ok) {
         const data = await res.json()
         setPages(data.pages)
@@ -162,7 +191,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     setMessage(null)
 
     try {
-      const res = await fetch(`/api/wiki/${selectedPage.id}`, {
+      const res = await fetch(`/api/core/wiki/${selectedPage.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -196,7 +225,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
     setSaving(true)
     try {
-      const res = await fetch('/api/wiki', {
+      const res = await fetch('/api/core/wiki', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -249,7 +278,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     setMessage(null)
 
     try {
-      const res = await fetch(`/api/wiki/${selectedPage.id}`, {
+      const res = await fetch(`/api/core/wiki/${selectedPage.id}`, {
         method: 'DELETE',
       })
 
@@ -478,7 +507,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                   )
                 ) : (
                   <div className="prose prose-invert max-w-none">
-                    <MDPreview source={selectedPage.content} />
+                    <MDPreview source={sanitizedContent} />
                   </div>
                 )}
               </div>

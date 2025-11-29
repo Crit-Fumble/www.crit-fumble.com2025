@@ -1,29 +1,24 @@
 import 'server-only'
 import { NextRequest } from 'next/server'
-import { isOwnerDiscordId, isAdminDiscordId, type UserRole } from './permissions'
-import { prisma } from './db'
+import { createBotAuth } from '@crit-fumble/web-auth/bot-auth'
+import type { UserRole } from './permissions'
 
 /**
  * Bot Authentication for FumbleBot
  *
- * Requires TWO headers for secure authentication:
- * 1. X-Discord-Bot-Id: The bot's Discord Application ID
- * 2. X-Bot-Secret: A shared secret known only to the bot and website
- *
- * The bot's Discord ID should be added to OWNER_DISCORD_IDS or ADMIN_DISCORD_IDS
- * in the environment variables.
- *
- * Environment variable required:
- * - BOT_API_SECRET: Shared secret for bot authentication
- *
- * Usage from FumbleBot:
- *   fetch('/api/wiki', {
- *     headers: {
- *       'X-Discord-Bot-Id': botDiscordId,
- *       'X-Bot-Secret': botApiSecret
- *     }
- *   })
+ * Uses @crit-fumble/web-auth for bot authentication.
+ * Bot service accounts are managed via Core API.
  */
+
+const CORE_API_URL = process.env.CORE_API_URL
+const CORE_API_SECRET = process.env.CORE_API_SECRET
+
+// Create bot auth verifier with environment configuration
+const verifyBot = createBotAuth({
+  botApiSecret: process.env.BOT_API_SECRET!,
+  ownerIds: process.env.OWNER_DISCORD_IDS,
+  adminIds: process.env.ADMIN_DISCORD_IDS,
+})
 
 /**
  * Verify Discord bot authentication from request headers
@@ -31,54 +26,52 @@ import { prisma } from './db'
  * Returns the bot's role if valid, null otherwise
  */
 export function verifyBotAuth(request: NextRequest): { discordId: string; role: UserRole } | null {
-  const botDiscordId = request.headers.get('X-Discord-Bot-Id')
-  const botSecret = request.headers.get('X-Bot-Secret')
-
-  // Require both headers
-  if (!botDiscordId || !botSecret) return null
-
-  // Verify the shared secret
-  const expectedSecret = process.env.BOT_API_SECRET
-  if (!expectedSecret || botSecret !== expectedSecret) {
-    return null
-  }
-
-  // Check if the bot's Discord ID is in our allowed lists
-  if (isOwnerDiscordId(botDiscordId)) {
-    return { discordId: botDiscordId, role: 'owner' }
-  }
-
-  if (isAdminDiscordId(botDiscordId)) {
-    return { discordId: botDiscordId, role: 'admin' }
-  }
-
-  return null
+  return verifyBot(request.headers)
 }
 
 /**
  * Get or create a service account user for bot-created content
- * Creates a user record if one doesn't exist for this bot
+ * Creates a user record in Core API if one doesn't exist for this bot
  */
 export async function getBotServiceAccountId(discordId: string): Promise<string> {
-  // Use a deterministic ID based on the bot's Discord ID
-  // This ensures the same bot always gets the same user record
-  const botUserId = `bot-${discordId}`
-
-  // Check if the bot user already exists
-  let botUser = await prisma.user.findUnique({
-    where: { id: botUserId }
-  })
-
-  if (!botUser) {
-    // Create the bot user
-    botUser = await prisma.user.create({
-      data: {
-        id: botUserId,
-        name: 'FumbleBot',
-        email: `bot-${discordId}@fumblebot.local`,
-      }
-    })
+  if (!CORE_API_URL || !CORE_API_SECRET) {
+    throw new Error('CORE_API_URL and CORE_API_SECRET must be configured')
   }
 
-  return botUser.id
+  const botUserId = `bot:${discordId}`
+  const botName = 'FumbleBot'
+
+  // Check if user exists
+  const existingRes = await fetch(`${CORE_API_URL}/api/auth/user/${encodeURIComponent(botUserId)}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Core-Secret': CORE_API_SECRET,
+    },
+  })
+
+  if (existingRes.ok) {
+    const user = await existingRes.json()
+    if (user) return user.id
+  }
+
+  // Create bot user
+  const createRes = await fetch(`${CORE_API_URL}/api/auth/user`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Core-Secret': CORE_API_SECRET,
+    },
+    body: JSON.stringify({
+      id: botUserId,
+      name: botName,
+      email: `bot-${discordId}@fumblebot.local`,
+    }),
+  })
+
+  if (!createRes.ok) {
+    throw new Error(`Failed to create bot service account: ${createRes.status}`)
+  }
+
+  const newUser = await createRes.json()
+  return newUser.id
 }

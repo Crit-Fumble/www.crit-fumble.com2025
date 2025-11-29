@@ -26,7 +26,7 @@ test.describe('Wiki - Authenticated Read-Only Access', () => {
     const page = authenticatedPage;
 
     // Fetch wiki pages
-    const response = await page.request.get('/api/wiki');
+    const response = await page.request.get('/api/core/wiki');
 
     expect(response.status()).toBe(200);
     const data = await response.json();
@@ -65,7 +65,7 @@ test.describe('Wiki - Authenticated Read-Only Access', () => {
     const page = authenticatedPage;
 
     // Try to create a wiki page
-    const response = await page.request.post('/api/wiki', {
+    const response = await page.request.post('/api/core/wiki', {
       data: {
         slug: 'test-page-unauthorized',
         title: 'Test Page',
@@ -84,7 +84,7 @@ test.describe('Wiki - Authenticated Read-Only Access', () => {
     const page = authenticatedPage;
 
     // Try to update a wiki page (using a fake ID)
-    const response = await page.request.patch('/api/wiki/fake-id', {
+    const response = await page.request.patch('/api/core/wiki/fake-id', {
       data: {
         title: 'Updated Title',
         content: 'Updated content',
@@ -99,7 +99,7 @@ test.describe('Wiki - Authenticated Read-Only Access', () => {
     const page = authenticatedPage;
 
     // Try to delete a wiki page
-    const response = await page.request.delete('/api/wiki/fake-id');
+    const response = await page.request.delete('/api/core/wiki/fake-id');
 
     // Should be forbidden for regular users
     expect(response.status()).toBe(403);

@@ -1,0 +1,63 @@
+{
+  "name": "@crit-fumble/web-auth",
+  "version": "1.0.0",
+  "description": "Crit-Fumble Website Auth.js configuration and permissions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./permissions": {
+      "types": "./dist/permissions.d.ts",
+      "import": "./dist/permissions.js"
+    },
+    "./bot-auth": {
+      "types": "./dist/bot-auth.d.ts",
+      "import": "./dist/bot-auth.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "next-auth": "^5.0.0-beta.28"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "keywords": [
+    "auth",
+    "auth.js",
+    "next-auth",
+    "discord",
+    "permissions"
+  ],
+  "author": "Crit-Fumble",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crit-fumble/core.git",
+    "directory": "packages/web-auth"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

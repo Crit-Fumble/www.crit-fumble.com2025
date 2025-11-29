@@ -1,91 +1,39 @@
-import { vi, beforeEach } from 'vitest';
+import { vi, beforeEach } from 'vitest'
 
 // Mock Next.js server module
 vi.mock('next/server', () => ({
   NextRequest: class NextRequest {
-    url: string;
-    method: string;
-    headers: Map<string, string>;
+    url: string
+    method: string
+    headers: Map<string, string>
 
-    constructor(url: string, init?: any) {
-      this.url = url;
-      this.method = init?.method || 'GET';
-      this.headers = new Map();
+    constructor(url: string, init?: { method?: string }) {
+      this.url = url
+      this.method = init?.method || 'GET'
+      this.headers = new Map()
     }
 
     json() {
-      return Promise.resolve({});
+      return Promise.resolve({})
     }
   },
   NextResponse: {
-    json: (data: any, init?: any) => ({
+    json: (data: unknown, init?: { status?: number }) => ({
       status: init?.status || 200,
       json: () => Promise.resolve(data),
     }),
   },
-}));
+}))
 
-// Create a mock Prisma client for the simplified wiki schema
-export const createMockPrisma = () => ({
-  user: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    deleteMany: vi.fn(),
-  },
-  account: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    deleteMany: vi.fn(),
-  },
-  session: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-    deleteMany: vi.fn(),
-  },
-  verificationToken: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    create: vi.fn(),
-    delete: vi.fn(),
-  },
-  wikiPage: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    update: vi.fn(),
-    delete: vi.fn(),
-  },
-  wikiPageRevision: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-  },
-  $transaction: vi.fn((callback) => callback(createMockPrisma())),
-});
+// Mock auth module - can be configured per test
+export const mockAuth = vi.fn()
 
-export const prismaMock = createMockPrisma();
-
-// Mock the db module
-vi.mock('@/lib/db', () => ({
-  prisma: prismaMock,
-  default: prismaMock,
-}));
+vi.mock('@/lib/auth', () => ({
+  auth: mockAuth,
+}))
 
 // Reset all mocks before each test
 beforeEach(() => {
-  vi.clearAllMocks();
-});
+  vi.clearAllMocks()
+  mockAuth.mockResolvedValue(null)
+})

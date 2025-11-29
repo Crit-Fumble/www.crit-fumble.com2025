@@ -46,9 +46,17 @@ export const test = base.extend<CustomFixtures>({
   // Test user - creates test auth session (regular user - read-only access)
   testUser: async ({ page }, use, testInfo) => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
+    const testAuthSecret = process.env.TEST_AUTH_SECRET;
+
+    // Headers for test auth API (secret required for staging/preview deployments)
+    const headers: Record<string, string> = {};
+    if (testAuthSecret) {
+      headers['X-Test-Auth-Secret'] = testAuthSecret;
+    }
 
     // Create test user via API
     const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
+      headers,
       data: {
         role: 'user',
         username: `test_user_${Date.now()}`,
@@ -67,6 +75,7 @@ export const test = base.extend<CustomFixtures>({
 
     // Cleanup: Delete test user after test
     await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
+      headers,
       data: { userId: testUser.userId },
     });
   },
@@ -74,9 +83,17 @@ export const test = base.extend<CustomFixtures>({
   // Admin test user - creates admin test auth session (edit access)
   adminTestUser: async ({ page }, use, testInfo) => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
+    const testAuthSecret = process.env.TEST_AUTH_SECRET;
+
+    // Headers for test auth API (secret required for staging/preview deployments)
+    const headers: Record<string, string> = {};
+    if (testAuthSecret) {
+      headers['X-Test-Auth-Secret'] = testAuthSecret;
+    }
 
     // Create admin user via API (will have Discord ID from ADMIN_DISCORD_IDS env var)
     const response = await page.request.post(`${baseURL}/api/_dev/test-auth`, {
+      headers,
       data: {
         role: 'admin',
         username: `test_admin_${Date.now()}`,
@@ -95,6 +112,7 @@ export const test = base.extend<CustomFixtures>({
 
     // Cleanup: Delete admin user after test
     await page.request.delete(`${baseURL}/api/_dev/test-auth`, {
+      headers,
       data: { userId: adminUser.userId },
     });
   },

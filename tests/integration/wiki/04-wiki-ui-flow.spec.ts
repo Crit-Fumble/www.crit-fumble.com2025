@@ -15,12 +15,12 @@ test.describe('Wiki - Admin UI Flow', () => {
   test.afterEach(async ({ adminAuthenticatedPage }) => {
     // Cleanup via API if needed
     if (createdPageSlug) {
-      const listResponse = await adminAuthenticatedPage.request.get('/api/wiki');
+      const listResponse = await adminAuthenticatedPage.request.get('/api/core/wiki');
       if (listResponse.ok()) {
         const data = await listResponse.json();
         const page = data.pages?.find((p: any) => p.slug === createdPageSlug);
         if (page) {
-          await adminAuthenticatedPage.request.delete(`/api/wiki/${page.id}`);
+          await adminAuthenticatedPage.request.delete(`/api/core/wiki/${page.id}`);
         }
       }
       createdPageSlug = null;
@@ -124,7 +124,7 @@ test.describe('Wiki - Admin UI Flow', () => {
     const page1Slug = `sidebar-test-1-${timestamp}`;
     const page2Slug = `sidebar-test-2-${timestamp}`;
 
-    const res1 = await page.request.post('/api/wiki', {
+    const res1 = await page.request.post('/api/core/wiki', {
       data: {
         slug: page1Slug,
         title: 'Sidebar Test Page 1',
@@ -134,7 +134,7 @@ test.describe('Wiki - Admin UI Flow', () => {
     });
     expect(res1.status()).toBe(201);
 
-    const res2 = await page.request.post('/api/wiki', {
+    const res2 = await page.request.post('/api/core/wiki', {
       data: {
         slug: page2Slug,
         title: 'Sidebar Test Page 2',
@@ -160,11 +160,11 @@ test.describe('Wiki - Admin UI Flow', () => {
     await screenshotHelper.capture('wiki/sidebar/03-page2-selected');
 
     // Cleanup
-    const listResponse = await page.request.get('/api/wiki');
+    const listResponse = await page.request.get('/api/core/wiki');
     const data = await listResponse.json();
     for (const p of data.pages) {
       if (p.slug === page1Slug || p.slug === page2Slug) {
-        await page.request.delete(`/api/wiki/${p.id}`);
+        await page.request.delete(`/api/core/wiki/${p.id}`);
       }
     }
   });
@@ -175,7 +175,7 @@ test.describe('Wiki - Admin UI Flow', () => {
 
     // Create a page first
     const slug = `error-test-${timestamp}`;
-    const res = await page.request.post('/api/wiki', {
+    const res = await page.request.post('/api/core/wiki', {
       data: {
         slug,
         title: 'Error Test Page',
@@ -205,11 +205,11 @@ test.describe('Wiki - Admin UI Flow', () => {
     }
 
     // Cleanup
-    const listResponse = await page.request.get('/api/wiki');
+    const listResponse = await page.request.get('/api/core/wiki');
     const data = await listResponse.json();
     const pageToDelete = data.pages?.find((p: any) => p.slug === slug);
     if (pageToDelete) {
-      await page.request.delete(`/api/wiki/${pageToDelete.id}`);
+      await page.request.delete(`/api/core/wiki/${pageToDelete.id}`);
     }
   });
 });

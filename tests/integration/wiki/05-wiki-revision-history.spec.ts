@@ -13,7 +13,7 @@ test.describe('Wiki - Revision History', () => {
   test.afterEach(async ({ adminAuthenticatedPage }) => {
     // Cleanup
     if (testPageId) {
-      await adminAuthenticatedPage.request.delete(`/api/wiki/${testPageId}`);
+      await adminAuthenticatedPage.request.delete(`/api/core/wiki/${testPageId}`);
       testPageId = null;
     }
   });
@@ -23,7 +23,7 @@ test.describe('Wiki - Revision History', () => {
     const timestamp = Date.now();
 
     // Create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `revision-test-${timestamp}`,
         title: 'Original Title',
@@ -37,7 +37,7 @@ test.describe('Wiki - Revision History', () => {
     testPageId = created.id;
 
     // Update the page
-    const updateResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const updateResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         title: 'Updated Title',
         content: '# Updated Content',
@@ -58,7 +58,7 @@ test.describe('Wiki - Revision History', () => {
     const timestamp = Date.now();
 
     // Create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `multi-revision-${timestamp}`,
         title: 'Version 1',
@@ -73,7 +73,7 @@ test.describe('Wiki - Revision History', () => {
 
     // Make multiple edits
     for (let i = 2; i <= 5; i++) {
-      const updateResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+      const updateResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
         data: {
           title: `Version ${i}`,
           content: `# Version ${i} Content`,
@@ -87,7 +87,7 @@ test.describe('Wiki - Revision History', () => {
     }
 
     // Final check - page should have latest version
-    const finalResponse = await page.request.get(`/api/wiki/${created.id}`);
+    const finalResponse = await page.request.get(`/api/core/wiki/${created.id}`);
     expect(finalResponse.status()).toBe(200);
     const finalPage = await finalResponse.json();
     expect(finalPage.title).toBe('Version 5');
@@ -99,7 +99,7 @@ test.describe('Wiki - Revision History', () => {
     const timestamp = Date.now();
 
     // Create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `partial-update-${timestamp}`,
         title: 'Original Title',
@@ -113,7 +113,7 @@ test.describe('Wiki - Revision History', () => {
     testPageId = created.id;
 
     // Update only the title
-    const titleOnlyResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const titleOnlyResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         title: 'New Title Only',
       },
@@ -122,13 +122,13 @@ test.describe('Wiki - Revision History', () => {
     expect(titleOnlyResponse.status()).toBe(200);
 
     // Fetch and verify content is unchanged
-    const fetchResponse = await page.request.get(`/api/wiki/${created.id}`);
+    const fetchResponse = await page.request.get(`/api/core/wiki/${created.id}`);
     const fetchedPage = await fetchResponse.json();
     expect(fetchedPage.title).toBe('New Title Only');
     // Content should remain original (note: the PATCH updates content anyway in current implementation)
 
     // Update only the content
-    const contentOnlyResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const contentOnlyResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         content: '# New Content Only',
       },
@@ -137,7 +137,7 @@ test.describe('Wiki - Revision History', () => {
     expect(contentOnlyResponse.status()).toBe(200);
 
     // Final fetch
-    const finalFetch = await page.request.get(`/api/wiki/${created.id}`);
+    const finalFetch = await page.request.get(`/api/core/wiki/${created.id}`);
     const finalPage = await finalFetch.json();
     expect(finalPage.content).toBe('# New Content Only');
     expect(finalPage.title).toBe('New Title Only');
@@ -148,7 +148,7 @@ test.describe('Wiki - Revision History', () => {
     const timestamp = Date.now();
 
     // Create a page
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `category-test-${timestamp}`,
         title: 'Category Test',
@@ -163,7 +163,7 @@ test.describe('Wiki - Revision History', () => {
     expect(created.category).toBe('general');
 
     // Update category
-    const updateResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const updateResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         category: 'rules',
       },
@@ -179,7 +179,7 @@ test.describe('Wiki - Revision History', () => {
     const timestamp = Date.now();
 
     // Create a page (unpublished by default)
-    const createResponse = await page.request.post('/api/wiki', {
+    const createResponse = await page.request.post('/api/core/wiki', {
       data: {
         slug: `publish-test-${timestamp}`,
         title: 'Publish Test',
@@ -194,7 +194,7 @@ test.describe('Wiki - Revision History', () => {
     expect(created.isPublished).toBe(false);
 
     // Publish the page
-    const publishResponse = await page.request.patch(`/api/wiki/${created.id}`, {
+    const publishResponse = await page.request.patch(`/api/core/wiki/${created.id}`, {
       data: {
         isPublished: true,
       },

@@ -1,0 +1,67 @@
+{
+  "name": "@crit-fumble/web-proxy",
+  "version": "1.0.0",
+  "description": "Crit-Fumble Website proxy utilities, rate limiting, and middleware",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rate-limit": {
+      "types": "./dist/rate-limit.d.ts",
+      "import": "./dist/rate-limit.js"
+    },
+    "./middleware": {
+      "types": "./dist/middleware.d.ts",
+      "import": "./dist/middleware.js"
+    },
+    "./auth-proxy": {
+      "types": "./dist/auth-proxy.d.ts",
+      "import": "./dist/auth-proxy.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "rate-limiter-flexible": "^5.0.4"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.1",
+    "next": "^15.0.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "keywords": [
+    "proxy",
+    "rate-limit",
+    "middleware",
+    "next.js"
+  ],
+  "author": "Crit-Fumble",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crit-fumble/core.git",
+    "directory": "packages/web-proxy"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

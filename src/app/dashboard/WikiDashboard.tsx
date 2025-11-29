@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
+import DOMPurify from 'isomorphic-dompurify'
 import type { UserRole } from '@/lib/permissions'
 
 // Dynamic import for markdown editor (client-only)
@@ -10,6 +11,13 @@ const MDPreview = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 )
+
+interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  timestamp: Date
+}
 
 interface WikiPage {
   id: string
@@ -20,6 +28,8 @@ interface WikiPage {
   isPublished: boolean
   updatedAt: string
   authorId: string
+  author: { name: string | null } | null
+  lastEditor: { name: string | null } | null
 }
 
 interface WikiDashboardProps {
@@ -30,6 +40,29 @@ interface WikiDashboardProps {
   }
   role: UserRole
   canEdit: boolean
+}
+
+/**
+ * Sanitize markdown/HTML content to prevent XSS attacks
+ */
+function sanitizeContent(content: string): string {
+  return DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: [
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'p', 'br', 'hr',
+      'ul', 'ol', 'li',
+      'blockquote', 'pre', 'code',
+      'strong', 'em', 'b', 'i', 'u', 's', 'del',
+      'a', 'img',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
+      'div', 'span',
+    ],
+    ALLOWED_ATTR: [
+      'href', 'src', 'alt', 'title', 'class', 'id',
+      'target', 'rel',
+    ],
+    ALLOW_DATA_ATTR: false,
+  })
 }
 
 export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
@@ -44,10 +77,93 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg')
 
+  // FumbleBot assistant state
+  const [showAssistant, setShowAssistant] = useState(false)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [chatInput, setChatInput] = useState('')
+  const [chatLoading, setChatLoading] = useState(false)
+  const [sessionId] = useState(() => crypto.randomUUID())
+  const chatEndRef = useRef<HTMLDivElement>(null)
+
   // Owners can delete any page, authors can delete their own pages
   const isOwner = role === 'owner'
   const isAuthor = selectedPage?.authorId === user.id
   const canDeleteSelected = isOwner || isAuthor
+
+  // Sanitize markdown content to prevent XSS
+  const sanitizedContent = useMemo(() => {
+    return selectedPage?.content ? sanitizeContent(selectedPage.content) : ''
+  }, [selectedPage?.content])
+
+  // Scroll chat to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [chatMessages])
+
+  async function sendChatMessage(e: React.FormEvent) {
+    e.preventDefault()
+    if (!chatInput.trim() || chatLoading) return
+
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: chatInput.trim(),
+      timestamp: new Date(),
+    }
+
+    setChatMessages((prev) => [...prev, userMessage])
+    setChatInput('')
+    setChatLoading(true)
+
+    try {
+      const response = await fetch('/api/fumblebot/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage.content,
+          sessionId,
+          context: selectedPage ? {
+            pageTitle: selectedPage.title,
+            pageContent: editContent || selectedPage.content,
+          } : undefined,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
+
+      const data = await response.json()
+
+      const assistantMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: data.response || data.message || 'No response',
+        timestamp: new Date(),
+      }
+
+      setChatMessages((prev) => [...prev, assistantMessage])
+    } catch (error) {
+      console.error('Chat error:', error)
+      const errorMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: 'Sorry, FumbleBot is not available right now. The HTTP API may not be configured.',
+        timestamp: new Date(),
+      }
+      setChatMessages((prev) => [...prev, errorMessage])
+    } finally {
+      setChatLoading(false)
+    }
+  }
+
+  function insertTextAtCursor(text: string) {
+    if (editorMode === 'markdown') {
+      setEditContent((prev) => prev + '\n\n' + text)
+    } else {
+      setEditContent((prev) => prev + '\n\n' + text)
+    }
+  }
 
   // Fetch pages on mount
   useEffect(() => {
@@ -56,7 +172,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
   async function fetchPages() {
     try {
-      const res = await fetch('/api/wiki')
+      const res = await fetch('/api/core/wiki')
       if (res.ok) {
         const data = await res.json()
         setPages(data.pages)
@@ -75,7 +191,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     setMessage(null)
 
     try {
-      const res = await fetch(`/api/wiki/${selectedPage.id}`, {
+      const res = await fetch(`/api/core/wiki/${selectedPage.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -109,7 +225,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
 
     setSaving(true)
     try {
-      const res = await fetch('/api/wiki', {
+      const res = await fetch('/api/core/wiki', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -162,7 +278,7 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
     setMessage(null)
 
     try {
-      const res = await fetch(`/api/wiki/${selectedPage.id}`, {
+      const res = await fetch(`/api/core/wiki/${selectedPage.id}`, {
         method: 'DELETE',
       })
 
@@ -289,6 +405,12 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
                   )}
                 </h1>
                 <div className="text-sm text-gray-500">/{selectedPage.slug}</div>
+                <div className="text-xs text-gray-600 mt-1">
+                  Created by {selectedPage.author?.name || 'Unknown'}
+                  {selectedPage.lastEditor?.name && selectedPage.lastEditor.name !== selectedPage.author?.name && (
+                    <> · Last edited by {selectedPage.lastEditor.name}</>
+                  )}
+                </div>
               </div>
               <div className="flex gap-2">
                 {isEditing ? (
@@ -362,30 +484,33 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
             )}
 
             {/* Content */}
-            <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
-              {isEditing ? (
-                editorMode === 'wysiwyg' ? (
-                  <MDEditor
-                    value={editContent}
-                    onChange={(val) => setEditContent(val || '')}
-                    height="100%"
-                    preview="live"
-                    hideToolbar={false}
-                    enableScroll={true}
-                  />
+            <div className="flex-1 flex overflow-hidden">
+              {/* Editor/Preview */}
+              <div className="flex-1 overflow-auto p-6" data-color-mode="dark">
+                {isEditing ? (
+                  editorMode === 'wysiwyg' ? (
+                    <MDEditor
+                      value={editContent}
+                      onChange={(val) => setEditContent(val || '')}
+                      height="100%"
+                      preview="live"
+                      hideToolbar={false}
+                      enableScroll={true}
+                    />
+                  ) : (
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className="w-full h-full bg-slate-900 text-gray-100 font-mono text-sm p-4 rounded border border-slate-700 resize-none focus:outline-none focus:border-crit-purple-500"
+                      placeholder="Write your markdown here..."
+                    />
+                  )
                 ) : (
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className="w-full h-full bg-slate-900 text-gray-100 font-mono text-sm p-4 rounded border border-slate-700 resize-none focus:outline-none focus:border-crit-purple-500"
-                    placeholder="Write your markdown here..."
-                  />
-                )
-              ) : (
-                <div className="prose prose-invert max-w-none">
-                  <MDPreview source={selectedPage.content} />
-                </div>
-              )}
+                  <div className="prose prose-invert max-w-none">
+                    <MDPreview source={sanitizedContent} />
+                  </div>
+                )}
+              </div>
             </div>
           </>
         ) : (
@@ -394,6 +519,111 @@ export function WikiDashboard({ user, role, canEdit }: WikiDashboardProps) {
           </div>
         )}
       </div>
+
+      {/* Floating FumbleBot toggle button */}
+      <button
+        onClick={() => setShowAssistant(!showAssistant)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-crit-purple-600 hover:bg-crit-purple-500 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 z-50"
+        aria-label={showAssistant ? 'Close FumbleBot' : 'Open FumbleBot'}
+      >
+        {showAssistant ? (
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        )}
+      </button>
+
+      {/* Floating FumbleBot chat window */}
+      {showAssistant && (
+        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-slate-900 border border-slate-700 rounded-lg shadow-xl flex flex-col z-50">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-slate-700 flex items-center gap-3">
+            <div className="w-8 h-8 bg-crit-purple-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-sm font-bold">F</span>
+            </div>
+            <div>
+              <div className="text-white font-medium">FumbleBot</div>
+              <div className="text-xs text-gray-400">Your TTRPG Assistant</div>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {chatMessages.length === 0 && (
+              <div className="text-center text-gray-500 mt-8">
+                <p className="text-sm">Hey there, {user.name}!</p>
+                <p className="text-xs mt-2">Ask me anything about TTRPGs, rules, or your campaign.</p>
+              </div>
+            )}
+
+            {chatMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] px-3 py-2 rounded-lg ${
+                    msg.role === 'user'
+                      ? 'bg-crit-purple-600 text-white'
+                      : 'bg-slate-800 text-gray-200'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                  {msg.role === 'assistant' && isEditing && (
+                    <button
+                      onClick={() => insertTextAtCursor(msg.content)}
+                      className="mt-2 text-xs text-crit-purple-400 hover:text-crit-purple-300"
+                    >
+                      + Insert into editor
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {chatLoading && (
+              <div className="flex justify-start">
+                <div className="bg-slate-800 px-3 py-2 rounded-lg">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input */}
+          <form onSubmit={sendChatMessage} className="p-4 border-t border-slate-700">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Type a message..."
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-crit-purple-500"
+                disabled={chatLoading}
+              />
+              <button
+                type="submit"
+                disabled={!chatInput.trim() || chatLoading}
+                className="px-4 py-2 bg-crit-purple-600 text-white rounded-lg hover:bg-crit-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   )
 }

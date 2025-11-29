@@ -29,7 +29,7 @@ test.describe('Wiki - Unauthenticated Access', () => {
 
   test('wiki API returns 401 when not authenticated', async ({ page }) => {
     // Try to fetch wiki pages without auth
-    const response = await page.request.get('/api/wiki');
+    const response = await page.request.get('/api/core/wiki');
 
     expect(response.status()).toBe(401);
     const data = await response.json();
@@ -38,7 +38,7 @@ test.describe('Wiki - Unauthenticated Access', () => {
 
   test('wiki page API returns 401 when not authenticated', async ({ page }) => {
     // Try to get a specific wiki page without auth
-    const response = await page.request.get('/api/wiki/some-id');
+    const response = await page.request.get('/api/core/wiki/some-id');
 
     expect(response.status()).toBe(401);
     const data = await response.json();
@@ -47,7 +47,7 @@ test.describe('Wiki - Unauthenticated Access', () => {
 
   test('wiki create API returns 401 when not authenticated', async ({ page }) => {
     // Try to create a wiki page without auth
-    const response = await page.request.post('/api/wiki', {
+    const response = await page.request.post('/api/core/wiki', {
       data: {
         slug: 'test-page',
         title: 'Test Page',

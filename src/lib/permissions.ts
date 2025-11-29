@@ -90,6 +90,85 @@ const permissions = createPermissions({
   adminIds: process.env.ADMIN_DISCORD_IDS,
 })
 
+/**
+ * Early Access System
+ *
+ * Only admins from specific Discord guilds can access authenticated pages.
+ * Everyone else sees the "Coming Soon" landing page.
+ */
+
+// Parse allowed guild IDs from environment
+const allowedGuildIds = parseDiscordIds(process.env.ALLOWED_GUILD_IDS)
+
+/**
+ * Check if a user has early access based on guild admin status
+ *
+ * @param discordId - The user's Discord ID
+ * @returns Promise<boolean> - True if user is an admin in an allowed guild
+ */
+export async function hasEarlyAccess(discordId: string | null): Promise<boolean> {
+  // No Discord ID means no access
+  if (!discordId) return false
+
+  // Owners always have access
+  if (isOwnerDiscordId(discordId)) return true
+
+  // Site admins always have access
+  if (isAdminDiscordId(discordId)) return true
+
+  // If no allowed guilds configured, deny access (fail closed)
+  if (allowedGuildIds.length === 0) {
+    console.warn('[permissions] No ALLOWED_GUILD_IDS configured - denying early access')
+    return false
+  }
+
+  // Check guild admin status via Core API
+  try {
+    const coreApiUrl = process.env.CORE_API_URL
+    const coreApiSecret = process.env.CORE_API_SECRET
+
+    if (!coreApiUrl || !coreApiSecret) {
+      console.error('[permissions] Core API not configured')
+      return false
+    }
+
+    // Check if user is admin in any allowed guild
+    const response = await fetch(`${coreApiUrl}/api/discord/user/${discordId}/guilds`, {
+      headers: {
+        'Authorization': `Bearer ${coreApiSecret}`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      console.error('[permissions] Failed to fetch user guilds:', response.status)
+      return false
+    }
+
+    const userGuilds = await response.json() as Array<{ id: string; isAdmin: boolean }>
+
+    // Check if user is admin in any of the allowed guilds
+    return userGuilds.some(
+      (guild) => allowedGuildIds.includes(guild.id) && guild.isAdmin
+    )
+  } catch (error) {
+    console.error('[permissions] Error checking early access:', error)
+    return false
+  }
+}
+
+/**
+ * Check early access from session
+ *
+ * Use this in middleware or page components to gate access
+ */
+export async function checkEarlyAccess(): Promise<{ hasAccess: boolean; discordId: string | null }> {
+  const session = await auth()
+  const discordId = (session?.user as SessionUser | undefined)?.discordId ?? null
+  const hasAccess = await hasEarlyAccess(discordId)
+  return { hasAccess, discordId }
+}
+
 // Re-export permission checks
 export const {
   isOwnerDiscordId,

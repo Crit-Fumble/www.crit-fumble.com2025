@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
-import { getUserRole, canViewWiki } from '@/lib/permissions'
+import { getUserRole, canViewWiki, hasEarlyAccess } from '@/lib/permissions'
 import { CampaignActivityFeed } from './CampaignActivityFeed'
 
 export const metadata: Metadata = {
@@ -20,7 +20,13 @@ export default async function ActivityPage() {
   }
 
   // Get user's role - only admins and owners can view for now
-  const { role } = await getUserRole(session.user.id)
+  const { role, discordId } = await getUserRole(session.user.id)
+
+  // Check early access - redirect to home if not authorized
+  const hasAccess = await hasEarlyAccess(discordId)
+  if (!hasAccess) {
+    redirect('/')
+  }
 
   if (!canViewWiki(role)) {
     return (

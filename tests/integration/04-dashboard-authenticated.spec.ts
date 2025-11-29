@@ -2,55 +2,57 @@
  * Dashboard Integration Tests - Authenticated
  * Priority: P0 (Critical)
  *
- * Tests authenticated user flows in the dashboard
+ * Tests authenticated user flows in the dashboard.
+ * Note: Uses admin users because early access restricts dashboard
+ * to admins of allowed Discord guilds only.
  */
 
 import { test, expect } from '../utils/fixtures';
 
-test.describe('Dashboard - Authenticated Player', () => {
-  test('should access dashboard when authenticated', async ({
-    authenticatedPage,
+test.describe('Dashboard - Authenticated Admin', () => {
+  // Use adminAuthenticatedPage for early access - only admins can access dashboard
+  test('should access dashboard when authenticated as admin', async ({
+    adminAuthenticatedPage,
     screenshotHelper,
-    testUser,
+    adminTestUser,
   }) => {
-    // Navigate to dashboard - should be accessible
-    await authenticatedPage.goto('/dashboard');
-    await authenticatedPage.waitForLoadState('networkidle');
+    // Navigate to dashboard - should be accessible for admins
+    await adminAuthenticatedPage.goto('/dashboard');
+    await adminAuthenticatedPage.waitForLoadState('networkidle');
 
     // Capture dashboard
     await screenshotHelper.capture('authenticated/dashboard/overview');
 
-    // Verify we're on dashboard
-    await expect(authenticatedPage).toHaveURL('/dashboard');
+    // Verify we're on dashboard (not redirected due to early access)
+    await expect(adminAuthenticatedPage).toHaveURL('/dashboard');
 
     // Verify user is logged in
-    console.log(`✅ Authenticated as: ${testUser.username} (${testUser.email})`);
+    console.log(`✅ Authenticated as admin: ${adminTestUser.username} (${adminTestUser.email})`);
   });
 
-  test('should display user information', async ({
-    authenticatedPage,
+  test('should display user information for admin', async ({
+    adminAuthenticatedPage,
     screenshotHelper,
-    testUser,
+    adminTestUser,
   }) => {
-    await authenticatedPage.goto('/dashboard');
-    await authenticatedPage.waitForLoadState('networkidle');
+    await adminAuthenticatedPage.goto('/dashboard');
+    await adminAuthenticatedPage.waitForLoadState('networkidle');
 
     // Capture initial state
     await screenshotHelper.capture('authenticated/dashboard/user-info');
 
     // Check for user-specific content
-    // Note: Update these selectors based on your actual dashboard UI
-    await expect(authenticatedPage.getByText(/Dashboard/i)).toBeVisible();
+    await expect(adminAuthenticatedPage.getByText(/Dashboard/i)).toBeVisible();
 
-    console.log(`✅ Dashboard loaded for user: ${testUser.username}`);
+    console.log(`✅ Dashboard loaded for admin: ${adminTestUser.username}`);
   });
 
   test('should navigate through dashboard sections', async ({
-    authenticatedPage,
+    adminAuthenticatedPage,
     screenshotHelper,
   }) => {
-    await authenticatedPage.goto('/dashboard');
-    await authenticatedPage.waitForLoadState('networkidle');
+    await adminAuthenticatedPage.goto('/dashboard');
+    await adminAuthenticatedPage.waitForLoadState('networkidle');
 
     // Capture main dashboard
     await screenshotHelper.capture('authenticated/dashboard/main');
@@ -63,15 +65,35 @@ test.describe('Dashboard - Authenticated Player', () => {
     // - Profile
   });
 
-  test('should redirect unauthenticated users', async ({ page, screenshotHelper }) => {
+  test('should redirect unauthenticated users to sign in', async ({ page, screenshotHelper }) => {
     // Use regular page (not authenticatedPage) - no auth
     await page.goto('/dashboard');
 
-    // Should redirect to login
-    await page.waitForURL('/login', { timeout: 10000 });
-    await screenshotHelper.capture('unauthenticated/dashboard/redirect-to-login');
+    // Should redirect to NextAuth sign-in
+    await page.waitForURL(/\/api\/auth\/signin/, { timeout: 10000 });
+    await screenshotHelper.capture('unauthenticated/dashboard/redirect-to-signin');
 
-    await expect(page).toHaveURL('/login');
+    await expect(page).toHaveURL(/\/api\/auth\/signin/);
+  });
+});
+
+test.describe('Dashboard - Early Access Restriction', () => {
+  test('should redirect regular users to home page (early access)', async ({
+    authenticatedPage,
+    screenshotHelper,
+    testUser,
+  }) => {
+    // Regular users (not admin/owner) should be redirected to home
+    // due to early access restrictions
+    await authenticatedPage.goto('/dashboard');
+    await authenticatedPage.waitForLoadState('networkidle');
+
+    // Should redirect to home page (Coming March 2026)
+    await expect(authenticatedPage).toHaveURL('/');
+
+    await screenshotHelper.capture('early-access/regular-user-redirected');
+
+    console.log(`✅ Regular user ${testUser.username} redirected to home (early access restriction)`);
   });
 });
 

@@ -3,26 +3,92 @@ import 'server-only'
 /**
  * Permission System
  *
- * Re-exports from @crit-fumble/web-auth with app-specific configuration.
+ * Admin/Owner roles are determined by Discord IDs in environment variables.
+ * This keeps permissions simple and out of the database.
  *
- * With JWT sessions, the Discord ID is available directly in the session
- * (set by the jwt callback in createCoreAuth). No database query needed.
+ * With database sessions, the Discord ID is available directly in the session
+ * (user.id is the Discord ID since we use profile.id as the user ID).
  */
 
-import {
-  createPermissions,
-  type UserRole,
-} from '@crit-fumble/web-auth'
 import { auth } from './auth'
+
+export type UserRole = 'owner' | 'admin' | 'user'
+
+/**
+ * Configuration for the permission system
+ */
+interface PermissionConfig {
+  ownerIds?: string | string[]
+  adminIds?: string | string[]
+}
+
+/**
+ * Parse comma-separated Discord IDs from environment variable
+ */
+function parseDiscordIds(envVar: string | undefined): string[] {
+  if (!envVar) return []
+  return envVar
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean)
+}
+
+/**
+ * Create a permission checker with configured owner/admin IDs
+ */
+function createPermissions(config: PermissionConfig = {}) {
+  const ownerIds = Array.isArray(config.ownerIds)
+    ? config.ownerIds
+    : parseDiscordIds(config.ownerIds)
+
+  const adminIds = Array.isArray(config.adminIds)
+    ? config.adminIds
+    : parseDiscordIds(config.adminIds)
+
+  function isOwnerDiscordId(discordId: string): boolean {
+    return ownerIds.includes(discordId)
+  }
+
+  function isAdminDiscordId(discordId: string): boolean {
+    return adminIds.includes(discordId) || isOwnerDiscordId(discordId)
+  }
+
+  function getRoleFromDiscordId(discordId: string | null): UserRole {
+    if (!discordId) return 'user'
+    if (isOwnerDiscordId(discordId)) return 'owner'
+    if (isAdminDiscordId(discordId)) return 'admin'
+    return 'user'
+  }
+
+  function canEditWiki(role: UserRole): boolean {
+    return role === 'owner' || role === 'admin'
+  }
+
+  function canPublishWiki(role: UserRole): boolean {
+    return role === 'owner'
+  }
+
+  function canDeleteWiki(role: UserRole): boolean {
+    return role === 'owner'
+  }
+
+  return {
+    ownerIds,
+    adminIds,
+    isOwnerDiscordId,
+    isAdminDiscordId,
+    getRoleFromDiscordId,
+    canEditWiki,
+    canPublishWiki,
+    canDeleteWiki,
+  }
+}
 
 // Create permissions instance with environment variables
 const permissions = createPermissions({
   ownerIds: process.env.OWNER_DISCORD_IDS,
   adminIds: process.env.ADMIN_DISCORD_IDS,
 })
-
-// Re-export types
-export type { UserRole }
 
 // Re-export permission checks
 export const {
@@ -40,7 +106,7 @@ export const {
  * - admin: Can edit/publish wiki, manage content
  * - member: Authenticated user, read-only access to protected content
  *
- * Note: 'user' role from web-auth maps to 'member' for display
+ * Note: 'user' role maps to 'member' for display
  */
 export type WebRole = 'owner' | 'admin' | 'member'
 
@@ -63,7 +129,7 @@ export function canViewActivity(role: UserRole): boolean {
 }
 
 /**
- * Extended session user type with discordId from JWT
+ * Extended session user type with discordId from session
  */
 interface SessionUser {
   id: string
@@ -76,8 +142,7 @@ interface SessionUser {
 /**
  * Get a user's Discord ID from the session
  *
- * With JWT sessions, discordId is stored in the token and available
- * directly on the session user. No database query needed.
+ * With database sessions, discordId is stored on the session user.
  */
 export async function getUserDiscordId(userId: string): Promise<string | null> {
   const session = await auth()
@@ -88,7 +153,7 @@ export async function getUserDiscordId(userId: string): Promise<string | null> {
 /**
  * Get user's role from session
  *
- * Uses the discordId from the JWT session to determine role.
+ * Uses the discordId from the session to determine role.
  * Returns the role and Discord ID for the authenticated user.
  */
 export async function getUserRole(userId: string): Promise<{ role: UserRole; discordId: string | null }> {
@@ -107,3 +172,6 @@ export function getRoleFromSession(discordId: string | null): { role: UserRole; 
   const role = permissions.getRoleFromDiscordId(discordId)
   return { role, discordId }
 }
+
+// Export createPermissions for use in bot-auth
+export { createPermissions }

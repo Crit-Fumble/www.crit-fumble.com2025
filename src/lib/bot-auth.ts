@@ -1,17 +1,70 @@
 import 'server-only'
 import { NextRequest } from 'next/server'
-import { createBotAuth } from '@crit-fumble/web-auth/bot-auth'
-import type { UserRole } from './permissions'
+import { type UserRole, createPermissions } from './permissions'
 
 /**
  * Bot Authentication for FumbleBot
  *
- * Uses @crit-fumble/web-auth for bot authentication.
+ * Requires TWO headers for secure authentication:
+ * 1. X-Discord-Bot-Id: The bot's Discord Application ID
+ * 2. X-Bot-Secret: A shared secret known only to the bot and website
+ *
  * Bot service accounts are managed via Core API.
  */
 
 const CORE_API_URL = process.env.CORE_API_URL
 const CORE_API_SECRET = process.env.CORE_API_SECRET
+
+/**
+ * Headers interface for bot authentication
+ */
+interface BotAuthHeaders {
+  get(name: string): string | null
+}
+
+/**
+ * Result of bot authentication
+ */
+interface BotAuthResult {
+  discordId: string
+  role: UserRole
+}
+
+/**
+ * Create a bot authentication verifier
+ */
+function createBotAuth(config: {
+  botApiSecret: string
+  ownerIds?: string | string[]
+  adminIds?: string | string[]
+}) {
+  const { botApiSecret, ...permissionConfig } = config
+  const permissions = createPermissions(permissionConfig)
+
+  return function verifyBotAuth(headers: BotAuthHeaders): BotAuthResult | null {
+    const botDiscordId = headers.get('X-Discord-Bot-Id')
+    const headerSecret = headers.get('X-Bot-Secret')
+
+    // Require both headers
+    if (!botDiscordId || !headerSecret) return null
+
+    // Verify the shared secret
+    if (headerSecret !== botApiSecret) {
+      return null
+    }
+
+    // Check if the bot's Discord ID is in our allowed lists
+    if (permissions.isOwnerDiscordId(botDiscordId)) {
+      return { discordId: botDiscordId, role: 'owner' }
+    }
+
+    if (permissions.isAdminDiscordId(botDiscordId)) {
+      return { discordId: botDiscordId, role: 'admin' }
+    }
+
+    return null
+  }
+}
 
 // Create bot auth verifier with environment configuration
 const verifyBot = createBotAuth({

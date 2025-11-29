@@ -35,6 +35,34 @@ export const {
 } = permissions
 
 /**
+ * Web Roles (for display purposes)
+ * - owner: Full access, site owner
+ * - admin: Can edit/publish wiki, manage content
+ * - member: Authenticated user, read-only access to protected content
+ *
+ * Note: 'user' role from web-auth maps to 'member' for display
+ */
+export type WebRole = 'owner' | 'admin' | 'member'
+
+export function toWebRole(role: UserRole): WebRole {
+  return role === 'user' ? 'member' : role
+}
+
+/**
+ * Check if user can view wiki (admins and owners only for now)
+ */
+export function canViewWiki(role: UserRole): boolean {
+  return role === 'owner' || role === 'admin'
+}
+
+/**
+ * Check if user can view activity feed (any authenticated user)
+ */
+export function canViewActivity(role: UserRole): boolean {
+  return role === 'owner' || role === 'admin' || role === 'user'
+}
+
+/**
  * Extended session user type with discordId from JWT
  */
 interface SessionUser {

@@ -3,7 +3,7 @@
  *
  * Uses @crit-fumble/web-auth with Core API adapter.
  * User accounts are stored in core.crit-fumble.com for shared identity.
- * Sessions are handled via JWT (stateless).
+ * Sessions are handled via database strategy.
  */
 
 import { createCoreAuth } from '@crit-fumble/web-auth'

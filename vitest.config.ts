@@ -6,6 +6,15 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     setupFiles: ['./tests/unit/setup.ts'],
+    // Only include unit tests - Playwright tests use their own runner
+    include: ['tests/unit/**/*.test.ts'],
+    exclude: [
+      'node_modules/',
+      'tests/integration/**',
+      'tests/e2e/**',
+      'tests/mcp/**',
+      '**/*.spec.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

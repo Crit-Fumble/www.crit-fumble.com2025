@@ -2,40 +2,61 @@
  * Home Page Integration Tests
  * Priority: P0 (Critical)
  *
- * Tests the root page redirects based on authentication state
+ * Tests the public landing page and navigation
  */
 
 import { test, expect } from '../utils/fixtures';
 
-test.describe('Home Page - Unauthenticated', () => {
-  test('should redirect to login page when not authenticated', async ({ page, screenshotHelper }) => {
+test.describe('Home Page - Public Landing', () => {
+  test('should display landing page content', async ({ page, screenshotHelper }) => {
     // Navigate to home page
     await page.goto('/');
 
-    // Should redirect to /login
-    await page.waitForURL('/login', { timeout: 10000 });
-    await screenshotHelper.capture('unauthenticated/home/redirect-to-login');
+    // Wait for page to load
+    await page.waitForLoadState('networkidle');
 
-    // Verify we're on login page
-    await expect(page).toHaveURL('/login');
-    // Fix strict mode violation - look for specific button
-    await expect(page.getByRole('button', { name: /Sign in with Discord/i })).toBeVisible();
+    // Verify landing page content is visible
+    await expect(page.getByRole('heading', { name: /Crit Fumble Gaming/i })).toBeVisible();
+    await expect(page.getByText(/If the GM doesn't kill you/i)).toBeVisible();
+
+    await screenshotHelper.capture('public/home/landing');
   });
 
-  test('should capture complete unauthenticated flow', async ({ page, screenshotHelper }) => {
-    // Start at homepage
+  test('should have Discord link', async ({ page, screenshotHelper }) => {
     await page.goto('/');
-    await screenshotHelper.capture('unauthenticated/home/initial');
+    await page.waitForLoadState('networkidle');
 
-    // Wait for redirect
-    await page.waitForURL('/login', { timeout: 10000 });
-    await screenshotHelper.capture('unauthenticated/home/redirected-to-login');
+    // Check for Discord link
+    const discordLink = page.getByRole('link', { name: /Discord/i });
+    await expect(discordLink).toBeVisible();
+
+    await screenshotHelper.capture('public/home/discord-link');
+  });
+
+  test('should display coming soon message', async ({ page, screenshotHelper }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // Verify "under construction" message specifically
+    await expect(page.getByText('Our platform is under construction')).toBeVisible();
+
+    await screenshotHelper.capture('public/home/coming-soon');
   });
 });
 
-test.describe.skip('Home Page - Authenticated', () => {
-  // TODO: Implement once authentication is set up in deployed app
-  test('should redirect to dashboard when authenticated', async ({ page }) => {
-    // Placeholder - implement with real auth
+test.describe('Navigation - Auth', () => {
+  // Skip auth tests locally when AUTH_SECRET isn't configured
+  test.skip(
+    !process.env.AUTH_SECRET && !process.env.CI,
+    'Auth tests require AUTH_SECRET - skipping in local dev'
+  );
+
+  test('should have auth API endpoint', async ({ page }) => {
+    // NextAuth handles /api/auth routes - verify the API responds
+    const response = await page.request.get('/api/auth/providers');
+    expect(response.ok()).toBeTruthy();
+
+    const providers = await response.json();
+    expect(providers).toHaveProperty('discord');
   });
 });

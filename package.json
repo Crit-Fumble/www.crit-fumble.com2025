@@ -50,8 +50,8 @@
     "security:scan": "bash scripts/scan-secrets.sh"
   },
   "dependencies": {
-    "@crit-fumble/core": "^7.0.0",
-    "@crit-fumble/react": "^19.1.0",
+    "@crit-fumble/core": "^8.0.1",
+    "@crit-fumble/react": "^19.3.0",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",
     "isomorphic-dompurify": "^2.33.0",

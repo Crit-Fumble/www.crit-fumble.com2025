@@ -82,7 +82,7 @@ async function coreRequest<T>(
  * enabling shared identity across all Crit-Fumble platforms.
  *
  * @example
- * import { CoreAdapter } from '@crit-fumble/web-auth'
+ * import { CoreAdapter } from '@/lib/core-adapter'
  *
  * export const { auth, handlers } = NextAuth({
  *   adapter: CoreAdapter({

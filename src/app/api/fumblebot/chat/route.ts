@@ -7,13 +7,16 @@ import { chatRateLimiter, checkRateLimit, getClientIdentifier } from '@/lib/rate
 const MAX_MESSAGE_LENGTH = 2000
 const SESSION_ID_PATTERN = /^[a-zA-Z0-9_-]+$/
 
+const CORE_API_URL = process.env.CORE_API_URL || 'https://core.crit-fumble.com'
+const CORE_API_SECRET = process.env.CORE_API_SECRET
+
 /**
  * POST /api/fumblebot/chat
- * Proxy chat messages to FumbleBot's HTTP API
+ * Proxy chat messages to Core API (which forwards to FumbleBot)
  *
- * Authentication: Dual-factor
+ * Authentication:
  * 1. User must be logged in via Discord OAuth (session)
- * 2. Request to FumbleBot includes BOT_API_SECRET + user's Discord ID
+ * 2. Request to Core includes CORE_API_SECRET + user's Discord ID
  */
 export async function POST(request: NextRequest) {
   try {
@@ -69,32 +72,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check FumbleBot API URL and secret are configured
-    const fumbleBotUrl = process.env.FUMBLEBOT_API_URL
-    const botApiSecret = process.env.BOT_API_SECRET
-
-    if (!fumbleBotUrl) {
-      console.error('[fumblebot] FUMBLEBOT_API_URL not configured')
+    // Check Core API secret is configured
+    if (!CORE_API_SECRET) {
+      console.error('[fumblebot] CORE_API_SECRET not configured')
       return NextResponse.json(
         { error: 'Chat service unavailable' },
         { status: 503 }
       )
     }
 
-    if (!botApiSecret) {
-      console.error('[fumblebot] BOT_API_SECRET not configured')
-      return NextResponse.json(
-        { error: 'Chat service unavailable' },
-        { status: 503 }
-      )
-    }
-
-    // Forward to FumbleBot with dual-factor auth
-    const response = await fetch(`${fumbleBotUrl}/api/chat`, {
+    // Forward to Core API (which proxies to FumbleBot)
+    const response = await fetch(`${CORE_API_URL}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Bot-Secret': botApiSecret,
+        'X-Core-Secret': CORE_API_SECRET,
         'X-Discord-User-Id': discordId,
       },
       body: JSON.stringify({
@@ -108,7 +100,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!response.ok) {
-      console.error('[fumblebot] API error:', response.status)
+      console.error('[fumblebot] Core API error:', response.status)
       return NextResponse.json(
         { error: 'Chat service error' },
         { status: response.status }
@@ -128,7 +120,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/fumblebot/chat
- * Get chat history for the current user
+ * Get chat history for the current user via Core API
  */
 export async function GET(request: NextRequest) {
   try {
@@ -155,10 +147,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const fumbleBotUrl = process.env.FUMBLEBOT_API_URL
-    const botApiSecret = process.env.BOT_API_SECRET
-
-    if (!fumbleBotUrl || !botApiSecret) {
+    if (!CORE_API_SECRET) {
       return NextResponse.json(
         { error: 'Chat service unavailable' },
         { status: 503 }
@@ -177,14 +166,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Build URL with proper encoding
-    const historyUrl = new URL(`${fumbleBotUrl}/api/chat/history`)
+    const historyUrl = new URL(`${CORE_API_URL}/api/chat/history`)
     if (sessionId) {
       historyUrl.searchParams.set('sessionId', sessionId)
     }
 
     const response = await fetch(historyUrl.toString(), {
       headers: {
-        'X-Bot-Secret': botApiSecret,
+        'X-Core-Secret': CORE_API_SECRET,
         'X-Discord-User-Id': discordId,
       },
     })

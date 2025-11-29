@@ -60,8 +60,9 @@ function createCoreAuthConfig(config: CoreAuthConfig): NextAuthConfig {
       }),
     ],
     callbacks: {
-      async session({ session, user }: { session: Session; user: User }) {
-        if (session.user) {
+      async session({ session, user }) {
+        // For database strategy, user comes from the adapter
+        if (session.user && user) {
           session.user.id = user.id
           // For Discord OAuth, the providerAccountId IS the Discord ID
           // Since we use profile.id as the user ID, user.id is the Discord ID
@@ -84,9 +85,25 @@ function createCoreAuth(config: CoreAuthConfig) {
   return NextAuth(createCoreAuthConfig(config))
 }
 
+// Validate required environment variables at startup
+const requiredEnvVars = {
+  CORE_API_URL: process.env.CORE_API_URL,
+  CORE_API_SECRET: process.env.CORE_API_SECRET,
+  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+} as const
+
+const missingVars = Object.entries(requiredEnvVars)
+  .filter(([, value]) => !value)
+  .map(([key]) => key)
+
+if (missingVars.length > 0) {
+  console.error(`[auth] Missing required environment variables: ${missingVars.join(', ')}`)
+}
+
 export const { handlers, auth, signIn, signOut } = createCoreAuth({
-  coreApiUrl: process.env.CORE_API_URL!,
-  coreApiSecret: process.env.CORE_API_SECRET!,
-  discordClientId: process.env.DISCORD_CLIENT_ID!,
-  discordClientSecret: process.env.DISCORD_CLIENT_SECRET!,
+  coreApiUrl: requiredEnvVars.CORE_API_URL || '',
+  coreApiSecret: requiredEnvVars.CORE_API_SECRET || '',
+  discordClientId: requiredEnvVars.DISCORD_CLIENT_ID || '',
+  discordClientSecret: requiredEnvVars.DISCORD_CLIENT_SECRET || '',
 })

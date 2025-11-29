@@ -2,9 +2,7 @@
 
 Technical documentation for AI agents working on the Crit-Fumble platform.
 
-**Last Updated:** November 25, 2025
-
-See [future/README.md](future/README.md) for roadmap.
+**Last Updated:** November 29, 2025
 
 ---
 
@@ -12,33 +10,29 @@ See [future/README.md](future/README.md) for roadmap.
 
 ### Getting Started
 - [Setup](setup/) - Development environment and deployment
-- [Testing](testing/) - E2E tests and developer mode
 
-### Implementation
-- [Authentication](authentication/) - NextAuth with OAuth providers
-- [Features](features/) - User accounts, tiers, signup flow
-- [Database](database/) - Prisma schema and setup
+### Architecture
 
-### Architecture & Planning
-- [Architecture](architecture/) - System design
-- [Planning](planning/) - Development approach and core concepts
-- [Integrations](integrations/) - External service integrations
-- [Future](future/) - Roadmap and deferred features
+**Authentication:**
+- Uses Auth.js v5 with Discord OAuth
+- Core API adapter proxies auth operations to `core.crit-fumble.com`
+- Database sessions stored in Core API (shared identity across platforms)
 
-### Operations
-- [Security](security/) - Security implementation and audits
-- [Licensing](licensing/) - Asset licensing and project license
+**Key Files:**
+- `src/lib/auth.ts` - NextAuth configuration with Core API adapter
+- `src/lib/core-adapter.ts` - Auth.js adapter for Core API
+- `src/lib/permissions.ts` - Role-based permissions (owner/admin/user)
+- `src/lib/bot-auth.ts` - FumbleBot authentication
 
 ---
 
 ## Technology Stack
 
-- Next.js 16 (App Router + Turbopack), React 19, TypeScript 5.7, Tailwind CSS 3.4
-- PostgreSQL (Vercel Postgres), Prisma ORM 6.1
-- Auth.js v5 with OAuth providers: Discord, GitHub, Twitch, Battle.net, Steam, World Anvil
-- Vercel Blob Storage
-- Playwright (E2E), Vitest (unit)
-- Deployed on Vercel + DigitalOcean (FoundryVTT)
+- **Framework:** Next.js 16 (App Router + Turbopack), React 19, TypeScript 5.7
+- **Styling:** Tailwind CSS 3.4
+- **Auth:** Auth.js v5 with Discord OAuth, Core API adapter
+- **Testing:** Playwright (E2E), Vitest (unit)
+- **Deployment:** Vercel
 
 ---
 
@@ -46,21 +40,19 @@ See [future/README.md](future/README.md) for roadmap.
 
 ```
 docs/agent/
-├── architecture/          # System design
-├── authentication/        # NextAuth configuration
-├── database/              # Database setup
-├── examples/              # Example implementations
-├── features/              # Implemented features
-├── future/                # Roadmap and deferred features
-├── integrations/          # External integrations
-│   ├── cypher/           # Cypher System RPG
-│   └── worldanvil/       # World Anvil integration
-├── licensing/             # Asset licensing and project license
-├── planning/              # Development approach and strategy
-├── security/              # Security implementation and audits
-│   └── phases/           # Implementation phases
-├── setup/                 # Development environment
-└── testing/               # Testing guides
+├── setup/                 # Development environment setup
+│   ├── vercel-env-setup.md
+│   ├── vercel-free-tier-setup.md
+│   ├── vercel-preview-environment.md
+│   ├── vercel-private-repo-deployment.md
+│   ├── staging-environment-setup.md
+│   ├── playwright-setup.md
+│   ├── github-setup.md
+│   ├── git-hooks-deployment.md
+│   ├── cicd-and-environments.md
+│   └── quick-fix-guide.md
+├── DEPLOYMENT.md          # Self-hosting guide
+└── README.md              # This file
 ```
 
 ---
@@ -68,18 +60,16 @@ docs/agent/
 ## Implementation Status
 
 ### Working
-- Multi-provider OAuth authentication
-- User profiles and tier system (FREE, PATRON, ELITE, COSMIC)
-- Admin panel
-- Vercel deployment with PostgreSQL and Blob Storage
+- Multi-provider OAuth authentication (Discord)
+- Core API integration for shared identity
+- Admin/owner permissions via Discord IDs
+- Wiki system with markdown editor
+- Storybook component library
 - E2E tests with Playwright
+- Unit tests with Vitest (97%+ coverage)
 
 ### In Progress
-- Database schemas for campaigns, characters, worlds
-- Pixi.js integration (not yet used)
-
-### Planned
-See [future/README.md](future/README.md) for roadmap.
+- FumbleBot web chat integration
 
 ---
 
@@ -87,14 +77,34 @@ See [future/README.md](future/README.md) for roadmap.
 
 ### Setup
 - [Quick Fix Guide](setup/quick-fix-guide.md)
-- [Vercel Database Setup](setup/vercel-database-setup.md)
 - [Staging Environment](setup/staging-environment-setup.md)
+- [Vercel Environment Setup](setup/vercel-env-setup.md)
 
-### Architecture
-- [Architecture Overview](architecture/overview.md)
-- [Tile & Asset System](architecture/TILE_ASSET_SYSTEM.md)
-- [Multiverse System](architecture/MULTIVERSE_SYSTEM.md)
+---
 
-### Planning
-- [Core Concepts & Foundry Status](planning/CORE_CONCEPTS_AND_FOUNDRY_STATUS.md)
-- [API-First Development](planning/API_FIRST_DEVELOPMENT_PLAN.md)
+## Environment Variables
+
+**Required:**
+```env
+# Core API
+CORE_API_URL=https://core.crit-fumble.com
+CORE_API_SECRET=<shared secret>
+
+# Discord OAuth
+DISCORD_CLIENT_ID=<from Discord Developer Portal>
+DISCORD_CLIENT_SECRET=<from Discord Developer Portal>
+
+# Auth.js
+AUTH_SECRET=<random 32+ char string>
+
+# Permissions (comma-separated Discord IDs)
+OWNER_DISCORD_IDS=<discord_id_1,discord_id_2>
+ADMIN_DISCORD_IDS=<discord_id_3,discord_id_4>
+```
+
+**Optional:**
+```env
+# FumbleBot integration
+BOT_API_SECRET=<shared secret for bot auth>
+FUMBLEBOT_API_URL=<bot HTTP API endpoint>
+```

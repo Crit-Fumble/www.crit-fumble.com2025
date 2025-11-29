@@ -12,6 +12,17 @@
 
 import type { Adapter, AdapterUser, AdapterAccount, AdapterSession } from 'next-auth/adapters'
 
+/**
+ * Parse session data, converting date strings to Date objects.
+ * Core API returns dates as ISO strings, but Auth.js expects Date objects.
+ */
+function parseSession(session: AdapterSession): AdapterSession {
+  return {
+    ...session,
+    expires: new Date(session.expires),
+  }
+}
+
 export interface CoreAdapterConfig {
   /**
    * Base URL of the Core API
@@ -32,12 +43,23 @@ export interface CoreAdapterConfig {
 }
 
 /**
+ * Custom error for Core API authentication failures
+ */
+class CoreAuthError extends Error {
+  constructor(message: string, public status: number) {
+    super(message)
+    this.name = 'CoreAuthError'
+  }
+}
+
+/**
  * Make authenticated requests to the Core API
  */
 async function coreRequest<T>(
   config: CoreAdapterConfig,
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  throwOnAuthError = false
 ): Promise<T | null> {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), config.timeout || 10000)
@@ -57,6 +79,17 @@ async function coreRequest<T>(
 
     if (!res.ok) {
       if (res.status === 404) return null
+
+      // Authentication errors - throw specific error so Auth.js shows proper message
+      if (res.status === 401 || res.status === 403) {
+        const errorMsg = `[core-adapter] Authentication failed: ${res.status} - Check CORE_API_SECRET matches Core API's CORE_SECRET`
+        console.error(errorMsg)
+        if (throwOnAuthError) {
+          throw new CoreAuthError(errorMsg, res.status)
+        }
+        return null
+      }
+
       console.error(`[core-adapter] Request failed: ${res.status} ${path}`)
       return null
     }
@@ -66,6 +99,8 @@ async function coreRequest<T>(
     return JSON.parse(text)
   } catch (error) {
     clearTimeout(timeoutId)
+    // Re-throw CoreAuthError
+    if (error instanceof CoreAuthError) throw error
     if (error instanceof Error && error.name === 'AbortError') {
       console.error(`[core-adapter] Request timeout: ${path}`)
     } else {
@@ -103,8 +138,8 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       const result = await coreRequest<AdapterUser>(config, '/user', {
         method: 'POST',
         body: JSON.stringify(user),
-      })
-      if (!result) throw new Error('Failed to create user')
+      }, true) // Throw on auth errors
+      if (!result) throw new Error('Failed to create user - Core API may be unavailable')
       return result
     },
 
@@ -144,8 +179,8 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       const result = await coreRequest<AdapterAccount>(config, '/account', {
         method: 'POST',
         body: JSON.stringify(account),
-      })
-      if (!result) throw new Error('Failed to link account')
+      }, true) // Throw on auth errors
+      if (!result) throw new Error('Failed to link account - Core API may be unavailable')
       return result
     },
 
@@ -165,9 +200,9 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       const result = await coreRequest<AdapterSession>(config, '/session', {
         method: 'POST',
         body: JSON.stringify(session),
-      })
-      if (!result) throw new Error('Failed to create session')
-      return result
+      }, true) // Throw on auth errors
+      if (!result) throw new Error('Failed to create session - Core API may be unavailable')
+      return parseSession(result)
     },
 
     async getSessionAndUser(sessionToken) {
@@ -175,7 +210,11 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
         config,
         `/session/${encodeURIComponent(sessionToken)}`
       )
-      return result
+      if (!result) return null
+      return {
+        session: parseSession(result.session),
+        user: result.user,
+      }
     },
 
     async updateSession(session) {
@@ -187,7 +226,8 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           body: JSON.stringify(session),
         }
       )
-      return result
+      if (!result) return null
+      return parseSession(result)
     },
 
     async deleteSession(sessionToken) {

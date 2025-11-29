@@ -1,7 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   getClientIdentifier,
   getIpAddress,
+  checkRateLimit,
+  authRateLimiter,
+  oauthRateLimiter,
+  apiRateLimiter,
+  webhookRateLimiter,
+  publicRateLimiter,
+  chatRateLimiter,
+  RateLimiterMemory,
 } from '@/lib/rate-limit';
 
 describe('rate-limit utilities', () => {
@@ -154,6 +162,104 @@ describe('rate-limit utilities', () => {
       // When x-forwarded-for has only whitespace/commas, first split returns empty string
       // The current implementation returns empty string, not falling back to x-real-ip
       expect(ip).toBe('');
+    });
+  });
+
+  describe('checkRateLimit', () => {
+    let testLimiter: RateLimiterMemory;
+
+    beforeEach(() => {
+      // Create a test limiter with low limits for testing
+      testLimiter = new RateLimiterMemory({
+        keyPrefix: 'test',
+        points: 2,
+        duration: 1, // 1 second
+      });
+    });
+
+    it('should return success when under limit', async () => {
+      const result = await checkRateLimit(testLimiter, 'test-user-1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('should return success for multiple requests under limit', async () => {
+      const result1 = await checkRateLimit(testLimiter, 'test-user-2');
+      const result2 = await checkRateLimit(testLimiter, 'test-user-2');
+
+      expect(result1).toEqual({ success: true });
+      expect(result2).toEqual({ success: true });
+    });
+
+    it('should return failure with retryAfter when limit exceeded', async () => {
+      // Use all points
+      await checkRateLimit(testLimiter, 'test-user-3');
+      await checkRateLimit(testLimiter, 'test-user-3');
+
+      // This should exceed the limit
+      const result = await checkRateLimit(testLimiter, 'test-user-3');
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.retryAfter).toBeGreaterThan(0);
+        expect(result.retryAfter).toBeLessThanOrEqual(1); // Should be 1 second or less
+      }
+    });
+
+    it('should track different identifiers separately', async () => {
+      // Exhaust limit for user A
+      await checkRateLimit(testLimiter, 'user-a');
+      await checkRateLimit(testLimiter, 'user-a');
+      const resultA = await checkRateLimit(testLimiter, 'user-a');
+
+      // User B should still have quota
+      const resultB = await checkRateLimit(testLimiter, 'user-b');
+
+      expect(resultA.success).toBe(false);
+      expect(resultB.success).toBe(true);
+    });
+  });
+
+  describe('Pre-configured Rate Limiters', () => {
+    it('should export authRateLimiter', () => {
+      expect(authRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should export oauthRateLimiter', () => {
+      expect(oauthRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should export apiRateLimiter', () => {
+      expect(apiRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should export webhookRateLimiter', () => {
+      expect(webhookRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should export publicRateLimiter', () => {
+      expect(publicRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should export chatRateLimiter', () => {
+      expect(chatRateLimiter).toBeInstanceOf(RateLimiterMemory);
+    });
+
+    it('should allow requests within auth limits', async () => {
+      // Auth limiter allows 5 attempts per 15 minutes
+      const result = await checkRateLimit(authRateLimiter, 'auth-test-unique-' + Date.now());
+      expect(result.success).toBe(true);
+    });
+
+    it('should allow requests within api limits', async () => {
+      // API limiter allows 100 requests per minute
+      const result = await checkRateLimit(apiRateLimiter, 'api-test-unique-' + Date.now());
+      expect(result.success).toBe(true);
+    });
+
+    it('should allow requests within chat limits', async () => {
+      // Chat limiter allows 30 messages per minute
+      const result = await checkRateLimit(chatRateLimiter, 'chat-test-unique-' + Date.now());
+      expect(result.success).toBe(true);
     });
   });
 });

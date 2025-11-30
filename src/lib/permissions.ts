@@ -135,7 +135,7 @@ export async function hasEarlyAccess(discordId: string | null): Promise<boolean>
     // Check if user is admin in any allowed guild
     const response = await fetch(`${coreApiUrl}/api/discord/user/${discordId}/guilds`, {
       headers: {
-        'Authorization': `Bearer ${coreApiSecret}`,
+        'X-Core-Secret': coreApiSecret,
         'Content-Type': 'application/json',
       },
     })

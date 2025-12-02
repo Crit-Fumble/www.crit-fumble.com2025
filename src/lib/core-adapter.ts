@@ -8,9 +8,103 @@
  * authenticated with X-Core-Secret header.
  *
  * Supports both JWT and database session strategies.
+ *
+ * When USE_MOCK_AUTH=true, uses in-memory store instead of Core API.
+ * This allows tests to run without depending on Core.
  */
 
 import type { Adapter, AdapterUser, AdapterAccount, AdapterSession } from 'next-auth/adapters'
+
+// =============================================================================
+// Mock Auth Store (for testing without Core API)
+// =============================================================================
+
+const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH === 'true'
+
+// In-memory stores for mock mode
+const mockUserStore = new Map<string, AdapterUser>()
+const mockAccountStore = new Map<string, AdapterAccount>()
+const mockSessionStore = new Map<string, AdapterSession>()
+
+// Mock user operations
+const mockUsers = {
+  create(user: AdapterUser): AdapterUser {
+    mockUserStore.set(user.id, user)
+    return user
+  },
+  get(id: string): AdapterUser | null {
+    return mockUserStore.get(id) || null
+  },
+  getByEmail(email: string): AdapterUser | null {
+    for (const user of mockUserStore.values()) {
+      if (user.email === email) return user
+    }
+    return null
+  },
+  getByAccount(provider: string, providerAccountId: string): AdapterUser | null {
+    const key = `${provider}:${providerAccountId}`
+    const account = mockAccountStore.get(key)
+    if (!account) return null
+    return mockUserStore.get(account.userId) || null
+  },
+  update(id: string, data: Partial<AdapterUser>): AdapterUser | null {
+    const user = mockUserStore.get(id)
+    if (!user) return null
+    const updated = { ...user, ...data } as AdapterUser
+    mockUserStore.set(id, updated)
+    return updated
+  },
+  delete(id: string): void {
+    mockUserStore.delete(id)
+  },
+}
+
+// Mock account operations
+const mockAccounts = {
+  link(account: AdapterAccount): AdapterAccount {
+    const key = `${account.provider}:${account.providerAccountId}`
+    mockAccountStore.set(key, account)
+    return account
+  },
+  unlink(provider: string, providerAccountId: string): void {
+    const key = `${provider}:${providerAccountId}`
+    mockAccountStore.delete(key)
+  },
+}
+
+// Mock session operations
+const mockSessions = {
+  create(session: AdapterSession): AdapterSession {
+    mockSessionStore.set(session.sessionToken, session)
+    return session
+  },
+  get(sessionToken: string): AdapterSession | null {
+    const session = mockSessionStore.get(sessionToken)
+    if (!session) return null
+    if (new Date(session.expires) < new Date()) {
+      mockSessionStore.delete(sessionToken)
+      return null
+    }
+    return session
+  },
+  getWithUser(sessionToken: string): { session: AdapterSession; user: AdapterUser } | null {
+    const session = this.get(sessionToken)
+    if (!session) return null
+    const user = mockUserStore.get(session.userId)
+    if (!user) return null
+    return { session, user }
+  },
+  update(sessionToken: string, data: Partial<AdapterSession>): AdapterSession | null {
+    const session = mockSessionStore.get(sessionToken)
+    if (!session) return null
+    const updated = { ...session, ...data } as AdapterSession
+    mockSessionStore.set(sessionToken, updated)
+    return updated
+  },
+  delete(sessionToken: string): void {
+    mockSessionStore.delete(sessionToken)
+  },
+}
 
 /**
  * Parse session data, converting date strings to Date objects.
@@ -129,6 +223,11 @@ async function coreRequest<T>(
  * })
  */
 export function CoreAdapter(config: CoreAdapterConfig): Adapter {
+  // Use mock adapter for testing (no Core API dependency)
+  if (USE_MOCK_AUTH) {
+    return createMockAdapter()
+  }
+
   return {
     // =========================================================================
     // User Operations
@@ -259,6 +358,72 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
         { method: 'DELETE' }
       )
       return result
+    },
+  }
+}
+
+/**
+ * Create a mock adapter for testing
+ * Uses in-memory store instead of Core API
+ */
+function createMockAdapter(): Adapter {
+  return {
+    async createUser(user) {
+      return mockUsers.create(user as AdapterUser)
+    },
+
+    async getUser(id) {
+      return mockUsers.get(id)
+    },
+
+    async getUserByEmail(email) {
+      return mockUsers.getByEmail(email)
+    },
+
+    async getUserByAccount({ provider, providerAccountId }) {
+      return mockUsers.getByAccount(provider, providerAccountId)
+    },
+
+    async updateUser(user) {
+      const result = mockUsers.update(user.id, user)
+      if (!result) throw new Error('User not found')
+      return result
+    },
+
+    async deleteUser(userId) {
+      mockUsers.delete(userId)
+    },
+
+    async linkAccount(account) {
+      return mockAccounts.link(account)
+    },
+
+    async unlinkAccount({ provider, providerAccountId }) {
+      mockAccounts.unlink(provider, providerAccountId)
+    },
+
+    async createSession(session) {
+      return mockSessions.create(session)
+    },
+
+    async getSessionAndUser(sessionToken) {
+      return mockSessions.getWithUser(sessionToken)
+    },
+
+    async updateSession(session) {
+      return mockSessions.update(session.sessionToken, session)
+    },
+
+    async deleteSession(sessionToken) {
+      mockSessions.delete(sessionToken)
+    },
+
+    async createVerificationToken() {
+      return null // Not used in tests
+    },
+
+    async useVerificationToken() {
+      return null // Not used in tests
     },
   }
 }

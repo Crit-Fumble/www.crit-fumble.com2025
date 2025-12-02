@@ -104,9 +104,9 @@ export default async function WikiIndexPage() {
           </a>
           <nav className="flex items-center gap-4">
             <span className="text-white text-sm font-medium">Wiki</span>
-            <a href="https://activity.crit-fumble.com" className="text-gray-400 hover:text-white text-sm">
+            <Link href="/activity" className="text-gray-400 hover:text-white text-sm">
               Activity
-            </a>
+            </Link>
             {canEdit && (
               <a href="/dashboard" className="text-gray-400 hover:text-white text-sm">
                 Dashboard

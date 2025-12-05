@@ -54,9 +54,20 @@ function createPermissions(config: PermissionConfig = {}) {
   }
 
   function getRoleFromDiscordId(discordId: string | null): UserRole {
-    if (!discordId) return 'user'
-    if (isOwnerDiscordId(discordId)) return 'owner'
-    if (isAdminDiscordId(discordId)) return 'admin'
+    if (!discordId) {
+      console.log('[permissions] getRoleFromDiscordId: no discordId provided')
+      return 'user'
+    }
+    const isOwner = isOwnerDiscordId(discordId)
+    const isAdmin = isAdminDiscordId(discordId)
+    console.log('[permissions] getRoleFromDiscordId:', {
+      discordId: `${discordId.slice(0, 4)}...${discordId.slice(-4)}`,
+      isOwner,
+      isAdmin,
+      ownerIds: ownerIds.map(id => `${id.slice(0, 4)}...`),
+    })
+    if (isOwner) return 'owner'
+    if (isAdmin) return 'admin'
     return 'user'
   }
 
@@ -88,6 +99,14 @@ function createPermissions(config: PermissionConfig = {}) {
 const permissions = createPermissions({
   ownerIds: process.env.OWNER_DISCORD_IDS,
   adminIds: process.env.ADMIN_DISCORD_IDS,
+})
+
+// Debug: Log configured IDs at startup (redact for security)
+console.log('[permissions] Configured IDs:', {
+  ownerCount: permissions.ownerIds.length,
+  adminCount: permissions.adminIds.length,
+  ownerIds: permissions.ownerIds.map(id => `${id.slice(0, 4)}...`),
+  adminIds: permissions.adminIds.map(id => `${id.slice(0, 4)}...`),
 })
 
 /**

@@ -483,6 +483,48 @@ describe('CoreAdapter', () => {
   })
 
   describe('Error Handling', () => {
+    it('should throw CoreAuthError on 401 for critical operations', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+      })
+
+      await expect(
+        adapter.createUser({
+          id: 'user-123',
+          email: 'test@example.com',
+          name: 'Test',
+          emailVerified: null,
+        })
+      ).rejects.toThrow('Authentication failed')
+    })
+
+    it('should throw CoreAuthError on 403 for critical operations', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 403,
+      })
+
+      await expect(
+        adapter.linkAccount({
+          userId: 'user-123',
+          type: 'oauth',
+          provider: 'discord',
+          providerAccountId: '12345',
+        })
+      ).rejects.toThrow('Authentication failed')
+    })
+
+    it('should return null on 401 for non-critical operations', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+      })
+
+      const result = await adapter.getUser('user-123')
+      expect(result).toBeNull()
+    })
+
     it('should handle network errors gracefully', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
 

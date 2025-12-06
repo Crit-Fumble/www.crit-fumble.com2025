@@ -5,7 +5,9 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { CoreAdapter } from '@/lib/core-adapter'
+
+// Store original env
+const originalEnv = { ...process.env }
 
 // Mock fetch globally
 const mockFetch = vi.fn()
@@ -18,20 +20,29 @@ describe('CoreAdapter', () => {
     timeout: 5000,
   }
 
-  let adapter: ReturnType<typeof CoreAdapter>
+  // Helper to get fresh adapter after env is set
+  async function getAdapter() {
+    const { CoreAdapter } = await import('@/lib/core-adapter')
+    return CoreAdapter(config)
+  }
 
   beforeEach(() => {
     vi.clearAllMocks()
-    adapter = CoreAdapter(config)
+    vi.resetModules()
+    // Ensure mock auth is disabled for these tests
+    process.env.USE_MOCK_AUTH = 'false'
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
+    // Restore original env
+    process.env = { ...originalEnv }
   })
 
   describe('User Operations', () => {
     describe('createUser', () => {
       it('should create a user via Core API', async () => {
+        const adapter = await getAdapter()
         const userData = {
           id: 'user-123',
           email: 'test@example.com',
@@ -61,6 +72,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should throw error when user creation fails', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 500,
@@ -79,6 +91,7 @@ describe('CoreAdapter', () => {
 
     describe('getUser', () => {
       it('should get a user by ID', async () => {
+        const adapter = await getAdapter()
         const userData = {
           id: 'user-123',
           email: 'test@example.com',
@@ -104,6 +117,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should return null for non-existent user', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 404,
@@ -114,6 +128,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should encode special characters in user ID', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: true,
           text: async () => JSON.stringify({ id: 'user@special' }),
@@ -130,6 +145,7 @@ describe('CoreAdapter', () => {
 
     describe('getUserByEmail', () => {
       it('should get a user by email', async () => {
+        const adapter = await getAdapter()
         const userData = { id: 'user-123', email: 'test@example.com' }
 
         mockFetch.mockResolvedValueOnce({
@@ -149,6 +165,7 @@ describe('CoreAdapter', () => {
 
     describe('getUserByAccount', () => {
       it('should get a user by provider account', async () => {
+        const adapter = await getAdapter()
         const userData = { id: 'user-123', email: 'test@example.com' }
 
         mockFetch.mockResolvedValueOnce({
@@ -171,6 +188,7 @@ describe('CoreAdapter', () => {
 
     describe('updateUser', () => {
       it('should update a user', async () => {
+        const adapter = await getAdapter()
         const userData = { id: 'user-123', name: 'Updated Name' }
 
         mockFetch.mockResolvedValueOnce({
@@ -191,6 +209,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should throw error when update fails', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 500,
@@ -204,6 +223,7 @@ describe('CoreAdapter', () => {
 
     describe('deleteUser', () => {
       it('should delete a user', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: true,
           text: async () => '',
@@ -224,6 +244,7 @@ describe('CoreAdapter', () => {
   describe('Account Operations', () => {
     describe('linkAccount', () => {
       it('should link an OAuth account', async () => {
+        const adapter = await getAdapter()
         const accountData = {
           userId: 'user-123',
           type: 'oauth' as const,
@@ -249,6 +270,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should throw error when linking fails', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 500,
@@ -267,6 +289,7 @@ describe('CoreAdapter', () => {
 
     describe('unlinkAccount', () => {
       it('should unlink an OAuth account', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: true,
           text: async () => '',
@@ -290,6 +313,7 @@ describe('CoreAdapter', () => {
   describe('Session Operations', () => {
     describe('createSession', () => {
       it('should create a session', async () => {
+        const adapter = await getAdapter()
         const sessionData = {
           sessionToken: 'token-123',
           userId: 'user-123',
@@ -320,6 +344,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should throw error when session creation fails', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 500,
@@ -337,6 +362,7 @@ describe('CoreAdapter', () => {
 
     describe('getSessionAndUser', () => {
       it('should get session and user by token', async () => {
+        const adapter = await getAdapter()
         const data = {
           session: { sessionToken: 'token-123', userId: 'user-123', expires: '2025-12-31T00:00:00.000Z' },
           user: { id: 'user-123', email: 'test@example.com' },
@@ -360,6 +386,7 @@ describe('CoreAdapter', () => {
       })
 
       it('should return null for invalid session', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: false,
           status: 404,
@@ -372,6 +399,7 @@ describe('CoreAdapter', () => {
 
     describe('updateSession', () => {
       it('should update a session', async () => {
+        const adapter = await getAdapter()
         const sessionData = {
           sessionToken: 'token-123',
           expires: '2026-01-01T00:00:00.000Z', // JSON serialized from API
@@ -400,6 +428,7 @@ describe('CoreAdapter', () => {
 
     describe('deleteSession', () => {
       it('should delete a session', async () => {
+        const adapter = await getAdapter()
         mockFetch.mockResolvedValueOnce({
           ok: true,
           text: async () => '',
@@ -420,6 +449,7 @@ describe('CoreAdapter', () => {
   describe('Verification Token Operations', () => {
     describe('createVerificationToken', () => {
       it('should create a verification token', async () => {
+        const adapter = await getAdapter()
         const responseData = {
           identifier: 'test@example.com',
           token: 'verify-token',
@@ -452,6 +482,7 @@ describe('CoreAdapter', () => {
 
     describe('useVerificationToken', () => {
       it('should use and delete a verification token', async () => {
+        const adapter = await getAdapter()
         const responseData = {
           identifier: 'test@example.com',
           token: 'verify-token',
@@ -484,6 +515,7 @@ describe('CoreAdapter', () => {
 
   describe('Error Handling', () => {
     it('should throw CoreAuthError on 401 for critical operations', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 401,
@@ -500,6 +532,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should throw CoreAuthError on 403 for critical operations', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 403,
@@ -516,6 +549,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should return null on 401 for non-critical operations', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 401,
@@ -526,6 +560,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should handle network errors gracefully', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
 
       const result = await adapter.getUser('user-123')
@@ -533,6 +568,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should handle timeout errors', async () => {
+      const adapter = await getAdapter()
       const abortError = new Error('Aborted')
       abortError.name = 'AbortError'
       mockFetch.mockRejectedValueOnce(abortError)
@@ -542,6 +578,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should handle empty response body', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockResolvedValueOnce({
         ok: true,
         text: async () => '',
@@ -552,6 +589,7 @@ describe('CoreAdapter', () => {
     })
 
     it('should handle non-404 errors', async () => {
+      const adapter = await getAdapter()
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 500,
@@ -564,6 +602,9 @@ describe('CoreAdapter', () => {
 
   describe('Configuration', () => {
     it('should use default timeout when not specified', async () => {
+      vi.resetModules()
+      process.env.USE_MOCK_AUTH = 'false'
+      const { CoreAdapter } = await import('@/lib/core-adapter')
       const adapterNoTimeout = CoreAdapter({
         coreApiUrl: 'https://core.example.com',
         coreApiSecret: 'test-secret',

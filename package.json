@@ -47,7 +47,7 @@
     "security:scan": "bash scripts/scan-secrets.sh"
   },
   "dependencies": {
-    "@crit-fumble/core": "^10.4.3",
+    "@crit-fumble/core": "^10.4.6",
     "@crit-fumble/react": "^19.9.0",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",

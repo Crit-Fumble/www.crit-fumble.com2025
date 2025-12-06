@@ -46,6 +46,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url)
   }
 
+  // Handle fumblebot subdomain - rewrite to proxy
+  if (host === 'fumblebot.crit-fumble.com' || host.startsWith('fumblebot.')) {
+    const url = request.nextUrl.clone()
+    url.pathname = `/api/fumblebot-proxy${pathname}`
+    return NextResponse.rewrite(url)
+  }
+
   // Allow these paths through on main site
   const allowedPaths = [
     '/',                    // Homepage

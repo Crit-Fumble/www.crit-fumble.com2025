@@ -33,7 +33,15 @@ export default async function StorybookAuthPage({
   }
 
   // Check authorization (admin or owner only)
-  const { role } = await getUserRole(session.user.id)
+  const { role, discordId } = await getUserRole(session.user.id)
+
+  // Debug logging for auth issues
+  console.log('[storybook-auth] Session user:', {
+    id: session.user.id,
+    discordId,
+    role,
+    sessionUser: JSON.stringify(session.user),
+  })
 
   if (!canEditWiki(role)) {
     return (

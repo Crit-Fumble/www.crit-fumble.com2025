@@ -62,6 +62,11 @@ function createCoreAuthConfig(config: CoreAuthConfig): NextAuthConfig {
     callbacks: {
       async session({ session, user }) {
         // For database strategy, user comes from the adapter
+        console.log('[auth] Session callback:', {
+          hasSession: !!session,
+          hasUser: !!user,
+          userId: user?.id ? `${user.id.slice(0, 4)}...` : 'none',
+        })
         if (session.user && user) {
           session.user.id = user.id
           // For Discord OAuth, the providerAccountId IS the Discord ID

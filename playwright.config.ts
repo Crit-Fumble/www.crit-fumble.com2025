@@ -118,6 +118,14 @@ export default defineConfig({
     env: {
       // Enable mock auth for tests - no Core API dependency
       USE_MOCK_AUTH: 'true',
+      // Auth.js requires a secret even in mock mode
+      AUTH_SECRET: 'test-secret-for-playwright-tests-only',
+      // Dummy Discord OAuth values (not used with mock auth)
+      DISCORD_CLIENT_ID: 'test-client-id',
+      DISCORD_CLIENT_SECRET: 'test-client-secret',
+      // Core API (not used with mock auth, but required by config)
+      CORE_API_URL: 'http://localhost:9999',
+      CORE_API_SECRET: 'test-core-secret',
     },
   },
 

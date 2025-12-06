@@ -217,6 +217,21 @@ describe('rate-limit utilities', () => {
       expect(resultA.success).toBe(false);
       expect(resultB.success).toBe(true);
     });
+
+    it('should allow request through when limiter throws unexpected error', async () => {
+      // Create a mock limiter that throws an unexpected error
+      const brokenLimiter = {
+        consume: vi.fn().mockRejectedValue(new Error('Database connection failed')),
+      } as unknown as RateLimiterMemory;
+
+      // Should log error but still allow the request through
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result = await checkRateLimit(brokenLimiter, 'test-user');
+
+      expect(result).toEqual({ success: true });
+      expect(consoleSpy).toHaveBeenCalledWith('Rate limiter error:', expect.any(Error));
+      consoleSpy.mockRestore();
+    });
   });
 
   describe('Pre-configured Rate Limiters', () => {

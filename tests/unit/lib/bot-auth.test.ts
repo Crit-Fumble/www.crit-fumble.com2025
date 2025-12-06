@@ -9,9 +9,20 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 // Mock 'server-only' before importing bot-auth
 vi.mock('server-only', () => ({}))
 
-// Mock fetch globally
-const mockFetch = vi.fn()
-vi.stubGlobal('fetch', mockFetch)
+// Mock the SDK
+const mockGetUser = vi.fn()
+const mockCreateUser = vi.fn()
+
+class MockCoreApiClient {
+  authAdapter = {
+    getUser: mockGetUser,
+    createUser: mockCreateUser,
+  }
+}
+
+vi.mock('@crit-fumble/core/client', () => ({
+  CoreApiClient: MockCoreApiClient,
+}))
 
 // Store original env
 const originalEnv = { ...process.env }
@@ -19,6 +30,8 @@ const originalEnv = { ...process.env }
 describe('Bot Authentication', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockGetUser.mockReset()
+    mockCreateUser.mockReset()
     // Set up test environment
     process.env.BOT_API_SECRET = 'test-bot-secret'
     process.env.OWNER_DISCORD_IDS = 'owner-123,owner-456'
@@ -160,81 +173,48 @@ describe('Bot Authentication', () => {
       vi.resetModules()
       const { getBotServiceAccountId } = await import('@/lib/bot-auth')
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ id: 'bot:bot-discord-id' }),
-      })
+      // Mock getUser to return existing user
+      mockGetUser.mockResolvedValueOnce({ id: 'bot:bot-discord-id' })
 
       const result = await getBotServiceAccountId('bot-discord-id')
 
       expect(result).toBe('bot:bot-discord-id')
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://core.example.com/api/auth/user/bot%3Abot-discord-id',
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            'X-Core-Secret': 'test-core-secret',
-          }),
-        })
-      )
+      expect(mockGetUser).toHaveBeenCalledWith('bot:bot-discord-id')
     })
 
     it('should create new user if user does not exist', async () => {
       vi.resetModules()
       const { getBotServiceAccountId } = await import('@/lib/bot-auth')
 
-      // First call - user doesn't exist
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-      })
+      // User doesn't exist
+      mockGetUser.mockResolvedValueOnce(null)
 
-      // Second call - create user
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ id: 'bot:new-bot-id' }),
-      })
+      // Create user returns new user
+      mockCreateUser.mockResolvedValueOnce({ id: 'bot:new-bot-id' })
 
       const result = await getBotServiceAccountId('new-bot-id')
 
       expect(result).toBe('bot:new-bot-id')
-      expect(mockFetch).toHaveBeenCalledTimes(2)
-
-      // Verify create call
-      expect(mockFetch).toHaveBeenLastCalledWith(
-        'https://core.example.com/api/auth/user',
-        expect.objectContaining({
-          method: 'POST',
-          headers: expect.objectContaining({
-            'Content-Type': 'application/json',
-            'X-Core-Secret': 'test-core-secret',
-          }),
-          body: JSON.stringify({
-            id: 'bot:new-bot-id',
-            name: 'FumbleBot',
-            email: 'bot-new-bot-id@fumblebot.local',
-          }),
-        })
-      )
+      expect(mockGetUser).toHaveBeenCalledWith('bot:new-bot-id')
+      expect(mockCreateUser).toHaveBeenCalledWith({
+        id: 'bot:new-bot-id',
+        name: 'FumbleBot',
+        email: 'bot-new-bot-id@fumblebot.local',
+      })
     })
 
     it('should throw error if user creation fails', async () => {
       vi.resetModules()
       const { getBotServiceAccountId } = await import('@/lib/bot-auth')
 
-      // First call - user doesn't exist
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-      })
+      // User doesn't exist
+      mockGetUser.mockResolvedValueOnce(null)
 
-      // Second call - create fails
-      mockFetch.mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-      })
+      // Create fails with SDK error
+      mockCreateUser.mockRejectedValueOnce(new Error('Failed to create user'))
 
       await expect(getBotServiceAccountId('failing-bot')).rejects.toThrow(
-        'Failed to create bot service account: 500'
+        'Failed to create user'
       )
     })
 

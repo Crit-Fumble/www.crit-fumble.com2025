@@ -11,6 +11,7 @@ import 'server-only'
  */
 
 import { auth } from './auth'
+import { CoreApiClient } from '@crit-fumble/core/client'
 
 export type UserRole = 'owner' | 'admin' | 'user'
 
@@ -141,7 +142,7 @@ export async function hasEarlyAccess(discordId: string | null): Promise<boolean>
     return false
   }
 
-  // Check guild admin status via Core API
+  // Check guild admin status via Core API SDK
   try {
     const coreApiUrl = process.env.CORE_API_URL
     const coreApiSecret = process.env.CORE_API_SECRET
@@ -151,25 +152,26 @@ export async function hasEarlyAccess(discordId: string | null): Promise<boolean>
       return false
     }
 
-    // Check if user is admin in any allowed guild
-    const response = await fetch(`${coreApiUrl}/api/discord/user/${discordId}/guilds`, {
-      headers: {
-        'X-Core-Secret': coreApiSecret,
-        'Content-Type': 'application/json',
-      },
+    const api = new CoreApiClient({
+      baseUrl: coreApiUrl,
+      apiKey: coreApiSecret,
     })
 
-    if (!response.ok) {
-      console.error('[permissions] Failed to fetch user guilds:', response.status)
-      return false
-    }
+    // Check if user is admin in any allowed guild
+    const { guilds } = await api.discord.getGuilds(discordId)
 
-    const userGuilds = await response.json() as Array<{ id: string; isAdmin: boolean }>
+    // Discord ADMINISTRATOR permission bit
+    const ADMINISTRATOR = BigInt(0x8)
 
     // Check if user is admin in any of the allowed guilds
-    return userGuilds.some(
-      (guild) => allowedGuildIds.includes(guild.id) && guild.isAdmin
-    )
+    return guilds.some((guild) => {
+      if (!allowedGuildIds.includes(guild.id)) return false
+      // Owner always has admin
+      if (guild.owner) return true
+      // Check ADMINISTRATOR permission bit
+      const permissions = BigInt(guild.permissions)
+      return (permissions & ADMINISTRATOR) === ADMINISTRATOR
+    })
   } catch (error) {
     console.error('[permissions] Error checking early access:', error)
     return false

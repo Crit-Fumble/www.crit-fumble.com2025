@@ -166,6 +166,22 @@ describe('Storybook Token', () => {
       expect(verifyStorybookToken('!!!invalid-base64!!!')).toBeNull()
     })
 
+    it('should return null for invalid role', async () => {
+      const { verifyStorybookToken } = await import('@/lib/storybook-token')
+      const { createHmac } = await import('crypto')
+
+      // Create a token with an invalid role
+      const futureTimestamp = Date.now() + 1000000
+      const payload = `user-123:invalid_role:${futureTimestamp}`
+      const signature = createHmac('sha256', 'test-secret-key-for-testing')
+        .update(payload)
+        .digest('hex')
+        .slice(0, 32)
+
+      const token = Buffer.from(`${payload}:${signature}`).toString('base64url')
+      expect(verifyStorybookToken(token)).toBeNull()
+    })
+
     it('should handle different roles correctly', async () => {
       const { generateStorybookToken, verifyStorybookToken } = await import('@/lib/storybook-token')
 

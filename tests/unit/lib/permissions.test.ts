@@ -507,6 +507,41 @@ describe('Permissions System', () => {
         const result = await hasEarlyAccess('network-error-user')
         expect(typeof result).toBe('boolean')
       })
+
+      it('should return false when Core API URL is not configured', async () => {
+        // Clear Core API URL
+        const origUrl = process.env.CORE_API_URL
+        process.env.CORE_API_URL = ''
+
+        // Need to test with a non-owner/admin user to reach the Core API check
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => [],
+        })
+
+        const result = await hasEarlyAccess('regular-user-no-api')
+        expect(typeof result).toBe('boolean')
+
+        // Restore
+        process.env.CORE_API_URL = origUrl
+      })
+
+      it('should return false when Core API secret is not configured', async () => {
+        // Clear Core API secret
+        const origSecret = process.env.CORE_API_SECRET
+        process.env.CORE_API_SECRET = ''
+
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => [],
+        })
+
+        const result = await hasEarlyAccess('regular-user-no-secret')
+        expect(typeof result).toBe('boolean')
+
+        // Restore
+        process.env.CORE_API_SECRET = origSecret
+      })
     })
 
     describe('checkEarlyAccess', () => {

@@ -4,16 +4,14 @@
  * Custom adapter that proxies all auth operations to the Core API.
  * This enables shared user identity and sessions across all Crit-Fumble platforms.
  *
- * The adapter communicates with core.crit-fumble.com via HTTPS,
- * authenticated with X-Core-Secret header.
- *
- * Supports both JWT and database session strategies.
+ * Uses the @crit-fumble/core SDK for typed API calls.
  *
  * When USE_MOCK_AUTH=true, uses in-memory store instead of Core API.
  * This allows tests to run without depending on Core.
  */
 
 import type { Adapter, AdapterUser, AdapterAccount, AdapterSession } from 'next-auth/adapters'
+import { CoreApiClient } from '@crit-fumble/core/client'
 
 // =============================================================================
 // Mock Auth Store (for testing without Core API)
@@ -106,17 +104,6 @@ const mockSessions = {
   },
 }
 
-/**
- * Parse session data, converting date strings to Date objects.
- * Core API returns dates as ISO strings, but Auth.js expects Date objects.
- */
-function parseSession(session: AdapterSession): AdapterSession {
-  return {
-    ...session,
-    expires: new Date(session.expires),
-  }
-}
-
 export interface CoreAdapterConfig {
   /**
    * Base URL of the Core API
@@ -137,78 +124,12 @@ export interface CoreAdapterConfig {
 }
 
 /**
- * Custom error for Core API authentication failures
- */
-class CoreAuthError extends Error {
-  constructor(message: string, public status: number) {
-    super(message)
-    this.name = 'CoreAuthError'
-  }
-}
-
-/**
- * Make authenticated requests to the Core API
- */
-async function coreRequest<T>(
-  config: CoreAdapterConfig,
-  path: string,
-  options: RequestInit = {},
-  throwOnAuthError = false
-): Promise<T | null> {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), config.timeout || 10000)
-
-  try {
-    const res = await fetch(`${config.coreApiUrl}/api/auth${path}`, {
-      ...options,
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Core-Secret': config.coreApiSecret,
-        ...options.headers,
-      },
-    })
-
-    clearTimeout(timeoutId)
-
-    if (!res.ok) {
-      if (res.status === 404) return null
-
-      // Authentication errors - throw specific error so Auth.js shows proper message
-      if (res.status === 401 || res.status === 403) {
-        const errorMsg = `[core-adapter] Authentication failed: ${res.status} - Check CORE_API_SECRET matches Core API's CORE_SECRET`
-        console.error(errorMsg)
-        if (throwOnAuthError) {
-          throw new CoreAuthError(errorMsg, res.status)
-        }
-        return null
-      }
-
-      console.error(`[core-adapter] Request failed: ${res.status} ${path}`)
-      return null
-    }
-
-    const text = await res.text()
-    if (!text) return null
-    return JSON.parse(text)
-  } catch (error) {
-    clearTimeout(timeoutId)
-    // Re-throw CoreAuthError
-    if (error instanceof CoreAuthError) throw error
-    if (error instanceof Error && error.name === 'AbortError') {
-      console.error(`[core-adapter] Request timeout: ${path}`)
-    } else {
-      console.error(`[core-adapter] Request error: ${path}`, error instanceof Error ? error.message : 'Unknown')
-    }
-    return null
-  }
-}
-
-/**
  * Create a Core API adapter for Auth.js
  *
  * This adapter stores users, accounts, and sessions in the Core API database,
  * enabling shared identity across all Crit-Fumble platforms.
+ *
+ * Uses the @crit-fumble/core SDK for typed API calls.
  *
  * @example
  * import { CoreAdapter } from '@/lib/core-adapter'
@@ -218,7 +139,7 @@ async function coreRequest<T>(
  *     coreApiUrl: process.env.CORE_API_URL!,
  *     coreApiSecret: process.env.CORE_API_SECRET!,
  *   }),
- *   session: { strategy: 'database' }, // or 'jwt'
+ *   session: { strategy: 'database' },
  *   providers: [Discord({ ... })],
  * })
  */
@@ -228,46 +149,99 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     return createMockAdapter()
   }
 
+  // Create SDK client
+  const api = new CoreApiClient({
+    baseUrl: config.coreApiUrl,
+    apiKey: config.coreApiSecret,
+  })
+
   return {
     // =========================================================================
     // User Operations
     // =========================================================================
 
     async createUser(user) {
-      const result = await coreRequest<AdapterUser>(config, '/user', {
-        method: 'POST',
-        body: JSON.stringify(user),
-      }, true) // Throw on auth errors
-      if (!result) throw new Error('Failed to create user - Core API may be unavailable')
-      return result
+      try {
+        const result = await api.authAdapter.createUser({
+          id: user.id,
+          email: user.email ?? undefined,
+          name: user.name ?? undefined,
+          image: user.image ?? undefined,
+          emailVerified: user.emailVerified?.toISOString() ?? null,
+        })
+        return {
+          ...result,
+          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+        } as AdapterUser
+      } catch (error) {
+        console.error('[core-adapter] Failed to create user:', error)
+        throw new Error('Failed to create user - Core API may be unavailable')
+      }
     },
 
     async getUser(id) {
-      return coreRequest<AdapterUser>(config, `/user/${encodeURIComponent(id)}`)
+      try {
+        const result = await api.authAdapter.getUser(id)
+        if (!result) return null
+        return {
+          ...result,
+          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+        } as AdapterUser
+      } catch {
+        return null
+      }
     },
 
     async getUserByEmail(email) {
-      return coreRequest<AdapterUser>(config, `/user/email/${encodeURIComponent(email)}`)
+      try {
+        const result = await api.authAdapter.getUserByEmail(email)
+        if (!result) return null
+        return {
+          ...result,
+          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+        } as AdapterUser
+      } catch {
+        return null
+      }
     },
 
     async getUserByAccount({ provider, providerAccountId }) {
-      return coreRequest<AdapterUser>(
-        config,
-        `/user/account?provider=${encodeURIComponent(provider)}&providerAccountId=${encodeURIComponent(providerAccountId)}`
-      )
+      try {
+        const result = await api.authAdapter.getUserByAccount(provider, providerAccountId)
+        if (!result) return null
+        return {
+          ...result,
+          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+        } as AdapterUser
+      } catch {
+        return null
+      }
     },
 
     async updateUser(user) {
-      const result = await coreRequest<AdapterUser>(config, `/user/${encodeURIComponent(user.id)}`, {
-        method: 'PATCH',
-        body: JSON.stringify(user),
-      })
-      if (!result) throw new Error('Failed to update user')
-      return result
+      try {
+        const result = await api.authAdapter.updateUser(user.id, {
+          email: user.email ?? undefined,
+          name: user.name ?? undefined,
+          image: user.image ?? undefined,
+          emailVerified: user.emailVerified?.toISOString() ?? null,
+        })
+        return {
+          ...result,
+          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+        } as AdapterUser
+      } catch (error) {
+        console.error('[core-adapter] Failed to update user:', error)
+        throw new Error('Failed to update user')
+      }
     },
 
     async deleteUser(userId) {
-      await coreRequest(config, `/user/${encodeURIComponent(userId)}`, { method: 'DELETE' })
+      try {
+        await api.authAdapter.deleteUser(userId)
+      } catch (error) {
+        console.error('[core-adapter] Failed to delete user:', error)
+      }
     },
 
     // =========================================================================
@@ -275,20 +249,45 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async linkAccount(account) {
-      const result = await coreRequest<AdapterAccount>(config, '/account', {
-        method: 'POST',
-        body: JSON.stringify(account),
-      }, true) // Throw on auth errors
-      if (!result) throw new Error('Failed to link account - Core API may be unavailable')
-      return result
+      try {
+        const result = await api.authAdapter.linkAccount({
+          userId: account.userId,
+          type: account.type,
+          provider: account.provider,
+          providerAccountId: account.providerAccountId,
+          refresh_token: account.refresh_token ?? undefined,
+          access_token: account.access_token ?? undefined,
+          expires_at: account.expires_at ?? undefined,
+          token_type: account.token_type ?? undefined,
+          scope: account.scope ?? undefined,
+          id_token: account.id_token ?? undefined,
+          session_state: typeof account.session_state === 'string' ? account.session_state : undefined,
+        })
+        return {
+          userId: result.userId,
+          type: result.type,
+          provider: result.provider,
+          providerAccountId: result.providerAccountId,
+          refresh_token: result.refresh_token ?? null,
+          access_token: result.access_token ?? null,
+          expires_at: result.expires_at ?? null,
+          token_type: result.token_type ?? null,
+          scope: result.scope ?? null,
+          id_token: result.id_token ?? null,
+          session_state: result.session_state ?? null,
+        } as AdapterAccount
+      } catch (error) {
+        console.error('[core-adapter] Failed to link account:', error)
+        throw new Error('Failed to link account - Core API may be unavailable')
+      }
     },
 
     async unlinkAccount({ provider, providerAccountId }) {
-      await coreRequest(
-        config,
-        `/account?provider=${encodeURIComponent(provider)}&providerAccountId=${encodeURIComponent(providerAccountId)}`,
-        { method: 'DELETE' }
-      )
+      try {
+        await api.authAdapter.unlinkAccount(provider, providerAccountId)
+      } catch (error) {
+        console.error('[core-adapter] Failed to unlink account:', error)
+      }
     },
 
     // =========================================================================
@@ -296,43 +295,65 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async createSession(session) {
-      const result = await coreRequest<AdapterSession>(config, '/session', {
-        method: 'POST',
-        body: JSON.stringify(session),
-      }, true) // Throw on auth errors
-      if (!result) throw new Error('Failed to create session - Core API may be unavailable')
-      return parseSession(result)
+      try {
+        const result = await api.authAdapter.createSession({
+          sessionToken: session.sessionToken,
+          userId: session.userId,
+          expires: session.expires.toISOString(),
+        })
+        return {
+          sessionToken: result.sessionToken,
+          userId: result.userId,
+          expires: new Date(result.expires),
+        } as AdapterSession
+      } catch (error) {
+        console.error('[core-adapter] Failed to create session:', error)
+        throw new Error('Failed to create session - Core API may be unavailable')
+      }
     },
 
     async getSessionAndUser(sessionToken) {
-      const result = await coreRequest<{ session: AdapterSession; user: AdapterUser }>(
-        config,
-        `/session/${encodeURIComponent(sessionToken)}`
-      )
-      if (!result) return null
-      return {
-        session: parseSession(result.session),
-        user: result.user,
+      try {
+        const result = await api.authAdapter.getSessionAndUser(sessionToken)
+        if (!result) return null
+        return {
+          session: {
+            sessionToken: result.session.sessionToken,
+            userId: result.session.userId,
+            expires: new Date(result.session.expires),
+          } as AdapterSession,
+          user: {
+            ...result.user,
+            emailVerified: result.user.emailVerified ? new Date(result.user.emailVerified) : null,
+          } as AdapterUser,
+        }
+      } catch {
+        return null
       }
     },
 
     async updateSession(session) {
-      const result = await coreRequest<AdapterSession>(
-        config,
-        `/session/${encodeURIComponent(session.sessionToken)}`,
-        {
-          method: 'PATCH',
-          body: JSON.stringify(session),
-        }
-      )
-      if (!result) return null
-      return parseSession(result)
+      try {
+        const result = await api.authAdapter.updateSession(session.sessionToken, {
+          expires: session.expires ? new Date(session.expires).toISOString() : undefined,
+        })
+        if (!result) return null
+        return {
+          sessionToken: result.sessionToken,
+          userId: result.userId,
+          expires: new Date(result.expires),
+        } as AdapterSession
+      } catch {
+        return null
+      }
     },
 
     async deleteSession(sessionToken) {
-      await coreRequest(config, `/session/${encodeURIComponent(sessionToken)}`, {
-        method: 'DELETE',
-      })
+      try {
+        await api.authAdapter.deleteSession(sessionToken)
+      } catch (error) {
+        console.error('[core-adapter] Failed to delete session:', error)
+      }
     },
 
     // =========================================================================
@@ -340,24 +361,35 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async createVerificationToken(token) {
-      const result = await coreRequest<{ identifier: string; token: string; expires: Date }>(
-        config,
-        '/verification-token',
-        {
-          method: 'POST',
-          body: JSON.stringify(token),
+      try {
+        const result = await api.authAdapter.createVerificationToken({
+          identifier: token.identifier,
+          token: token.token,
+          expires: token.expires.toISOString(),
+        })
+        if (!result) return null
+        return {
+          identifier: result.identifier,
+          token: result.token,
+          expires: new Date(result.expires),
         }
-      )
-      return result
+      } catch {
+        return null
+      }
     },
 
     async useVerificationToken({ identifier, token }) {
-      const result = await coreRequest<{ identifier: string; token: string; expires: Date }>(
-        config,
-        `/verification-token?identifier=${encodeURIComponent(identifier)}&token=${encodeURIComponent(token)}`,
-        { method: 'DELETE' }
-      )
-      return result
+      try {
+        const result = await api.authAdapter.useVerificationToken(identifier, token)
+        if (!result) return null
+        return {
+          identifier: result.identifier,
+          token: result.token,
+          expires: new Date(result.expires),
+        }
+      } catch {
+        return null
+      }
     },
   }
 }

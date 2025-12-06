@@ -1,6 +1,7 @@
 import 'server-only'
 import { NextRequest } from 'next/server'
 import { type UserRole, createPermissions } from './permissions'
+import { CoreApiClient } from '@crit-fumble/core/client'
 
 /**
  * Bot Authentication for FumbleBot
@@ -91,40 +92,26 @@ export async function getBotServiceAccountId(discordId: string): Promise<string>
     throw new Error('CORE_API_URL and CORE_API_SECRET must be configured')
   }
 
+  const api = new CoreApiClient({
+    baseUrl: CORE_API_URL,
+    apiKey: CORE_API_SECRET,
+  })
+
   const botUserId = `bot:${discordId}`
   const botName = 'FumbleBot'
 
   // Check if user exists
-  const existingRes = await fetch(`${CORE_API_URL}/api/auth/user/${encodeURIComponent(botUserId)}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Core-Secret': CORE_API_SECRET,
-    },
-  })
-
-  if (existingRes.ok) {
-    const user = await existingRes.json()
-    if (user) return user.id
+  const existingUser = await api.authAdapter.getUser(botUserId)
+  if (existingUser) {
+    return existingUser.id
   }
 
   // Create bot user
-  const createRes = await fetch(`${CORE_API_URL}/api/auth/user`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Core-Secret': CORE_API_SECRET,
-    },
-    body: JSON.stringify({
-      id: botUserId,
-      name: botName,
-      email: `bot-${discordId}@fumblebot.local`,
-    }),
+  const newUser = await api.authAdapter.createUser({
+    id: botUserId,
+    name: botName,
+    email: `bot-${discordId}@fumblebot.local`,
   })
 
-  if (!createRes.ok) {
-    throw new Error(`Failed to create bot service account: ${createRes.status}`)
-  }
-
-  const newUser = await createRes.json()
   return newUser.id
 }

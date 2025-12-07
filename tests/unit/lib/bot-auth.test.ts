@@ -2,6 +2,7 @@
  * Tests for Bot Authentication
  *
  * Tests the bot authentication and service account functionality.
+ * Bots with valid BOT_API_SECRET are always treated as admin.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
@@ -34,8 +35,6 @@ describe('Bot Authentication', () => {
     mockCreateUser.mockReset()
     // Set up test environment
     process.env.BOT_API_SECRET = 'test-bot-secret'
-    process.env.OWNER_DISCORD_IDS = 'owner-123,owner-456'
-    process.env.ADMIN_DISCORD_IDS = 'admin-789'
     process.env.CORE_API_URL = 'https://core.example.com'
     process.env.CORE_API_SECRET = 'test-core-secret'
   })
@@ -47,7 +46,7 @@ describe('Bot Authentication', () => {
   })
 
   describe('verifyBotAuth', () => {
-    it('should return owner role for owner bot ID with valid secret', async () => {
+    it('should return isAdmin true for any bot ID with valid secret', async () => {
       // Re-import to pick up env changes
       vi.resetModules()
       const { verifyBotAuth } = await import('@/lib/bot-auth')
@@ -55,7 +54,7 @@ describe('Bot Authentication', () => {
       const mockRequest = {
         headers: {
           get: (name: string) => {
-            if (name === 'X-Discord-Bot-Id') return 'owner-123'
+            if (name === 'X-Discord-Bot-Id') return 'any-bot-123'
             if (name === 'X-Bot-Secret') return 'test-bot-secret'
             return null
           },
@@ -66,19 +65,19 @@ describe('Bot Authentication', () => {
       const result = verifyBotAuth(mockRequest as any)
 
       expect(result).toEqual({
-        discordId: 'owner-123',
-        role: 'owner',
+        discordId: 'any-bot-123',
+        isAdmin: true,
       })
     })
 
-    it('should return admin role for admin bot ID with valid secret', async () => {
+    it('should return isAdmin true for another bot ID with valid secret', async () => {
       vi.resetModules()
       const { verifyBotAuth } = await import('@/lib/bot-auth')
 
       const mockRequest = {
         headers: {
           get: (name: string) => {
-            if (name === 'X-Discord-Bot-Id') return 'admin-789'
+            if (name === 'X-Discord-Bot-Id') return 'fumblebot-456'
             if (name === 'X-Bot-Secret') return 'test-bot-secret'
             return null
           },
@@ -88,8 +87,8 @@ describe('Bot Authentication', () => {
       const result = verifyBotAuth(mockRequest as any)
 
       expect(result).toEqual({
-        discordId: 'admin-789',
-        role: 'admin',
+        discordId: 'fumblebot-456',
+        isAdmin: true,
       })
     })
 
@@ -100,7 +99,7 @@ describe('Bot Authentication', () => {
       const mockRequest = {
         headers: {
           get: (name: string) => {
-            if (name === 'X-Discord-Bot-Id') return 'owner-123'
+            if (name === 'X-Discord-Bot-Id') return 'any-bot-123'
             if (name === 'X-Bot-Secret') return 'wrong-secret'
             return null
           },
@@ -137,7 +136,7 @@ describe('Bot Authentication', () => {
       const mockRequest = {
         headers: {
           get: (name: string) => {
-            if (name === 'X-Discord-Bot-Id') return 'owner-123'
+            if (name === 'X-Discord-Bot-Id') return 'any-bot-123'
             return null
           },
         },
@@ -148,14 +147,16 @@ describe('Bot Authentication', () => {
       expect(result).toBeNull()
     })
 
-    it('should return null for unrecognized bot ID', async () => {
+    it('should return null when BOT_API_SECRET is not configured', async () => {
+      process.env.BOT_API_SECRET = ''
+
       vi.resetModules()
       const { verifyBotAuth } = await import('@/lib/bot-auth')
 
       const mockRequest = {
         headers: {
           get: (name: string) => {
-            if (name === 'X-Discord-Bot-Id') return 'unknown-bot'
+            if (name === 'X-Discord-Bot-Id') return 'any-bot-123'
             if (name === 'X-Bot-Secret') return 'test-bot-secret'
             return null
           },

@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { auth } from '@/lib/auth'
 import { getUserRole, canViewWiki, hasEarlyAccess } from '@/lib/permissions'
 import { CampaignActivityFeed } from './CampaignActivityFeed'
 
@@ -12,18 +11,16 @@ export const metadata: Metadata = {
 }
 
 export default async function ActivityPage() {
-  const session = await auth()
+  // Get user's role from session
+  const { role, user } = await getUserRole()
 
   // Require authentication
-  if (!session?.user?.id) {
+  if (!user) {
     redirect('/api/auth/signin?callbackUrl=/activity')
   }
 
-  // Get user's role - only admins and owners can view for now
-  const { role, discordId } = await getUserRole(session.user.id)
-
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(discordId)
+  const hasAccess = await hasEarlyAccess(user)
   if (!hasAccess) {
     redirect('/')
   }
@@ -59,16 +56,16 @@ export default async function ActivityPage() {
               Dashboard
             </Link>
             <div className="flex items-center gap-2">
-              {session.user.image && (
+              {user.image && (
                 <Image
-                  src={session.user.image}
-                  alt={session.user.name ?? 'User'}
+                  src={user.image}
+                  alt={user.name ?? 'User'}
                   width={32}
                   height={32}
                   className="rounded-full"
                 />
               )}
-              <span className="text-sm text-gray-300">{session.user.name}</span>
+              <span className="text-sm text-gray-300">{user.name}</span>
               <span className="text-xs px-2 py-0.5 rounded bg-slate-800 text-gray-400 capitalize">
                 {role}
               </span>

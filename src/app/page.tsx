@@ -73,7 +73,7 @@ export default function HomePage() {
         <div className="w-full bg-crit-purple-600 py-4 px-8">
           <div className="max-w-7xl mx-auto flex items-center justify-center">
             <a
-              href="https://discord.gg/your-server"
+              href="https://discord.gg/D6vVANEJ3w"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-white hover:text-gray-200 transition-colors"

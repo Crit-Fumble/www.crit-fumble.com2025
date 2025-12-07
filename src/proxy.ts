@@ -53,6 +53,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url)
   }
 
+  // Handle Discord Activity proxy domain - let everything through
+  if (host.endsWith('.discordsays.com')) {
+    return NextResponse.next()
+  }
+
   // Allow these paths through on main site
   const allowedPaths = [
     '/',                    // Homepage
@@ -60,6 +65,7 @@ export async function proxy(request: NextRequest) {
     '/dashboard',           // Wiki editor (requires login)
     '/wiki',                // Public wiki (also accessible via subdomain)
     '/activity',            // Activity feed (also accessible via subdomain)
+    '/discord',             // Discord Activity
     '/terms-of-service',    // Legal
     '/privacy-policy',      // Legal
     '/storybook',           // Storybook viewer

@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { frameId, instanceId, platform, guildId, channelId, accessToken } = body
+    const { instanceId, platform, guildId, channelId, accessToken } = body
 
     if (!guildId || !channelId) {
       return NextResponse.json(
@@ -29,7 +29,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!accessToken) {
+      return NextResponse.json(
+        { error: 'Missing access token' },
+        { status: 400 }
+      )
+    }
+
+    console.log('[discord-activity] Authenticating user', {
+      guildId,
+      channelId,
+      instanceId,
+      platform,
+    })
+
     // Forward auth request to Core API
+    // Core API expects: { authType, discordToken, guildId?, channelId? }
     const response = await fetch(`${CORE_API_URL}/api/activity/auth`, {
       method: 'POST',
       headers: {
@@ -37,12 +52,10 @@ export async function POST(request: NextRequest) {
         'X-Core-Secret': CORE_API_SECRET,
       },
       body: JSON.stringify({
-        frameId,
-        instanceId,
-        platform,
+        authType: 'discord',
+        discordToken: accessToken,
         guildId,
         channelId,
-        accessToken,
       }),
     })
 

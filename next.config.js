@@ -15,6 +15,7 @@ const discordFrameAncestors = [
 
 const nextConfig = {
   // Redirect apex domain to www subdomain
+  // But DON'T redirect Discord Activity domains (discordsays.com)
   async redirects() {
     return [
       {
@@ -23,6 +24,12 @@ const nextConfig = {
           {
             type: 'host',
             value: 'crit-fumble.com',
+          },
+        ],
+        missing: [
+          {
+            type: 'host',
+            value: '(.*)\\.discordsays\\.com',
           },
         ],
         destination: 'https://www.crit-fumble.com/:path*',
@@ -34,6 +41,16 @@ const nextConfig = {
   // Security headers
   async headers() {
     return [
+      // Static assets - ensure correct MIME types for Discord proxy
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       {
         source: '/:path*',
         headers: [
@@ -107,6 +124,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
+  // Transpile external packages
+  transpilePackages: ['@crit-fumble/react', '@crit-fumble/core', 'framer-motion'],
 
   // Enable Turbopack (Next.js 16 default)
   turbopack: {},

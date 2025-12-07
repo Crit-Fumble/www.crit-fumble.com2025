@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { DiscordSDK } from '@discord/embedded-app-sdk'
 import { LoadingPage, ErrorPage, WaitingPage } from '@crit-fumble/react/activity'
 import type {
   ContainerStatus,
   ContainerStartResponse,
   ContainerStatusResponse,
+  ActivityAuthResponse,
 } from '@crit-fumble/core/types'
 
 type ActivityState = 'loading' | 'authenticating' | 'starting' | 'connecting' | 'ready' | 'error'
@@ -14,7 +16,9 @@ interface DiscordContext {
   guildId: string
   channelId: string
   userId: string
-  username: string
+  name: string | null
+  discordId: string | null
+  isAdmin: boolean
 }
 
 export function DiscordActivityClient() {
@@ -34,62 +38,83 @@ export function DiscordActivityClient() {
     try {
       setState('authenticating')
 
-      // Check if we're in Discord iframe
-      const urlParams = new URLSearchParams(window.location.search)
-      const frameId = urlParams.get('frame_id')
-      const instanceId = urlParams.get('instance_id')
-      const platform = urlParams.get('platform')
+      // Development mode - use mock context
+      if (process.env.NODE_ENV === 'development') {
+        const urlParams = new URLSearchParams(window.location.search)
+        const frameId = urlParams.get('frame_id')
 
-      if (!frameId && !instanceId) {
-        // Development mode - use mock context
-        if (process.env.NODE_ENV === 'development') {
+        if (!frameId) {
+          console.log('[Discord Activity] Dev mode - using mock context')
           setContext({
             guildId: 'dev-guild',
             channelId: 'dev-channel',
             userId: 'dev-user',
-            username: 'Developer',
+            name: 'Developer',
+            discordId: null,
+            isAdmin: false,
           })
           setState('starting')
           return
         }
-        throw new Error('Not running in Discord Activity context')
       }
 
-      // In production, we need to use Discord Embedded App SDK
-      // For now, get context from URL params (set by Discord)
-      const guildId = urlParams.get('guild_id')
-      const channelId = urlParams.get('channel_id')
+      // Initialize Discord SDK with client ID
+      const discordSdk = new DiscordSDK(process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!)
+
+      console.log('[Discord Activity] Waiting for Discord SDK ready...')
+      await discordSdk.ready()
+
+      console.log('[Discord Activity] Authenticating with Discord...')
+      // Authenticate and get access token (scopes are returned, not passed)
+      const { access_token } = await discordSdk.commands.authenticate({})
+
+      console.log('[Discord Activity] Got access token')
+
+      // Get guild and channel from SDK properties (available after ready())
+      const guildId = discordSdk.guildId
+      const channelId = discordSdk.channelId
 
       if (!guildId || !channelId) {
-        throw new Error('Missing guild or channel context')
+        throw new Error('Could not determine guild or channel context')
       }
 
+      console.log('[Discord Activity] Exchanging token with backend...', { guildId, channelId })
       // Exchange Discord token for our session
       const authResponse = await fetch('/api/discord-activity/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          frameId,
-          instanceId,
-          platform,
+          instanceId: discordSdk.instanceId,
+          platform: discordSdk.platform,
           guildId,
           channelId,
+          accessToken: access_token,
         }),
       })
 
       if (!authResponse.ok) {
-        throw new Error('Failed to authenticate with Discord')
+        const errorData = await authResponse.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to authenticate with backend')
       }
 
-      const authData = await authResponse.json()
+      const authData: ActivityAuthResponse = await authResponse.json()
+      console.log('[Discord Activity] Authentication successful', {
+        userId: authData.userId,
+        name: authData.name,
+        isAdmin: authData.isAdmin,
+      })
+
       setContext({
         guildId,
         channelId,
         userId: authData.userId,
-        username: authData.username,
+        name: authData.name,
+        discordId: authData.discordId,
+        isAdmin: authData.isAdmin,
       })
       setState('starting')
     } catch (err) {
+      console.error('[Discord Activity] Initialization failed:', err)
       setError(err instanceof Error ? err.message : 'Failed to initialize')
       setState('error')
     }
@@ -244,7 +269,7 @@ export function DiscordActivityClient() {
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-green-500" />
           <span className="text-sm text-gray-300">
-            Terminal - {context?.username || 'User'}
+            Terminal - {context?.name || 'User'}
           </span>
         </div>
         <div className="text-xs text-gray-500">

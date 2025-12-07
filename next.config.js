@@ -14,6 +14,14 @@ const discordFrameAncestors = [
 ].filter(Boolean).join(' ')
 
 const nextConfig = {
+  // Asset prefix for Discord Activity - ensures static assets load from the correct domain
+  // When accessed via Discord's *.discordsays.com proxy, assets will load from the actual Vercel domain
+  assetPrefix: process.env.VERCEL_ENV === 'production'
+    ? 'https://www.crit-fumble.com'
+    : process.env.VERCEL_ENV === 'preview'
+    ? 'https://treefarm22-staging.crit-fumble.com'
+    : undefined,
+
   // Redirect apex domain to www subdomain
   // But DON'T redirect Discord Activity domains (discordsays.com)
   async redirects() {

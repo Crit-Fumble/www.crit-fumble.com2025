@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { getUserRole, canEditWiki } from '@/lib/permissions'
 import { generateStorybookToken } from '@/lib/storybook-token'
+import { AccessDenied } from './AccessDenied'
 
 /**
  * Storybook Authentication Page
@@ -43,25 +43,7 @@ export default async function StorybookAuthPage({
   })
 
   if (!canEditWiki(role)) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="max-w-md w-full text-center space-y-6">
-          <div className="text-6xl">🔒</div>
-          <div>
-            <h1 className="text-2xl font-bold text-white mb-2">Access Denied</h1>
-            <p className="text-gray-400">
-              You need admin or owner permissions to access the component library.
-            </p>
-          </div>
-          <Link
-            href="/dashboard"
-            className="inline-block px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors"
-          >
-            Back to Dashboard
-          </Link>
-        </div>
-      </div>
-    )
+    return <AccessDenied />
   }
 
   // Generate access token and redirect to storybook

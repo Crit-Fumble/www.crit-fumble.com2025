@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { getUserDiscordId } from '@/lib/permissions'
+import type { SessionUser } from '@/lib/permissions'
 import { chatRateLimiter, checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 
 // Message validation constants
@@ -36,8 +36,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get user's Discord ID
-    const discordId = await getUserDiscordId(session.user.id)
+    // Get user's Discord ID from session
+    const user = session.user as SessionUser
+    const discordId = user.discordId
     if (!discordId) {
       return NextResponse.json(
         { error: 'Discord account not linked' },
@@ -139,7 +140,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const discordId = await getUserDiscordId(session.user.id)
+    const user = session.user as SessionUser
+    const discordId = user.discordId
     if (!discordId) {
       return NextResponse.json(
         { error: 'Discord account not linked' },

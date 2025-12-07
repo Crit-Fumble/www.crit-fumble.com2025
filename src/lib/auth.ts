@@ -8,8 +8,8 @@
 
 import NextAuth from 'next-auth'
 import Discord from 'next-auth/providers/discord'
-import type { NextAuthConfig, Session, User } from 'next-auth'
-import { CoreAdapter } from './core-adapter'
+import type { NextAuthConfig } from 'next-auth'
+import { CoreAdapter, type AdapterUser } from './core-adapter'
 
 /**
  * Configuration options for Core API auth mode
@@ -61,17 +61,22 @@ function createCoreAuthConfig(config: CoreAuthConfig): NextAuthConfig {
     ],
     callbacks: {
       async session({ session, user }) {
-        // For database strategy, user comes from the adapter
+        // For database strategy, user comes from the adapter (includes isAdmin from Core)
+        const adapterUser = user as AdapterUser
         console.log('[auth] Session callback:', {
           hasSession: !!session,
           hasUser: !!user,
           userId: user?.id ? `${user.id.slice(0, 4)}...` : 'none',
+          isAdmin: adapterUser?.isAdmin ?? false,
         })
         if (session.user && user) {
           session.user.id = user.id
           // For Discord OAuth, the providerAccountId IS the Discord ID
           // Since we use profile.id as the user ID, user.id is the Discord ID
-          ;(session.user as unknown as Record<string, unknown>).discordId = user.id
+          const sessionUser = session.user as unknown as Record<string, unknown>
+          sessionUser.discordId = user.id
+          // Pass through isAdmin from Core database
+          sessionUser.isAdmin = adapterUser.isAdmin ?? false
         }
         return session
       },

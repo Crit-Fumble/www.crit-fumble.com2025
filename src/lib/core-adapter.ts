@@ -10,8 +10,21 @@
  * This allows tests to run without depending on Core.
  */
 
-import type { Adapter, AdapterUser, AdapterAccount, AdapterSession } from 'next-auth/adapters'
+import type { Adapter, AdapterAccount, AdapterSession } from 'next-auth/adapters'
 import { CoreApiClient } from '@crit-fumble/core/client'
+
+/**
+ * Extended AdapterUser with isAdmin flag from Core API
+ * Core API returns isAdmin but the SDK types don't include it yet
+ */
+export interface AdapterUser {
+  id: string
+  email: string | null
+  emailVerified: Date | null
+  name: string | null
+  image: string | null
+  isAdmin?: boolean
+}
 
 // =============================================================================
 // Mock Auth Store (for testing without Core API)
@@ -169,9 +182,12 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           image: user.image ?? undefined,
           emailVerified: user.emailVerified?.toISOString() ?? null,
         })
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
-          ...result,
-          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+          ...apiResult,
+          emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
+          isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
       } catch (error) {
         console.error('[core-adapter] Failed to create user:', error)
@@ -183,9 +199,12 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       try {
         const result = await api.authAdapter.getUser(id)
         if (!result) return null
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
-          ...result,
-          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+          ...apiResult,
+          emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
+          isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
       } catch {
         return null
@@ -196,9 +215,12 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       try {
         const result = await api.authAdapter.getUserByEmail(email)
         if (!result) return null
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
-          ...result,
-          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+          ...apiResult,
+          emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
+          isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
       } catch {
         return null
@@ -209,9 +231,12 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       try {
         const result = await api.authAdapter.getUserByAccount(provider, providerAccountId)
         if (!result) return null
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
-          ...result,
-          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+          ...apiResult,
+          emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
+          isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
       } catch {
         return null
@@ -226,9 +251,12 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           image: user.image ?? undefined,
           emailVerified: user.emailVerified?.toISOString() ?? null,
         })
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
-          ...result,
-          emailVerified: result.emailVerified ? new Date(result.emailVerified) : null,
+          ...apiResult,
+          emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
+          isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
       } catch (error) {
         console.error('[core-adapter] Failed to update user:', error)
@@ -316,6 +344,8 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
       try {
         const result = await api.authAdapter.getSessionAndUser(sessionToken)
         if (!result) return null
+        // Core API returns isAdmin but SDK types don't have it yet
+        const apiUser = result.user as typeof result.user & { isAdmin?: boolean }
         return {
           session: {
             sessionToken: result.session.sessionToken,
@@ -323,8 +353,9 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
             expires: new Date(result.session.expires),
           } as AdapterSession,
           user: {
-            ...result.user,
-            emailVerified: result.user.emailVerified ? new Date(result.user.emailVerified) : null,
+            ...apiUser,
+            emailVerified: apiUser.emailVerified ? new Date(apiUser.emailVerified) : null,
+            isAdmin: apiUser.isAdmin ?? false,
           } as AdapterUser,
         }
       } catch {

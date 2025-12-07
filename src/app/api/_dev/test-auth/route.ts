@@ -24,7 +24,7 @@ const TEST_AUTH_SECRET = process.env.TEST_AUTH_SECRET
 const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH === 'true'
 
 // In-memory store for mock users (local testing only)
-const mockUsers = new Map<string, { id: string; name: string; email: string; sessionToken: string; role: string; discordId: string }>()
+const mockUsers = new Map<string, { id: string; name: string; email: string; sessionToken: string; isAdmin: boolean; discordId: string }>()
 
 /**
  * Check if the environment allows test auth
@@ -106,23 +106,11 @@ export async function POST(request: NextRequest) {
 
     // Generate unique identifiers
     const sessionToken = randomUUID()
-    const baseDiscordId = `test_discord_${Date.now()}`
+    const providerAccountId = `test_discord_${Date.now()}`
 
-    // Determine Discord ID based on role
-    let providerAccountId = baseDiscordId
-    let effectiveRole = 'user'
-
-    if (role === 'owner') {
-      const testOwnerId = process.env.TEST_OWNER_DISCORD_ID
-      const ownerIds = process.env.OWNER_DISCORD_IDS?.split(',').map(id => id.trim()).filter(Boolean)
-      providerAccountId = testOwnerId || (ownerIds && ownerIds[0]) || `test_owner_${Date.now()}`
-      effectiveRole = 'owner'
-    } else if (role === 'admin') {
-      const testAdminId = process.env.TEST_ADMIN_DISCORD_ID
-      const adminIds = process.env.ADMIN_DISCORD_IDS?.split(',').map(id => id.trim()).filter(Boolean)
-      providerAccountId = testAdminId || (adminIds && adminIds[0]) || `test_admin_${Date.now()}`
-      effectiveRole = 'admin'
-    }
+    // Determine if user should be admin
+    // Accept 'owner' for backwards compatibility, but treat as admin
+    const isAdmin = role === 'admin' || role === 'owner'
 
     // Mock mode: store user in memory (no Core API needed)
     if (USE_MOCK_AUTH) {
@@ -131,7 +119,7 @@ export async function POST(request: NextRequest) {
         name: username || `test_user_${Date.now()}`,
         email: email || `test-${Date.now()}@crit-fumble.test`,
         sessionToken,
-        role: effectiveRole,
+        isAdmin,
         discordId: providerAccountId,
       }
       mockUsers.set(providerAccountId, mockUser)
@@ -142,7 +130,7 @@ export async function POST(request: NextRequest) {
         username: mockUser.name,
         email: mockUser.email,
         sessionToken: mockUser.sessionToken,
-        role: mockUser.role,
+        isAdmin: mockUser.isAdmin,
         discordId: mockUser.discordId,
       })
     }
@@ -195,7 +183,7 @@ export async function POST(request: NextRequest) {
       username: user.name,
       email: user.email,
       sessionToken: session.sessionToken,
-      role: effectiveRole,
+      isAdmin,
       discordId: providerAccountId,
     })
   } catch (error) {
@@ -281,7 +269,7 @@ export async function GET(request: NextRequest) {
     userId: user.id,
     username: user.name,
     email: user.email,
-    role: user.role,
+    isAdmin: user.isAdmin,
     discordId: user.discordId,
   })
 }

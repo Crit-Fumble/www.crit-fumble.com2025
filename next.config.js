@@ -66,10 +66,10 @@ const nextConfig = {
             value: [
               "default-src 'self'",
               `script-src 'self' 'unsafe-eval' 'unsafe-inline'${vercelLiveScripts}`, // Next.js requires unsafe-eval and unsafe-inline
-              "style-src 'self' 'unsafe-inline'", // Tailwind requires unsafe-inline
+              "style-src 'self' 'unsafe-inline' https:", // Tailwind requires unsafe-inline, allow external stylesheets
               "img-src 'self' data: https: blob:",
-              "font-src 'self' data:",
-              `connect-src 'self' https://discord.com https://*.discord.com${vercelLiveConnect}`,
+              "font-src 'self' data: https:",
+              `connect-src 'self' https: wss: ws:${vercelLiveConnect}`, // Allow WebSocket connections to Core API
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",

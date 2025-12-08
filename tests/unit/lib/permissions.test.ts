@@ -306,6 +306,24 @@ describe('Permissions System', () => {
         expect(result).toBe(false)
       })
 
+      it('should return false when ALLOWED_GUILD_IDS is empty', async () => {
+        vi.resetModules()
+        process.env.ALLOWED_GUILD_IDS = ''
+
+        const { hasEarlyAccess: hasEarlyAccessFresh } = await import('@/lib/permissions')
+
+        const user: SessionUser = {
+          id: 'user-123',
+          discordId: 'discord-456',
+          isAdmin: false,
+        }
+        const result = await hasEarlyAccessFresh(user)
+        expect(result).toBe(false)
+
+        // Restore for other tests
+        process.env.ALLOWED_GUILD_IDS = 'guild-123,guild-456'
+      })
+
       it('should call SDK for non-admin users with discordId', async () => {
         vi.resetModules()
         const { hasEarlyAccess: hasEarlyAccessFresh } = await import('@/lib/permissions')

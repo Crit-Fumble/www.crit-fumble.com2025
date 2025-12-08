@@ -166,6 +166,33 @@ describe('Storybook Token', () => {
       expect(verifyStorybookToken('!!!invalid-base64!!!')).toBeNull()
     })
 
+    it('should return null when crypto operation throws', async () => {
+      vi.resetModules()
+
+      // Mock crypto to throw an error
+      vi.doMock('crypto', async () => {
+        const actual = await vi.importActual<typeof import('crypto')>('crypto')
+        return {
+          ...actual,
+          createHmac: () => {
+            throw new Error('Crypto error')
+          },
+        }
+      })
+
+      const { verifyStorybookToken } = await import('@/lib/storybook-token')
+
+      // Create a valid-looking token that will trigger the crypto path
+      const payload = 'user-123:admin:9999999999999:12345678901234567890123456789012'
+      const token = Buffer.from(payload).toString('base64url')
+
+      // Should hit the catch block and return null
+      expect(verifyStorybookToken(token)).toBeNull()
+
+      // Restore
+      vi.doUnmock('crypto')
+    })
+
     it('should return null for invalid role', async () => {
       const { verifyStorybookToken } = await import('@/lib/storybook-token')
       const { createHmac } = await import('crypto')

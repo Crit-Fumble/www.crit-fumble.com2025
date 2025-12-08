@@ -170,8 +170,10 @@ export function setNoSession() {
 // Test Lifecycle
 // =============================================================================
 
-// Reset all mocks before each test
-beforeEach(() => {
-  vi.clearAllMocks()
-  mockAuth.mockResolvedValue(null)
-})
+// Note: beforeEach at module level is deprecated in Vitest 4.x
+// Individual test files should handle their own cleanup using beforeEach inside describe blocks
+// Example usage in test files:
+// beforeEach(() => {
+//   vi.clearAllMocks()
+//   mockAuth.mockResolvedValue(null)
+// })

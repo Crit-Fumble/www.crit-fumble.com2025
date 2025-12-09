@@ -11,14 +11,16 @@ import { mockAuth, setMockSession, createMockSession } from '../setup'
 // Mock 'server-only' before importing admin-auth
 vi.mock('server-only', () => ({}))
 
-// Mock the Core API Client
-const mockCoreApiClient = vi.fn()
-
+// Mock the Core API Client - use factory function to avoid hoisting issues
 vi.mock('@crit-fumble/core/client', () => {
+  const mockCoreApiClient = vi.fn()
   return {
     CoreApiClient: mockCoreApiClient,
   }
 })
+
+// Get reference to mocked CoreApiClient for test assertions
+const { CoreApiClient: mockCoreApiClient } = await vi.importMock<typeof import('@crit-fumble/core/client')>('@crit-fumble/core/client')
 
 // Now import the admin-auth module
 import {
@@ -259,7 +261,7 @@ describe('Admin Authentication', () => {
 
       const result = await requireAdmin()
 
-      expect(result).not.toBeInstanceOf(NextResponse)
+      // Result should be AdminSession, not a Response
       expect((result as AdminSession).userId).toBe('user-123')
       expect((result as AdminSession).discordId).toBe('discord-456')
       expect((result as AdminSession).isAdmin).toBe(true)

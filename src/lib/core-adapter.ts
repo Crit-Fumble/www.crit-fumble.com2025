@@ -174,6 +174,7 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async createUser(user) {
+      console.log('[core-adapter] createUser called:', { id: user.id, email: user.email, name: user.name })
       try {
         const result = await api.authAdapter.createUser({
           id: user.id,
@@ -182,6 +183,7 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           image: user.image ?? undefined,
           emailVerified: user.emailVerified?.toISOString() ?? null,
         })
+        console.log('[core-adapter] createUser success:', { id: result.id })
         // Core API returns isAdmin but SDK types don't have it yet
         const apiResult = result as typeof result & { isAdmin?: boolean }
         return {
@@ -228,17 +230,23 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     },
 
     async getUserByAccount({ provider, providerAccountId }) {
+      console.log('[core-adapter] getUserByAccount called:', { provider, providerAccountId: providerAccountId?.slice(0, 6) + '...' })
       try {
         const result = await api.authAdapter.getUserByAccount(provider, providerAccountId)
-        if (!result) return null
+        if (!result) {
+          console.log('[core-adapter] getUserByAccount: no user found')
+          return null
+        }
         // Core API returns isAdmin but SDK types don't have it yet
         const apiResult = result as typeof result & { isAdmin?: boolean }
+        console.log('[core-adapter] getUserByAccount success:', { userId: apiResult.id })
         return {
           ...apiResult,
           emailVerified: apiResult.emailVerified ? new Date(apiResult.emailVerified) : null,
           isAdmin: apiResult.isAdmin ?? false,
         } as AdapterUser
-      } catch {
+      } catch (error) {
+        console.error('[core-adapter] getUserByAccount failed:', error)
         return null
       }
     },
@@ -277,6 +285,7 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async linkAccount(account) {
+      console.log('[core-adapter] linkAccount called:', { userId: account.userId, provider: account.provider })
       try {
         const result = await api.authAdapter.linkAccount({
           userId: account.userId,
@@ -291,6 +300,7 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           id_token: account.id_token ?? undefined,
           session_state: typeof account.session_state === 'string' ? account.session_state : undefined,
         })
+        console.log('[core-adapter] linkAccount success:', { userId: result.userId, provider: result.provider })
         return {
           userId: result.userId,
           type: result.type,
@@ -305,7 +315,7 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
           session_state: result.session_state ?? null,
         } as AdapterAccount
       } catch (error) {
-        console.error('[core-adapter] Failed to link account:', error)
+        console.error('[core-adapter] linkAccount failed:', error)
         throw new Error('Failed to link account - Core API may be unavailable')
       }
     },
@@ -323,29 +333,36 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
     // =========================================================================
 
     async createSession(session) {
+      console.log('[core-adapter] createSession called:', { userId: session.userId })
       try {
         const result = await api.authAdapter.createSession({
           sessionToken: session.sessionToken,
           userId: session.userId,
           expires: session.expires.toISOString(),
         })
+        console.log('[core-adapter] createSession success:', { userId: result.userId })
         return {
           sessionToken: result.sessionToken,
           userId: result.userId,
           expires: new Date(result.expires),
         } as AdapterSession
       } catch (error) {
-        console.error('[core-adapter] Failed to create session:', error)
+        console.error('[core-adapter] createSession failed:', error)
         throw new Error('Failed to create session - Core API may be unavailable')
       }
     },
 
     async getSessionAndUser(sessionToken) {
+      console.log('[core-adapter] getSessionAndUser called:', { tokenPrefix: sessionToken?.slice(0, 8) + '...' })
       try {
         const result = await api.authAdapter.getSessionAndUser(sessionToken)
-        if (!result) return null
+        if (!result) {
+          console.log('[core-adapter] getSessionAndUser: no result from Core API')
+          return null
+        }
         // Core API returns isAdmin but SDK types don't have it yet
         const apiUser = result.user as typeof result.user & { isAdmin?: boolean }
+        console.log('[core-adapter] getSessionAndUser success:', { userId: result.session.userId, isAdmin: apiUser.isAdmin })
         return {
           session: {
             sessionToken: result.session.sessionToken,
@@ -358,7 +375,8 @@ export function CoreAdapter(config: CoreAdapterConfig): Adapter {
             isAdmin: apiUser.isAdmin ?? false,
           } as AdapterUser,
         }
-      } catch {
+      } catch (error) {
+        console.error('[core-adapter] getSessionAndUser failed:', error)
         return null
       }
     },

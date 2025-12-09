@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
-import { getUserRole, canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
+import { canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
 
 interface WikiPage {
   id: string
@@ -75,11 +75,12 @@ export default async function WikiIndexPage() {
     redirect('/api/auth/signin?callbackUrl=/wiki')
   }
 
-  // Get user role and check permissions
-  const { role, discordId } = await getUserRole(session.user.id)
+  // Get user role from session
+  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
+  const role = sessionUser.isAdmin ? 'admin' : 'user'
 
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(discordId)
+  const hasAccess = await hasEarlyAccess(sessionUser)
   if (!hasAccess) {
     redirect('/')
   }

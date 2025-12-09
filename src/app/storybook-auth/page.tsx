@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
-import { getUserRole, canEditWiki } from '@/lib/permissions'
+import { canEditWiki } from '@/lib/permissions'
 import { generateStorybookToken } from '@/lib/storybook-token'
 import { AccessDenied } from './AccessDenied'
 
@@ -32,14 +32,17 @@ export default async function StorybookAuthPage({
   }
 
   // Check authorization (admin or owner only)
-  const { role, discordId } = await getUserRole(session.user.id)
+  // getUserRole() gets session internally, but we already have it
+  // Use getRoleFromSession directly to avoid double auth() call
+  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
+  const role = sessionUser.isAdmin ? 'admin' : 'user'
 
   // Debug logging for auth issues
   console.log('[storybook-auth] Session user:', {
-    id: session.user.id,
-    discordId,
+    id: sessionUser.id,
+    discordId: sessionUser.discordId,
     role,
-    sessionUser: JSON.stringify(session.user),
+    isAdmin: sessionUser.isAdmin,
   })
 
   if (!canEditWiki(role)) {

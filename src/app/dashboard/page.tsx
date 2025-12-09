@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
-import { getUserRole, hasEarlyAccess } from '@/lib/permissions'
+import { hasEarlyAccess } from '@/lib/permissions'
 
 interface DashboardCardProps {
   title: string
@@ -40,11 +40,12 @@ export default async function DashboardPage() {
     redirect('/api/auth/signin?callbackUrl=/dashboard')
   }
 
-  // Get user's role and Discord ID
-  const { role, discordId } = await getUserRole(session.user.id)
+  // Get user's role and Discord ID from session
+  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
+  const role = sessionUser.isAdmin ? 'admin' : 'user'
 
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(discordId)
+  const hasAccess = await hasEarlyAccess(sessionUser)
   if (!hasAccess) {
     redirect('/')
   }

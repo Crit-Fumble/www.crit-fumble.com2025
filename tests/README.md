@@ -22,7 +22,7 @@ Our testing strategy includes:
 
 ### Test Statistics
 
-- **70+ unit tests** with full Prisma mocking
+- **80+ unit tests** covering lib functions, hooks, and components
 - **10+ integration test suites** covering critical user journeys
 - **100+ UI capture scenarios** across all viewports and browsers
 
@@ -34,7 +34,10 @@ Fast, isolated tests using Vitest with mocked dependencies.
 
 **Coverage:**
 - API route handlers
-- Utility functions
+- Authentication and authorization (admin-auth, permissions, core-adapter)
+- Utility functions (utils, rate-limit, storybook-token)
+- React hooks (useApiMutation, useToggle, useFormState, useSearch, useClickOutside, useTabState, useTheme)
+- React components (FloatingFumbleBot)
 - Business logic
 - Data transformations
 
@@ -108,6 +111,12 @@ npm test
 # Run unit tests with UI
 npm run test:ui
 ```
+
+**Note on React Hook Testing:**
+Current hook tests verify imports and exports. For full React hook behavior testing with `@testing-library/react`, you would need to:
+1. Install testing utilities: `npm install --save-dev @testing-library/react @testing-library/jest-dom happy-dom`
+2. Update `vitest.config.ts` to use `happy-dom` environment for hook tests
+3. Full integration testing for hooks is covered by E2E Playwright tests
 
 ### Integration Tests
 
@@ -205,20 +214,33 @@ After running UI capture:
 ```
 tests/
 ├── unit/                              # Unit tests
-│   ├── setup.ts                       # Test configuration & Prisma mocks
+│   ├── setup.ts                       # Test configuration & mocks
 │   ├── api/                           # API route tests
-│   │   └── crit/
-│   │       ├── coins/
-│   │       │   ├── balance.test.ts
-│   │       │   └── debit.test.ts
-│   │       └── credits/
-│   │           └── balance.test.ts
-│   ├── lib/                           # Utility tests
-│   │   └── worldEditLock.test.ts
-│   └── packages/                      # Package tests
-│       └── cfg-lib/
-│           ├── rate-limit.test.ts
-│           └── utils.test.ts
+│   │   ├── discord-activity-auth.test.ts
+│   │   └── fumblebot-proxy.test.ts
+│   ├── components/                    # Component tests
+│   │   └── FloatingFumbleBot.test.ts
+│   ├── config/                        # Configuration tests
+│   │   └── next-config.test.ts
+│   ├── hooks/                         # React hooks tests
+│   │   ├── index.test.ts              # All hooks smoke tests
+│   │   └── useToggle.test.ts
+│   ├── lib/                           # Library/utility tests
+│   │   ├── admin-auth.test.ts
+│   │   ├── bot-auth.test.ts
+│   │   ├── core-adapter.test.ts
+│   │   ├── core-adapter-mock.test.ts
+│   │   ├── permissions.test.ts
+│   │   ├── storybook-token.test.ts
+│   │   └── utils.test.ts
+│   ├── packages/                      # Package tests
+│   │   └── cfg-lib/
+│   │       ├── rate-limit.test.ts
+│   │       └── utils.test.ts
+│   ├── proxy/                         # Proxy tests
+│   │   └── proxy.test.ts
+│   └── security/                      # Security tests
+│       └── no-server-code-in-client.test.ts
 │
 ├── integration/                       # E2E tests
 │   ├── 01-homepage.spec.ts

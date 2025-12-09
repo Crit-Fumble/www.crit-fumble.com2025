@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
+import { Card, Badge } from '@crit-fumble/react/shared'
 
 interface WikiPage {
   id: string
@@ -113,9 +114,9 @@ export default async function WikiIndexPage() {
                 Dashboard
               </a>
             )}
-            <span className="text-xs text-gray-500 bg-slate-800 px-2 py-1 rounded">
+            <Badge size="sm" variant="default">
               {webRole}
-            </span>
+            </Badge>
           </nav>
         </div>
       </header>
@@ -151,17 +152,16 @@ export default async function WikiIndexPage() {
                 <ul className="grid gap-3">
                   {groupedPages[category].map(page => (
                     <li key={page.id}>
-                      <Link
-                        href={`/wiki/${page.slug}`}
-                        className="block bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-crit-purple-500/50 rounded-lg p-4 transition-colors"
-                      >
-                        <h3 className="text-lg font-medium text-white mb-1">
-                          {page.title}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          Updated {new Date(page.updatedAt).toLocaleDateString()}
-                          {page.author?.name && ` · By ${page.author.name}`}
-                        </p>
+                      <Link href={`/wiki/${page.slug}`}>
+                        <Card variant="interactive" className="p-4">
+                          <h3 className="text-lg font-medium text-white mb-1">
+                            {page.title}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            Updated {new Date(page.updatedAt).toLocaleDateString()}
+                            {page.author?.name && ` · By ${page.author.name}`}
+                          </p>
+                        </Card>
                       </Link>
                     </li>
                   ))}

@@ -4,6 +4,7 @@ import DOMPurify from 'isomorphic-dompurify'
 import { auth } from '@/lib/auth'
 import { canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
 import { WikiContent } from './WikiContent'
+import { Badge } from '@crit-fumble/react/shared'
 
 interface WikiPage {
   id: string
@@ -146,9 +147,9 @@ export default async function WikiPage({ params }: PageProps) {
                 Dashboard
               </a>
             )}
-            <span className="text-xs text-gray-500 bg-slate-800 px-2 py-1 rounded">
+            <Badge size="sm" variant="default">
               {webRole}
-            </span>
+            </Badge>
           </nav>
         </div>
       </header>
@@ -170,9 +171,9 @@ export default async function WikiPage({ params }: PageProps) {
         {/* Metadata */}
         <div className="text-sm text-gray-500 mb-8">
           {page.category && (
-            <span className="inline-block bg-slate-800 text-gray-300 px-2 py-1 rounded mr-2">
+            <Badge size="sm" variant="default" className="mr-2">
               {page.category}
-            </span>
+            </Badge>
           )}
           <span>
             Last updated {new Date(page.updatedAt).toLocaleDateString()}

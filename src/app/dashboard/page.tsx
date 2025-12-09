@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
 import { hasEarlyAccess } from '@/lib/permissions'
+import { Card, CardContent, Badge } from '@crit-fumble/react/shared'
 
 interface DashboardCardProps {
   title: string
@@ -13,22 +14,23 @@ interface DashboardCardProps {
 
 function DashboardCard({ title, description, href, icon }: DashboardCardProps) {
   return (
-    <a
-      href={href}
-      className="group block p-6 bg-slate-900 border border-slate-800 rounded-lg hover:border-crit-purple-500 hover:bg-slate-800 transition-all"
-    >
-      <div className="flex items-start gap-4">
-        <div className="flex-shrink-0 w-12 h-12 bg-crit-purple-900/50 rounded-lg flex items-center justify-center text-crit-purple-400 group-hover:bg-crit-purple-900 group-hover:text-crit-purple-300 transition-colors">
-          {icon}
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold text-white group-hover:text-crit-purple-300 transition-colors">
-            {title}
-          </h3>
-          <p className="mt-1 text-sm text-gray-400">{description}</p>
-        </div>
-      </div>
-    </a>
+    <Link href={href}>
+      <Card variant="interactive">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 bg-crit-purple-900/50 rounded-lg flex items-center justify-center text-crit-purple-400">
+              {icon}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">
+                {title}
+              </h3>
+              <p className="mt-1 text-sm text-gray-400">{description}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 
@@ -74,9 +76,9 @@ export default async function DashboardPage() {
                 />
               )}
               <span className="text-sm text-gray-300">{session.user.name}</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-slate-800 text-gray-400 capitalize">
+              <Badge size="sm" variant="default">
                 {role}
-              </span>
+              </Badge>
             </div>
             <a
               href="/api/auth/signout"

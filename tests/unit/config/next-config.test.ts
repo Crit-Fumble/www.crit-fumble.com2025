@@ -31,12 +31,12 @@ describe('Next.js Configuration', () => {
       expect(config.assetPrefix).toBe('https://www.crit-fumble.com')
     })
 
-    it('should set preview assetPrefix to treefarm22-staging.crit-fumble.com', async () => {
+    it('should set preview assetPrefix to staging-treefarm22.crit-fumble.com', async () => {
       process.env.VERCEL_ENV = 'preview'
 
       const config = await loadNextConfig()
 
-      expect(config.assetPrefix).toBe('https://treefarm22-staging.crit-fumble.com')
+      expect(config.assetPrefix).toBe('https://staging-treefarm22.crit-fumble.com')
     })
 
     it('should have undefined assetPrefix in development', async () => {

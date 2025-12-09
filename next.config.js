@@ -19,7 +19,7 @@ const nextConfig = {
   assetPrefix: process.env.VERCEL_ENV === 'production'
     ? 'https://www.crit-fumble.com'
     : process.env.VERCEL_ENV === 'preview'
-    ? 'https://treefarm22-staging.crit-fumble.com'
+    ? 'https://staging-treefarm22.crit-fumble.com'
     : undefined,
 
   // Redirect apex domain to www subdomain

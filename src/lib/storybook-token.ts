@@ -82,12 +82,15 @@ export function verifyStorybookToken(token: string): { userId: string; role: Use
       return null
     }
 
-    // Validate role is a valid UserRole
+    // Validate role is a valid UserRole (owner is treated as admin for backwards compat)
     if (role !== 'owner' && role !== 'admin' && role !== 'user') {
       return null
     }
 
-    return { userId, role }
+    // Normalize 'owner' to 'admin' for backwards compatibility
+    const normalizedRole = role === 'owner' ? 'admin' : role
+
+    return { userId, role: normalizedRole as 'admin' | 'user' }
   } catch {
     return null
   }

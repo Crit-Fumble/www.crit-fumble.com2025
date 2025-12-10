@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { requireAdmin } from '@/lib/admin-auth'
 import type { ContainerStatusResponse } from '@crit-fumble/core/types'
 
 const CORE_API_URL = process.env.CORE_API_URL || 'https://core.crit-fumble.com'
@@ -10,13 +10,13 @@ const CORE_API_SECRET = process.env.CORE_API_SECRET
  *
  * Get container status for a guild+channel.
  * Query params: guildId, channelId
+ * Admin-only: Container management is restricted to administrators.
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Verify user is admin
+    const admin = await requireAdmin()
+    if (admin instanceof NextResponse) return admin
 
     if (!CORE_API_SECRET) {
       console.error('[container] CORE_API_SECRET not configured')
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     const response = await fetch(url.toString(), {
       headers: {
         'X-Core-Secret': CORE_API_SECRET,
-        'X-User-Id': session.user.id,
+        'X-User-Id': admin.userId,
         'X-Guild-Id': guildId,
         'X-Channel-Id': channelId,
       },

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { auth } from '@/lib/auth'
+import { getCurrentUser } from '@/lib/core-auth'
 import { hasEarlyAccess } from '@/lib/permissions'
 import { Card, CardContent, Badge } from '@crit-fumble/react/shared'
 
@@ -35,19 +35,18 @@ function DashboardCard({ title, description, href, icon }: DashboardCardProps) {
 }
 
 export default async function DashboardPage() {
-  const session = await auth()
+  const user = await getCurrentUser()
 
   // Require login
-  if (!session?.user?.id) {
+  if (!user) {
     redirect('/api/auth/signin?callbackUrl=/dashboard')
   }
 
-  // Get user's role and Discord ID from session
-  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
-  const role = sessionUser.isAdmin ? 'admin' : 'user'
+  // Get user's role
+  const role = user.isAdmin ? 'admin' : 'user'
 
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(sessionUser)
+  const hasAccess = await hasEarlyAccess(user)
   if (!hasAccess) {
     redirect('/')
   }
@@ -66,16 +65,16 @@ export default async function DashboardPage() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              {session.user.image && (
+              {user.image && (
                 <Image
-                  src={session.user.image}
-                  alt={session.user.name ?? 'User'}
+                  src={user.image}
+                  alt={user.name ?? 'User'}
                   width={32}
                   height={32}
                   className="rounded-full"
                 />
               )}
-              <span className="text-sm text-gray-300">{session.user.name}</span>
+              <span className="text-sm text-gray-300">{user.name}</span>
               <Badge size="sm" variant="default">
                 {role}
               </Badge>
@@ -92,7 +91,7 @@ export default async function DashboardPage() {
 
       {/* Main content */}
       <main className="max-w-5xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-white mb-2">Welcome back, {session.user.name?.split(' ')[0] ?? 'Adventurer'}!</h1>
+        <h1 className="text-3xl font-bold text-white mb-2">Welcome back, {user.name?.split(' ')[0] ?? 'Adventurer'}!</h1>
         <p className="text-gray-400 mb-8">Choose where you want to go:</p>
 
         <div className="grid gap-6 md:grid-cols-2">

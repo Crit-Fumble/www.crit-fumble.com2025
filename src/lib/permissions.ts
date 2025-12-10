@@ -4,25 +4,18 @@ import 'server-only'
  * Permission System
  *
  * Admin status is determined by the isAdmin flag in the Core database.
- * This flag is passed through the session from the auth adapter.
+ * This flag is passed through the session from Core API.
  */
 
-import { auth } from './auth'
+import { getCurrentUser, type SessionUser as CoreSessionUser } from './core-auth'
 import { CoreApiClient } from '@crit-fumble/core/client'
 
 export type UserRole = 'admin' | 'user'
 
 /**
- * Extended session user type with isAdmin from Core
+ * Session user type (re-exported from core-auth for compatibility)
  */
-export interface SessionUser {
-  id: string
-  name?: string | null
-  email?: string | null
-  image?: string | null
-  discordId?: string
-  isAdmin?: boolean
-}
+export type SessionUser = CoreSessionUser
 
 /**
  * Check if a user is an admin based on their session
@@ -158,8 +151,7 @@ export async function hasEarlyAccess(user: SessionUser | null | undefined): Prom
  * Use this in middleware or page components to gate access
  */
 export async function checkEarlyAccess(): Promise<{ hasAccess: boolean; user: SessionUser | null }> {
-  const session = await auth()
-  const user = session?.user as SessionUser | undefined ?? null
+  const user = await getCurrentUser()
   const hasAccess = await hasEarlyAccess(user)
   return { hasAccess, user }
 }
@@ -170,8 +162,7 @@ export async function checkEarlyAccess(): Promise<{ hasAccess: boolean; user: Se
  * Returns the role and user for the authenticated user.
  */
 export async function getUserRole(): Promise<{ role: UserRole; user: SessionUser | null }> {
-  const session = await auth()
-  const user = session?.user as SessionUser | undefined ?? null
+  const user = await getCurrentUser()
   const role = getRoleFromSession(user)
   return { role, user }
 }

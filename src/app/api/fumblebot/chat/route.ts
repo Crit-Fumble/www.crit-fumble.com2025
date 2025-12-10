@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
-import type { SessionUser } from '@/lib/permissions'
+import { getCurrentUser } from '@/lib/core-auth'
 import { chatRateLimiter, checkRateLimit, getClientIdentifier } from '@/lib/rate-limit'
 
 // Message validation constants
@@ -21,13 +20,13 @@ const CORE_API_SECRET = process.env.CORE_API_SECRET
 export async function POST(request: NextRequest) {
   try {
     // Verify user is authenticated
-    const session = await auth()
-    if (!session?.user?.id) {
+    const user = await getCurrentUser()
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Rate limit by user ID
-    const identifier = getClientIdentifier(session.user.id)
+    const identifier = getClientIdentifier(user.id)
     const rateLimitResult = await checkRateLimit(chatRateLimiter, identifier)
     if (!rateLimitResult.success) {
       return NextResponse.json(
@@ -37,7 +36,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user's Discord ID from session
-    const user = session.user as SessionUser
     const discordId = user.discordId
     if (!discordId) {
       return NextResponse.json(
@@ -95,7 +93,7 @@ export async function POST(request: NextRequest) {
         sessionId,
         user: {
           discordId,
-          name: session.user.name,
+          name: user.name,
         },
       }),
     })
@@ -125,13 +123,13 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
+    const user = await getCurrentUser()
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Rate limit GET requests too
-    const identifier = getClientIdentifier(session.user.id)
+    const identifier = getClientIdentifier(user.id)
     const rateLimitResult = await checkRateLimit(chatRateLimiter, identifier)
     if (!rateLimitResult.success) {
       return NextResponse.json(
@@ -140,7 +138,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const user = session.user as SessionUser
     const discordId = user.discordId
     if (!discordId) {
       return NextResponse.json(

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { auth } from '@/lib/auth'
+import { getCurrentUser } from '@/lib/core-auth'
 import { canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
 import { Card, Badge } from '@crit-fumble/react/shared'
 
@@ -69,19 +69,18 @@ export const metadata: Metadata = {
 }
 
 export default async function WikiIndexPage() {
-  const session = await auth()
+  const user = await getCurrentUser()
 
   // Require authentication
-  if (!session?.user?.id) {
+  if (!user) {
     redirect('/api/auth/signin?callbackUrl=/wiki')
   }
 
-  // Get user role from session
-  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
-  const role = sessionUser.isAdmin ? 'admin' : 'user'
+  // Get user role
+  const role = user.isAdmin ? 'admin' : 'user'
 
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(sessionUser)
+  const hasAccess = await hasEarlyAccess(user)
   if (!hasAccess) {
     redirect('/')
   }

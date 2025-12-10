@@ -10,6 +10,7 @@ export interface MockSessionUser {
   email?: string | null
   image?: string | null
   discordId?: string
+  isAdmin?: boolean
 }
 
 export interface MockSession {
@@ -32,6 +33,7 @@ export function createMockSession(overrides: Partial<MockSession> = {}): MockSes
       email: 'test@example.com',
       image: null,
       discordId: 'test-discord-id',
+      isAdmin: false,
       ...overrides.user,
     },
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
@@ -40,7 +42,7 @@ export function createMockSession(overrides: Partial<MockSession> = {}): MockSes
 }
 
 /**
- * Create a mock owner session
+ * Create a mock owner session (deprecated - use admin)
  */
 export function createOwnerSession(discordId = 'owner-123'): MockSession {
   return createMockSession({
@@ -49,6 +51,7 @@ export function createOwnerSession(discordId = 'owner-123'): MockSession {
       name: 'Owner User',
       email: 'owner@example.com',
       discordId,
+      isAdmin: true,
     },
   })
 }
@@ -63,6 +66,7 @@ export function createAdminSession(discordId = 'admin-456'): MockSession {
       name: 'Admin User',
       email: 'admin@example.com',
       discordId,
+      isAdmin: true,
     },
   })
 }
@@ -77,6 +81,7 @@ export function createUserSession(discordId = 'user-789'): MockSession {
       name: 'Regular User',
       email: 'user@example.com',
       discordId,
+      isAdmin: false,
     },
   })
 }
@@ -110,10 +115,48 @@ vi.mock('next/server', () => ({
 }))
 
 // =============================================================================
-// Auth Module Mock
+// Core Auth Module Mock
 // =============================================================================
 
-// Mock auth module - can be configured per test
+// Mock getCurrentUser function - can be configured per test
+export const mockGetCurrentUser = vi.fn()
+
+// Mock getSession function
+export const mockGetSession = vi.fn()
+
+vi.mock('@/lib/core-auth', () => ({
+  getCurrentUser: mockGetCurrentUser,
+  getSession: mockGetSession,
+  getSigninUrl: vi.fn((provider = 'discord', callbackUrl) => {
+    const callback = callbackUrl || '/dashboard'
+    return `https://core.crit-fumble.com/auth/signin/${provider}?callbackUrl=${encodeURIComponent(callback)}`
+  }),
+  getSignoutUrl: vi.fn((callbackUrl) => {
+    const callback = callbackUrl || '/'
+    return `https://core.crit-fumble.com/api/auth/signout?callbackUrl=${encodeURIComponent(callback)}`
+  }),
+  isAuthenticated: vi.fn(async () => {
+    const user = await mockGetCurrentUser()
+    return user !== null
+  }),
+  isAdmin: vi.fn(async () => {
+    const user = await mockGetCurrentUser()
+    return user?.isAdmin ?? false
+  }),
+  requireAuth: vi.fn(),
+  requireAdmin: vi.fn(),
+  signOut: vi.fn(),
+  clientAuth: {
+    getSigninUrl: vi.fn((callbackUrl) => `https://core.crit-fumble.com/auth/signin/discord?callbackUrl=${encodeURIComponent(callbackUrl || '/dashboard')}`),
+    getSignoutUrl: vi.fn((callbackUrl) => `https://core.crit-fumble.com/api/auth/signout?callbackUrl=${encodeURIComponent(callbackUrl || '/')}`),
+  },
+}))
+
+// =============================================================================
+// Legacy Auth Module Mock (for backwards compatibility)
+// =============================================================================
+
+// Legacy mock auth function - maps to getCurrentUser
 export const mockAuth = vi.fn()
 
 vi.mock('@/lib/auth', () => ({
@@ -135,11 +178,38 @@ vi.mock('@/lib/auth', () => ({
  * Use in beforeEach or individual tests
  */
 export function setMockSession(session: MockSession | null) {
+  // Update legacy mock
   mockAuth.mockResolvedValue(session)
+
+  // Update core-auth mock
+  if (session) {
+    mockGetCurrentUser.mockResolvedValue({
+      id: session.user.id,
+      discordId: session.user.discordId || session.user.id,
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+      isAdmin: session.user.isAdmin ?? false,
+    })
+    mockGetSession.mockResolvedValue({
+      user: {
+        id: session.user.id,
+        discordId: session.user.discordId || session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+        isAdmin: session.user.isAdmin ?? false,
+      },
+      expires: session.expires,
+    })
+  } else {
+    mockGetCurrentUser.mockResolvedValue(null)
+    mockGetSession.mockResolvedValue({ user: null, expires: null })
+  }
 }
 
 /**
- * Set up auth mock to return an owner session
+ * Set up auth mock to return an owner session (deprecated - use admin)
  */
 export function setOwnerSession(discordId = 'owner-123') {
   setMockSession(createOwnerSession(discordId))
@@ -175,5 +245,5 @@ export function setNoSession() {
 // Example usage in test files:
 // beforeEach(() => {
 //   vi.clearAllMocks()
-//   mockAuth.mockResolvedValue(null)
+//   setNoSession()
 // })

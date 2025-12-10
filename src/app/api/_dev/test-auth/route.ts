@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { randomUUID } from 'crypto'
+import { mockAuthStores } from '@/lib/mock-auth-stores'
 
 /**
  * DEV ONLY: Test Authentication API
@@ -12,7 +13,10 @@ import { randomUUID } from 'crypto'
  *
  * Production deployments (VERCEL_ENV=production) are ALWAYS blocked.
  *
- * Proxies to Core API for user/session management.
+ * In mock mode (USE_MOCK_AUTH=true), uses the shared mock stores from CoreAdapter.
+ * This ensures Auth.js session validation finds the test users created here.
+ *
+ * In non-mock mode, proxies to Core API for user/session management.
  *
  * POST - Create a test user with session
  * DELETE - Remove a test user and their sessions
@@ -23,8 +27,8 @@ const CORE_API_SECRET = process.env.CORE_API_SECRET
 const TEST_AUTH_SECRET = process.env.TEST_AUTH_SECRET
 const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH === 'true'
 
-// In-memory store for mock users (local testing only)
-const mockUsers = new Map<string, { id: string; name: string; email: string; sessionToken: string; isAdmin: boolean; discordId: string }>()
+// Local index for cleanup (maps userId -> sessionToken)
+const testUserIndex = new Map<string, string>()
 
 /**
  * Check if the environment allows test auth
@@ -112,26 +116,50 @@ export async function POST(request: NextRequest) {
     // Accept 'owner' for backwards compatibility, but treat as admin
     const isAdmin = role === 'admin' || role === 'owner'
 
-    // Mock mode: store user in memory (no Core API needed)
+    // Mock mode: use shared mock stores from CoreAdapter
+    // This ensures Auth.js can find the user when validating the session cookie
     if (USE_MOCK_AUTH) {
-      const mockUser = {
+      const userName = username || `test_user_${Date.now()}`
+      const userEmail = email || `test-${Date.now()}@crit-fumble.test`
+
+      // Create user in shared mock store (matches AdapterUser interface)
+      mockAuthStores.users.create({
         id: providerAccountId,
-        name: username || `test_user_${Date.now()}`,
-        email: email || `test-${Date.now()}@crit-fumble.test`,
+        name: userName,
+        email: userEmail,
+        emailVerified: new Date(),
+        image: null,
+        isAdmin,
+      })
+
+      // Create account link in shared mock store
+      mockAuthStores.accounts.link({
+        userId: providerAccountId,
+        type: 'oauth',
+        provider: 'discord',
+        providerAccountId,
+        access_token: `test_access_${sessionToken}`,
+        token_type: 'Bearer',
+        scope: 'identify email',
+      })
+
+      // Create session in shared mock store
+      mockAuthStores.sessions.create({
+        sessionToken,
+        userId: providerAccountId,
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      })
+
+      // Track for cleanup
+      testUserIndex.set(providerAccountId, sessionToken)
+
+      return NextResponse.json({
+        userId: providerAccountId,
+        username: userName,
+        email: userEmail,
         sessionToken,
         isAdmin,
         discordId: providerAccountId,
-      }
-      mockUsers.set(providerAccountId, mockUser)
-      mockUsers.set(sessionToken, mockUser) // Also index by session token
-
-      return NextResponse.json({
-        userId: mockUser.id,
-        username: mockUser.name,
-        email: mockUser.email,
-        sessionToken: mockUser.sessionToken,
-        isAdmin: mockUser.isAdmin,
-        discordId: mockUser.discordId,
       })
     }
 
@@ -215,12 +243,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Missing userId or playerId' }, { status: 400 })
     }
 
-    // Mock mode: remove from in-memory store
+    // Mock mode: remove from shared mock stores
     if (USE_MOCK_AUTH) {
-      const user = mockUsers.get(targetUserId)
-      if (user) {
-        mockUsers.delete(targetUserId)
-        mockUsers.delete(user.sessionToken)
+      const sessionToken = testUserIndex.get(targetUserId)
+      if (sessionToken) {
+        mockAuthStores.sessions.delete(sessionToken)
+        mockAuthStores.accounts.unlink('discord', targetUserId)
+        mockAuthStores.users.delete(targetUserId)
+        testUserIndex.delete(targetUserId)
       }
       return NextResponse.json({ success: true })
     }
@@ -260,16 +290,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Missing sessionToken' }, { status: 400 })
   }
 
-  const user = mockUsers.get(sessionToken)
-  if (!user) {
+  // Look up session and user in shared mock stores
+  const result = mockAuthStores.sessions.getWithUser(sessionToken)
+  if (!result) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
+  const { user } = result
   return NextResponse.json({
     userId: user.id,
     username: user.name,
     email: user.email,
-    isAdmin: user.isAdmin,
-    discordId: user.discordId,
+    isAdmin: user.isAdmin ?? false,
+    discordId: user.id, // In mock mode, userId is the Discord ID
   })
 }

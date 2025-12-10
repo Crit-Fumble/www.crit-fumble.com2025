@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { requireAdmin } from '@/lib/admin-auth'
 import type { ContainerStartRequest, ContainerStartResponse } from '@crit-fumble/core/types'
 
 const CORE_API_URL = process.env.CORE_API_URL || 'https://core.crit-fumble.com'
@@ -9,15 +9,14 @@ const CORE_API_SECRET = process.env.CORE_API_SECRET
  * POST /api/container/start
  *
  * Start a container for a guild+channel.
- * Proxies to Core API with session auth.
+ * Proxies to Core API with admin auth.
+ * Admin-only: Container management is restricted to administrators.
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify user is authenticated
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Verify user is admin
+    const admin = await requireAdmin()
+    if (admin instanceof NextResponse) return admin
 
     if (!CORE_API_SECRET) {
       console.error('[container] CORE_API_SECRET not configured')
@@ -43,8 +42,8 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'X-Core-Secret': CORE_API_SECRET,
-        'X-User-Id': session.user.id,
-        'X-User-Name': session.user.name || 'User',
+        'X-User-Id': admin.userId,
+        'X-User-Name': 'Admin',
         'X-Guild-Id': guildId,
         'X-Channel-Id': channelId,
       },

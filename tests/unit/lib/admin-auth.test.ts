@@ -92,15 +92,15 @@ describe('Admin Authentication', () => {
       expect(result).toBeNull()
     })
 
-    it('should handle user without discordId', async () => {
+    it('should include discordId in result', async () => {
+      // All users have a discordId since we use Discord OAuth
       const session = createMockSession({
         user: {
           id: 'user-123',
+          discordId: 'discord-789',
           isAdmin: true,
         },
       })
-      // Remove discordId
-      delete (session.user as any).discordId
 
       setMockSession(session)
 
@@ -108,7 +108,7 @@ describe('Admin Authentication', () => {
 
       expect(result).not.toBeNull()
       expect(result?.userId).toBe('user-123')
-      expect(result?.discordId).toBeNull()
+      expect(result?.discordId).toBe('discord-789')
       expect(result?.isAdmin).toBe(true)
     })
 

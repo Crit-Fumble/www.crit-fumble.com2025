@@ -7,8 +7,8 @@ import 'server-only'
  */
 
 import { NextResponse } from 'next/server'
-import { auth } from './auth'
-import { isAdmin as checkIsAdmin, type SessionUser } from './permissions'
+import { getCurrentUser, type SessionUser } from './core-auth'
+import { isAdmin as checkIsAdmin } from './permissions'
 import { CoreApiClient } from '@crit-fumble/core/client'
 
 /**
@@ -26,13 +26,11 @@ export interface AdminSession {
  * @returns AdminSession if user is admin, null otherwise
  */
 export async function verifyAdmin(): Promise<AdminSession | null> {
-  const session = await auth()
+  const user = await getCurrentUser()
 
-  if (!session?.user) {
+  if (!user) {
     return null
   }
-
-  const user = session.user as SessionUser
 
   if (!checkIsAdmin(user)) {
     console.log('[admin-auth] User is not admin:', {

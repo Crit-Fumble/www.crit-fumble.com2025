@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { auth } from '@/lib/auth'
+import { getCurrentUser } from '@/lib/core-auth'
 import { canEditWiki } from '@/lib/permissions'
 import { generateStorybookToken } from '@/lib/storybook-token'
 import { AccessDenied } from './AccessDenied'
@@ -17,14 +17,14 @@ export default async function StorybookAuthPage({
 }: {
   searchParams: Promise<{ redirect?: string }>
 }) {
-  const session = await auth()
+  const user = await getCurrentUser()
   const params = await searchParams
 
   // Target URL after auth (default to storybook root)
   const targetUrl = params.redirect || 'https://storybook.crit-fumble.com/'
 
   // If not authenticated, redirect to signin
-  if (!session?.user?.id) {
+  if (!user) {
     const callbackUrl = encodeURIComponent(
       `https://www.crit-fumble.com/storybook-auth?redirect=${encodeURIComponent(targetUrl)}`
     )
@@ -32,17 +32,14 @@ export default async function StorybookAuthPage({
   }
 
   // Check authorization (admin or owner only)
-  // getUserRole() gets session internally, but we already have it
-  // Use getRoleFromSession directly to avoid double auth() call
-  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
-  const role = sessionUser.isAdmin ? 'admin' : 'user'
+  const role = user.isAdmin ? 'admin' : 'user'
 
   // Debug logging for auth issues
-  console.log('[storybook-auth] Session user:', {
-    id: sessionUser.id,
-    discordId: sessionUser.discordId,
+  console.log('[storybook-auth] User:', {
+    id: user.id,
+    discordId: user.discordId,
     role,
-    isAdmin: sessionUser.isAdmin,
+    isAdmin: user.isAdmin,
   })
 
   if (!canEditWiki(role)) {
@@ -50,7 +47,7 @@ export default async function StorybookAuthPage({
   }
 
   // Generate access token and redirect to storybook
-  const token = generateStorybookToken(session.user.id, role)
+  const token = generateStorybookToken(user.id, role)
 
   // Build redirect URL with token
   const storybookUrl = new URL(targetUrl)

@@ -216,7 +216,8 @@ describe('Storybook Token', () => {
       const adminToken = generateStorybookToken('user-2', 'admin')
       const userToken = generateStorybookToken('user-3', 'user')
 
-      expect(verifyStorybookToken(ownerToken)?.role).toBe('owner')
+      // 'owner' is normalized to 'admin' for backwards compatibility
+      expect(verifyStorybookToken(ownerToken)?.role).toBe('admin')
       expect(verifyStorybookToken(adminToken)?.role).toBe('admin')
       expect(verifyStorybookToken(userToken)?.role).toBe('user')
     })
@@ -240,19 +241,19 @@ describe('Storybook Token', () => {
       const { generateStorybookToken, verifyStorybookToken } = await import('@/lib/storybook-token')
 
       const testCases = [
-        { userId: 'simple-user', role: 'admin' },
-        { userId: 'user-with-numbers-123', role: 'owner' },
-        { userId: 'email@example.com', role: 'user' },
-        { userId: 'uuid-a1b2c3d4-e5f6', role: 'admin' },
+        { userId: 'simple-user', inputRole: 'admin', expectedRole: 'admin' },
+        { userId: 'user-with-numbers-123', inputRole: 'owner', expectedRole: 'admin' }, // owner -> admin
+        { userId: 'email@example.com', inputRole: 'user', expectedRole: 'user' },
+        { userId: 'uuid-a1b2c3d4-e5f6', inputRole: 'admin', expectedRole: 'admin' },
       ]
 
-      for (const { userId, role } of testCases) {
-        const token = generateStorybookToken(userId, role)
+      for (const { userId, inputRole, expectedRole } of testCases) {
+        const token = generateStorybookToken(userId, inputRole)
         const result = verifyStorybookToken(token)
 
         expect(result).not.toBeNull()
         expect(result?.userId).toBe(userId)
-        expect(result?.role).toBe(role)
+        expect(result?.role).toBe(expectedRole)
       }
     })
   })

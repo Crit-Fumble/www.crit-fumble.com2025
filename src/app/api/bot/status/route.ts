@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       authenticated: true,
-      role: botAuth.role,
+      isAdmin: botAuth.isAdmin,
+      discordId: botAuth.discordId,
       timestamp: new Date().toISOString(),
     })
   } catch (error) {

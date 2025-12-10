@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import DOMPurify from 'isomorphic-dompurify'
-import { auth } from '@/lib/auth'
+import { getCurrentUser } from '@/lib/core-auth'
 import { canViewWiki, canEditWiki, toWebRole, hasEarlyAccess } from '@/lib/permissions'
 import { WikiContent } from './WikiContent'
 import { Badge } from '@crit-fumble/react/shared'
@@ -98,17 +98,16 @@ export default async function WikiPage({ params }: PageProps) {
   const { slug } = await params
 
   // Require authentication
-  const session = await auth()
-  if (!session?.user?.id) {
+  const user = await getCurrentUser()
+  if (!user) {
     redirect(`/api/auth/signin?callbackUrl=/wiki/${slug}`)
   }
 
-  // Get user role from session
-  const sessionUser = session.user as { id: string; discordId?: string; isAdmin?: boolean }
-  const role = sessionUser.isAdmin ? 'admin' : 'user'
+  // Get user role
+  const role = user.isAdmin ? 'admin' : 'user'
 
   // Check early access - redirect to home if not authorized
-  const hasAccess = await hasEarlyAccess(sessionUser)
+  const hasAccess = await hasEarlyAccess(user)
   if (!hasAccess) {
     redirect('/')
   }

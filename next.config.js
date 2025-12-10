@@ -122,12 +122,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
 
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
-  },
-
   // Skip TypeScript checks during build (check in CI instead)
   typescript: {
     ignoreBuildErrors: true,

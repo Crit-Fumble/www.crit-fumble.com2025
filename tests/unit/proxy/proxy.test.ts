@@ -3,7 +3,6 @@
  *
  * Tests the Next.js 16 Proxy function that handles:
  * - Subdomain routing
- * - Discord Activity proxy domain handling
  * - Path restrictions
  *
  * @vitest-environment node
@@ -55,81 +54,6 @@ describe('Proxy (src/proxy.ts)', () => {
     vi.restoreAllMocks()
   })
 
-  describe('Discord Activity Domain Handling', () => {
-    it('should pass through requests from *.discordsays.com domains', async () => {
-      vi.resetModules()
-      const { proxy } = await import('@/proxy')
-
-      const request = createMockRequest(
-        '/discord/activity',
-        '1225663590166691840.discordsays.com'
-      )
-
-      const response = await proxy(request as any)
-
-      expect(mockNextFn).toHaveBeenCalled()
-      expect(response.type).toBe('next')
-    })
-
-    it('should pass through static asset requests from discordsays.com', async () => {
-      vi.resetModules()
-      const { proxy } = await import('@/proxy')
-
-      const request = createMockRequest(
-        '/_next/static/chunks/main.css',
-        '1223681019178123274.discordsays.com'
-      )
-
-      const response = await proxy(request as any)
-
-      expect(mockNextFn).toHaveBeenCalled()
-      expect(response.type).toBe('next')
-    })
-
-    it('should pass through API requests from discordsays.com', async () => {
-      vi.resetModules()
-      const { proxy } = await import('@/proxy')
-
-      const request = createMockRequest(
-        '/api/discord-activity/auth',
-        '1225663590166691840.discordsays.com'
-      )
-
-      const response = await proxy(request as any)
-
-      expect(mockNextFn).toHaveBeenCalled()
-      expect(response.type).toBe('next')
-    })
-
-    it('should handle staging Discord Activity domain', async () => {
-      vi.resetModules()
-      const { proxy } = await import('@/proxy')
-
-      const request = createMockRequest(
-        '/discord/activity',
-        '1225663590166691840.discordsays.com'
-      )
-
-      const response = await proxy(request as any)
-
-      expect(mockNextFn).toHaveBeenCalled()
-    })
-
-    it('should handle production Discord Activity domain', async () => {
-      vi.resetModules()
-      const { proxy } = await import('@/proxy')
-
-      const request = createMockRequest(
-        '/discord/activity',
-        '1223681019178123274.discordsays.com'
-      )
-
-      const response = await proxy(request as any)
-
-      expect(mockNextFn).toHaveBeenCalled()
-    })
-  })
-
   describe('Subdomain Routing', () => {
     it('should rewrite wiki subdomain to /wiki routes', async () => {
       vi.resetModules()
@@ -166,7 +90,7 @@ describe('Proxy (src/proxy.ts)', () => {
       expect(response.type).toBe('next')
     })
 
-    it('should rewrite activity subdomain to /activity routes', async () => {
+    it('should rewrite activity subdomain to activity-proxy', async () => {
       vi.resetModules()
       const { proxy } = await import('@/proxy')
 
@@ -177,7 +101,7 @@ describe('Proxy (src/proxy.ts)', () => {
       expect(mockRewriteFn).toHaveBeenCalled()
     })
 
-    it('should pass through /api routes on activity subdomain', async () => {
+    it('should rewrite /api routes on activity subdomain to activity-proxy', async () => {
       vi.resetModules()
       const { proxy } = await import('@/proxy')
 
@@ -185,8 +109,9 @@ describe('Proxy (src/proxy.ts)', () => {
 
       const response = await proxy(request as any)
 
-      expect(mockNextFn).toHaveBeenCalled()
-      expect(response.type).toBe('next')
+      // All activity subdomain requests are proxied to Core
+      expect(mockRewriteFn).toHaveBeenCalled()
+      expect(response.type).toBe('rewrite')
     })
 
     it('should rewrite storybook subdomain to proxy API', async () => {
@@ -259,7 +184,7 @@ describe('Proxy (src/proxy.ts)', () => {
       expect(mockNextFn).toHaveBeenCalled()
     })
 
-    it('should allow /discord paths', async () => {
+    it('should redirect /discord paths (Discord Activity moved to Core)', async () => {
       vi.resetModules()
       const { proxy } = await import('@/proxy')
 
@@ -267,7 +192,9 @@ describe('Proxy (src/proxy.ts)', () => {
 
       const response = await proxy(request as any)
 
-      expect(mockNextFn).toHaveBeenCalled()
+      // Discord Activity is now served by Core, not www
+      expect(mockRedirectFn).toHaveBeenCalled()
+      expect(response.type).toBe('redirect')
     })
 
     it('should allow /terms-of-service', async () => {

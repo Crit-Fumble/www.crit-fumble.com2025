@@ -6,10 +6,10 @@ import type { NextRequest } from 'next/server'
  *
  * Handles subdomain routing and path restrictions.
  * - wiki.crit-fumble.com -> /wiki/*
- * - activity.crit-fumble.com -> /activity/*
- * - storybook.crit-fumble.com -> /api/storybook-proxy/*
+ * - activity.crit-fumble.com -> /api/activity-proxy/* -> Core API
+ * - storybook.crit-fumble.com -> /api/storybook-proxy/* -> GitHub Pages
+ * - fumblebot.crit-fumble.com -> /api/fumblebot-proxy/* -> FumbleBot API
  * - Main site: Redirect non-essential routes to homepage while site is placeholder.
- * Auth.js handles /api/auth/* routes automatically.
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -27,15 +27,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url)
   }
 
-  // Handle activity subdomain - rewrite to /activity routes
+  // Handle activity subdomain - proxy to Core API
   if (host === 'activity.crit-fumble.com' || host.startsWith('activity.')) {
     const url = request.nextUrl.clone()
-    // /api routes should pass through for auth
-    if (pathname.startsWith('/api')) {
-      return NextResponse.next()
-    }
-    // Rewrite root to /activity
-    url.pathname = pathname === '/' ? '/activity' : `/activity${pathname}`
+    // Proxy all requests to Core via activity-proxy
+    url.pathname = `/api/activity-proxy${pathname}`
     return NextResponse.rewrite(url)
   }
 
@@ -53,19 +49,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.rewrite(url)
   }
 
-  // Handle Discord Activity proxy domain - let everything through
-  if (host.endsWith('.discordsays.com')) {
-    return NextResponse.next()
-  }
-
   // Allow these paths through on main site
   const allowedPaths = [
     '/',                    // Homepage
-    '/api',                 // API routes (including /api/auth/*)
+    '/api',                 // API routes
     '/dashboard',           // Wiki editor (requires login)
     '/wiki',                // Public wiki (also accessible via subdomain)
     '/activity',            // Activity feed (also accessible via subdomain)
-    '/discord',             // Discord Activity
     '/terms-of-service',    // Legal
     '/privacy-policy',      // Legal
     '/storybook',           // Storybook viewer

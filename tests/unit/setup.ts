@@ -133,7 +133,7 @@ vi.mock('@/lib/core-auth', () => ({
   }),
   getSignoutUrl: vi.fn((callbackUrl) => {
     const callback = callbackUrl || '/'
-    return `https://core.crit-fumble.com/api/auth/signout?callbackUrl=${encodeURIComponent(callback)}`
+    return `https://core.crit-fumble.com/auth/signout?callbackUrl=${encodeURIComponent(callback)}`
   }),
   isAuthenticated: vi.fn(async () => {
     const user = await mockGetCurrentUser()
@@ -148,7 +148,7 @@ vi.mock('@/lib/core-auth', () => ({
   signOut: vi.fn(),
   clientAuth: {
     getSigninUrl: vi.fn((callbackUrl) => `https://core.crit-fumble.com/auth/signin/discord?callbackUrl=${encodeURIComponent(callbackUrl || '/dashboard')}`),
-    getSignoutUrl: vi.fn((callbackUrl) => `https://core.crit-fumble.com/api/auth/signout?callbackUrl=${encodeURIComponent(callbackUrl || '/')}`),
+    getSignoutUrl: vi.fn((callbackUrl) => `https://core.crit-fumble.com/auth/signout?callbackUrl=${encodeURIComponent(callbackUrl || '/')}`),
   },
 }))
 

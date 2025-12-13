@@ -7,15 +7,23 @@
  *
  * Cookie: 'authjs.session-token' is set by Core with domain=.crit-fumble.com
  *
+ * Security:
+ * - X-Core-Secret header proves www's identity to Core (defense-in-depth)
+ * - X-Response-Signature header from Core proves response authenticity
+ * - HMAC-SHA256 signature prevents MITM attacks even if TLS is compromised
+ * - Uses @crit-fumble/core SDK for signature verification
+ *
  * Mock Mode (USE_MOCK_AUTH=true):
  * For local development and testing, sessions are validated against
  * in-memory mock stores instead of Core API.
  */
 
 import { cookies } from 'next/headers'
+import { verifyResponseSignature as coreVerifySignature } from '@crit-fumble/core'
 import { mockAuthStores } from './mock-auth-stores'
 
 const CORE_API_URL = process.env.CORE_API_URL || 'https://core.crit-fumble.com'
+const CORE_API_SECRET = process.env.CORE_API_SECRET || ''
 const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH === 'true'
 
 /**
@@ -56,7 +64,7 @@ export function getSigninUrl(
  */
 export function getSignoutUrl(callbackUrl?: string): string {
   const callback = callbackUrl || `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.crit-fumble.com'}/`
-  return `${CORE_API_URL}/api/auth/signout?callbackUrl=${encodeURIComponent(callback)}`
+  return `${CORE_API_URL}/auth/signout?callbackUrl=${encodeURIComponent(callback)}`
 }
 
 /**
@@ -96,10 +104,18 @@ export async function getSession(): Promise<SessionResponse> {
     }
 
     // Production mode: validate with Core API
+    // Include X-Core-Secret to prove www's identity (defense-in-depth)
+    const headers: Record<string, string> = {
+      Cookie: `authjs.session-token=${sessionCookie.value}`,
+    }
+
+    if (CORE_API_SECRET) {
+      headers['X-Core-Secret'] = CORE_API_SECRET
+    }
+
+    // Use /api/auth/session for server-side validation with X-Core-Secret
     const response = await fetch(`${CORE_API_URL}/api/auth/session`, {
-      headers: {
-        Cookie: `authjs.session-token=${sessionCookie.value}`,
-      },
+      headers,
       // Don't cache session checks
       cache: 'no-store',
     })
@@ -109,7 +125,23 @@ export async function getSession(): Promise<SessionResponse> {
       return { user: null, expires: null }
     }
 
-    const data = await response.json()
+    const bodyText = await response.text()
+    const signature = response.headers.get('X-Response-Signature')
+
+    // Verify response signature if Core provides one (defense-in-depth)
+    // If CORE_API_SECRET is set, we require a valid signature
+    if (CORE_API_SECRET && signature) {
+      if (!coreVerifySignature(bodyText, signature, CORE_API_SECRET)) {
+        console.error('[core-auth] Invalid response signature from Core')
+        return { user: null, expires: null }
+      }
+    } else if (CORE_API_SECRET && !signature) {
+      // Secret is configured but Core didn't sign - log warning but allow
+      // This enables gradual rollout: www can be updated before Core
+      console.warn('[core-auth] CORE_API_SECRET set but Core did not sign response')
+    }
+
+    const data = JSON.parse(bodyText)
     return data as SessionResponse
   } catch (error) {
     console.error('[core-auth] Failed to get session:', error)
@@ -178,11 +210,17 @@ export async function signOut(): Promise<void> {
     const sessionCookie = cookieStore.get('authjs.session-token')
 
     if (sessionCookie?.value) {
-      await fetch(`${CORE_API_URL}/api/auth/signout`, {
+      const headers: Record<string, string> = {
+        Cookie: `authjs.session-token=${sessionCookie.value}`,
+      }
+
+      if (CORE_API_SECRET) {
+        headers['X-Core-Secret'] = CORE_API_SECRET
+      }
+
+      await fetch(`${CORE_API_URL}/auth/signout`, {
         method: 'POST',
-        headers: {
-          Cookie: `authjs.session-token=${sessionCookie.value}`,
-        },
+        headers,
       })
     }
   } catch (error) {

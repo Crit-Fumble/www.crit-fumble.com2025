@@ -9,6 +9,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { createHmac } from 'crypto'
 
 // Unmock core-auth so we test the actual implementation
 vi.unmock('@/lib/core-auth')
@@ -32,6 +33,31 @@ vi.mock('next/headers', () => ({
 const mockFetch = vi.fn()
 global.fetch = mockFetch
 
+// Helper to create signed response
+function createSignedResponse(body: object, secret: string) {
+  const bodyText = JSON.stringify(body)
+  const signature = createHmac('sha256', secret).update(bodyText).digest('hex')
+  return {
+    ok: true,
+    text: () => Promise.resolve(bodyText),
+    headers: {
+      get: (name: string) => (name === 'X-Response-Signature' ? signature : null),
+    },
+  }
+}
+
+// Helper to create unsigned response
+function createUnsignedResponse(body: object) {
+  const bodyText = JSON.stringify(body)
+  return {
+    ok: true,
+    text: () => Promise.resolve(bodyText),
+    headers: {
+      get: () => null,
+    },
+  }
+}
+
 describe('Core Auth', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -40,6 +66,7 @@ describe('Core Auth', () => {
     process.env.CORE_API_URL = 'https://core.test.com'
     process.env.NEXT_PUBLIC_BASE_URL = 'https://www.test.com'
     process.env.USE_MOCK_AUTH = ''
+    process.env.CORE_API_SECRET = ''
     mockCookies.mockReturnValue(Promise.resolve({ get: mockCookiesGet }))
   })
 
@@ -88,7 +115,7 @@ describe('Core Auth', () => {
 
       const url = getSignoutUrl()
 
-      expect(url).toContain('https://core.test.com/api/auth/signout')
+      expect(url).toContain('https://core.test.com/auth/signout')
       expect(url).toContain('callbackUrl=')
     })
 
@@ -130,21 +157,18 @@ describe('Core Auth', () => {
 
     it('should validate session with Core API in production mode', async () => {
       mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            user: {
-              id: 'user-123',
-              discordId: 'discord-456',
-              name: 'Test User',
-              email: 'test@example.com',
-              image: null,
-              isAdmin: true,
-            },
-            expires: '2025-01-01T00:00:00.000Z',
-          }),
-      })
+      const responseBody = {
+        user: {
+          id: 'user-123',
+          discordId: 'discord-456',
+          name: 'Test User',
+          email: 'test@example.com',
+          image: null,
+          isAdmin: true,
+        },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
 
       const { getSession } = await import('@/lib/core-auth')
       const result = await getSession()
@@ -160,6 +184,80 @@ describe('Core Auth', () => {
       )
       expect(result.user?.id).toBe('user-123')
       expect(result.user?.isAdmin).toBe(true)
+    })
+
+    it('should include X-Core-Secret header when configured', async () => {
+      process.env.CORE_API_SECRET = 'test-secret-123'
+      vi.resetModules()
+
+      mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createSignedResponse(responseBody, 'test-secret-123'))
+
+      const { getSession } = await import('@/lib/core-auth')
+      await getSession()
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://core.test.com/api/auth/session',
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'X-Core-Secret': 'test-secret-123',
+          }),
+        })
+      )
+    })
+
+    it('should verify valid response signature', async () => {
+      process.env.CORE_API_SECRET = 'test-secret-123'
+      vi.resetModules()
+
+      mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: true },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createSignedResponse(responseBody, 'test-secret-123'))
+
+      const { getSession } = await import('@/lib/core-auth')
+      const result = await getSession()
+
+      expect(result.user?.id).toBe('user-123')
+    })
+
+    it('should reject invalid response signature', async () => {
+      process.env.CORE_API_SECRET = 'test-secret-123'
+      vi.resetModules()
+
+      mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: true },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      // Sign with wrong secret
+      mockFetch.mockResolvedValueOnce(createSignedResponse(responseBody, 'wrong-secret'))
+
+      const { getSession } = await import('@/lib/core-auth')
+      const result = await getSession()
+
+      expect(result).toEqual({ user: null, expires: null })
+    })
+
+    it('should allow unsigned response when secret not configured', async () => {
+      // CORE_API_SECRET is empty by default in tests
+      mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
+
+      const { getSession } = await import('@/lib/core-auth')
+      const result = await getSession()
+
+      expect(result.user?.id).toBe('user-123')
     })
 
     it('should return null user when Core API returns error', async () => {
@@ -240,21 +338,18 @@ describe('Core Auth', () => {
   describe('getCurrentUser', () => {
     it('should return user from session', async () => {
       mockCookiesGet.mockReturnValue({ value: 'valid-token' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            user: {
-              id: 'user-123',
-              discordId: 'discord-456',
-              name: 'Test User',
-              email: 'test@example.com',
-              image: null,
-              isAdmin: false,
-            },
-            expires: '2025-01-01T00:00:00.000Z',
-          }),
-      })
+      const responseBody = {
+        user: {
+          id: 'user-123',
+          discordId: 'discord-456',
+          name: 'Test User',
+          email: 'test@example.com',
+          image: null,
+          isAdmin: false,
+        },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
 
       const { getCurrentUser } = await import('@/lib/core-auth')
       const user = await getCurrentUser()
@@ -276,14 +371,11 @@ describe('Core Auth', () => {
   describe('isAuthenticated', () => {
     it('should return true when user exists', async () => {
       mockCookiesGet.mockReturnValue({ value: 'valid-token' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
-            expires: '2025-01-01T00:00:00.000Z',
-          }),
-      })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
 
       const { isAuthenticated } = await import('@/lib/core-auth')
       const result = await isAuthenticated()
@@ -304,14 +396,11 @@ describe('Core Auth', () => {
   describe('isAdmin (function)', () => {
     it('should return true when user is admin', async () => {
       mockCookiesGet.mockReturnValue({ value: 'valid-token' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            user: { id: 'user-123', discordId: 'discord-456', isAdmin: true },
-            expires: '2025-01-01T00:00:00.000Z',
-          }),
-      })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: true },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
 
       const { isAdmin } = await import('@/lib/core-auth')
       const result = await isAdmin()
@@ -321,14 +410,11 @@ describe('Core Auth', () => {
 
     it('should return false when user is not admin', async () => {
       mockCookiesGet.mockReturnValue({ value: 'valid-token' })
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
-            expires: '2025-01-01T00:00:00.000Z',
-          }),
-      })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
 
       const { isAdmin } = await import('@/lib/core-auth')
       const result = await isAdmin()
@@ -355,7 +441,7 @@ describe('Core Auth', () => {
       await signOut()
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://core.test.com/api/auth/signout',
+        'https://core.test.com/auth/signout',
         expect.objectContaining({
           method: 'POST',
           headers: {
@@ -399,7 +485,7 @@ describe('Core Auth', () => {
 
       const url = clientAuth.getSignoutUrl('/goodbye')
 
-      expect(url).toContain('/api/auth/signout')
+      expect(url).toContain('/auth/signout')
       expect(url).toContain(encodeURIComponent('/goodbye'))
     })
   })

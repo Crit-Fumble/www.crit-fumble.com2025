@@ -169,14 +169,18 @@ describe('Storybook Token', () => {
     it('should return null when crypto operation throws', async () => {
       vi.resetModules()
 
-      // Mock crypto to throw an error
+      // Mock crypto to throw an error - include default export for ESM compatibility
       vi.doMock('crypto', async () => {
         const actual = await vi.importActual<typeof import('crypto')>('crypto')
-        return {
+        const mockModule = {
           ...actual,
           createHmac: () => {
             throw new Error('Crypto error')
           },
+        }
+        return {
+          ...mockModule,
+          default: mockModule,
         }
       })
 
@@ -189,8 +193,9 @@ describe('Storybook Token', () => {
       // Should hit the catch block and return null
       expect(verifyStorybookToken(token)).toBeNull()
 
-      // Restore
+      // Restore - need to reset modules to clear the mock
       vi.doUnmock('crypto')
+      vi.resetModules()
     })
 
     it('should return null for invalid role', async () => {

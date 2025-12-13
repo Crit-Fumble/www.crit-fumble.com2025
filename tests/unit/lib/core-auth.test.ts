@@ -470,6 +470,143 @@ describe('Core Auth', () => {
     })
   })
 
+  describe('getSession edge cases', () => {
+    it('should log warning when CORE_API_SECRET set but no signature in response', async () => {
+      process.env.CORE_API_SECRET = 'test-secret-123'
+      vi.resetModules()
+
+      mockCookiesGet.mockReturnValue({ value: 'valid-session-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      // Response without signature header
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        text: () => Promise.resolve(JSON.stringify(responseBody)),
+        headers: {
+          get: () => null, // No signature
+        },
+      })
+
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      const { getSession } = await import('@/lib/core-auth')
+      const result = await getSession()
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('CORE_API_SECRET set but Core did not sign'))
+      expect(result.user?.id).toBe('user-123') // Should still return user
+
+      warnSpy.mockRestore()
+    })
+  })
+
+  describe('requireAuth', () => {
+    it('should return user when authenticated', async () => {
+      mockCookiesGet.mockReturnValue({ value: 'valid-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', name: 'Test', email: null, image: null, isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
+
+      const { requireAuth } = await import('@/lib/core-auth')
+      const user = await requireAuth()
+
+      expect(user.id).toBe('user-123')
+    })
+
+    it('should throw redirect Response when not authenticated', async () => {
+      mockCookiesGet.mockReturnValue(undefined)
+
+      const { requireAuth } = await import('@/lib/core-auth')
+
+      await expect(requireAuth()).rejects.toThrow()
+
+      try {
+        await requireAuth('/custom-redirect')
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response)
+        expect((error as Response).status).toBe(302)
+        expect((error as Response).headers.get('Location')).toContain('/auth/signin/discord')
+        expect((error as Response).headers.get('Location')).toContain(encodeURIComponent('/custom-redirect'))
+      }
+    })
+  })
+
+  describe('requireAdmin', () => {
+    it('should return user when authenticated as admin', async () => {
+      mockCookiesGet.mockReturnValue({ value: 'valid-token' })
+      const responseBody = {
+        user: { id: 'admin-123', discordId: 'discord-456', name: 'Admin', email: null, image: null, isAdmin: true },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
+
+      const { requireAdmin } = await import('@/lib/core-auth')
+      const user = await requireAdmin()
+
+      expect(user.id).toBe('admin-123')
+      expect(user.isAdmin).toBe(true)
+    })
+
+    it('should throw 403 Forbidden when authenticated but not admin', async () => {
+      mockCookiesGet.mockReturnValue({ value: 'valid-token' })
+      const responseBody = {
+        user: { id: 'user-123', discordId: 'discord-456', name: 'User', email: null, image: null, isAdmin: false },
+        expires: '2025-01-01T00:00:00.000Z',
+      }
+      mockFetch.mockResolvedValueOnce(createUnsignedResponse(responseBody))
+
+      const { requireAdmin } = await import('@/lib/core-auth')
+
+      try {
+        await requireAdmin()
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response)
+        expect((error as Response).status).toBe(403)
+      }
+    })
+
+    it('should throw redirect when not authenticated', async () => {
+      mockCookiesGet.mockReturnValue(undefined)
+
+      const { requireAdmin } = await import('@/lib/core-auth')
+
+      try {
+        await requireAdmin()
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(Response)
+        expect((error as Response).status).toBe(302)
+      }
+    })
+  })
+
+  describe('signOut with CORE_API_SECRET', () => {
+    it('should include X-Core-Secret header when configured', async () => {
+      process.env.CORE_API_SECRET = 'test-secret-123'
+      vi.resetModules()
+
+      mockCookiesGet.mockReturnValue({ value: 'session-token' })
+      mockFetch.mockResolvedValueOnce({ ok: true })
+
+      const { signOut } = await import('@/lib/core-auth')
+      await signOut()
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/auth/signout'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.objectContaining({
+            'X-Core-Secret': 'test-secret-123',
+          }),
+        })
+      )
+    })
+  })
+
   describe('clientAuth', () => {
     it('should export getSigninUrl helper', async () => {
       const { clientAuth } = await import('@/lib/core-auth')

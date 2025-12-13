@@ -44,10 +44,11 @@
     "deploy:staging": "git push origin staging",
     "deploy:prod": "git push origin main",
     "prepare": "node -e \"if (process.env.CI !== 'true' && process.env.VERCEL !== '1') { require('child_process').execSync('husky', {stdio: 'inherit'}) }\"",
-    "security:scan": "bash scripts/scan-secrets.sh"
+    "security:scan": "bash scripts/scan-secrets.sh",
+    "dev:tunnel": "tsx scripts/dev-tunnel.ts"
   },
   "dependencies": {
-    "@crit-fumble/core": "^10.22.0",
+    "@crit-fumble/core": "^10.27.0",
     "@crit-fumble/react": "^19.11.0",
     "@discord/embedded-app-sdk": "^2.4.0",
     "@uiw/react-md-editor": "^4.0.8",
@@ -67,8 +68,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
+    "dotenv": "^16.5.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^22.19.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -79,6 +83,7 @@
     "eslint": "^9.14.0",
     "eslint-config-next": "^15.0.3",
     "ffmpeg-static": "^5.3.0",
+    "happy-dom": "^20.0.11",
     "husky": "^9.1.7",
     "playwright": "^1.57.0",
     "postcss": "^8.4.47",

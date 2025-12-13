@@ -1,4 +1,5 @@
 import { vi, beforeEach } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
 // =============================================================================
 // Mock Session Types
@@ -85,6 +86,21 @@ export function createUserSession(discordId = 'user-789'): MockSession {
     },
   })
 }
+
+// =============================================================================
+// @crit-fumble/core Mock (to avoid rrule ESM/CommonJS issues)
+// =============================================================================
+
+vi.mock('@crit-fumble/core', () => {
+  const crypto = require('crypto')
+  return {
+    verifyResponseSignature: (body: string, signature: string, secret: string): boolean => {
+      if (!secret || !signature) return true
+      const expectedSignature = crypto.createHmac('sha256', secret).update(body).digest('hex')
+      return signature === expectedSignature
+    },
+  }
+})
 
 // =============================================================================
 // Next.js Server Mocks

@@ -4,10 +4,10 @@ import path from 'path';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'node',
+    environment: 'happy-dom',
     setupFiles: ['./tests/unit/setup.ts'],
     // Only include unit tests - Playwright tests use their own runner
-    include: ['tests/unit/**/*.test.ts'],
+    include: ['tests/unit/**/*.test.ts', 'tests/unit/**/*.test.tsx'],
     exclude: [
       'node_modules/',
       'tests/integration/**',
@@ -25,6 +25,10 @@ export default defineConfig({
         '**/*.config.*',
         '**/mockData',
       ],
+    },
+    // Handle CommonJS modules that don't support ESM named exports
+    deps: {
+      inline: ['rrule', '@crit-fumble/core'],
     },
   },
   resolve: {

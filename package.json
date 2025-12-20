@@ -48,8 +48,8 @@
     "dev:tunnel": "tsx scripts/dev-tunnel.ts"
   },
   "dependencies": {
-    "@crit-fumble/core": "^11.0.1",
-    "@crit-fumble/react": "^19.11.4",
+    "@crit-fumble/core": "latest",
+    "@crit-fumble/react": "^19.16.0",
     "@discord/embedded-app-sdk": "^2.4.0",
     "@uiw/react-md-editor": "^4.0.8",
     "clsx": "^2.1.1",

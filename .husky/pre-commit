@@ -1,2 +1,5 @@
-# Run secret scanner before commit
-bash scripts/scan-secrets.sh
+# Pre-commit hook disabled for simple landing page
+# Re-enable secret scanning when adding sensitive code
+
+# Uncomment to enable secret scanning:
+# bash scripts/scan-secrets.sh

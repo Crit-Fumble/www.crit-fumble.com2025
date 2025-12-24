@@ -1,53 +1,21 @@
 {
-  "name": "crit-fumble",
+  "name": "@crit-fumble/www",
   "version": "1.0.0",
   "private": true,
+  "description": "Crit-Fumble www - thin auth proxy to core.crit-fumble.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:unit": "vitest run tests/unit/",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:wiki": "playwright test tests/integration/wiki/ --project=chromium",
-    "test:e2e:wiki:headed": "playwright test tests/integration/wiki/ --project=chromium --headed",
-    "test:e2e:foundry": "playwright test tests/e2e/foundry-dual-system.spec.ts --project=chromium",
-    "test:e2e:foundry:keep": "cross-env KEEP_DROPLET=true playwright test tests/e2e/foundry-dual-system.spec.ts --project=chromium",
-    "test:cleanup": "bash scripts/cleanup-nul-files.sh",
-    "test:chromium": "playwright test --project=chromium",
-    "test:firefox": "playwright test --project=firefox",
-    "test:webkit": "playwright test --project=webkit",
-    "test:report": "playwright show-report test-results/html-report",
-    "capture:ui": "tsx scripts/capture-ui.ts",
-    "capture:ui:all-browsers": "tsx scripts/capture-ui.ts all-browsers",
-    "capture:ui:mobile": "tsx scripts/capture-ui.ts mobile",
-    "capture:ui:tablet": "tsx scripts/capture-ui.ts tablet",
-    "capture:all": "playwright test tests/integration/10-login-dashboard-flow.spec.ts --grep=\"Visual Regression\" --project=chromium",
-    "playwright:install": "playwright install --with-deps",
-    "scales:print": "tsx scripts/generate-print-scales.ts",
-    "docker:build": "docker compose build",
-    "mcp:build": "docker compose -f docker/docker-compose.test.yml build mcp-server",
-    "mcp:up": "docker compose -f docker/docker-compose.test.yml up -d mcp-server",
-    "mcp:down": "docker compose -f docker/docker-compose.test.yml stop mcp-server",
-    "mcp:logs": "docker compose -f docker/docker-compose.test.yml logs -f mcp-server",
-    "mcp:restart": "docker compose -f docker/docker-compose.test.yml restart mcp-server",
-    "mcp:start": "cd mcp-server && npm start",
     "env:pull:staging": "vercel env pull .env.development.local --environment=preview",
     "env:pull:prod": "vercel env pull .env.production.local --environment=production",
-    "test:staging": "cross-env PLAYWRIGHT_BASE_URL=https://treefarm22-staging.crit-fumble.com playwright test",
     "deploy:staging": "git push origin staging",
-    "deploy:prod": "git push origin main",
-    "prepare": "node -e \"if (process.env.CI !== 'true' && process.env.VERCEL !== '1') { require('child_process').execSync('husky', {stdio: 'inherit'}) }\"",
-    "security:scan": "bash scripts/scan-secrets.sh",
-    "dev:tunnel": "tsx scripts/dev-tunnel.ts"
+    "deploy:prod": "git push origin main"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "@crit-fumble/core": "latest",
     "@crit-fumble/react": "^19.16.0",
     "@discord/embedded-app-sdk": "^2.4.0",
@@ -58,39 +26,37 @@
     "next": "^16.0.10",
     "next-themes": "^0.4.6",
     "rate-limiter-flexible": "^8.2.1",
+=======
+    "next": "^16.0.7",
+>>>>>>> Stashed changes
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-rnd": "^10.5.2",
     "server-only": "^0.0.1",
-    "tailwind-merge": "^2.5.4",
-    "zod": "^3.23.8",
-    "zustand": "^4.5.7"
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
+<<<<<<< Updated upstream
     "@playwright/test": "^1.57.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
+=======
+>>>>>>> Stashed changes
     "@types/node": "^22.19.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "^4.0.14",
     "autoprefixer": "^10.4.20",
+<<<<<<< Updated upstream
     "cross-env": "^10.1.0",
     "dotenv": "^16.5.0",
+=======
+>>>>>>> Stashed changes
     "eslint": "^9.14.0",
     "eslint-config-next": "^15.0.3",
-    "ffmpeg-static": "^5.3.0",
-    "happy-dom": "^20.0.11",
-    "husky": "^9.1.7",
-    "playwright": "^1.57.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "vitest": "^4.0.13"
+    "typescript": "^5.6.3"
   },
   "engines": {
     "node": "22.x",

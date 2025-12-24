@@ -1,0 +1,56 @@
+name: Publish Package
+
+on:
+  push:
+    paths:
+      - 'packages/react/**'
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build package
+        run: npm run build:lib
+        working-directory: packages/react
+
+      - name: Check if version changed
+        id: version-check
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          NPM_VERSION=$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "0.0.0")
+          if [ "$LOCAL_VERSION" != "$NPM_VERSION" ]; then
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            echo "Publishing $PACKAGE_NAME: $NPM_VERSION -> $LOCAL_VERSION"
+          else
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "Version unchanged: $LOCAL_VERSION"
+          fi
+        working-directory: packages/react
+
+      - name: Publish to npm
+        if: steps.version-check.outputs.should_publish == 'true'
+        run: npm publish --access public
+        working-directory: packages/react
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

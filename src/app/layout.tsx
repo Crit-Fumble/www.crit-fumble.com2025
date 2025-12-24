@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { FloatingFumbleBot } from "@/components/FloatingFumbleBot";
-import { Banner } from "@crit-fumble/react/shared";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,12 +20,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen antialiased`} suppressHydrationWarning>
         {appEnv === 'staging' && (
-          <Banner variant="warning">
+          <div className="bg-yellow-500 text-black text-center py-2 font-bold">
             ⚠️ STAGING ENVIRONMENT - For testing only
-          </Banner>
+          </div>
         )}
         {children}
-        <FloatingFumbleBot />
       </body>
     </html>
   );

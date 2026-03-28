@@ -1,55 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-// Vercel Live feedback widget - only needed in preview/staging
-const isPreview = process.env.VERCEL_ENV === 'preview'
-const vercelLiveScripts = isPreview ? ' https://vercel.live' : ''
-const vercelLiveConnect = isPreview ? ' https://vercel.live https://*.pusher.com wss://*.pusher.com' : ''
-
-// Discord client IDs for frame-ancestors (both web app and bot)
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || ''
-const FUMBLEBOT_CLIENT_ID = process.env.FUMBLEBOT_DISCORD_CLIENT_ID || ''
-const discordFrameAncestors = [
-  DISCORD_CLIENT_ID && `https://${DISCORD_CLIENT_ID}.discordsays.com`,
-  FUMBLEBOT_CLIENT_ID && `https://${FUMBLEBOT_CLIENT_ID}.discordsays.com`,
-].filter(Boolean).join(' ')
-
 const nextConfig = {
-  // Asset prefix for Discord Activity - ensures static assets load from the correct domain
-  // When accessed via Discord's *.discordsays.com proxy, assets will load from the actual Vercel domain
-  assetPrefix: process.env.VERCEL_ENV === 'production'
-    ? 'https://www.crit-fumble.com'
-    : process.env.VERCEL_ENV === 'preview'
-    ? 'https://staging-treefarm22.crit-fumble.com'
-    : undefined,
-
-  // Redirect apex domain to www subdomain
-  // But DON'T redirect Discord Activity domains (discordsays.com)
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'crit-fumble.com',
-          },
-        ],
-        missing: [
-          {
-            type: 'host',
-            value: '(.*)\\.discordsays\\.com',
-          },
-        ],
-        destination: 'https://www.crit-fumble.com/:path*',
-        permanent: true,
-      },
-    ]
-  },
-
-  // Security headers
   async headers() {
     return [
-      // Static assets - ensure correct MIME types for Discord proxy
       {
         source: '/_next/static/:path*',
         headers: [
@@ -90,16 +43,16 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              `script-src 'self' 'unsafe-eval' 'unsafe-inline'${vercelLiveScripts}`, // Next.js requires unsafe-eval and unsafe-inline
-              "style-src 'self' 'unsafe-inline' https:", // Tailwind requires unsafe-inline, allow external stylesheets
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline' https:",
               "img-src 'self' data: https: blob:",
               "font-src 'self' data: https:",
-              `connect-src 'self' https: wss: ws:${vercelLiveConnect}`, // Allow WebSocket connections to Core API
+              "connect-src 'self' https: wss: ws:",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
-              "form-action 'self' https://www.crit-fumble.com https://*.crit-fumble.com https://discord.com https://*.discord.com",
-              `frame-ancestors 'self' ${discordFrameAncestors}`,
+              "form-action 'self'",
+              "frame-ancestors 'self'",
               "upgrade-insecure-requests"
             ].join('; ')
           }
@@ -108,34 +61,24 @@ const nextConfig = {
     ]
   },
 
+  // Redirect apex domain to www subdomain
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'crit-fumble.com' }],
+        destination: 'https://www.crit-fumble.com/:path*',
+        permanent: true,
+      },
+    ]
+  },
+
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.discordapp.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-      },
-    ],
     formats: ['image/avif', 'image/webp'],
   },
 
-  // Skip TypeScript checks during build (check in CI instead)
   typescript: {
     ignoreBuildErrors: true,
-  },
-
-  // Transpile external packages
-  transpilePackages: ['@crit-fumble/react', '@crit-fumble/core', 'framer-motion'],
-
-  // Enable Turbopack (Next.js 16 default)
-  turbopack: {},
-
-  // Webpack config
-  webpack: (config) => {
-    return config
   },
 }
 

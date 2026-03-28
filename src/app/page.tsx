@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { CoreStatusButton } from './CoreStatusButton'
 
 export default function HomePage() {
   return (
@@ -55,16 +56,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Coming Soon Banner */}
+            {/* Core Platform Link */}
             <div className="text-center py-8">
-              <div className="inline-block bg-crit-purple-600/20 border-2 border-crit-purple-500 rounded-xl px-12 py-6">
-                <p className="text-3xl md:text-4xl font-display font-bold text-crit-purple-400">
-                  Coming March 2026
-                </p>
-                <p className="text-gray-400 mt-2">
-                  Our platform is under construction
-                </p>
-              </div>
+              <CoreStatusButton />
             </div>
           </div>
         </div>

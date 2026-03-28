@@ -3,12 +3,5 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install --include=dev",
   "framework": "nextjs",
-  "regions": ["iad1"],
-  "functions": {
-    "app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
-  "crons": [],
-  "rewrites": []
+  "regions": ["iad1"]
 }

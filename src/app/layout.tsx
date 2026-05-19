@@ -5,8 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Crit-Fumble Gaming",
-  description: "Modern Gaming platform with integrated VTT, Discord Activities, and GM marketplace.",
+  title: "Crit-Fumble Gaming — Cloud game servers & Discord session tools",
+  description:
+    "Cloud-hosted tabletop game servers, Discord session recording, and party tools — pay only for uptime.",
 };
 
 export default function RootLayout({

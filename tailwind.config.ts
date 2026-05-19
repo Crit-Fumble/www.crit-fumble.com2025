@@ -76,8 +76,8 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-rubik)', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Rubik', 'system-ui', 'sans-serif'],
         mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
       },
       backgroundImage: {

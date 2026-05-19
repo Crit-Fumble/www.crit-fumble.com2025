@@ -40,9 +40,9 @@ export function CoreStatusButton() {
   return (
     <a
       href="https://core.crit-fumble.com"
-      className="inline-flex items-center justify-center w-full max-w-md mx-auto rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-10 py-5 transition-colors"
+      className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-8 py-4 transition-colors"
     >
-      <p className="text-2xl md:text-3xl font-display font-bold text-white">
+      <p className="text-lg md:text-xl font-display font-bold text-white">
         Enter Core
       </p>
     </a>

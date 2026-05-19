@@ -1,44 +1,26 @@
-/** @type {import('next').NextConfig} */
+const path = require('path')
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Pin the workspace root: this repo lives inside a parent monorepo
+  // checkout (Crit-Fumble/), which has its own lockfile. Without this,
+  // Next 16's Turbopack picks the parent and fails to find our app/.
+  turbopack: {
+    root: __dirname,
+  },
+
   async headers() {
     return [
       {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      {
+        // Standard security headers — Next.js sets immutable cache headers
+        // for /_next/static automatically, so we don't override that.
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           {
             key: 'Content-Security-Policy',
             value: [
@@ -53,15 +35,15 @@ const nextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'self'",
-              "upgrade-insecure-requests"
-            ].join('; ')
-          }
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
         ],
       },
     ]
   },
 
-  // Redirect apex domain to www subdomain
+  // Apex → www canonical redirect.
   async redirects() {
     return [
       {
@@ -75,10 +57,6 @@ const nextConfig = {
 
   images: {
     formats: ['image/avif', 'image/webp'],
-  },
-
-  typescript: {
-    ignoreBuildErrors: true,
   },
 }
 

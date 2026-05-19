@@ -8,10 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "env:pull:staging": "vercel env pull .env.development.local --environment=preview",
-    "env:pull:prod": "vercel env pull .env.production.local --environment=production",
-    "deploy:staging": "git push origin staging",
-    "deploy:prod": "git push origin main",
+    "env:pull": "vercel env pull .env.production.local --environment=production",
+    "deploy": "git push origin main",
     "prepare": "node -e \"if (process.env.CI !== 'true' && process.env.VERCEL !== '1') { require('child_process').execSync('husky', {stdio: 'inherit'}) }\"",
     "security:scan": "bash scripts/scan-secrets.sh"
   },

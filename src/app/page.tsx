@@ -312,12 +312,12 @@ export default function HomePage() {
                   Free/Basic members get 2,500 CT monthly for free to try things out. 
                   Paid plans include a higher monthly grant. 
                 </p>
-                <a
+                {/* <a
                   href={CORE_PRICING_URL}
                   className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-6 py-3 transition-colors w-full"
                 >
                   <span className="text-base font-display font-bold text-white">Subscribe Now</span>
-                </a>
+                </a> */}
               </div>
             </div>
 
@@ -332,12 +332,12 @@ export default function HomePage() {
                   Tip GMs and top up Compute Tokens if your monthly grant runs out. 
                   1 CC = 10,000 CT.
                 </p>
-                <a
+                {/* <a
                   href={CORE_WALLET_URL}
                   className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-6 py-3 transition-colors w-full"
                 >
                   <span className="text-base font-display font-bold text-white">Buy Crit-Coins</span>
-                </a>
+                </a> */}
               </div>
             </div>
 

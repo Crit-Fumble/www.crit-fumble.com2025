@@ -60,11 +60,7 @@ export default function HomePage() {
             </p>
             <div className="text-gray-100 leading-relaxed">
               <p>
-                Welcome to Crit Fumble Gaming! We&apos;re a VTTRPG group and have players with some of the worst
-                luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have
-                moved our campaigns online and have since grown to include members all over the country. We play a
-                few long-running campaigns, as well as plenty of one-shots and &quot;mini-campaigns&quot; that only
-                last a few sessions.
+                Welcome to Crit Fumble Gaming! Since 2022, we&apos;ve been an online tabletop gaming group with some of the worst luck and dumbest ideas. We started as an in-person group in Kansas City, but have since moved our campaigns online and have grown to include players from all over the country. We play Cypher, D&D, and other tabletop RPGs, as well as CRPGs,  MOBAs, Simulations, and the occasional party game, on our Discord server.
               </p>
             </div>
           </div>
@@ -89,7 +85,7 @@ export default function HomePage() {
               Start here — Discord is where we moderate our community.
             </p>
             <p className="text-gray-100 max-w-2xl mx-auto text-center mb-8 leading-relaxed">
-              Our Discord server is the gate to CFG Core, ReSesh, and everything else. Answer a 
+              Our Discord server is the gate to our live game sessions, ReSesh, and CFG Core. Answer a 
               few questions, agree to the server guidelines, then you'll gain access to the rest of the server.
             </p>
 
@@ -183,35 +179,13 @@ export default function HomePage() {
               </div>
               <div className="bg-slate-900 rounded-b-lg px-6 py-8 flex-1 flex flex-col">
                 <p className="text-lg text-gray-200 text-center mb-6">
-                  Cloud-hosted gaming and community servers, on-demand
+                  Cloud-hosted gaming and community servers, on-demand, coming back this Summer
                 </p>
 
-                <ul className="space-y-4 text-gray-100 mb-6">
-                  <li className="flex gap-3">
-                    <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
-                    <span>
-                      <strong className="text-white">Your tools, your data.</strong> No ads, no data sales.
-                    </span>
-                  </li>
-                  {/* <li className="flex gap-3">
-                    <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
-                    <span>
-                      Built-in <strong className="text-white">Fermi</strong> chat with community <strong className="text-white">Spacebar</strong> server. Voice support coming soon.
-                    </span>
-                  </li> */}
-                  {/* <li className="flex gap-3">
-                    <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
-                    <span>
-                      Track your balances and gain early access to the CFG Core Platform.
-                    </span>
-                  </li> */}
-                  <li className="flex gap-3">
-                    <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
-                    <span>
-                      <strong className="text-white">FoundryVTT</strong> hosting in Beta now, more coming Fall 2026.
-                    </span>
-                  </li>
-                </ul>
+                <p className="text-gray-100 text-center mb-6 leading-relaxed flex-1">
+                  We are migrating CFG Core to OVH Cloud in order to provide a more reliable and scalable hosting experience for our users. Stay tuned!
+                  {/* ReSesh is free to try with your Core subscription — no separate fee, just the Compute Tokens it uses to run. */}
+                </p>
 
                 {/* Hostable game-server kinds. Add new icons here as more
                     kinds land in Core's Server Manager (Phase-0: Foundry +
@@ -249,9 +223,7 @@ export default function HomePage() {
                   </ul>
                 </div>
 
-                {/* DigitalOcean affiliate attribution — Core runs on DO, so
-                    the badge belongs alongside the Core CTA rather than in
-                    the generic site footer. */}
+                {/* 
                 <div className="flex justify-center">
                   <a
                     href={DO_AFFILIATE_URL}
@@ -260,7 +232,6 @@ export default function HomePage() {
                     aria-label="Powered by DigitalOcean"
                     className="inline-block"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={DO_BADGE_URL}
                       alt="Powered by DigitalOcean"
@@ -268,7 +239,8 @@ export default function HomePage() {
                       style={{ height: 36, width: 'auto' }}
                     />
                   </a>
-                </div>
+                </div> 
+                */}
 
                 {/* <div className="text-center mt-6">
                   <CoreStatusButton />
@@ -310,7 +282,7 @@ export default function HomePage() {
                 <p className="text-gray-100 leading-relaxed mb-6 flex-1">
                   These power ReSesh recording and transcription, as well as Server Hosting.  
                   Free/Basic members get 2,500 CT monthly for free to try things out. 
-                  Paid plans include a higher monthly grant. 
+                  {/* Paid plans include a higher monthly grant.  */}
                 </p>
                 {/* <a
                   href={CORE_PRICING_URL}

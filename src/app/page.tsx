@@ -90,7 +90,7 @@ export default function HomePage() {
             </p>
             <p className="text-gray-100 max-w-2xl mx-auto text-center mb-8 leading-relaxed">
               Our Discord server is the gate to CFG Core, ReSesh, and everything else. Answer a 
-              few questions, agree to the server guidelines, then you'll gain access to the rest of the server, CFG Core Server Hosting, and the ReSesh Bot.
+              few questions, agree to the server guidelines, then you'll gain access to the rest of the server.
             </p>
 
             <div className="text-center">
@@ -138,7 +138,7 @@ export default function HomePage() {
                 <p className="text-gray-100 text-center mb-6 leading-relaxed flex-1">
                   Run a recording bot in your voice channel and get a searchable transcript posted live as you play. 
                   Recordings and transcripts stay yours — runs on DisRecord server powered by our CFG Core infrastructure. 
-                  ReSesh is free to try with your Core subscription — no separate fee, just the Compute Tokens it uses to run.
+                  {/* ReSesh is free to try with your Core subscription — no separate fee, just the Compute Tokens it uses to run. */}
                 </p>
 
                 <div className="flex justify-center">
@@ -158,7 +158,7 @@ export default function HomePage() {
                   </a>
                 </div>
 
-                <div className="text-center mt-6">
+                {/* <div className="text-center mt-6">
                   <a
                     href={RESESH_INSTALL_URL}
                     target="_blank"
@@ -169,7 +169,7 @@ export default function HomePage() {
                       Add ReSesh to your server
                     </span>
                   </a>
-                </div>
+                </div> */}
               </div>
             </section>
             
@@ -199,12 +199,12 @@ export default function HomePage() {
                       Built-in <strong className="text-white">Fermi</strong> chat with community <strong className="text-white">Spacebar</strong> server. Voice support coming soon.
                     </span>
                   </li> */}
-                  <li className="flex gap-3">
+                  {/* <li className="flex gap-3">
                     <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
                     <span>
                       Track your balances and gain early access to the CFG Core Platform.
                     </span>
-                  </li>
+                  </li> */}
                   <li className="flex gap-3">
                     <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
                     <span>
@@ -270,9 +270,9 @@ export default function HomePage() {
                   </a>
                 </div>
 
-                <div className="text-center mt-6">
+                {/* <div className="text-center mt-6">
                   <CoreStatusButton />
-                </div>
+                </div> */}
               </div>
             </section>
           </div>

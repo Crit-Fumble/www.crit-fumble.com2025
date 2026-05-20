@@ -115,7 +115,65 @@ export default function HomePage() {
             `flex-col` + `flex-1` on the body so their CTAs and trailing
             badges align across the row. */}
         <div className="max-w-5xl mx-auto w-full px-4 pb-12">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* ReSesh */}
+            <section className="flex flex-col" aria-labelledby="resesh-heading">
+              <div className="bg-crit-purple-600 rounded-t-lg px-6 py-6 flex items-center justify-center gap-4">
+                <Image
+                  src="/img/resesh.png"
+                  alt=""
+                  width={48}
+                  height={48}
+                  className="rounded-lg shrink-0"
+                />
+                <h2 id="resesh-heading" className="text-3xl font-display font-bold text-white text-center">
+                  ReSesh
+                </h2>
+              </div>
+              <div className="bg-slate-900 rounded-b-lg px-6 py-8 flex-1 flex flex-col">
+                <p className="text-lg text-gray-200 text-center mb-6">
+                  Discord session recording with searchable transcripts.
+                </p>
+                <p className="text-gray-100 text-center mb-6 leading-relaxed flex-1">
+                  Run a recording bot in your voice channel and get a searchable transcript posted live as you play. 
+                  Recordings and transcripts stay yours — runs on DisRecord server powered by our CFG Core infrastructure. 
+                  ReSesh is free to try with your Core subscription — no separate fee, just the Compute Tokens it uses to run.
+                </p>
+
+                <div className="flex justify-center">
+                  <a
+                    href="https://deepgram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Transcription powered by Deepgram"
+                  >
+                    <Image
+                      src="/img/powered-by-deepgram.svg"
+                      alt="Powered by Deepgram"
+                      width={160}
+                      height={32}
+                      unoptimized
+                    />
+                  </a>
+                </div>
+
+                <div className="text-center mt-6">
+                  <a
+                    href={RESESH_INSTALL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-8 py-4 transition-colors"
+                  >
+                    <span className="text-lg md:text-xl font-display font-bold text-white">
+                      Add ReSesh to your server
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </section>
+            
+            {/* Core */}
             {/* CFG Core */}
             <section className="flex flex-col" aria-labelledby="core-heading">
               <div className="bg-crit-purple-600 rounded-t-lg px-6 py-6">
@@ -125,7 +183,7 @@ export default function HomePage() {
               </div>
               <div className="bg-slate-900 rounded-b-lg px-6 py-8 flex-1 flex flex-col">
                 <p className="text-lg text-gray-200 text-center mb-6">
-                  Cloud-hosted gaming and community servers, on-demand, pay only for what you use.
+                  Cloud-hosted gaming and community servers, on-demand
                 </p>
 
                 <ul className="space-y-4 text-gray-100 mb-6">
@@ -138,13 +196,19 @@ export default function HomePage() {
                   {/* <li className="flex gap-3">
                     <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
                     <span>
-                      Built-in <strong className="text-white">Fermi</strong> chat with community <strong className="text-white">Spacebar</strong> server.
+                      Built-in <strong className="text-white">Fermi</strong> chat with community <strong className="text-white">Spacebar</strong> server. Voice support coming soon.
                     </span>
                   </li> */}
                   <li className="flex gap-3">
                     <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
                     <span>
-                      <strong className="text-white">FoundryVTT</strong> hosting today, more coming soon...
+                      Track your balances and gain early access to the CFG Core Platform.
+                    </span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-crit-purple-400 font-bold" aria-hidden>→</span>
+                    <span>
+                      <strong className="text-white">FoundryVTT</strong> hosting in Beta now, more coming Fall 2026.
                     </span>
                   </li>
                 </ul>
@@ -155,7 +219,7 @@ export default function HomePage() {
                     bottom so it lines up with ReSesh's CTA. */}
                 <div className="flex flex-col items-center gap-3 mb-6 flex-1">
                   <ul className="flex items-center justify-center gap-6">
-                    {/* <li className="flex flex-col items-center gap-1">
+                    <li className="flex flex-col items-center gap-1">
                       <Image
                         src="/img/fermi.svg"
                         alt="Fermi"
@@ -172,7 +236,7 @@ export default function HomePage() {
                         height={48}
                         className="rounded-lg bg-slate-600 p-1"
                       />
-                    </li> */}
+                    </li>
                     <li className="flex flex-col items-center gap-1">
                       <Image
                         src="/img/fvtt-d20.png"
@@ -183,10 +247,6 @@ export default function HomePage() {
                       />
                     </li>
                   </ul>
-                </div>
-
-                <div className="text-center mb-6">
-                  <CoreStatusButton />
                 </div>
 
                 {/* DigitalOcean affiliate attribution — Core runs on DO, so
@@ -209,60 +269,9 @@ export default function HomePage() {
                     />
                   </a>
                 </div>
-              </div>
-            </section>
 
-            {/* ReSesh */}
-            <section className="flex flex-col" aria-labelledby="resesh-heading">
-              <div className="bg-crit-purple-600 rounded-t-lg px-6 py-6 flex items-center justify-center gap-4">
-                <Image
-                  src="/img/resesh.png"
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="rounded-lg shrink-0"
-                />
-                <h2 id="resesh-heading" className="text-3xl font-display font-bold text-white text-center">
-                  ReSesh
-                </h2>
-              </div>
-              <div className="bg-slate-900 rounded-b-lg px-6 py-8 flex-1 flex flex-col">
-                <p className="text-lg text-gray-200 text-center mb-6">
-                  Discord session recording with searchable transcripts.
-                </p>
-                <p className="text-gray-100 text-center mb-6 leading-relaxed flex-1">
-                  Run a recording bot in your voice channel and get a searchable transcript posted live as you play. 
-                  Recordings and transcripts stay yours — runs on DisRecord server powered by our CFG Core infrastructure. 
-                </p>
-
-                <div className="text-center mb-6">
-                  <a
-                    href={RESESH_INSTALL_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-8 py-4 transition-colors"
-                  >
-                    <span className="text-lg md:text-xl font-display font-bold text-white">
-                      Add ReSesh to your server
-                    </span>
-                  </a>
-                </div>
-
-                <div className="flex justify-center">
-                  <a
-                    href="https://deepgram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Transcription powered by Deepgram"
-                  >
-                    <Image
-                      src="/img/powered-by-deepgram.svg"
-                      alt="Powered by Deepgram"
-                      width={160}
-                      height={32}
-                      unoptimized
-                    />
-                  </a>
+                <div className="text-center mt-6">
+                  <CoreStatusButton />
                 </div>
               </div>
             </section>
@@ -299,15 +308,15 @@ export default function HomePage() {
               </div>
               <div className="bg-slate-900 rounded-b-lg px-6 py-6 flex-1 flex flex-col">
                 <p className="text-gray-100 leading-relaxed mb-6 flex-1">
-                  These power server hosting and ReSesh recording.  
+                  These power ReSesh recording and transcription, as well as Server Hosting.  
                   Free/Basic members get 2,500 CT monthly for free to try things out. 
-                  Paid plans include a higher monthly grant.
+                  Paid plans include a higher monthly grant. 
                 </p>
                 <a
                   href={CORE_PRICING_URL}
                   className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-6 py-3 transition-colors w-full"
                 >
-                  <span className="text-base font-display font-bold text-white">Subscribe</span>
+                  <span className="text-base font-display font-bold text-white">Subscribe Now</span>
                 </a>
               </div>
             </div>
@@ -360,12 +369,12 @@ export default function HomePage() {
                   1 CC = $0.25 USD when tipped to a creator as Story Credit. 
                   Spend it on Crit-Coins, or cash out via Stripe Connect.
                 </p>
-                <a
+                {/* <a
                   href={CORE_WALLET_URL}
                   className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 border-2 border-crit-purple-400 px-6 py-3 transition-colors w-full"
                 >
-                  <span className="text-base font-display font-bold text-white">See Your Wallet</span>
-                </a>
+                  <span className="text-base font-display font-bold text-white">See Balance</span>
+                </a> */}
               </div>
             </div>
           </div>

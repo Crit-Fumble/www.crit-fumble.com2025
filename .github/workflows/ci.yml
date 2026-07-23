@@ -25,4 +25,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run type-check
-      - run: npm run lint
+      # NOTE: `npm run lint` (next lint) is intentionally NOT run — `next lint`
+      # was removed in Next 16 (this repo is on 16.x) and errors immediately,
+      # and there's no standalone eslint config yet. Re-add a lint step once the
+      # project migrates to eslint directly.

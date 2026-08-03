@@ -60,7 +60,7 @@ export default function HomePage() {
             </p>
             <div className="text-gray-100 leading-relaxed">
               <p>
-                Welcome to Crit Fumble Gaming! Since 2022, we&apos;ve been an online tabletop gaming group with some of the worst luck and dumbest ideas. We started as an in-person group in Kansas City, but have since moved our campaigns online and have grown to include players from all over the country. We play Cypher, D&D, and other tabletop RPGs, as well as CRPGs,  MOBAs, Simulations, and the occasional party game, on our Discord server.
+                Welcome to Crit Fumble Gaming! Since 2022, we&apos;ve been an online tabletop gaming group with some of the worst luck and dumbest ideas. We started as an in-person group in Kansas City, but have since moved our campaigns online and have grown to include players from all over the country. We play Cypher, 5e-compatible, and other tabletop RPGs, as well as CRPGs,  MOBAs, Simulations, and the occasional party game, on our Discord server.
               </p>
             </div>
           </div>

@@ -9,7 +9,6 @@ import { CoreStatusButton } from './CoreStatusButton'
 const RESESH_INSTALL_URL =
   'https://discord.com/oauth2/authorize?client_id=1504164101553656028&scope=bot+applications.commands&permissions=3147776'
 
-const DISCORD_INVITE_URL = 'https://discord.gg/D6vVANEJ3w'
 const GITHUB_ORG_URL = 'https://github.com/Crit-Fumble'
 
 // Core wallet + pricing surfaces. Subscribe lands on the public /pricing
@@ -17,6 +16,12 @@ const GITHUB_ORG_URL = 'https://github.com/Crit-Fumble'
 // store is the in-Core wallet, which handles top-ups via Stripe.
 const CORE_PRICING_URL = 'https://core.crit-fumble.com/pricing'
 const CORE_WALLET_URL = 'https://core.crit-fumble.com/apps/settings/wallet'
+
+// "Join our Discord" goes through Core rather than straight to a discord.gg
+// invite: /join always shows the current invite (invites expire; this page
+// shipped a dead one) and signs the visitor in once they've joined, so Core
+// stays the one entry point for Discord onboarding.
+const CORE_JOIN_URL = 'https://core.crit-fumble.com/join'
 
 // Digital Ocean affiliate link — referral code embedded. Badge image is
 // served from DO's own CDN so it tracks correctly for the affiliate program.
@@ -86,14 +91,13 @@ export default function HomePage() {
             </p>
             <p className="text-gray-100 max-w-2xl mx-auto text-center mb-8 leading-relaxed">
               Our Discord server is the gate to our live game sessions, ReSesh, and CFG Core. Answer a 
-              few questions, agree to the server guidelines, then you'll gain access to the rest of the server.
+              few questions, agree to the server guidelines, then you'll gain access to the rest of the server
+              and can sign in to CFG Core with your Discord account.
             </p>
 
             <div className="text-center">
               <a
-                href={DISCORD_INVITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={CORE_JOIN_URL}
                 className="inline-flex items-center justify-center rounded-xl bg-discord hover:bg-discord-dark px-10 py-4 transition-colors"
               >
                 <span className="text-xl md:text-2xl font-display font-bold text-white">
@@ -357,9 +361,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-5">
               <a
-                href={DISCORD_INVITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={CORE_JOIN_URL}
                 className="flex items-center gap-2 text-white hover:text-gray-200 transition-colors"
                 aria-label="Join our Discord server"
                 data-testid="discord-server-link"

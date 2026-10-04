@@ -1,0 +1,4 @@
+Contact: mailto:security@crit-fumble.com
+Expires: 2027-10-04T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.crit-fumble.com/.well-known/security.txt

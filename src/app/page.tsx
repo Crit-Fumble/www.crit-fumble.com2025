@@ -260,8 +260,9 @@ export default function HomePage() {
             grant (left card) or a Crit-Coin top-up (middle card).
             Story Credit is the creator-earnings side: tips, asset-pack
             sales, etc. — convertible to CC, cashable to USD via Stripe
-            Connect (Premium+ tier). No technical explainer text by
-            design — interested users ask in Discord. */}
+            Connect on any tier (the payout fee depends on the tier). No
+            technical explainer text by design — interested users ask in
+            Discord. */}
         <section className="max-w-5xl mx-auto w-full px-4 pb-12" aria-labelledby="economy-heading">
           <h2 id="economy-heading" className="sr-only">Crit-Fumble economy</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -321,9 +322,11 @@ export default function HomePage() {
                 workspaces/cfg-core-browser/src/views/components/molecules/StoryCreditActions.tsx
                 — SC is earned (tips, asset-pack sales, creator activity).
                 Conversion SC → CC is always available. Cash-out SC → USD
-                requires Stripe Connect onboarding (Premium+ tier). The
-                "Set up payouts" CTA lands on the wallet page where the
-                Stripe Connect onboarding button lives. */}
+                requires Stripe Connect onboarding, on any tier. The fee
+                withheld at payout depends on the tier; its amounts live in
+                cfg-core-server services/economy/payout-fees.ts (cs#420), so
+                none are restated here. The "Set up payouts" CTA lands on the
+                wallet page where the Stripe Connect onboarding button lives. */}
             <div className="flex flex-col">
               <div className="bg-crit-purple-600 rounded-t-lg px-6 py-5 flex items-center justify-center gap-3">
                 <svg

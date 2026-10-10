@@ -9,54 +9,14 @@ const nextConfig = {
     root: __dirname,
   },
 
-  async headers() {
-    return [
-      {
-        // Standard security headers — Next.js sets immutable cache headers
-        // for /_next/static automatically, so we don't override that.
-        source: '/:path*',
-        headers: [
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline' https:",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data: https:",
-              "connect-src 'self' https: wss: ws:",
-              "frame-src 'self'",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-              "frame-ancestors 'self'",
-              "upgrade-insecure-requests",
-            ].join('; '),
-          },
-        ],
-      },
-    ]
-  },
+  // Plain files in out/. The site is static only (README, "Static only"):
+  // nothing here may need a server — no route handlers, no middleware, no
+  // headers()/redirects(). Response headers live in public/_headers.
+  output: 'export',
 
-  // Apex → www canonical redirect.
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'crit-fumble.com' }],
-        destination: 'https://www.crit-fumble.com/:path*',
-        permanent: true,
-      },
-    ]
-  },
-
+  // The image optimizer is a server. Images ship as the files in public/.
   images: {
-    formats: ['image/avif', 'image/webp'],
+    unoptimized: true,
   },
 }
 

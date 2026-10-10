@@ -10,10 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  # Fast, env-free gate: type-check + lint. The production BUILD runs on Vercel,
-  # which has the deployment env vars a `next build` here would be missing — so
-  # we don't duplicate it. Vercel also posts a preview-deploy status on every PR
-  # for the reviewer to eyeball the actual site.
+  # Env-free gate: type-check + the static export. The build is the check that
+  # nothing needs a server: a dynamic route handler or page fails
+  # `output: 'export'`. The deploy builds the same way, from a reviewed ref.
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -25,6 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run type-check
+      - run: npm run build
       # NOTE: `npm run lint` (next lint) is intentionally NOT run — `next lint`
       # was removed in Next 16 (this repo is on 16.x) and errors immediately,
       # and there's no standalone eslint config yet. Re-add a lint step once the

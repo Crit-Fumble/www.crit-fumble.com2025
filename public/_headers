@@ -1,0 +1,15 @@
+# Response headers for every file, applied by Cloudflare (this file is read, not
+# served). Each rule is one line: a Content-Security-Policy cannot be wrapped.
+/*
+  X-DNS-Prefetch-Control: on
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: ws:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
+# Next's build output is content-hashed, so a name never changes meaning. Without
+# this rule Cloudflare serves it as must-revalidate and every visit re-asks for
+# every chunk.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable

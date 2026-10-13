@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { CoreStatusButton } from './CoreStatusButton'
+import { HostStatusList } from './HostStatusList'
 
 // ReSesh "Add to Server" install link. Built from prod App ID + the minimum
 // permissions a voice-channel recording bot needs (View Channel, Connect,
@@ -246,9 +246,6 @@ export default function HomePage() {
                 </div> 
                 */}
 
-                {/* <div className="text-center mt-6">
-                  <CoreStatusButton />
-                </div> */}
               </div>
             </section>
           </div>
@@ -356,6 +353,21 @@ export default function HomePage() {
                 </a> */}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ── Status ──────────────────────────────────────────────────
+            Whether each platform host answers right now. The rows come
+            from the status service (see host-status.ts), so a host added
+            there appears here with no change to this page. */}
+        <section className="max-w-5xl mx-auto w-full px-4 pb-12" aria-labelledby="status-heading">
+          <div className="bg-crit-purple-600 rounded-t-lg px-6 py-5">
+            <h2 id="status-heading" className="text-xl font-display font-bold text-white text-center">
+              Service status
+            </h2>
+          </div>
+          <div className="bg-slate-900 rounded-b-lg px-6 py-6">
+            <HostStatusList />
           </div>
         </section>
 

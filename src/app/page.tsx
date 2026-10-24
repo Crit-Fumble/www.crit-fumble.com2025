@@ -57,7 +57,7 @@ export default function HomePage() {
           </div>
           <div className="bg-slate-900 rounded-b-lg px-8 py-10">
             <p className="text-gray-100 max-w-2xl mx-auto text-center mb-8 leading-relaxed">
-              Our Discord Server (or "Guild") is where we plan and meet for our games, moderate our community, and chat between sessions. By joining, you agree to respect other members, don't be a bigot, be an adult, don't be gross, be careful with sensitive info, not spam us, learn to mute, not use a naughty username, and commit no crimes.
+              Our Discord Server (or "Guild") is where we plan and meet for our games, moderate our community, and chat between sessions. By joining, you agree to respect other members, not be a bigot, be an adult, not be gross, be careful with sensitive info, not spam us, learn to mute, not use a naughty username, and commit no crimes.
             </p>
 
             <div className="text-center">

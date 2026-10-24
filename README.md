@@ -8,7 +8,7 @@ is just the front door.
 
 ## Develop
 
-You need **Node.js 22.x** (see `engines` in `package.json`). There are no
+You need **Node.js 24.x** (see `engines` in `package.json`). There are no
 `@crit-fumble/*` dependencies, so `npm install` needs no GitHub Packages token
 — a plain clone + install works.
 

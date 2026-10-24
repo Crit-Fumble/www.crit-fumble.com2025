@@ -30,8 +30,6 @@ a hosting preference. Work that needs a server goes on another hostname.
 
 - Response headers (CSP, HSTS) live in `public/_headers`, which the host applies.
   Keep the HSTS line as it is: the domain's preload entry depends on it.
-- The "Service status" list reads `https://status.critfumble.com/`, a separate
-  service (`src/app/host-status.ts`).
 
 ## Deploy
 

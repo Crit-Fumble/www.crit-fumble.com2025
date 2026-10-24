@@ -5,9 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Crit-Fumble Gaming — Cloud game servers & Discord session tools",
+  title: "Crit Fumble Gaming",
   description:
-    "Cloud-hosted tabletop game servers, Discord session recording, and party tools — pay only for uptime.",
+    "If the GM doesn't kill you, the dice will. An online tabletop gaming group, since 2022.",
 };
 
 export default function RootLayout({

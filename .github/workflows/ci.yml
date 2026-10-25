@@ -22,6 +22,7 @@ jobs:
         with:
           # `engines.node` in package.json is the one place the version is set.
           node-version-file: package.json
+          check-latest: true
           cache: npm
       - run: npm ci
       - run: npm run type-check

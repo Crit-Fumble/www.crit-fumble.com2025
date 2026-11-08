@@ -3,6 +3,12 @@ import Image from 'next/image'
 const GITHUB_ORG_URL = 'https://github.com/Crit-Fumble'
 const DISCORD_JOIN_URL = 'https://discord.gg/WUq7K8Nww8'
 
+const PARTNERS = [
+  { name: 'Dorian', titles: ['Executive (CEO)', 'Security (CSO)', 'Marketing (CMO)'] },
+  { name: 'Mumbley', titles: ['Operations (COO)', 'Creative (CCO)', 'People (CPO)'] },
+  { name: 'Hob', titles: ['Technology (CTO)', 'Finance (CFO)'] },
+]
+
 export default function HomePage() {
   return (
     <div className="min-h-screen relative overflow-hidden" data-testid="home-page">
@@ -70,6 +76,28 @@ export default function HomePage() {
                 </span>
               </a>
             </div>
+          </div>
+        </section>
+
+        <section className="max-w-4xl mx-auto w-full px-4 pb-12" aria-labelledby="partners-heading">
+          <div className="bg-crit-purple-600 rounded-t-lg px-8 py-6">
+            <h2 id="partners-heading" className="text-3xl font-display font-bold text-white text-center">
+              Partners
+            </h2>
+          </div>
+          <div className="bg-slate-900 rounded-b-lg px-8 py-10">
+            <ul className="grid gap-6 sm:grid-cols-3" data-testid="partners-list">
+              {PARTNERS.map((partner) => (
+                <li key={partner.name} className="text-center">
+                  <p className="text-xl font-display font-bold text-white">{partner.name}</p>
+                  <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                    {partner.titles.map((title) => (
+                      <li key={title}>{title}</li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

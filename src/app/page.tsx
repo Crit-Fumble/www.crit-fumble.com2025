@@ -3,6 +3,9 @@ import Image from 'next/image'
 const GITHUB_ORG_URL = 'https://github.com/Crit-Fumble'
 const DISCORD_JOIN_URL = 'https://discord.gg/WUq7K8Nww8'
 
+const CORE_URL = 'https://core.crit-fumble.com'
+const PRICING_URL = `${CORE_URL}/pricing`
+
 const PARTNERS = [
   { name: 'Dorian', titles: ['Executive (CEO)', 'Security (CSO)', 'Marketing (CMO)'] },
   { name: 'Mumbley', titles: ['Operations (COO)', 'Creative (CCO)', 'People (CPO)'] },
@@ -75,6 +78,62 @@ export default function HomePage() {
                   Join our Discord
                 </span>
               </a>
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-4xl mx-auto w-full px-4 pb-12" aria-labelledby="hosting-heading" data-testid="hosting-section">
+          <div className="bg-crit-purple-600 rounded-t-lg px-8 py-6">
+            <h2 id="hosting-heading" className="text-3xl font-display font-bold text-white text-center">
+              Host your own game
+            </h2>
+          </div>
+          <div className="bg-slate-900 rounded-b-lg px-8 py-10">
+            <div className="text-gray-100 max-w-2xl mx-auto leading-relaxed space-y-4">
+              <p>
+                Run your own Foundry Virtual Tabletop server on our hardware, with nothing to install. Bring your Foundry
+                license, pick a size, and play. Your server starts when your table does and stops when it&apos;s idle, so
+                you only pay for the time you play.
+              </p>
+              <p>
+                Your players sign in with Discord. Anyone you seat at your table gets in, whatever their plan: only the
+                host needs one. Cauldron VTT runs here too.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href={PRICING_URL}
+                className="inline-flex items-center justify-center rounded-xl bg-crit-purple-600 hover:bg-crit-purple-700 px-8 py-3 transition-colors"
+              >
+                <span className="text-lg font-display font-bold text-white">See plans</span>
+              </a>
+              <a
+                href={CORE_URL}
+                className="inline-flex items-center justify-center rounded-xl border border-white/40 hover:bg-white/10 px-8 py-3 transition-colors"
+              >
+                <span className="text-lg font-display font-bold text-white">Sign in</span>
+              </a>
+            </div>
+            <p className="mt-8 text-xs text-gray-400 text-center">
+              Foundry Virtual Tabletop is a trademark of Foundry Gaming LLC. Crit Fumble Gaming is not affiliated with or
+              endorsed by Foundry Gaming LLC.
+            </p>
+          </div>
+        </section>
+
+        <section className="max-w-4xl mx-auto w-full px-4 pb-12" aria-labelledby="tips-heading" data-testid="tips-section">
+          <div className="bg-crit-purple-600 rounded-t-lg px-8 py-6">
+            <h2 id="tips-heading" className="text-3xl font-display font-bold text-white text-center">
+              Tip your GM
+            </h2>
+          </div>
+          <div className="bg-slate-900 rounded-b-lg px-8 py-10">
+            <div className="text-gray-100 max-w-2xl mx-auto leading-relaxed space-y-4">
+              <p>
+                Had a great session? Tip your GM in Crit-Coins. Tips become Story Credit, which your GM can spend on their
+                own hosting and coins, or cash out.
+              </p>
+              <p>A table that tips can keep its own game running.</p>
             </div>
           </div>
         </section>

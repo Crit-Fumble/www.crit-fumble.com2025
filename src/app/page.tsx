@@ -1,7 +1,8 @@
 import Image from 'next/image'
 
 const GITHUB_ORG_URL = 'https://github.com/Crit-Fumble'
-const DISCORD_JOIN_URL = 'https://discord.gg/WUq7K8Nww8'
+// The guild's join page on core: each newcomer gets a single-use invite there after signing in with Discord.
+const DISCORD_JOIN_URL = 'https://core.crit-fumble.com/join'
 
 const PARTNERS = [
   { name: 'Dorian', titles: ['Executive (CEO)', 'Security (CSO)', 'Marketing (CMO)'] },

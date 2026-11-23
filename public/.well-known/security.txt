@@ -1,3 +1,4 @@
+# Abuse reports and content removal requests: mailto:abuse@crit-fumble.com
 Contact: mailto:security@crit-fumble.com
 Expires: 2027-10-04T00:00:00.000Z
 Preferred-Languages: en
